@@ -213,6 +213,11 @@ $result = $request
     ->send();
 ```
 Ещё примеры: `withRetry()`, `withoutCache()`, `withRateLimit()`, `withDelay()`, `withTraceId()`.
+
+`withRetry(attempts)` сохраняет остальные параметры повторов и не подтверждает
+безопасность POST/PATCH. Она определяется конфигом клиента и необязательным
+`#[Retry(safe: true/false)]`; неуказанный safe и null равнозначны. Подробнее:
+[безопасность повторов](retries-rate-limit.md#безопасность-повторов-без-обязательной-настройки).
 Для credentials enrichment см. блок выше.
 
 ## Отправка и результат

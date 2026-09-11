@@ -18,5 +18,6 @@ readonly class Retry
         public BackoffStrategy $backoff = BackoffStrategy::Exponential,
         public bool $jitter = true,
         public array $retryOn = [429, 500, 502, 503, 504],
+        public ?bool $safe = null,
     ) {}
 }

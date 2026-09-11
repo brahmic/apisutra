@@ -274,6 +274,9 @@ final readonly class ExecutionResultBuilder
         );
 
         $contextData = array_merge($systemContext, $overrideContext);
+        if ($context->retryRefusalReason !== null) {
+            $contextData['retryRefusalReason'] = $context->retryRefusalReason;
+        }
 
         return new RequestError(
             code: $code,

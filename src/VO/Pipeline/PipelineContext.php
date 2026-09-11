@@ -18,6 +18,7 @@ class PipelineContext
 {
     public ?CacheExecutionState $cacheExecution = null;
     public ?ErrorCode $failureCode = null;
+    public ?string $retryRefusalReason = null;
 
     public function __construct(
         public readonly RequestInterface $request,

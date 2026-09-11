@@ -95,7 +95,13 @@ final readonly class RequestPreparer
         $idempotencyKey = $options?->getIdempotencyKey() ?? $request->getIdempotencyKey();
         if ($idempotency !== null) {
             $header = $idempotency->header ?? $this->config->idempotencyHeader;
-            $headers[$header] = $idempotencyKey ?? $this->generateIdempotencyKey($request);
+            foreach ($headers as $name => $value) {
+                if (strcasecmp($name, $header) === 0) {
+                    $idempotencyKey ??= $value;
+                    unset($headers[$name]);
+                }
+            }
+            $headers[$header] = $idempotencyKey ?? $this->generateIdempotencyKey();
         } elseif ($idempotencyKey !== null) {
             $headers[$this->config->idempotencyHeader] = $idempotencyKey;
         }
@@ -117,14 +123,9 @@ final readonly class RequestPreparer
         return array_merge($prepared->headers, $overrideHeaders);
     }
 
-    private function generateIdempotencyKey(RequestInterface $request): string
+    private function generateIdempotencyKey(): string
     {
-        $payload = $request::class;
-        if ($request instanceof AbstractRequest) {
-            $payload .= '|' . json_encode($request->toArray(), JSON_UNESCAPED_UNICODE);
-        }
-        $payload .= '|' . microtime(true);
-
-        return hash('sha256', $payload);
+        // Ключ принадлежит одному выполнению и не зависит от сериализации тела или точности часов.
+        return bin2hex(random_bytes(32));
     }
 }

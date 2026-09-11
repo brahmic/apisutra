@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Безопасные повторы и восстановление тела запроса](completed/pln-005-safe-retries-stream-replay.md)
 - [Строгий JSON и корректная классификация ошибок](completed/pln-004-json-error-contracts.md)
 - [Автоматическая identity кеша и опциональная RedactionPolicy](completed/pln-003-automatic-cache-identity.md)
 - [Первая поставка: изоляция кеша, auth scope и диагностика](completed/pln-002-cache-auth-diagnostics.md)

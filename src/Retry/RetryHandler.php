@@ -12,6 +12,9 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Closure;
+use Override;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
+use Brahmic\ApiSutra\Timing\SystemSleeper;
 
 final class RetryHandler implements RetryHandlerInterface
 {
@@ -20,22 +23,37 @@ final class RetryHandler implements RetryHandlerInterface
     public function __construct(
         private readonly TransportInterface $transport,
         ?callable $jitterResolver = null,
+        private readonly SleeperInterface $sleeper = new SystemSleeper(),
     ) {
         $this->jitterResolver = $jitterResolver === null
             ? null
             : Closure::fromCallable($jitterResolver);
     }
 
-    #[\Override]
+    #[Override]
     public function handle(
         PreparedRequest $request,
         PipelineContext $context,
         RetryConfig $config,
         int $attempt,
     ): ProviderResponse {
-        $delay = $this->calculateDelay($config, $attempt);
+        return $this->sendWithDelay($request, $context, $config, $attempt);
+    }
+
+    /** Встроенная отправка объединяет серверное ожидание с backoff; auth retry не добавляет backoff. */
+    public function sendWithDelay(
+        PreparedRequest $request,
+        PipelineContext $context,
+        RetryConfig $config,
+        int $attempt,
+        int $minimumDelayMs = 0,
+        bool $applyBackoff = true,
+        ?SleeperInterface $sleeper = null,
+    ): ProviderResponse {
+        $backoff = $applyBackoff && $attempt > 1 ? $this->calculateDelay($config, $attempt - 1) : 0;
+        $delay = max($minimumDelayMs, $backoff);
         if ($delay > 0) {
-            usleep($delay * 1000);
+            ($sleeper ?? $this->sleeper)->sleepMs($delay);
         }
 
         return $this->transport->send($request);
@@ -49,13 +67,13 @@ final class RetryHandler implements RetryHandlerInterface
             BackoffStrategy::Exponential => $config->baseDelay * (2 ** ($attempt - 1)),
         };
 
-        $delay = min($delay, $config->maxDelay);
+        $delay = (int) min($delay, $config->maxDelay);
 
         if ($config->jitter) {
             $jitter = $this->jitterResolver !== null
                 ? (int) ($this->jitterResolver)($config, $attempt)
                 : random_int(0, (int) ($config->baseDelay * 0.5));
-            $delay += max(0, $jitter);
+            $delay += min(max(0, $jitter), $config->maxDelay - $delay);
         }
 
         return min($delay, $config->maxDelay);

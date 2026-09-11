@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Pipeline\Transport;
 
 use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
@@ -29,6 +30,9 @@ final readonly class RetryDecisionMaker
         int $attempt,
         ?RetryConfig $retryConfig,
     ): bool {
+        if ($retryConfig === null) {
+            return false;
+        }
         if ($response->status === 401 && $this->config->authRetryOn401) {
             return false;
         }
@@ -46,11 +50,13 @@ final readonly class RetryDecisionMaker
             return true;
         }
 
-        if ($retryConfig === null) {
-            return false;
-        }
-
         return in_array($response->status, $retryConfig->retryOn, true);
+    }
+
+    public function isSafe(RequestInterface $request, HttpMethod $method): bool
+    {
+        $safe = $request instanceof AbstractRequest ? $request->getRetryAttribute()?->safe : null;
+        return $safe ?? in_array($method, ($this->config->retry ?? new RetryConfig())->safeMethods, true);
     }
 
     public function isRetryException(Throwable $exception, RetryConfig $retryConfig): bool

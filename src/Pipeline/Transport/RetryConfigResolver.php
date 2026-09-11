@@ -25,6 +25,7 @@ final readonly class RetryConfigResolver
 
         $attribute = $request->getRetryAttribute();
         if ($attribute !== null) {
+            $base = $retry ?? new RetryConfig();
             $retry = new RetryConfig(
                 attempts: $attribute->attempts,
                 baseDelay: $attribute->baseDelay,
@@ -32,13 +33,15 @@ final readonly class RetryConfigResolver
                 backoff: $attribute->backoff,
                 jitter: $attribute->jitter,
                 retryOn: $attribute->retryOn,
-                retryExceptions: $retry?->retryExceptions ?? [],
+                retryExceptions: $base->retryExceptions,
+                totalTimeoutMs: $retry?->totalTimeoutMs,
+                safeMethods: $base->safeMethods,
             );
         }
 
         $override = $options?->getRetryOverride() ?? $request->getRetryOverride();
         $overrideEnabled = $override['enabled'] ?? null;
-        if ($overrideEnabled === false) {
+        if ($overrideEnabled === false || ($overrideEnabled === null && $attribute?->enabled === false)) {
             return null;
         }
 
@@ -54,6 +57,8 @@ final readonly class RetryConfigResolver
                     jitter: $retry->jitter,
                     retryOn: $retry->retryOn,
                     retryExceptions: $retry->retryExceptions,
+                    totalTimeoutMs: $retry->totalTimeoutMs,
+                    safeMethods: $retry->safeMethods,
                 );
         } elseif ($overrideEnabled === true && $retry === null) {
             $retry = new RetryConfig();

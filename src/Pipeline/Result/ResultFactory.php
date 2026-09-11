@@ -31,6 +31,10 @@ final readonly class ResultFactory
             requestClass: $request::class,
         );
 
+        if ($context->retryRefusalReason !== null) {
+            $contextData['retryRefusalReason'] = $context->retryRefusalReason;
+        }
+
         $error = new RequestError(
             code: $code,
             message: $response?->errorMessage() ?? 'Ошибка запроса',

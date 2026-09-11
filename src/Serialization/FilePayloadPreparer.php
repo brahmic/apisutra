@@ -8,6 +8,10 @@ use Brahmic\ApiSutra\Enums\Http\FileFormat;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\VO\Files\FileInput;
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\LimitStream;
+use GuzzleHttp\Psr7\NoSeekStream;
+use Psr\Http\Message\StreamInterface;
+use Throwable;
 
 final class FilePayloadPreparer
 {
@@ -116,13 +120,24 @@ final class FilePayloadPreparer
 
             $parts[] = [
                 'name' => $fileItem['name'],
-                'contents' => $file->stream,
+                'contents' => $this->preserveFilePosition($file->stream),
                 'filename' => $file->filename,
                 'headers' => $file->mimeType ? ['Content-Type' => $file->mimeType] : [],
             ];
         }
 
         return new MultipartStream($parts);
+    }
+
+    private function preserveFilePosition(StreamInterface $stream): StreamInterface
+    {
+        try {
+            $offset = $stream->tell();
+            return $offset > 0 ? new LimitStream($stream, -1, $offset) : $stream;
+        } catch (Throwable) {
+            // Без известной начальной позиции повтор файла не гарантирует прежние байты.
+            return new NoSeekStream($stream);
+        }
     }
 
     /**
