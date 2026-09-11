@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Auth;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
+use Override;
 
-final readonly class ApiKeyAuthenticator implements AuthenticatorInterface
+final readonly class ApiKeyAuthenticator implements AuthenticatorInterface, CacheIdentityProviderInterface
 {
     public function __construct(
         private string $key,
@@ -17,7 +19,18 @@ final readonly class ApiKeyAuthenticator implements AuthenticatorInterface
         private ?string $query = null,
     ) {}
 
-    #[\Override]
+    #[Override]
+    public function getCacheIdentity(?PreparedRequest $request = null): ?string
+    {
+        return CacheCredentialIdentity::forRequest(
+            hash('sha256', serialize([self::class, $this->key, $this->header, $this->query])),
+            $request,
+            $this->header !== null ? [$this->header] : [],
+            $this->header === null ? $this->query : null,
+        );
+    }
+
+    #[Override]
     public function authenticate(PreparedRequest $request): PreparedRequest
     {
         if ($this->header !== null) {
@@ -33,19 +46,19 @@ final readonly class ApiKeyAuthenticator implements AuthenticatorInterface
         return $request;
     }
 
-    #[\Override]
+    #[Override]
     public function shouldRefresh(): bool
     {
         return false;
     }
 
-    #[\Override]
+    #[Override]
     public function getRefreshRequest(): ?RequestInterface
     {
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function processTokenResponse(ResponseDtoInterface $response): void
     {
     }

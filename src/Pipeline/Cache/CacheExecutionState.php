@@ -22,5 +22,7 @@ final class CacheExecutionState
         public readonly string $groupGeneration,
         public readonly CacheMode $mode,
         public readonly int $ttl,
+        public readonly string $scopeIdentity,
+        public readonly string $tenantIdentity,
     ) {}
 }

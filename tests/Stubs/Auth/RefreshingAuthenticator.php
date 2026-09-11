@@ -5,17 +5,23 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Tests\Stubs\Auth;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\RefreshTokenRequest;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 
-final class RefreshingAuthenticator implements AuthenticatorInterface
+final class RefreshingAuthenticator implements AuthenticatorInterface, CacheIdentityProviderInterface
 {
     public static bool $shouldRefresh = false;
     public static int $refreshCalls = 0;
     public static int $authenticateCalls = 0;
     public static ?string $token = null;
+
+    public function getCacheIdentity(?PreparedRequest $request = null): ?string
+    {
+        return 'fixture-account';
+    }
 
     public static function reset(): void
     {

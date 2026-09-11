@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Автоматическая identity кеша и опциональная RedactionPolicy](completed/pln-003-automatic-cache-identity.md)
 - [Первая поставка: изоляция кеша, auth scope и диагностика](completed/pln-002-cache-auth-diagnostics.md)
 - [Аудит архитектуры и кода — 2026-09-11](audit/aud-001-architecture-code-2026-09-11/aud-001-readme.md)
 - [Отложенный план перехода на async-first](backlog/pln-001-async-first.md)

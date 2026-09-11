@@ -80,6 +80,16 @@ final readonly class AuthHandler
         }
     }
 
+    /** Выбор auth без refresh, внедрения store и вызова authenticate. */
+    public function resolveForCache(RequestInterface $request, PipelineContext $context): ?AuthenticatorInterface
+    {
+        if (!$request instanceof AbstractRequest || $this->shouldSkipAuth($request, $context)) {
+            return null;
+        }
+
+        return $this->resolveAuthenticator($request, $context);
+    }
+
     private function shouldSkipAuth(AbstractRequest $request, PipelineContext $context): bool
     {
         $override = $this->resolveAuthOverride($request, $context);

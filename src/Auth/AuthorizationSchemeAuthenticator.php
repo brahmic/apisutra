@@ -11,9 +11,11 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthorizationParamsProviderInterf
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
+use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Stringable;
+use Override;
 
-final readonly class AuthorizationSchemeAuthenticator implements AuthenticatorInterface
+final readonly class AuthorizationSchemeAuthenticator implements AuthenticatorInterface, CacheIdentityProviderInterface
 {
     /**
      * Параметры схемы Authorization.
@@ -28,7 +30,34 @@ final readonly class AuthorizationSchemeAuthenticator implements AuthenticatorIn
         private ?AuthorizationParamsFormatterInterface $formatter = null,
     ) {}
 
-    #[\Override]
+    #[Override]
+    public function getCacheIdentity(?PreparedRequest $request = null): ?string
+    {
+        if ($this->token !== null) {
+            return CacheCredentialIdentity::forRequest(
+                hash('sha256', serialize([self::class, $this->scheme, $this->token])),
+                $request,
+                ['Authorization'],
+            );
+        }
+        // Динамические параметры и пользовательский formatter могут зависеть от запроса.
+        if ($this->provider !== null || $this->formatter !== null) {
+            return null;
+        }
+        foreach ($this->params as $value) {
+            if ($value instanceof Stringable) {
+                return null;
+            }
+        }
+
+        return CacheCredentialIdentity::forRequest(
+            hash('sha256', serialize([self::class, $this->scheme, $this->params])),
+            $request,
+            ['Authorization'],
+        );
+    }
+
+    #[Override]
     public function authenticate(PreparedRequest $request): PreparedRequest
     {
         $header = $this->buildHeaderValue($request);
@@ -39,19 +68,19 @@ final readonly class AuthorizationSchemeAuthenticator implements AuthenticatorIn
         return $request->withHeader('Authorization', $header);
     }
 
-    #[\Override]
+    #[Override]
     public function shouldRefresh(): bool
     {
         return false;
     }
 
-    #[\Override]
+    #[Override]
     public function getRefreshRequest(): ?RequestInterface
     {
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function processTokenResponse(ResponseDtoInterface $response): void
     {
     }

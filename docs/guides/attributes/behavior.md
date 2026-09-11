@@ -28,8 +28,9 @@ use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 final class CachedRequest extends AbstractRequest {}
 ```
 
-`key` объединяет варианты запроса внутри пространства identity/tenant. Пространство
-задаётся через `CacheConfig::prefix` или `withCacheScope()`; без него HTTP-кеш
+`key` объединяет варианты запроса внутри автоматического пространства identity/tenant.
+`CacheConfig::prefix` и `withCacheScope()` служат дополнительному разделению и
+не обязательны. При неопределённой identity HTTP-кеш
 не используется. Атрибут разрешает кеширование операции, включая POST, если итоговый
 режим не Disabled. Подробности и миграция: [Cache](../client-config/cache.md).
 

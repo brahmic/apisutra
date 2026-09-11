@@ -49,12 +49,21 @@ Audit хранится в `ExecutionResult::$audit` как массив `Pipelin
 
 ## Маскирование безопасного экспорта
 
+**Параметр `ClientConfig::redaction` необязателен:** по умолчанию уже используется
+`new RedactionPolicy()`. Создавать и передавать этот объект для включения базовой
+защиты не нужно. Достаточно обычного `new ClientConfig(baseUrl: ...)`.
+
 Общая `RedactionPolicy` применяется к `requestDebug()`/`requestDebugJson()`,
 структурированному context штатного PSR-3 logger и записываемым фикстурам.
 Она маскирует стандартные credential headers, Cookie/Set-Cookie, известные
 password/token/secret-поля, URL userinfo и query credentials, включая повторяющиеся
 и percent-encoded имена. `credentialsConfig.secretKeys` дополняет правила для
 подготовленного запроса. Исходные HTTP-данные и позиция stream не изменяются.
+
+Явно передавайте политику, когда у провайдера есть **дополнительные** секретные
+заголовки, поля или вложенные пути, которых нет во встроенных правилах. Если
+стандартных правил и `credentialsConfig.secretKeys` достаточно, параметр опустите.
+Например, для специфичных credentials провайдера:
 
 ```php
 use Brahmic\ApiSutra\Config\ClientConfig;
@@ -73,8 +82,8 @@ $config = new ClientConfig(
 `fields` действуют на любой глубине, `paths` задают пути внутри JSON-тела/данных;
 `*` соответствует одному уровню. Правила добавляются к встроенным и не отключают
 их. `ClientConfig::with()` сохраняет политику, а `$client->record()` передаёт её
-recorder. При самостоятельной сборке `RecordingTransport` передайте её аргументом
-`redaction`.
+recorder. При самостоятельной сборке `RecordingTransport` базовая политика также
+работает автоматически; аргумент `redaction` нужен только для собственных правил.
 
 Невалидный JSON в безопасном экспорте заменяется маркером `[redacted-body]`;
 form-urlencoded маскируется по именам полей. Произвольный текст ошибок,

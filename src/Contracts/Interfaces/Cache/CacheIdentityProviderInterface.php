@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\Contracts\Interfaces\Cache;
+
+use Brahmic\ApiSutra\VO\Http\PreparedRequest;
+
+/** Контекст доступа к кешу; получение значения не должно выполнять I/O. */
+interface CacheIdentityProviderInterface
+{
+    /**
+     * Стабильная непрозрачная identity в рамках провайдера; null запрещает кеширование.
+     * Без request возвращается identity подключения/группы для очистки.
+     * С request учитывается фактический контекст после auth/hooks для custom key.
+     * Разные права доступа/tenant должны давать разные значения. Не возвращать секреты.
+     */
+    public function getCacheIdentity(?PreparedRequest $request = null): ?string;
+}

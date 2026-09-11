@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Auth;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheAwareInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Psr\SimpleCache\CacheInterface;
+use Override;
 
-final class TokenAuthenticator implements AuthenticatorInterface, CacheAwareInterface
+final class TokenAuthenticator implements AuthenticatorInterface, CacheIdentityProviderInterface, CacheAwareInterface
 {
     private ?CacheInterface $cache = null;
     private ?string $token = null;
@@ -24,20 +26,30 @@ final class TokenAuthenticator implements AuthenticatorInterface, CacheAwareInte
         private readonly ?string $refreshRequestClass = null,
     ) {}
 
-    #[\Override]
+    #[Override]
+    public function getCacheIdentity(?PreparedRequest $request = null): ?string
+    {
+        return CacheCredentialIdentity::forRequest(
+            hash('sha256', serialize([self::class, $this->username, $this->password, $this->refreshRequestClass])),
+            $request,
+            ['Authorization'],
+        );
+    }
+
+    #[Override]
     public function setCache(CacheInterface $cache): void
     {
         $this->cache = $cache;
         $this->loadFromCache();
     }
 
-    #[\Override]
+    #[Override]
     public function getCacheKey(): string
     {
         return 'auth_token_' . $this->username;
     }
 
-    #[\Override]
+    #[Override]
     public function authenticate(PreparedRequest $request): PreparedRequest
     {
         if ($this->token === null) {
@@ -47,13 +59,13 @@ final class TokenAuthenticator implements AuthenticatorInterface, CacheAwareInte
         return $request->withHeader('Authorization', 'Bearer ' . $this->token);
     }
 
-    #[\Override]
+    #[Override]
     public function shouldRefresh(): bool
     {
         return $this->token === null || ($this->expiresAt !== null && $this->expiresAt < time() + 30);
     }
 
-    #[\Override]
+    #[Override]
     public function getRefreshRequest(): ?RequestInterface
     {
         if ($this->refreshRequestClass === null) {
@@ -66,7 +78,7 @@ final class TokenAuthenticator implements AuthenticatorInterface, CacheAwareInte
         );
     }
 
-    #[\Override]
+    #[Override]
     public function processTokenResponse(ResponseDtoInterface $response): void
     {
         if (property_exists($response, 'accessToken')) {

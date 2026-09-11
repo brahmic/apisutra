@@ -60,15 +60,15 @@ it('изолирует двух клиентов, позволяет общий 
     }
 });
 
-it('без пространства не читает и не записывает кеш даже при withCache', function (): void {
+it('без prefix кеширует в автоматическом пространстве и безопасно очищает его', function (): void {
     $client = new TestClient($this->config->with(cache: new CacheConfig(store: $this->store)), $this->transport);
     $request = (new CacheProbeRequest())->setClient($client);
     expect($request->withCache()->dataOrFail())->toBe(['value' => 1])
-        ->and($request->withCache()->dataOrFail())->toBe(['value' => 2])
-        ->and($this->store->keys)->toBe([]);
+        ->and($request->withCache()->dataOrFail())->toBe(['value' => 1]);
     $this->store->set('foreign', 'keep');
     $client->clearCache();
-    expect($this->store->get('foreign'))->toBe('keep');
+    expect($this->store->get('foreign'))->toBe('keep')
+        ->and($request->dataOrFail())->toBe(['value' => 2]);
 });
 
 it('разделяет runtime пространства и сохраняет исходную цепочку', function (): void {

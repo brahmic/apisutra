@@ -5,18 +5,30 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Auth;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
+use Override;
 
-final readonly class HmacAuthenticator implements AuthenticatorInterface
+final readonly class HmacAuthenticator implements AuthenticatorInterface, CacheIdentityProviderInterface
 {
     public function __construct(
         private string $apiKey,
         private string $secret,
     ) {}
 
-    #[\Override]
+    #[Override]
+    public function getCacheIdentity(?PreparedRequest $request = null): ?string
+    {
+        return CacheCredentialIdentity::forRequest(
+            hash('sha256', serialize([self::class, $this->apiKey, $this->secret])),
+            $request,
+            ['X-Api-Key'],
+        );
+    }
+
+    #[Override]
     public function authenticate(PreparedRequest $request): PreparedRequest
     {
         $timestamp = time();
@@ -28,19 +40,19 @@ final readonly class HmacAuthenticator implements AuthenticatorInterface
             ->withHeader('X-Signature', $signature);
     }
 
-    #[\Override]
+    #[Override]
     public function shouldRefresh(): bool
     {
         return false;
     }
 
-    #[\Override]
+    #[Override]
     public function getRefreshRequest(): ?RequestInterface
     {
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function processTokenResponse(ResponseDtoInterface $response): void
     {
     }

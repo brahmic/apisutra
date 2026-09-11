@@ -346,3 +346,11 @@ $config = $config->with(authPolicy: new OnlyWritePolicy());
 - `docs/guides/attributes/request.md` — `AuthScope`
 - `docs/guides/attributes/behavior.md` — `NoAuth`
 - `docs/guides/client-config/auth.md`
+
+## Identity для HTTP-кеша
+
+Встроенные authenticators автоматически предоставляют identity: `prefix` для
+изоляции учётных записей не требуется. Собственный authenticator может реализовать
+`CacheIdentityProviderInterface`; без него HTTP-кеш пропускается. Метод получения
+identity не выполняет авторизацию или refresh. Отдельный tenant провайдера объявляется
+дополнительно. Контракт и ограничения описаны в [настройках кеша](client-config/cache.md).

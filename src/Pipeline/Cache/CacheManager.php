@@ -11,6 +11,7 @@ use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
 use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Pipeline\Preparation\PreparedRequestFactory;
 use Brahmic\ApiSutra\Pipeline\Preparation\RequestPreparer;
@@ -20,27 +21,41 @@ use Brahmic\ApiSutra\VO\Cache\CacheOverride;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
-
 use Psr\Log\LogLevel;
 
-/** Кеш ответов с явным пространством и изолированным инвалидированием. */
+/** Кеш ответов с автоматической identity и изолированным инвалидированием. */
 final readonly class CacheManager
 {
+    private CacheIdentityResolver $identities;
+
     public function __construct(
         private ClientConfig $config,
         private PreparedRequestFactory $preparedRequestFactory,
         private RequestPreparer $requestPreparer,
-    ) {}
+        private AuthHandler $authHandler,
+        string $provider,
+    ) {
+        $this->identities = new CacheIdentityResolver($config, $provider);
+    }
 
     public function clearScope(): void
     {
-        $cache = $this->config->cacheConfig;
-        $store = $cache?->store ?? $this->config->cache;
-        if ($store === null || trim($cache?->prefix ?? '') === '') {
+        $cache = $this->config->cacheConfig ?? new CacheConfig(store: $this->config->cache);
+        $store = $cache->store ?? $this->config->cache;
+        if ($store === null) {
             return;
         }
 
-        (new CacheGenerations($store))->invalidate(CacheGenerations::key('scope', $cache->prefix));
+        $scopes = [];
+        foreach ([null, $this->config->auth, ...array_values($this->config->authScopes)] as $auth) {
+            $scope = $this->identities->scope($auth, $cache, $cache->prefix);
+            if ($scope !== null) {
+                $scopes[$scope] = true;
+            }
+        }
+        foreach (array_keys($scopes) as $scope) {
+            (new CacheGenerations($store))->invalidate(CacheGenerations::key('scope', $scope));
+        }
     }
 
     public function clearCache(
@@ -56,7 +71,7 @@ final readonly class CacheManager
         }
         [$cache, $override] = $state;
         $scope = $this->scope($request, $cache, $options);
-        if (trim($scope) === '' || !$this->isAllowed($request, $cache, $override)) {
+        if ($scope === null || !$this->isAllowed($request, $cache, $override)) {
             return;
         }
 
@@ -65,6 +80,9 @@ final readonly class CacheManager
             return;
         }
         $group = $this->groupIdentity($request, $prepared);
+        if ($group === null) {
+            return;
+        }
         (new CacheGenerations($cache->store))->invalidate(
             CacheGenerations::key('group', $scope, $group),
             max(60, $override->ttl ?? $cache->ttl),
@@ -81,10 +99,10 @@ final readonly class CacheManager
         }
         [$cache, $override] = $state;
         $scope = $this->scope($request, $cache, $context->options);
-        if (trim($scope) === '') {
-            (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Кеш пропущен: пространство не задано', [
+        if ($scope === null || $this->identities->request($request) === null) {
+            (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Кеш пропущен: identity не определена', [
                 'trace' => $context->traceId,
-                'cache_reason' => 'missing_scope',
+                'cache_reason' => 'unknown_identity',
             ]);
             return;
         }
@@ -111,6 +129,8 @@ final readonly class CacheManager
             $groupGeneration,
             $mode,
             $ttl,
+            $scope,
+            $this->identities->request($request),
         );
     }
 
@@ -121,7 +141,7 @@ final readonly class CacheManager
         if ($state === null || $prepared === null) {
             return null;
         }
-        if ($this->isFileUpload($prepared)) {
+        if (!$this->hasSameAccess($request, $context, $state) || $this->isFileUpload($prepared)) {
             $context->cacheExecution = null;
             return null;
         }
@@ -129,10 +149,24 @@ final readonly class CacheManager
         $identity = $this->requestIdentity($prepared);
         $state->requestIdentity = $identity;
         $customKey = $request instanceof AbstractRequest ? $request->getCacheAttribute()?->key : null;
+        $guard = $customKey !== null ? $this->identities->customGuard(
+            $prepared,
+            $request,
+            $this->authHandler->resolveForCache($request, $context),
+            $this->resolveCacheConfig($request),
+        ) : '';
+        if ($guard === null) {
+            (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Кеш пропущен: итоговая identity не определена', [
+                'trace' => $context->traceId,
+                'cache_reason' => 'unknown_identity',
+            ]);
+            $context->cacheExecution = null;
+            return null;
+        }
         $state->key = hash('sha256', serialize([
-            'apisutra-response-v2', $state->scopeKey, $state->scopeGeneration,
+            'apisutra-response-v3', $state->scopeKey, $state->scopeGeneration,
             $state->groupKey, $state->groupGeneration,
-            $customKey !== null ? ['custom', $customKey] : ['http', $identity],
+            $customKey !== null ? ['custom', $customKey, $guard] : ['http', $identity],
         ]));
         if (!$this->isReadEnabled($state->mode) || !$this->isCurrent($state)) {
             return null;
@@ -153,6 +187,7 @@ final readonly class CacheManager
         if (
             $state === null || $state->hit || $state->key === null || $response === null
             || !$response->isSuccess() || !$this->isWriteEnabled($state->mode) || !$this->isCurrent($state)
+            || !$this->hasSameAccess($request, $context, $state)
         ) {
             return;
         }
@@ -180,10 +215,20 @@ final readonly class CacheManager
             && $state->store->get($state->groupKey) === $state->groupGeneration;
     }
 
-    private function scope(RequestInterface $request, CacheConfig $cache, ?RequestOptions $options): string
+    private function hasSameAccess(RequestInterface $request, PipelineContext $context, CacheExecutionState $state): bool
+    {
+        $cache = $this->resolveCacheConfig($request);
+        return $cache !== null
+            && $this->scope($request, $cache, $context->options) === $state->scopeIdentity
+            && $this->identities->request($request) === $state->tenantIdentity;
+    }
+
+    private function scope(RequestInterface $request, CacheConfig $cache, ?RequestOptions $options): ?string
     {
         $options ??= $request instanceof AbstractRequest ? $request->getOptions() : null;
-        return $options?->getCacheScopeOverride() ?? $cache->prefix;
+        $context = new PipelineContext($request, $this->config, '', options: $options);
+        $auth = $this->authHandler->resolveForCache($request, $context);
+        return $this->identities->scope($auth, $cache, $options?->getCacheScopeOverride() ?? $cache->prefix);
     }
 
     private function isAllowed(RequestInterface $request, CacheConfig $cache, CacheOverride $override): bool
@@ -200,15 +245,19 @@ final readonly class CacheManager
             || ($request instanceof AbstractRequest && $request->getCacheAttribute() !== null);
     }
 
-    private function groupIdentity(RequestInterface $request, PreparedRequest $prepared): string
+    private function groupIdentity(RequestInterface $request, PreparedRequest $prepared): ?string
     {
+        $tenant = $this->identities->request($request);
+        if ($tenant === null) {
+            return null;
+        }
         $customKey = $request instanceof AbstractRequest ? $request->getCacheAttribute()?->key : null;
         if ($customKey !== null) {
             // Пользователь явно объединяет варианты запроса внутри своего пространства.
-            return hash('sha256', serialize(['custom', $customKey]));
+            return hash('sha256', serialize(['custom', $tenant, $customKey]));
         }
 
-        return $this->requestIdentity($prepared);
+        return hash('sha256', serialize([$tenant, $this->requestIdentity($prepared)]));
     }
 
     private function requestIdentity(PreparedRequest $prepared): string
@@ -233,6 +282,7 @@ final readonly class CacheManager
                 ttl: $cacheConfig->ttl,
                 prefix: $cacheConfig->prefix,
                 mode: $cacheConfig->mode,
+                identity: $cacheConfig->identity,
             );
         }
         if ($cacheConfig === null && $this->config->cache !== null) {
@@ -247,6 +297,7 @@ final readonly class CacheManager
                     ttl: $attribute->ttl ?? $cacheConfig?->ttl ?? 3600,
                     prefix: $cacheConfig?->prefix ?? '',
                     mode: $attribute->mode,
+                    identity: $cacheConfig?->identity,
                 );
             }
         }

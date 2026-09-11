@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Config;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 use Psr\SimpleCache\CacheInterface;
 
@@ -14,5 +15,6 @@ final readonly class CacheConfig
         public int $ttl = 3600,
         public string $prefix = '',
         public CacheMode $mode = CacheMode::Enabled,
+        public ?CacheIdentityProviderInterface $identity = null,
     ) {}
 }

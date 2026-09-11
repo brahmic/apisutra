@@ -22,7 +22,7 @@ VO конфигурации архивов. Параметры: driver (`native`
 VO конфигурации retry. Параметры: attempts, baseDelay, maxDelay, backoff (BackoffStrategy), jitter (bool), retryOn (array<int> HTTP статусов), retryExceptions (array<string>). Группирует все настройки повторных попыток.
 
 ## CacheConfig
-VO конфигурации кеширования. Параметры: store (PSR-16), ttl, prefix, mode (CacheMode). Группирует настройки кеша.
+VO конфигурации кеширования. Параметры: store (PSR-16), ttl, необязательный prefix, mode (CacheMode), identity (контекст tenant провайдера). Пространство кеша определяется автоматически; подробности — в [настройках кеша](../guides/client-config/cache.md).
 
 ## CacheMode
 Enum режима кеша. Значения: Enabled, Disabled, ReadOnly, WriteOnly. Управляет чтением/записью кеша.
