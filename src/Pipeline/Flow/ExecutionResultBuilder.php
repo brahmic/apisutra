@@ -287,6 +287,7 @@ final readonly class ExecutionResultBuilder
         ?ProviderResponse $response = null,
     ): ExecutionResult {
         return new ExecutionResult(
+            redaction: $this->config->redaction,
             data: $data,
             status: ResultStatus::SUCCESS,
             errors: new ErrorCollection([]),
@@ -312,6 +313,7 @@ final readonly class ExecutionResultBuilder
         ?ProviderResponse $response = null,
     ): ExecutionResult {
         return new ExecutionResult(
+            redaction: $this->config->redaction,
             data: null,
             status: ResultStatus::FAILED,
             errors: $errors,

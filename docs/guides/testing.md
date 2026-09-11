@@ -70,6 +70,12 @@ $client->assertNothingSent();
 ```
 
 ## Фикстуры (record/playback)
+
+Recorder маскирует стандартные credentials по умолчанию, даже без Fixture.
+`$client->record()` использует `ClientConfig::redaction`; правила пользовательского
+Fixture дополняют базовые. Настройка и границы маскирования — в
+[логировании](logging.md#маскирование-безопасного-экспорта).
+
 ```php
 use Brahmic\ApiSutra\Testing\Fixture;
 

@@ -152,7 +152,8 @@ final class CreateSignatureRequest extends AbstractRequest {}
 ## Кеширование
 Для управления кешем используйте:
 - `withCache()` / `withoutCache()`
-- `clearCache()`
+- `withCacheScope(string $scope)` — пространство identity/tenant для исполнения
+- `clearCache()` — инвалидирование вариантов запроса в его пространстве
 
 Подробнее: `docs/guides/client-config/cache.md`
 

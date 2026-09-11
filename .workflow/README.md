@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Первая поставка: изоляция кеша, auth scope и диагностика](completed/pln-002-cache-auth-diagnostics.md)
 - [Аудит архитектуры и кода — 2026-09-11](audit/aud-001-architecture-code-2026-09-11/aud-001-readme.md)
 - [Отложенный план перехода на async-first](backlog/pln-001-async-first.md)
 - [Историческое обсуждение async-first](discussion/dsc-001-async-first-analysis.md)

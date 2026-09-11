@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Request;
 
 use Brahmic\ApiSutra\Config\RateLimitConfig;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
@@ -60,7 +61,12 @@ final readonly class RequestOptions
         private ?CredentialsMergeMode $credentialsMergeModeOverride,
         private ?string $credentialsScopeOverride,
         private ?ContinuationMode $continuationModeOverride,
-    ) {}
+        private ?string $cacheScopeOverride = null,
+    ) {
+        if ($cacheScopeOverride !== null && trim($cacheScopeOverride) === '') {
+            throw new ConfigurationException('Пространство кеша не должно быть пустым');
+        }
+    }
 
     /**
      * Пустой набор опций без переопределений.
@@ -106,7 +112,9 @@ final readonly class RequestOptions
             retryEnabledOverride: $overrides['retryEnabledOverride'] ?? $this->retryEnabledOverride,
             retryAttemptsOverride: $overrides['retryAttemptsOverride'] ?? $this->retryAttemptsOverride,
             authOverride: $overrides['authOverride'] ?? $this->authOverride,
-            authScopeOverride: $overrides['authScopeOverride'] ?? $this->authScopeOverride,
+            authScopeOverride: array_key_exists('authScopeOverride', $overrides)
+                ? $overrides['authScopeOverride']
+                : $this->authScopeOverride,
             delayOverride: $overrides['delayOverride'] ?? $this->delayOverride,
             idempotencyKey: $overrides['idempotencyKey'] ?? $this->idempotencyKey,
             rateLimitOverride: $overrides['rateLimitOverride'] ?? $this->rateLimitOverride,
@@ -121,6 +129,7 @@ final readonly class RequestOptions
             credentialsMergeModeOverride: $overrides['credentialsMergeModeOverride'] ?? $this->credentialsMergeModeOverride,
             credentialsScopeOverride: $overrides['credentialsScopeOverride'] ?? $this->credentialsScopeOverride,
             continuationModeOverride: $overrides['continuationModeOverride'] ?? $this->continuationModeOverride,
+            cacheScopeOverride: $overrides['cacheScopeOverride'] ?? $this->cacheScopeOverride,
         );
     }
 
@@ -141,6 +150,17 @@ final readonly class RequestOptions
             'cacheTtlOverride' => $ttl,
             'cacheModeOverride' => CacheMode::Enabled,
         ]);
+    }
+
+    /** Пространство provider/identity/tenant для текущего исполнения. */
+    public function withCacheScope(string $scope): self
+    {
+        return $this->with(['cacheScopeOverride' => $scope]);
+    }
+
+    public function getCacheScopeOverride(): ?string
+    {
+        return $this->cacheScopeOverride;
     }
 
     /**
@@ -195,7 +215,7 @@ final readonly class RequestOptions
     }
 
     /**
-     * Отключить auth для запроса (не пробивает forceAuth).
+     * Отключить auth для запроса, заменив предыдущий runtime-выбор.
      */
     public function withoutAuth(): self
     {

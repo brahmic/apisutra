@@ -292,6 +292,12 @@ final class Pipeline implements PipelineExecutorInterface
         return $promise;
     }
 
+    /** Инвалидировать настроенное пространство кеша клиента. */
+    public function clearCacheScope(): void
+    {
+        $this->cacheManager->clearScope();
+    }
+
     /**
      * Очистить кеш для конкретного запроса.
      */

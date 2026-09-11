@@ -53,7 +53,7 @@ describe('Pipeline options fallback for RequestOptionsProviderInterface', functi
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             environment: Environment::Testing,
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
         );
         $client = new TestClient($config, $transport);
 
@@ -67,6 +67,7 @@ describe('Pipeline options fallback for RequestOptionsProviderInterface', functi
 
         $client->clearCacheForRequest($request);
 
-        expect($cache->lastDeleteKey)->toBe($setKey);
+        $request->withBaseUrl('https://override.test')->withCache()->send();
+        expect($transport->getRecorded())->toHaveCount(2);
     });
 });

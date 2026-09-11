@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Config;
 
+use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthPolicyInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
@@ -118,6 +119,7 @@ final readonly class ClientConfig
         public ContinuationMode $defaultContinuationMode = ContinuationMode::Auto,
         public ?string $defaultPollRequest = null,
         public ?ContinuationModeApplicatorInterface $continuationModeApplicator = null,
+        public RedactionPolicy $redaction = new RedactionPolicy(),
     ) {
         if ($cache instanceof CacheConfig) {
             $this->cacheConfig = $cache;
@@ -202,6 +204,7 @@ final readonly class ClientConfig
             'defaultContinuationMode' => $this->defaultContinuationMode,
             'defaultPollRequest' => $this->defaultPollRequest,
             'continuationModeApplicator' => $this->continuationModeApplicator,
+            'redaction' => $this->redaction,
         ];
 
         foreach ($overrides as $key => $value) {

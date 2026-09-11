@@ -51,6 +51,7 @@ $config = new ClientConfig(
 
 ## Redaction в requestDebug
 По умолчанию `requestDebug()` маскирует секреты:
+- userinfo и секретные query-параметры в URL
 - чувствительные headers (`Authorization`, `Cookie`, `X-Api-Key` и др.)
 - ключи в `body/query/form` по списку:
   - built‑in ключи (`password`, `token`, `secret`, `api_key`, ...)
@@ -61,6 +62,9 @@ $config = new ClientConfig(
 $raw = $result->requestDebug(false);
 $rawJson = $result->requestDebugJson(false);
 ```
+
+Политика также применяется к штатным логам и recorder; настройка дополнительных
+полей и границы безопасного экспорта описаны в [логировании](../logging.md).
 
 ## Environment
 `environment` влияет на поведение ядра:

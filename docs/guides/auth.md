@@ -265,7 +265,8 @@ $request = (new PublicPing())->withoutAuth();
 $request = (new PublicPing())->forceAuth(); // использовать только для исключений
 ```
 
-`withAuthScope()` не пробивает `#[NoAuth]`/`withoutAuth()`.
+`withAuthScope()` не пробивает `#[NoAuth]`; предыдущий runtime `withoutAuth()`
+заменяется новым runtime-выбором.
 `forceAuthScope()` пробивает запрет и нужен только для редких исключений.
 
 ## Приоритеты выбора auth
@@ -277,6 +278,24 @@ $request = (new PublicPing())->forceAuth(); // использовать толь
 5) `withAuth()`
 6) `AuthPolicyInterface`
 7) дефолтный `auth` из `ClientConfig`
+
+## Сброс runtime scope
+
+`withAuth()`, `withoutAuth()` и `forceAuth()` очищают предыдущий runtime scope.
+Например, `withAuthScope('secondary')->withoutAuth()->withAuth()` возвращает
+выбор к default credentials, если у класса нет `#[AuthScope]`. При наличии
+атрибута после сброса снова действует его scope. Исходная execution-копия
+с `secondary` не меняется.
+
+`withOptions()` заменяет полный снимок опций: очищенный scope execution не
+восстанавливается из runtime scope исходного request. Правила `NoAuth`,
+`AuthPolicy` и разрешение через `forceAuth` сохраняются. В цепочке runtime-методов
+последняя настройка заменяет предыдущую; например, `forceAuth()->withoutAuth()`
+отключает авторизацию.
+
+**Изменение совместимости:** раньше переданный для сброса null сохранял предыдущий
+scope. Для сохранения выбранного scope используйте явный `withAuthScope()` или
+`forceAuthScope()`. Необязательные TTL и connect timeout этим исправлением не меняются.
 
 ## Политика доступа
 ```php

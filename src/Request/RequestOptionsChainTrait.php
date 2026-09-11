@@ -57,6 +57,12 @@ trait RequestOptionsChainTrait
         );
     }
 
+    /** Задать пространство кеша только для текущего исполнения. */
+    public function withCacheScope(string $scope): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withCacheScope($scope));
+    }
+
     /**
      * Полностью отключить кеширование для запроса.
      */
@@ -118,7 +124,7 @@ trait RequestOptionsChainTrait
     }
 
     /**
-     * Отключить auth для запроса (не пробивает forceAuth).
+     * Отключить auth для запроса, заменив предыдущий runtime-выбор.
      */
     public function withoutAuth(): RequestExecutionInterface
     {

@@ -34,7 +34,7 @@ trait TestingClientTrait
      */
     public function record(string $path, array $fixtures = []): static
     {
-        $this->transport = new RecordingTransport($this->transport, $path, $fixtures);
+        $this->transport = new RecordingTransport($this->transport, $path, $fixtures, $this->config->redaction);
         MockConfig::setFixturePath($path);
         $this->rebuildPipeline();
 

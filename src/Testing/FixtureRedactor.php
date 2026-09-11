@@ -4,14 +4,24 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Testing;
 
+use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
+
 final class FixtureRedactor
 {
+    public function __construct(private readonly RedactionPolicy $policy = new RedactionPolicy()) {}
+
     /**
      * @param array<string, mixed> $payload
+     * @param list<string> $secretFields
      * @return array<string, mixed>
      */
-    public function redact(array $payload, Fixture $fixture): array
+    public function redact(array $payload, ?Fixture $fixture = null, array $secretFields = []): array
     {
+        $payload = $this->policy->withFields($secretFields)->context($payload);
+        if ($fixture === null) {
+            return $payload;
+        }
+
         $headers = $fixture->sensitiveHeaders();
         $payload = $this->redactHeaders($payload, $headers);
 

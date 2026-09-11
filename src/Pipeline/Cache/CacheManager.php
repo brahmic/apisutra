@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Pipeline\Cache;
 
-use BackedEnum;
 use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Pipeline\Preparation\PreparedRequestFactory;
 use Brahmic\ApiSutra\Pipeline\Preparation\RequestPreparer;
 use Brahmic\ApiSutra\Request\PaginationOptions;
@@ -20,16 +21,9 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 
-/**
- * Менеджер кеша на уровне пайплайна.
- *
- * Нюансы:
- * - override опций имеет приоритет над атрибутом и конфигом;
- * - download кешируется только при явном opt-in;
- * - upload с файлами не кешируется;
- * - ключ строится из метода, baseUrl, query и body (query нормализуется);
- * - clearCache использует тот же ключ, что и чтение/запись.
- */
+use Psr\Log\LogLevel;
+
+/** Кеш ответов с явным пространством и изолированным инвалидированием. */
 final readonly class CacheManager
 {
     public function __construct(
@@ -37,6 +31,17 @@ final readonly class CacheManager
         private PreparedRequestFactory $preparedRequestFactory,
         private RequestPreparer $requestPreparer,
     ) {}
+
+    public function clearScope(): void
+    {
+        $cache = $this->config->cacheConfig;
+        $store = $cache?->store ?? $this->config->cache;
+        if ($store === null || trim($cache?->prefix ?? '') === '') {
+            return;
+        }
+
+        (new CacheGenerations($store))->invalidate(CacheGenerations::key('scope', $cache->prefix));
+    }
 
     public function clearCache(
         RequestInterface $request,
@@ -50,78 +55,186 @@ final readonly class CacheManager
             return;
         }
         [$cache, $override] = $state;
-
-        if ($this->isDownloadCacheBlocked($request, $override->mode)) {
+        $scope = $this->scope($request, $cache, $options);
+        if (trim($scope) === '' || !$this->isAllowed($request, $cache, $override)) {
             return;
         }
 
-        // Подготовка учитывает overrides и пагинацию для совпадения ключа.
         $prepared = $this->prepareForCache($request, $traceId, $options, $paginationOptions);
         if ($this->isFileUpload($prepared)) {
             return;
         }
-        $cacheKey = $this->buildCacheKey($prepared, $cache->prefix, $request);
-        $cache->store->delete($cacheKey);
+        $group = $this->groupIdentity($request, $prepared);
+        (new CacheGenerations($cache->store))->invalidate(
+            CacheGenerations::key('group', $scope, $group),
+            max(60, $override->ttl ?? $cache->ttl),
+        );
+    }
+
+    /** Снимок поколения снимается до auth и hooks, способных выполнять I/O. */
+    public function prepareExecution(RequestInterface $request, PipelineContext $context): void
+    {
+        $context->cacheExecution = null;
+        $state = $this->resolveCacheState($request, $context->options);
+        if ($state === null || $context->preparedRequest === null) {
+            return;
+        }
+        [$cache, $override] = $state;
+        $scope = $this->scope($request, $cache, $context->options);
+        if (trim($scope) === '') {
+            (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Кеш пропущен: пространство не задано', [
+                'trace' => $context->traceId,
+                'cache_reason' => 'missing_scope',
+            ]);
+            return;
+        }
+        if (!$this->isAllowed($request, $cache, $override) || $this->isFileUpload($context->preparedRequest)) {
+            return;
+        }
+
+        $ttl = $override->ttl ?? $cache->ttl;
+        $generations = new CacheGenerations($cache->store);
+        $scopeKey = CacheGenerations::key('scope', $scope);
+        $groupKey = CacheGenerations::key('group', $scope, $this->groupIdentity($request, $context->preparedRequest));
+        $mode = $this->resolveCacheMode($cache, $override->mode);
+        $create = $this->isWriteEnabled($mode);
+        $scopeGeneration = $generations->current($scopeKey, create: $create);
+        $groupGeneration = $generations->current($groupKey, max(60, $ttl), $create);
+        if ($scopeGeneration === null || $groupGeneration === null) {
+            return;
+        }
+        $context->cacheExecution = new CacheExecutionState(
+            $cache->store,
+            $scopeKey,
+            $scopeGeneration,
+            $groupKey,
+            $groupGeneration,
+            $mode,
+            $ttl,
+        );
     }
 
     public function checkCache(RequestInterface $request, PipelineContext $context): ?ProviderResponse
     {
-        $state = $this->resolveCacheState($request, $context->options);
-        if ($state === null) {
+        $state = $context->cacheExecution;
+        $prepared = $context->preparedRequest;
+        if ($state === null || $prepared === null) {
             return null;
         }
-        [$cache, $override] = $state;
-
-        if ($this->isDownloadCacheBlocked($request, $override->mode)) {
-            return null;
-        }
-        if (!$this->isReadEnabled($this->resolveCacheMode($cache, $override->mode))) {
+        if ($this->isFileUpload($prepared)) {
+            $context->cacheExecution = null;
             return null;
         }
 
-        if ($this->isFileUpload($context->preparedRequest)) {
+        $identity = $this->requestIdentity($prepared);
+        $state->requestIdentity = $identity;
+        $customKey = $request instanceof AbstractRequest ? $request->getCacheAttribute()?->key : null;
+        $state->key = hash('sha256', serialize([
+            'apisutra-response-v2', $state->scopeKey, $state->scopeGeneration,
+            $state->groupKey, $state->groupGeneration,
+            $customKey !== null ? ['custom', $customKey] : ['http', $identity],
+        ]));
+        if (!$this->isReadEnabled($state->mode) || !$this->isCurrent($state)) {
             return null;
         }
-        $cacheKey = $this->buildCacheKey($context->preparedRequest, $cache->prefix, $request);
-        $cached = $cache->store->get($cacheKey);
-        if (!is_array($cached)) {
+        $cached = $state->store->get($state->key);
+        if (!is_array($cached) || !isset($cached['status'], $cached['headers'], $cached['body'])) {
             return null;
         }
 
+        $state->hit = true;
         return $this->buildCachedResponse($cached, $context);
     }
 
     public function storeCache(RequestInterface $request, PipelineContext $context): void
     {
-        $state = $this->resolveCacheState($request, $context->options);
-        if ($state === null) {
+        $state = $context->cacheExecution;
+        $response = $context->response;
+        if (
+            $state === null || $state->hit || $state->key === null || $response === null
+            || !$response->isSuccess() || !$this->isWriteEnabled($state->mode) || !$this->isCurrent($state)
+        ) {
             return;
         }
-        [$cache, $override] = $state;
+        // Auth retry мог сменить credentials; исходный ключ тогда больше не подходит.
+        if ($state->requestIdentity !== $this->requestIdentity($response->request)) {
+            (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Запись кеша пропущена: запрос изменился', [
+                'trace' => $context->traceId,
+                'cache_reason' => 'request_changed',
+            ]);
+            return;
+        }
 
-        if ($this->isDownloadCacheBlocked($request, $override->mode)) {
-            return;
+        if (!$state->store->set($state->key, [
+            'status' => $response->status,
+            'headers' => $response->headers,
+            'body' => $response->body,
+        ], $state->ttl)) {
+            throw new ConfigurationException('Не удалось сохранить ответ в кеше');
         }
-        if (!$this->isWriteEnabled($this->resolveCacheMode($cache, $override->mode))) {
-            return;
+    }
+
+    private function isCurrent(CacheExecutionState $state): bool
+    {
+        return $state->store->get($state->scopeKey) === $state->scopeGeneration
+            && $state->store->get($state->groupKey) === $state->groupGeneration;
+    }
+
+    private function scope(RequestInterface $request, CacheConfig $cache, ?RequestOptions $options): string
+    {
+        $options ??= $request instanceof AbstractRequest ? $request->getOptions() : null;
+        return $options?->getCacheScopeOverride() ?? $cache->prefix;
+    }
+
+    private function isAllowed(RequestInterface $request, CacheConfig $cache, CacheOverride $override): bool
+    {
+        $mode = $this->resolveCacheMode($cache, $override->mode);
+        if ($mode === CacheMode::Disabled || $this->isDownloadCacheBlocked($request, $override->mode)) {
+            return false;
+        }
+        if (in_array($request->getMethod()->value, ['GET', 'HEAD'], true)) {
+            return true;
         }
 
-        if ($this->isFileUpload($context->preparedRequest)) {
-            return;
-        }
-        $ttl = $override->ttl ?? $cache->ttl;
-        $cacheKey = $this->buildCacheKey($context->preparedRequest, $cache->prefix, $request);
+        return $override->mode !== null
+            || ($request instanceof AbstractRequest && $request->getCacheAttribute() !== null);
+    }
 
-        $cache->store->set($cacheKey, [
-            'status' => $context->response?->status ?? 200,
-            'headers' => $context->response?->headers ?? [],
-            'body' => $context->response?->body ?? '',
-        ], $ttl);
+    private function groupIdentity(RequestInterface $request, PreparedRequest $prepared): string
+    {
+        $customKey = $request instanceof AbstractRequest ? $request->getCacheAttribute()?->key : null;
+        if ($customKey !== null) {
+            // Пользователь явно объединяет варианты запроса внутри своего пространства.
+            return hash('sha256', serialize(['custom', $customKey]));
+        }
+
+        return $this->requestIdentity($prepared);
+    }
+
+    private function requestIdentity(PreparedRequest $prepared): string
+    {
+        $headers = [];
+        foreach ($prepared->headers as $name => $value) {
+            $headers[strtolower($name)][] = $value;
+        }
+        ksort($headers);
+
+        return hash('sha256', serialize([
+            $prepared->method->value, $prepared->url, $headers, $prepared->body,
+        ]));
     }
 
     private function resolveCacheConfig(RequestInterface $request): ?CacheConfig
     {
         $cacheConfig = $this->config->cacheConfig;
+        if ($cacheConfig !== null && $cacheConfig->store === null && $this->config->cache !== null) {
+            $cacheConfig = new CacheConfig(
+                store: $this->config->cache,
+                ttl: $cacheConfig->ttl,
+                prefix: $cacheConfig->prefix,
+                mode: $cacheConfig->mode,
+            );
+        }
         if ($cacheConfig === null && $this->config->cache !== null) {
             $cacheConfig = new CacheConfig(store: $this->config->cache);
         }
@@ -130,7 +243,7 @@ final readonly class CacheManager
             $attribute = $request->getCacheAttribute();
             if ($attribute !== null) {
                 return new CacheConfig(
-                    store: $cacheConfig?->store,
+                    store: $cacheConfig?->store ?? $this->config->cache,
                     ttl: $attribute->ttl ?? $cacheConfig?->ttl ?? 3600,
                     prefix: $cacheConfig?->prefix ?? '',
                     mode: $attribute->mode,
@@ -271,57 +384,5 @@ final readonly class CacheManager
 
         $attribute = $request->getCacheAttribute();
         return $attribute !== null && $attribute->mode !== CacheMode::Disabled;
-    }
-
-    private function buildCacheKey(PreparedRequest $request, string $prefix, RequestInterface $original): string
-    {
-        if ($original instanceof AbstractRequest) {
-            $attribute = $original->getCacheAttribute();
-            if ($attribute !== null && $attribute->key !== null) {
-                // Явный ключ из атрибута имеет приоритет над расчётным.
-                return $prefix . $attribute->key;
-            }
-        }
-
-        $algo = in_array('xxh3', hash_algos(), true) ? 'xxh3' : 'sha256';
-        $bodyHash = $request->body !== null ? hash($algo, $request->body) : '';
-        $urlParts = explode('?', $request->url, 2);
-        $baseUrl = $urlParts[0] ?? $request->url;
-        $queryHash = '';
-        if (isset($request->meta['query']) && is_array($request->meta['query'])) {
-            // Нормализуем query для стабильного ключа.
-            $queryHash = hash($algo, $this->normalizeQueryForCache($request->meta['query']));
-        }
-        $parts = [$request->method->value, $baseUrl, $queryHash, $bodyHash];
-        $hash = hash($algo, implode('|', $parts));
-
-        return $prefix . $hash;
-    }
-
-    /**
-     * @param array<string, array{value: mixed, format: mixed}|mixed> $query
-     */
-    private function normalizeQueryForCache(array $query): string
-    {
-        // Сортируем ключи и значения массивов, чтобы избежать коллизий.
-        ksort($query);
-        $parts = [];
-        foreach ($query as $name => $data) {
-            $value = is_array($data) && array_key_exists('value', $data) ? $data['value'] : $data;
-            $format = is_array($data) && array_key_exists('format', $data) ? $data['format'] : null;
-
-            if (is_array($value)) {
-                $normalized = array_map(static fn (mixed $item) => (string) $item, $value);
-                sort($normalized);
-                $value = $normalized;
-            }
-
-            $formatValue = $format instanceof BackedEnum ? $format->value : (string) $format;
-            $parts[] = $name . '|' . $formatValue . '|' . json_encode($value, JSON_UNESCAPED_UNICODE);
-        }
-
-        sort($parts);
-
-        return implode('&', $parts);
     }
 }

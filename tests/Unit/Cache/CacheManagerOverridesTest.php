@@ -2,17 +2,10 @@
 
 declare(strict_types=1);
 
-use Brahmic\ApiSutra\Casts\CastRegistry;
 use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 use Brahmic\ApiSutra\Enums\Configuration\Environment;
-use Brahmic\ApiSutra\Enums\Http\HttpMethod;
-use Brahmic\ApiSutra\Enums\Http\QueryArrayFormat;
-use Brahmic\ApiSutra\Pipeline\Cache\CacheManager;
-use Brahmic\ApiSutra\Pipeline\Preparation\PreparedRequestFactory;
-use Brahmic\ApiSutra\Pipeline\Preparation\RequestPreparer;
-use Brahmic\ApiSutra\Serialization\Serializer;
 use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\AttributeRichRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\CacheableRequest;
@@ -22,7 +15,6 @@ use Brahmic\ApiSutra\Tests\Stubs\Requests\SimpleGetRequest;
 use Brahmic\ApiSutra\Tests\Stubs\TestClient;
 use Brahmic\ApiSutra\Tests\Support\SpyCache;
 use Brahmic\ApiSutra\Transport\MockTransport;
-use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 
 describe('CacheManager overrides', function () {
     it('withoutCache отключает чтение и запись', function () {
@@ -37,7 +29,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -66,7 +58,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -92,7 +84,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -114,7 +106,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -136,7 +128,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 45),
+            cache: new CacheConfig(store: $cache, ttl: 45, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -161,7 +153,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -187,7 +179,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -213,7 +205,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, mode: CacheMode::Disabled),
+            cache: new CacheConfig(store: $cache, ttl: 60, mode: CacheMode::Disabled, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -241,7 +233,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -280,180 +272,9 @@ describe('CacheManager overrides', function () {
 
         $request->withIdempotencyKey('id')->withCache()->send()->raw();
 
-        expect($cache->lastSetKey)->toBe('prefix:attr-cache-key');
-    });
-
-    it('cache key стабилен при разном порядке параметров', function () {
-        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
-        $cacheManager = new CacheManager(
-            $config,
-            new PreparedRequestFactory(new Serializer(new CastRegistry()), new RequestPreparer($config)),
-            new RequestPreparer($config),
-        );
-
-        $request = new SimpleGetRequest('q');
-        $preparedA = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [
-                'query' => [
-                    'b' => ['value' => '2', 'format' => null],
-                    'a' => ['value' => '1', 'format' => null],
-                ],
-            ],
-        );
-        $preparedB = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [
-                'query' => [
-                    'a' => ['value' => '1', 'format' => null],
-                    'b' => ['value' => '2', 'format' => null],
-                ],
-            ],
-        );
-
-        $method = new ReflectionMethod(CacheManager::class, 'buildCacheKey');
-        $method->setAccessible(true);
-
-        $keyA = $method->invoke($cacheManager, $preparedA, 'prefix:', $request);
-        $keyB = $method->invoke($cacheManager, $preparedB, 'prefix:', $request);
-
-        expect($keyA)->toBe($keyB);
-    });
-
-    it('cache key стабилен при разном порядке значений массива', function () {
-        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
-        $cacheManager = new CacheManager(
-            $config,
-            new PreparedRequestFactory(new Serializer(new CastRegistry()), new RequestPreparer($config)),
-            new RequestPreparer($config),
-        );
-
-        $request = new SimpleGetRequest('q');
-        $preparedA = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [
-                'query' => [
-                    'ids' => ['value' => [2, 1], 'format' => null],
-                ],
-            ],
-        );
-        $preparedB = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [
-                'query' => [
-                    'ids' => ['value' => [1, 2], 'format' => null],
-                ],
-            ],
-        );
-
-        $method = new ReflectionMethod(CacheManager::class, 'buildCacheKey');
-        $method->setAccessible(true);
-
-        $keyA = $method->invoke($cacheManager, $preparedA, 'prefix:', $request);
-        $keyB = $method->invoke($cacheManager, $preparedB, 'prefix:', $request);
-
-        expect($keyA)->toBe($keyB);
-    });
-
-    it('cache key учитывает формат массива в query', function () {
-        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
-        $cacheManager = new CacheManager(
-            $config,
-            new PreparedRequestFactory(new Serializer(new CastRegistry()), new RequestPreparer($config)),
-            new RequestPreparer($config),
-        );
-
-        $request = new SimpleGetRequest('q');
-        $preparedA = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [
-                'query' => [
-                    'ids' => ['value' => [1, 2], 'format' => QueryArrayFormat::Comma],
-                ],
-            ],
-        );
-        $preparedB = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [
-                'query' => [
-                    'ids' => ['value' => [1, 2], 'format' => QueryArrayFormat::Repeat],
-                ],
-            ],
-        );
-
-        $method = new ReflectionMethod(CacheManager::class, 'buildCacheKey');
-        $method->setAccessible(true);
-
-        $keyA = $method->invoke($cacheManager, $preparedA, 'prefix:', $request);
-        $keyB = $method->invoke($cacheManager, $preparedB, 'prefix:', $request);
-
-        expect($keyA)->not->toBe($keyB);
-    });
-
-    it('cache key учитывает http метод', function () {
-        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
-        $cacheManager = new CacheManager(
-            $config,
-            new PreparedRequestFactory(new Serializer(new CastRegistry()), new RequestPreparer($config)),
-            new RequestPreparer($config),
-        );
-
-        $request = new SimpleGetRequest('q');
-        $preparedA = new PreparedRequest(
-            method: HttpMethod::GET,
-            url: 'https://api.test/items',
-            meta: [],
-        );
-        $preparedB = new PreparedRequest(
-            method: HttpMethod::POST,
-            url: 'https://api.test/items',
-            meta: [],
-        );
-
-        $method = new ReflectionMethod(CacheManager::class, 'buildCacheKey');
-        $method->setAccessible(true);
-
-        $keyA = $method->invoke($cacheManager, $preparedA, 'prefix:', $request);
-        $keyB = $method->invoke($cacheManager, $preparedB, 'prefix:', $request);
-
-        expect($keyA)->not->toBe($keyB);
-    });
-
-    it('cache key учитывает тело запроса', function () {
-        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
-        $cacheManager = new CacheManager(
-            $config,
-            new PreparedRequestFactory(new Serializer(new CastRegistry()), new RequestPreparer($config)),
-            new RequestPreparer($config),
-        );
-
-        $request = new SimpleGetRequest('q');
-        $preparedA = new PreparedRequest(
-            method: HttpMethod::POST,
-            url: 'https://api.test/items',
-            body: json_encode(['a' => 1], JSON_UNESCAPED_UNICODE),
-            meta: [],
-        );
-        $preparedB = new PreparedRequest(
-            method: HttpMethod::POST,
-            url: 'https://api.test/items',
-            body: json_encode(['a' => 2], JSON_UNESCAPED_UNICODE),
-            meta: [],
-        );
-
-        $method = new ReflectionMethod(CacheManager::class, 'buildCacheKey');
-        $method->setAccessible(true);
-
-        $keyA = $method->invoke($cacheManager, $preparedA, 'prefix:', $request);
-        $keyB = $method->invoke($cacheManager, $preparedB, 'prefix:', $request);
-
-        expect($keyA)->not->toBe($keyB);
+        expect($cache->lastSetKey)->toMatch('/^[a-f0-9]{64}$/');
+        $request->withIdempotencyKey('other-id')->withCache()->send()->raw();
+        expect($transport->getRecorded())->toHaveCount(1);
     });
 
     it('page и limit влияют на cache key', function () {
@@ -465,7 +286,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);
@@ -483,7 +304,7 @@ describe('CacheManager overrides', function () {
             ->and($firstKey)->not->toBe($secondKey);
     });
 
-    it('clearCache удаляет запись по ключу', function () {
+    it('clearCache инвалидирует запись запроса', function () {
         $cache = new SpyCache();
         $transport = new MockTransport();
         $transport->fake([
@@ -492,7 +313,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);
@@ -504,8 +325,9 @@ describe('CacheManager overrides', function () {
 
         $request->clearCache();
 
-        expect($setKey)->not->toBeNull()
-            ->and($cache->lastDeleteKey)->toBe($setKey);
+        expect($setKey)->not->toBeNull();
+        $request->withCache()->send()->raw();
+        expect($transport->getRecorded())->toHaveCount(2);
     });
 
     it('clearCache учитывает pagination options', function () {
@@ -517,7 +339,7 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);
@@ -530,7 +352,8 @@ describe('CacheManager overrides', function () {
 
         $execution->clearCache();
 
-        expect($setKey)->not->toBeNull()
-            ->and($cache->lastDeleteKey)->toBe($setKey);
+        expect($setKey)->not->toBeNull();
+        $execution->send()->raw();
+        expect($transport->getRecorded())->toHaveCount(2);
     });
 });

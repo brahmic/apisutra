@@ -323,10 +323,7 @@ abstract class AbstractClient implements ClientInterface, AttributeMetadataCache
 
     public function clearCache(): void
     {
-        $store = $this->config->cacheConfig?->store ?? $this->config->cache;
-        if ($store !== null && method_exists($store, 'clear')) {
-            $store->clear();
-        }
+        $this->pipeline->clearCacheScope();
     }
 
     public function continuation(): ContinuationService

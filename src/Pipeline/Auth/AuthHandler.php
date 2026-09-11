@@ -133,9 +133,9 @@ final readonly class AuthHandler
 
     private function resolveAuthScopeOverride(AbstractRequest $request, PipelineContext $context): ?string
     {
-        $contextScope = $context->options?->getAuthScopeOverride();
-        if ($contextScope !== null) {
-            return $contextScope;
+        if ($context->options !== null) {
+            // Execution содержит полный снимок опций, включая явный сброс scope.
+            return $context->options->getAuthScopeOverride();
         }
 
         return $request->getAuthScopeOverride();

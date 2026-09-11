@@ -61,6 +61,7 @@ final readonly class RequestFlowRunner
         float $startTime,
         PreparedRequest $prepared,
     ): ExecutionResult {
+        $this->cacheManager->prepareExecution($request, $context);
         $prepared = $this->applyBeforeSendStages($request, $context, $prepared);
 
         $cachedResponse = $this->resolveResponse($request, $context);

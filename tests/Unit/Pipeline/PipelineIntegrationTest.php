@@ -52,7 +52,7 @@ describe('Pipeline integration', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60),
+            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);

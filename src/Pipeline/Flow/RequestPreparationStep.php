@@ -23,11 +23,12 @@ final readonly class RequestPreparationStep
         $prepared = $this->preparedRequestFactory->create($request, $context);
         $context->preparedRequest = $prepared;
 
+        $secretFields = $prepared->meta['credentialsEnrichment']['secretKeys'] ?? [];
         $this->auditLogger->log(LogLevel::DEBUG, 'HTTP запрос подготовлен', [
             'trace' => $context->traceId,
             'method' => $prepared->method->value,
             'url' => $prepared->url,
-        ]);
+        ], is_array($secretFields) ? array_values(array_filter($secretFields, 'is_string')) : []);
 
         return $prepared;
     }

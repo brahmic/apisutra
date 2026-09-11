@@ -55,8 +55,9 @@ final readonly class AuditLogger
 
     /**
      * @param array<string, mixed> $context
+     * @param list<string> $secretFields
      */
-    public function log(string $level, string $message, array $context = []): void
+    public function log(string $level, string $message, array $context = [], array $secretFields = []): void
     {
         $logger = $this->config->logger;
         if (!$logger instanceof LoggerInterface) {
@@ -67,7 +68,7 @@ final readonly class AuditLogger
             return;
         }
 
-        $logger->log($level, $message, $context);
+        $logger->log($level, $message, $this->config->redaction->withFields($secretFields)->context($context));
     }
 
     private function shouldLog(string $level): bool

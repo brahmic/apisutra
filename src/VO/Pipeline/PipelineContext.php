@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\VO\Pipeline;
 
 use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Pipeline\Cache\CacheExecutionState;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Request\PaginationOptions;
@@ -14,6 +15,8 @@ use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 
 class PipelineContext
 {
+    public ?CacheExecutionState $cacheExecution = null;
+
     public function __construct(
         public readonly RequestInterface $request,
         public readonly ClientConfig $config,

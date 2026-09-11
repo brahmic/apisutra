@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
+use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Testing\Fixture;
 use Brahmic\ApiSutra\Testing\FixtureRedactor;
@@ -29,9 +30,10 @@ final class RecordingTransport implements TransportInterface
         private readonly TransportInterface $transport,
         private readonly string $path,
         array $fixtures = [],
+        RedactionPolicy $redaction = new RedactionPolicy(),
     ) {
         $this->fixtures = $fixtures;
-        $this->redactor = new FixtureRedactor();
+        $this->redactor = new FixtureRedactor($redaction);
     }
 
     #[\Override]
@@ -79,9 +81,12 @@ final class RecordingTransport implements TransportInterface
         ];
 
         $fixture = $this->resolveFixture($request);
-        if ($fixture instanceof Fixture) {
-            $payload = $this->redactor->redact($payload, $fixture);
-        }
+        $secretFields = $request->meta['credentialsEnrichment']['secretKeys'] ?? [];
+        $payload = $this->redactor->redact(
+            $payload,
+            $fixture,
+            is_array($secretFields) ? array_values(array_filter($secretFields, 'is_string')) : [],
+        );
 
         $file = $this->resolveFilename($payload['request']['class']);
         file_put_contents($file, json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

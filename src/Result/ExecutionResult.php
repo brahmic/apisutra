@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Result;
 
+use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Collections\ErrorCollection;
 use Brahmic\ApiSutra\Collections\ResultCollection;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\ResultInterface;
@@ -28,28 +29,6 @@ use Throwable;
  */
 readonly class ExecutionResult implements ResultInterface
 {
-    private const array SENSITIVE_HEADERS = [
-        'authorization',
-        'proxy-authorization',
-        'cookie',
-        'set-cookie',
-        'x-api-key',
-        'api-key',
-        'x-auth-token',
-        'x-access-token',
-    ];
-
-    private const array DEFAULT_SENSITIVE_KEYS = [
-        'password',
-        'token',
-        'secret',
-        'api_key',
-        'apikey',
-        'client_secret',
-        'access_token',
-        'refresh_token',
-    ];
-
     private ResultCollection $nestedResults;
 
     /**
@@ -70,6 +49,7 @@ readonly class ExecutionResult implements ResultInterface
         public ?string $requestClass = null,
         public ?Throwable $exception = null,
         public ?ProviderResponse $response = null,
+        private RedactionPolicy $redaction = new RedactionPolicy(),
     ) {
         $this->nestedResults = ResultCollection::make($this->nested);
     }
@@ -203,36 +183,45 @@ readonly class ExecutionResult implements ResultInterface
             return null;
         }
 
-        $headers = $redactSensitive
-            ? $this->redactHeaders($prepared->headers)
-            : $prepared->headers;
+        $headers = $prepared->headers;
         $credentials = is_array($prepared->meta['credentialsEnrichment'] ?? null)
             ? $prepared->meta['credentialsEnrichment']
             : null;
-        $secretKeys = $this->resolveSecretKeys($credentials);
-
+        $secretFields = $credentials['secretKeys'] ?? [];
+        $secretKeys = is_array($secretFields) ? array_values(array_filter($secretFields, 'is_string')) : [];
+        $policy = $this->redaction->withFields($secretKeys);
         $body = $prepared->meta['body'] ?? null;
         $query = is_array($prepared->meta['query'] ?? null) ? $prepared->meta['query'] : null;
-        $form = $this->extractForm($prepared->meta['body'] ?? null, $prepared->headers);
+        $form = $this->extractForm($body, $headers);
         $bodyRaw = $prepared->body;
-
+        $url = $prepared->url;
         if ($redactSensitive) {
-            $body = $this->redactByKeys($body, $secretKeys);
-            $query = is_array($query) ? $this->redactQuery($query, $secretKeys) : null;
-            $form = is_array($form) ? $this->redactByKeys($form, $secretKeys) : null;
-            $bodyRaw = $this->redactBodyRaw($bodyRaw, $secretKeys);
+            $headers = $policy->headers($headers);
+            $url = $policy->url($url);
+            $body = $policy->data($body);
+            $query = $query !== null ? $policy->query($query) : null;
+            $form = $policy->data($form);
+            $contentType = null;
+            foreach ($prepared->headers as $name => $value) {
+                if (strcasecmp($name, 'Content-Type') === 0) {
+                    $contentType = $value;
+                }
+            }
+            $bodyRaw = $policy->body($bodyRaw, $contentType);
         }
 
         return [
             'method' => $prepared->method->value,
-            'url' => $prepared->url,
+            'url' => $url,
             'headers' => $headers,
             'bodyRaw' => $bodyRaw,
             'body' => $body,
             'query' => $query,
             'form' => $form,
             'hasStream' => $prepared->stream !== null,
-            'oneOf' => is_array($prepared->meta['oneOf'] ?? null) ? $prepared->meta['oneOf'] : null,
+            'oneOf' => is_array($prepared->meta['oneOf'] ?? null)
+                ? ($redactSensitive ? $policy->data($prepared->meta['oneOf']) : $prepared->meta['oneOf'])
+                : null,
             'credentialsEnrichment' => $credentials,
         ];
     }
@@ -252,59 +241,6 @@ readonly class ExecutionResult implements ResultInterface
     }
 
     /**
-     * @param array<string, string> $headers
-     * @return array<string, string>
-     */
-    private function redactHeaders(array $headers): array
-    {
-        $result = [];
-        foreach ($headers as $name => $value) {
-            $result[$name] = in_array(strtolower($name), self::SENSITIVE_HEADERS, true)
-                ? '***'
-                : $value;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array<string, mixed>|null $credentials
-     * @return array<int, string>
-     */
-    private function resolveSecretKeys(?array $credentials): array
-    {
-        $keys = self::DEFAULT_SENSITIVE_KEYS;
-        if (is_array($credentials['secretKeys'] ?? null)) {
-            $keys = [...$keys, ...$credentials['secretKeys']];
-        }
-
-        return $this->normalizeSecretKeys($keys);
-    }
-
-    /**
-     * @param array<int, string> $keys
-     * @return array<int, string>
-     */
-    private function normalizeSecretKeys(array $keys): array
-    {
-        $normalized = [];
-        foreach ($keys as $key) {
-            if (!is_string($key)) {
-                continue;
-            }
-
-            $trimmed = strtolower(trim($key));
-            if ($trimmed === '') {
-                continue;
-            }
-
-            $normalized[] = $trimmed;
-        }
-
-        return array_values(array_unique($normalized));
-    }
-
-    /**
      * @param array<string, mixed> $headers
      */
     private function extractForm(mixed $body, array $headers): ?array
@@ -319,81 +255,5 @@ readonly class ExecutionResult implements ResultInterface
         }
 
         return $body;
-    }
-
-    /**
-     * @param array<string, mixed> $query
-     * @param array<int, string> $secretKeys
-     * @return array<string, mixed>
-     */
-    private function redactQuery(array $query, array $secretKeys): array
-    {
-        $result = [];
-        foreach ($query as $key => $data) {
-            if (!is_array($data)) {
-                $result[$key] = $data;
-                continue;
-            }
-
-            $item = $data;
-            if ($this->isSensitiveKey((string) $key, $secretKeys)) {
-                $item['value'] = '***';
-            } else {
-                $item['value'] = $this->redactByKeys($item['value'] ?? null, $secretKeys);
-            }
-            $result[$key] = $item;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array<int, string> $secretKeys
-     */
-    private function redactByKeys(mixed $value, array $secretKeys): mixed
-    {
-        if (!is_array($value)) {
-            return $value;
-        }
-
-        $result = [];
-        foreach ($value as $key => $item) {
-            if (is_string($key) && $this->isSensitiveKey($key, $secretKeys)) {
-                $result[$key] = '***';
-                continue;
-            }
-
-            $result[$key] = $this->redactByKeys($item, $secretKeys);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array<int, string> $secretKeys
-     */
-    private function redactBodyRaw(?string $bodyRaw, array $secretKeys): ?string
-    {
-        if ($bodyRaw === null || trim($bodyRaw) === '') {
-            return $bodyRaw;
-        }
-
-        $decoded = json_decode($bodyRaw, true);
-        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
-            return $bodyRaw;
-        }
-
-        $redacted = $this->redactByKeys($decoded, $secretKeys);
-        $encoded = json_encode($redacted, JSON_UNESCAPED_UNICODE);
-
-        return is_string($encoded) ? $encoded : $bodyRaw;
-    }
-
-    /**
-     * @param array<int, string> $secretKeys
-     */
-    private function isSensitiveKey(string $key, array $secretKeys): bool
-    {
-        return in_array(strtolower(trim($key)), $secretKeys, true);
     }
 }
