@@ -1,0 +1,55 @@
+{
+    "name": "brahmic/apisutra",
+    "description": "API Core SDK for declarative API clients",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "guzzlehttp/promises": "^2.0",
+        "guzzlehttp/psr7": "^2.0",
+        "php": "^8.4",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.0",
+        "psr/log": "^3.0",
+        "psr/simple-cache": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brahmic\\ApiSutra\\": "src/"
+        },
+        "classmap": [
+            "src/Attributes",
+            "src/VO",
+            "src/Testing"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brahmic\\ApiSutra\\Tests\\Stubs\\": "tests/Stubs/",
+            "Brahmic\\ApiSutra\\Tests\\Support\\": "tests/Support/",
+            "Acme\\Blank\\": "tests/Fixtures/Acme/Blank/",
+            "Acme\\Discovery\\": "tests/Fixtures/Acme/Discovery/",
+            "Acme\\Fallback\\": "tests/Fixtures/Acme/Fallback/"
+        }
+    },
+    "scripts": {
+        "test": "pest"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.0",
+        "illuminate/container": "^12.0",
+        "illuminate/http": "^12.0",
+        "illuminate/translation": "^12.0",
+        "illuminate/validation": "^12.0",
+        "pestphp/pest": "^3.8"
+    }
+}

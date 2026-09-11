@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\Config;
+
+use Brahmic\ApiSutra\Enums\Cache\CacheMode;
+use Psr\SimpleCache\CacheInterface;
+
+final readonly class CacheConfig
+{
+    public function __construct(
+        public ?CacheInterface $store = null,
+        public int $ttl = 3600,
+        public string $prefix = '',
+        public CacheMode $mode = CacheMode::Enabled,
+    ) {}
+}

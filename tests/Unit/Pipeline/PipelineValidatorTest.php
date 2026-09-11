@@ -1,0 +1,113 @@
+<?php
+
+declare(strict_types=1);
+
+use Brahmic\ApiSutra\Attributes\AttributeRegistry;
+use Brahmic\ApiSutra\Casts\CastRegistry;
+use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Enums\Configuration\Environment;
+use Brahmic\ApiSutra\Enums\Execution\RequestRole;
+use Brahmic\ApiSutra\Extensions\ExtensionRegistry;
+use Brahmic\ApiSutra\Hooks\HookRegistry;
+use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
+use Brahmic\ApiSutra\Pipeline\Flow\ExecutionResultBuilder;
+use Brahmic\ApiSutra\Pipeline\Flow\PipelineValidator;
+use Brahmic\ApiSutra\Pipeline\Hydration\ResponseHydrator;
+use Brahmic\ApiSutra\Serialization\Hydrator;
+use Brahmic\ApiSutra\Enums\Result\ResultStatus;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\CustomValidatableRequestStub;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\SimpleGetRequest;
+use Brahmic\ApiSutra\VO\Errors\ValidationError;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+
+describe('PipelineValidator', function () {
+    it('не возвращает ошибку при отсутствии правил', function () {
+        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
+        $builder = new ExecutionResultBuilder(
+            $config,
+            new AuditLogger($config),
+            new ResponseHydrator(
+                $config,
+                new Hydrator(new CastRegistry()),
+                new ExtensionRegistry(new CastRegistry(), new HookRegistry(), new AttributeRegistry()),
+            ),
+        );
+        $validator = new PipelineValidator($builder);
+
+        $request = new SimpleGetRequest('q');
+        $context = new PipelineContext(
+            request: $request,
+            config: $config,
+            traceId: 'trace',
+            role: RequestRole::Root,
+        );
+
+        $audit = [];
+        $result = $validator->validate($request, $context, $audit, microtime(true));
+
+        expect($result)->toBeNull();
+    });
+
+    it('возвращает ExecutionResult при ошибках validateCustom', function () {
+        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
+        $builder = new ExecutionResultBuilder(
+            $config,
+            new AuditLogger($config),
+            new ResponseHydrator(
+                $config,
+                new Hydrator(new CastRegistry()),
+                new ExtensionRegistry(new CastRegistry(), new HookRegistry(), new AttributeRegistry()),
+            ),
+        );
+        $validator = new PipelineValidator($builder);
+
+        $request = new CustomValidatableRequestStub('q');
+        $request->customValidationErrors = [
+            new ValidationError('document', 'file_valid', 'Файл повреждён или не поддерживается', null),
+        ];
+        $context = new PipelineContext(
+            request: $request,
+            config: $config,
+            traceId: 'trace',
+            role: RequestRole::Root,
+        );
+
+        $audit = [];
+        $result = $validator->validate($request, $context, $audit, microtime(true));
+
+        expect($result)->not->toBeNull()
+            ->and($result->status)->toBe(ResultStatus::FAILED)
+            ->and($result->validationErrors)->toHaveCount(1)
+            ->and($result->validationErrors[0]->field)->toBe('document')
+            ->and($result->validationErrors[0]->rule)->toBe('file_valid')
+            ->and($result->validationErrors[0]->message)->toBe('Файл повреждён или не поддерживается');
+    });
+
+    it('пропускает custom validation при пустом списке ошибок', function () {
+        $config = new ClientConfig(baseUrl: 'https://api.test', environment: Environment::Testing);
+        $builder = new ExecutionResultBuilder(
+            $config,
+            new AuditLogger($config),
+            new ResponseHydrator(
+                $config,
+                new Hydrator(new CastRegistry()),
+                new ExtensionRegistry(new CastRegistry(), new HookRegistry(), new AttributeRegistry()),
+            ),
+        );
+        $validator = new PipelineValidator($builder);
+
+        $request = new CustomValidatableRequestStub('q');
+        $request->customValidationErrors = [];
+        $context = new PipelineContext(
+            request: $request,
+            config: $config,
+            traceId: 'trace',
+            role: RequestRole::Root,
+        );
+
+        $audit = [];
+        $result = $validator->validate($request, $context, $audit, microtime(true));
+
+        expect($result)->toBeNull();
+    });
+});

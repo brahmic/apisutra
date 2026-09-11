@@ -1,0 +1,297 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\Serialization;
+
+use Brahmic\ApiSutra\Attributes\AttributeMetadataCache;
+use Brahmic\ApiSutra\Contracts\Interfaces\Continuation\ContinuationModeApplicatorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Serialization\RequestPartsEnricherInterface;
+use Brahmic\ApiSutra\Casts\CastRegistry;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Pagination\PaginableInterface;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
+use Brahmic\ApiSutra\Enums\Http\HttpMethod;
+use Brahmic\ApiSutra\Request\RequestPaginationHelper;
+use Brahmic\ApiSutra\Serialization\Enrichment\CredentialsEnricher;
+use Brahmic\ApiSutra\Serialization\VO\RequestPartsBag;
+use Brahmic\ApiSutra\VO\Http\PreparedRequest;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+
+/**
+ * Центральный orchestrator сериализации RequestInterface -> PreparedRequest.
+ *
+ * Порядок этапов (инвариант):
+ * 1) collect частей запроса (query/body/headers/files/placeholders);
+ * 2) request enrichers (credentials и кастомные enrichers);
+ * 3) continuation mode applicator (provider-специфичный mapping mode -> protocol fields);
+ * 4) сборка URL и finalize payload.
+ *
+ * Важно:
+ * - Serializer не знает provider-протокол напрямую;
+ * - mode-resolve для continuation: runtime override -> ContinuationResult.defaultMode -> ClientConfig.defaultContinuationMode.
+ *
+ * @see docs/guides/serialization.md
+ * @see docs/guides/provider-async-await.md
+ * @see docs/technical/pipeline.md
+ */
+final class Serializer
+{
+    private ?DtoSerializer $dtoSerializer = null;
+    private readonly RequestPartsCollector $partsCollector;
+    private readonly RequestUrlBuilder $urlBuilder;
+    private readonly FilePayloadPreparer $filePayloadPreparer;
+    private readonly DtoSerializationProfileResolver $profileResolver;
+
+    public function __construct(
+        private readonly CastRegistry $casts,
+        private readonly ?AttributeMetadataCache $cache = null,
+    ) {
+        $this->profileResolver = new DtoSerializationProfileResolver();
+        $this->partsCollector = new RequestPartsCollector(
+            casts: $this->casts,
+            cache: $this->cache,
+            dtoSerializer: fn (object $dto, ?PipelineContext $context): array => $this->serializeWireDto($dto, $context),
+        );
+        $this->urlBuilder = new RequestUrlBuilder();
+        $this->filePayloadPreparer = new FilePayloadPreparer();
+    }
+
+    public function serialize(RequestInterface $request, ?PipelineContext $context = null): PreparedRequest
+    {
+        $method = $request->getMethod();
+        $endpoint = $request->getEndpoint();
+        $baseUrl = $this->resolveBaseUrl($request, $context);
+        $paginationOverrides = $this->resolvePaginationOverrides($request, $context);
+        $placeholders = $this->urlBuilder->extractPathParams($endpoint);
+        $parts = $this->buildParts(
+            request: $request,
+            context: $context,
+            paginationOverrides: $paginationOverrides,
+            placeholders: $placeholders,
+            method: $method,
+        );
+
+        $parts = $this->applyRequestEnrichers($request, $parts, $context);
+        $continuationMode = null;
+        [$parts, $continuationMode] = $this->applyContinuationModeApplicator($request, $parts, $context);
+
+        $url = $this->buildPreparedUrl(
+            baseUrl: $baseUrl,
+            endpoint: $endpoint,
+            parts: $parts,
+            context: $context,
+        );
+
+        $prepared = $this->preparePayload($parts);
+
+        return new PreparedRequest(
+            method: $method,
+            url: $url,
+            headers: $prepared['headers'],
+            body: $prepared['body'],
+            stream: $prepared['stream'],
+            meta: [
+                'query' => $parts->query,
+                'body' => $parts->body,
+                'bodyIsRoot' => $parts->bodyIsRoot,
+                'files' => $parts->files,
+                'requestClass' => $request::class,
+                'requestInstance' => $request,
+                'oneOf' => $context?->requestContractDebug,
+                'credentialsEnrichment' => $parts->enrichment['credentials'] ?? null,
+                'continuationMode' => $continuationMode?->value,
+            ],
+        );
+    }
+
+    private function resolveBaseUrl(RequestInterface $request, ?PipelineContext $context): string
+    {
+        $baseUrl = $context?->config->baseUrl ?? '';
+
+        if ($context?->options?->getBaseUrlOverride() !== null) {
+            return $context->options->getBaseUrlOverride();
+        }
+
+        if ($request instanceof AbstractRequest) {
+            return $request->getBaseUrl() ?? $baseUrl;
+        }
+
+        return $baseUrl;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function resolvePaginationOverrides(RequestInterface $request, ?PipelineContext $context): array
+    {
+        if (
+            $context?->paginationOptions === null
+            || !$request instanceof AbstractRequest
+            || !$request instanceof PaginableInterface
+        ) {
+            return [];
+        }
+
+        return new RequestPaginationHelper($context, null)
+            ->resolvePaginationOverrides($request, $context->paginationOptions);
+    }
+
+    /**
+     * @param array<string, mixed> $paginationOverrides
+     * @param array<string, mixed> $placeholders
+     */
+    private function buildParts(
+        RequestInterface $request,
+        ?PipelineContext $context,
+        array $paginationOverrides,
+        array $placeholders,
+        HttpMethod $method,
+    ): RequestPartsBag {
+        return $this->partsCollector->collect(
+            request: $request,
+            context: $context,
+            paginationOverrides: $paginationOverrides,
+            placeholders: $placeholders,
+            method: $method,
+        );
+    }
+
+    /**
+     * Сборка итогового URL после обогащения parts.
+     */
+    private function buildPreparedUrl(
+        string $baseUrl,
+        string $endpoint,
+        RequestPartsBag $parts,
+        ?PipelineContext $context,
+    ): string {
+        return $this->urlBuilder->buildUrl(
+            baseUrl: $baseUrl,
+            endpoint: $endpoint,
+            placeholders: $parts->placeholders,
+            query: $parts->query,
+            context: $context,
+        );
+    }
+
+    /**
+     * @return array{body: ?string, stream: ?MultipartStream, headers: array<string, string>}
+     */
+    private function preparePayload(RequestPartsBag $parts): array
+    {
+        return $this->filePayloadPreparer->prepareBodyAndStream(
+            fileFormat: $parts->fileFormat,
+            files: $parts->files,
+            body: $parts->body,
+            bodyIsRoot: $parts->bodyIsRoot,
+            headers: $parts->headers,
+        );
+    }
+
+    private function applyRequestEnrichers(
+        RequestInterface $request,
+        RequestPartsBag $parts,
+        ?PipelineContext $context,
+    ): RequestPartsBag {
+        foreach ($this->resolveRequestEnrichers($context) as $enricher) {
+            $parts = $enricher->enrich($request, $parts, $context);
+        }
+
+        return $parts;
+    }
+
+    /**
+     * @return array{0: RequestPartsBag, 1: ?ContinuationMode}
+     */
+    private function applyContinuationModeApplicator(
+        RequestInterface $request,
+        RequestPartsBag $parts,
+        ?PipelineContext $context,
+    ): array {
+        $applicator = $this->resolveContinuationModeApplicator($context);
+        if ($applicator === null) {
+            return [$parts, null];
+        }
+
+        $mode = $this->resolveContinuationMode($request, $context);
+
+        return [$applicator->apply($request, $parts, $mode, $context), $mode];
+    }
+
+    private function resolveContinuationMode(RequestInterface $request, ?PipelineContext $context): ContinuationMode
+    {
+        $modeOverride = $context?->options?->getContinuationModeOverride();
+        if ($modeOverride === null && $request instanceof AbstractRequest) {
+            $modeOverride = $request->getContinuationModeOverride();
+        }
+        if ($modeOverride !== null) {
+            return $modeOverride;
+        }
+
+        if ($request instanceof AbstractRequest) {
+            $defaultMode = $request->getContinuationResultAttribute()?->defaultMode;
+            if ($defaultMode !== null) {
+                return $defaultMode;
+            }
+        }
+
+        return $context?->config->defaultContinuationMode ?? ContinuationMode::Auto;
+    }
+
+    private function resolveContinuationModeApplicator(?PipelineContext $context): ?ContinuationModeApplicatorInterface
+    {
+        $applicator = $context?->config->continuationModeApplicator;
+
+        return $applicator instanceof ContinuationModeApplicatorInterface ? $applicator : null;
+    }
+
+    /**
+     * @return array<int, RequestPartsEnricherInterface>
+     */
+    private function resolveRequestEnrichers(?PipelineContext $context): array
+    {
+        $config = $context?->config;
+        if ($config === null) {
+            return [];
+        }
+
+        $enrichers = [];
+        if ($config->credentialsConfig !== null) {
+            $enrichers[] = new CredentialsEnricher($config->credentialsConfig);
+        }
+
+        foreach ($config->requestEnrichers as $enricher) {
+            if ($enricher instanceof RequestPartsEnricherInterface) {
+                $enrichers[] = $enricher;
+            }
+        }
+
+        return $enrichers;
+    }
+
+    private function getDtoSerializer(): DtoSerializer
+    {
+        if ($this->dtoSerializer === null) {
+            $this->dtoSerializer = new DtoSerializer($this->casts, $this->cache);
+        }
+
+        return $this->dtoSerializer;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function serializeWireDto(object $dto, ?PipelineContext $context): array
+    {
+        $resolved = $this->profileResolver->resolveForWireDto($dto::class, $context?->config);
+
+        return $this->getDtoSerializer()->serializeWithPolicy(
+            dto: $dto,
+            policy: $resolved->policy,
+            context: $context,
+            casts: $resolved->casts,
+        );
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "request": {
+    "class": "Brahmic\\ApiSutra\\Tests\\Stubs\\ProviderB\\Requests\\ProviderBDownloadRequest"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/octet-stream"
+    },
+    "body": "BINARY_DATA_PLACEHOLDER"
+  }
+}

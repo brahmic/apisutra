@@ -1,0 +1,68 @@
+# Архитектура ApiSutra (обзор)
+
+Короткий обзор ключевых компонентов и потоков SDK без перечисления всех параметров.
+Подробные справочные списки — в guides и glossary.
+
+## Цели SDK
+- декларативные запросы через атрибуты;
+- единый пайплайн выполнения;
+- расширяемость через хуки/расширения;
+- предсказуемые результаты и ошибки.
+
+## Ключевые компоненты
+- **ClientConfig** — источник дефолтных настроек клиента и поведения.
+- **AbstractClient** — точка входа для отправки запросов, сборки пайплайна.
+- **AbstractRequest / RequestExecution** — декларативный запрос и runtime‑обёртка с опциями.
+- **RequestSpec** — метаданные запроса, собираемые из атрибутов.
+- **Pipeline** — единый оркестратор исполнения.
+- **Serializer / Hydrator** — сериализация запроса и гидрация ответа.
+- **Result / ClientResponse** — единый формат результатов и ответов.
+- **ContainerProvider** — интеграция с контейнером (Laravel/без контейнера).
+
+## Принципы и границы
+- **Transport is pluggable** — SDK не навязывает HTTP‑клиент.
+- **Container optional** — без контейнера работает всё, кроме auto‑resolve и DTO‑валидации.
+- **Result‑first** — ошибки не выбрасываются по умолчанию.
+- **Immutability** — конфиг и runtime‑опции неизменяемы.
+- **Attributes as config** — атрибуты описывают поведение, а не бизнес‑логику.
+
+## Потоки выполнения
+### Отправка запроса
+1) `Request` → `RequestResolver`
+2) если пагинация: `Paginator` управляет страницами
+3) иначе: единичное выполнение в Pipeline
+
+### Пайплайн (упрощённо)
+1) валидация запроса  
+2) composite/dependency обработка  
+3) подготовка `PreparedRequest`  
+4) auth + cache + retry/rate‑limit  
+5) транспорт  
+6) гидрация  
+7) сбор результата  
+
+## Резолв клиента
+- если клиент задан явно — используется он;
+- иначе — `ContainerProvider` пытается получить `ClientResolver`;
+- если провайдера нет — требуется `setClient()`.
+
+## Точки расширения
+- **Hooks** — вмешательство в жизненный цикл запроса;
+- **Extensions** — обработчики ответа и дополнительные политики;
+- **Casts** — преобразование типов при сериализации/гидрации.
+
+## Внутренний слой сериализации/гидрации
+- **PropertyTypeInspector** — единое чтение declared types и runtime-match логики для свойств.
+- **SerializationValueResolver** — общий resolver сериализации значений для `DtoSerializer` и `RequestPartsCollector`.
+- **HydrationTypeSelector** — выбор ветки union/declared type для гидрации.
+- **BuiltinHydrationCaster** — встроенный hydration-dispatch поверх registry/safe-scalar/date/enum/DTO/Base64File.
+- **SafeScalarHydrationCaster** — безопасное приведение scalar значений по declared type DTO.
+
+Это внутренние сервисы ядра. Новые механизмы безопасного auto-cast следует добавлять
+через этот слой, а не напрямую разносить по `Hydrator`, `DtoSerializer`
+и `RequestPartsCollector`.
+
+## Где детали
+- Пайплайн и хуки: `docs/glossary/pipeline.md`
+- Результаты и ошибки: `docs/glossary/results.md`
+- Атрибуты: `docs/guides/attributes/README.md`

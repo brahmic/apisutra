@@ -1,0 +1,96 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\VO\Files;
+
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\StreamInterface;
+
+readonly class FileInput
+{
+    private function __construct(
+        public StreamInterface $stream,
+        public string $filename,
+        public ?string $mimeType = null,
+        public ?int $size = null,
+    ) {}
+
+    public static function fromPath(string $path): self
+    {
+        $resource = fopen($path, 'rb');
+        if ($resource === false) {
+            throw new ConfigurationException("Не удалось открыть файл: {$path}");
+        }
+
+        return new self(
+            stream: Utils::streamFor($resource),
+            filename: basename($path),
+            mimeType: mime_content_type($path) ?: null,
+            size: filesize($path) ?: null,
+        );
+    }
+
+    /**
+     * Создаёт FileInput из пути без исключения при ошибке открытия.
+     *
+     * Возвращает null при любом сбое (файл не найден, нет прав и т.п.).
+     * Удобно для path-flow: ошибку можно обработать через ValidationError.
+     */
+    public static function tryFromPath(string $path): ?self
+    {
+        if (!is_file($path) || !is_readable($path)) {
+            return null;
+        }
+
+        $resource = fopen($path, 'rb');
+        if ($resource === false) {
+            return null;
+        }
+
+        $mimeType = mime_content_type($path);
+        $size = filesize($path);
+
+        return new self(
+            stream: Utils::streamFor($resource),
+            filename: basename($path),
+            mimeType: $mimeType ?: null,
+            size: $size !== false ? $size : null,
+        );
+    }
+
+    public static function fromContent(string $content, string $filename): self
+    {
+        return new self(
+            stream: Utils::streamFor($content),
+            filename: $filename,
+            mimeType: null,
+            size: strlen($content),
+        );
+    }
+
+    public static function fromStream(StreamInterface $stream, string $filename): self
+    {
+        return new self(
+            stream: $stream,
+            filename: $filename,
+            mimeType: null,
+            size: null,
+        );
+    }
+
+    public function withMimeType(string $mimeType): self
+    {
+        return new self(
+            stream: $this->stream,
+            filename: $this->filename,
+            mimeType: $mimeType,
+            size: $this->size,
+        );
+    }
+}
+
+
+
+

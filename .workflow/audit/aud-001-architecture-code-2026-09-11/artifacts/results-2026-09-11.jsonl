@@ -1,0 +1,17 @@
+{"case":"cache_auth_scope","first":{"url":"https://audit.invalid/account","authorization":"Bearer synthetic-A","call":1},"second":{"url":"https://audit.invalid/account","authorization":"Bearer synthetic-A","call":1},"transport_calls":1}
+{"case":"literal_query","first":{"url":"https://audit.invalid/account?id=1","authorization":null,"call":1},"second":{"url":"https://audit.invalid/account?id=1","authorization":null,"call":1},"transport_calls":1}
+{"case":"ordered_query","first":{"url":"https://audit.invalid/account?sort[]=name&sort[]=date","authorization":null,"call":1},"second":{"url":"https://audit.invalid/account?sort[]=name&sort[]=date","authorization":null,"call":1},"transport_calls":1}
+{"case":"cache_ttl_renewed_on_read","elapsed_seconds":12,"ttl_seconds":10,"transport_calls":1}
+{"case":"refresh_lock_release","with_psr16_without_add":false,"reacquired":true}
+{"case":"refresh_lock_release","with_psr16_without_add":true,"reacquired":false}
+{"case":"async_dispatch_before_wait","sync_calls":1,"async_calls":0,"promise_state":"pending"}
+{"case":"transport_timeouts","requested_timeout":3,"requested_connect_timeout":4,"http_timeout":null,"http_connect_timeout":null}
+{"case":"network_exception_retry","configured_attempts":3,"actual_attempts":1,"error_code":"connection_failed"}
+{"case":"redacted_debug_url","url":"https://audit.invalid/account?token=synthetic-secret","query":{"token":{"value":"***","format":null}}}
+{"case":"psr16_rate_limit_key","transport_calls":0,"error":"PSR-16 forbids colon: rate:53e92971d0d4404c"}
+{"case":"integer_overflow_hydration","input":"92233720368547758070","actual":9223372036854775807}
+{"case":"float_overflow_hydration","input":"1e1000","accepted":true,"finite":false}
+{"case":"invalid_json_with_declared_dto","status":"success","data":{"name":null},"has_error":false}
+{"case":"quickstart_container_resolution","resolved":false,"error":"Unresolvable dependency resolving [Parameter #0 [ <required> string $baseUrl ]] in class Brahmic\\ApiSutra\\Config\\ClientConfig"}
+{"case":"client_container_validation","with_client_provider_only":"success","with_global_provider":"failed","transport_calls":1}
+{"case":"hydration_error_classification","http_status":200,"code":"connection_failed","message":"AuditIntegerDto::__construct(): Argument #1 ($id) must be of type int, string given"}

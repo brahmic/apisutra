@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\Attributes\Behavior;
+
+use Attribute;
+
+#[Attribute(Attribute::TARGET_CLASS)]
+readonly class Timeout
+{
+    public function __construct(
+        public int $seconds,
+        public ?int $connectTimeout = null,
+    ) {}
+}
