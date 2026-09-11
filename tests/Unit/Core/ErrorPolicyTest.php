@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Brahmic\ApiSutra\Exceptions\Request\ClientException;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Exceptions\Request\BadGatewayException;
 use Brahmic\ApiSutra\Exceptions\Request\ForbiddenException;
@@ -104,7 +105,7 @@ describe('ErrorPolicy', function () {
         [504, GatewayTimeoutException::class],
     ]);
 
-    it('возвращает null для немаппируемого статуса', function () {
+    it('сохраняет немаппируемый 4xx в общем ClientException', function () {
         $policy = new ErrorPolicy();
         $request = new SimpleGetRequest('q');
         $response = new ProviderResponse(
@@ -117,7 +118,8 @@ describe('ErrorPolicy', function () {
 
         $exception = $policy->getRequestExceptionInternal($request, $response);
 
-        expect($exception)->toBeNull();
+        expect($exception)->toBeInstanceOf(ClientException::class)
+            ->and($exception->response)->toBe($response);
     });
 
     it('использует fallback сообщение при пустом body', function () {

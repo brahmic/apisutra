@@ -19,7 +19,11 @@ use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\VO\Files\FileResponse;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+use Brahmic\ApiSutra\VO\Pipeline\DecodedResponse;
 use GuzzleHttp\Psr7\Utils as Psr7Utils;
+use Brahmic\ApiSutra\Exceptions\Core\SdkException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Throwable;
 
 /**
  * Гидрация ответа и пагинации.
@@ -35,21 +39,54 @@ final readonly class ResponseHydrator
         private ExtensionRegistry $extensions,
     ) {}
 
-    public function hydrateResponse(RequestInterface $request, PipelineContext $context, mixed $data): mixed
+    public function decodeResponse(RequestInterface $request, PipelineContext $context): DecodedResponse
+    {
+        if ($this->isDownloadRequest($request)) {
+            return new DecodedResponse($context->response?->json() ?? []);
+        }
+
+        $handler = $this->extensions->resolveResponseHandler($context->response, $context);
+        if ($handler !== null) {
+            // Расширение владеет форматом; строгий JSON применяется только при отказе обработчика.
+            return new DecodedResponse($context->response?->json() ?? [], $handler);
+        }
+
+        return new DecodedResponse($this->decodeStandardResponse($request, $context->response));
+    }
+
+    public function hydrateResponse(
+        RequestInterface $request,
+        PipelineContext $context,
+        mixed $data,
+        ?DecodedResponse $decoded = null,
+    ): mixed
     {
         if ($this->isDownloadRequest($request)) {
             return $this->makeFileResponse($context->response);
         }
 
-        $extensionResult = $this->handleExtensionResponse($context);
+        $handler = $decoded !== null
+            ? $decoded->handler
+            : $this->extensions->resolveResponseHandler($context->response, $context);
+        $extensionResult = $handler?->handle($context->response, $context);
         if ($extensionResult !== null) {
             return $extensionResult;
+        }
+
+        if (($decoded === null && $context->response !== null) || $handler !== null) {
+            $standardData = $this->decodeStandardResponse($request, $context->response);
+            if (!is_array($standardData)) {
+                $data = $standardData;
+            }
         }
 
         $dtoClass = $this->resolveDtoClass($request);
         $returns = $this->resolveReturnsAttribute($request);
 
         if ($request instanceof AbstractRequest && $request instanceof PaginableInterface) {
+            if (!is_array($data)) {
+                throw new HydrationException('Ответ пагинации должен содержать JSON-массив или объект');
+            }
             $pagination = $this->resolvePaginationConfig($request);
 
             // Режим контейнера: #[Returns] сохраняет структуру ответа, items подставляются отдельно
@@ -106,14 +143,25 @@ final readonly class ResponseHydrator
         return $request instanceof AbstractRequest && $request->hasDownload();
     }
 
-    private function handleExtensionResponse(PipelineContext $context): mixed
+    private function decodeStandardResponse(RequestInterface $request, ?ProviderResponse $response): mixed
     {
-        $handler = $this->extensions->resolveResponseHandler($context->response, $context);
-        if ($handler === null) {
-            return null;
+        $requiresArray = $this->resolveDtoClass($request) !== null || $request instanceof PaginableInterface;
+        if ($response === null || $response->status === 204 || $response->body === '') {
+            return $requiresArray ? [] : null;
         }
 
-        return $handler->handle($context->response, $context);
+        $contentType = strtolower(trim(explode(';', $response->header('Content-Type') ?? '')[0]));
+        if ($contentType === '' || $contentType === 'application/json' || str_ends_with($contentType, '+json')) {
+            $data = $response->jsonStrict();
+            return $requiresArray && $data === null ? [] : $data;
+        }
+
+        if (!$requiresArray && $contentType === 'text/plain') {
+            return $response->body;
+        }
+
+        // Остальные форматы сохраняют прежнее поведение и могут обрабатываться расширениями.
+        return $response->json() ?? [];
     }
 
     private function resolveDtoClass(RequestInterface $request): ?string
@@ -162,7 +210,13 @@ final readonly class ResponseHydrator
             return $data;
         }
 
-        return $this->hydrator->hydrate($data, $dtoClass, $context);
+        try {
+            return $this->hydrator->hydrate($data, $dtoClass, $context);
+        } catch (SdkException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            throw new HydrationException('Не удалось гидратировать ответ в ' . $dtoClass, 0, $exception);
+        }
     }
 
     private function resolvePaginationConfig(AbstractRequest $request): PaginationConfig
@@ -198,7 +252,13 @@ final readonly class ResponseHydrator
             return $items;
         }
 
-        return $this->hydrator->hydrateCollection($items, $pagination->itemsType, $context);
+        try {
+            return $this->hydrator->hydrateCollection($items, $pagination->itemsType, $context);
+        } catch (SdkException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            throw new HydrationException('Не удалось гидратировать элементы ответа в ' . $pagination->itemsType, 0, $exception);
+        }
     }
 
     /**

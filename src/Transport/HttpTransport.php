@@ -12,7 +12,10 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface as PsrRequestInterface;
+use Override;
 use Psr\Http\Message\StreamFactoryInterface;
+use Throwable;
 
 final class HttpTransport implements TransportInterface
 {
@@ -22,31 +25,35 @@ final class HttpTransport implements TransportInterface
         private readonly StreamFactoryInterface $streamFactory,
     ) {}
 
-    #[\Override]
+    #[Override]
     public function send(PreparedRequest $request): ProviderResponse
     {
         $start = microtime(true);
         $psrRequest = $this->buildPsrRequest($request);
-        $psrResponse = $this->httpClient->sendRequest($psrRequest);
+        try {
+            $psrResponse = $this->httpClient->sendRequest($psrRequest);
+        } catch (Throwable $exception) {
+            throw TransportExceptionNormalizer::normalize($exception);
+        }
 
         return $this->buildProviderResponse($psrResponse, $request, $start);
     }
 
-    #[\Override]
+    #[Override]
     public function sendAsync(PreparedRequest $request): PromiseInterface
     {
         $promise = new Promise();
 
         try {
             $promise->resolve($this->send($request));
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $promise->reject($exception);
         }
 
         return $promise;
     }
 
-    private function buildPsrRequest(PreparedRequest $request): \Psr\Http\Message\RequestInterface
+    private function buildPsrRequest(PreparedRequest $request): PsrRequestInterface
     {
         $psrRequest = $this->requestFactory->createRequest($request->method->value, $request->url);
 

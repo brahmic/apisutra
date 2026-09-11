@@ -155,3 +155,54 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 - Обработка ошибок: `docs/technical/error-handling.md`
 - Continuation token: `docs/guides/continuation-token.md`
 - Provider async-await: `docs/guides/provider-async-await.md`
+
+## Классификация ошибок JSON и исполнения
+
+| Сбой | SDK code |
+| --- | --- |
+| Кодирование исходящего JSON | `serialization_error` |
+| Разбор непустого JSON-ответа | `response_decoding_error` |
+| Приведение данных ответа к DTO | `hydration_error` |
+| Пользовательский hook | `hook_error` |
+| PSR-18 network failure | `connection_failed` |
+| Подтверждённый timeout | `timeout` |
+| PSR-18 request failure | `invalid_request` |
+| Прочий PSR-18 client failure | `transport_error` |
+| Конфигурация | `configuration_error` |
+| Неизвестное исключение исполнения | `execution_error` |
+
+`SerializationException`, `ResponseDecodingException` и `HydrationException` находятся
+в `Exceptions\Serialization`. Ошибки стандартного JSON-кодека сохраняют
+`JsonException` в `previous`; HTTP-ответ ошибки разбора остаётся в `ExecutionResult::response`.
+Проверка pipeline применяется к непустому `application/json`, MIME с суффиксом
+`+json` и ответу без `Content-Type`; успешный статус 204 исключён из разбора.
+Значения `null`, пустого тела и текста описаны в
+[контракте успешного ответа](client-config/responses-errors.md#успешный-ответ-без-dto).
+Публичный `ProviderResponse::jsonStrict()` выполняет строгий разбор по явному вызову;
+существующий `json()` сохраняет permissive-поведение для совместимости, в том числе
+для пользовательских обработчиков HTTP-ошибок. Download и response handlers
+расширений сохраняют собственную обработку формата.
+
+Известные транспортные исключения нормализуются до решения retry. Исходное исключение
+доступно в `previous`; явно настроенный исходный класс в `retryExceptions` продолжает
+учитываться. Timeout не определяется по тексту сообщения: поддерживается собственный
+`TimeoutException`, общий бюджет повторов и подтверждённый cURL errno 28 у Guzzle
+ConnectException. Наличие Guzzle HTTP Client для остальных транспортов не требуется.
+
+После исчерпания повторов последний HTTP-ответ проходит обычный error mapping.
+Например, 503 остаётся `service_unavailable`, включая ответ с HTML или испорченным JSON.
+Для 400 используется `bad_request`, для остальных немаппируемых 4xx — `client_error`;
+ответ и его raw body сохраняются. Строковый `message` из JSON используется как сообщение,
+иначе применяется `HTTP <status>`. Если последняя HTTP-попытка завершилась сетевым сбоем,
+ответ предыдущей попытки не подставляется вместо отсутствующего текущего ответа.
+
+Произвольное исключение hook не становится сетевым и не вызывает сетевой retry.
+Оно сохраняется в `ExecutionResult::exception` без замены исходного объекта.
+Типизированные HTTP/configuration-исключения сохраняют свои коды. `EarlyReturnException`
+работает и на стадии AfterResponse, завершая выполнение успехом; `RetryableException`
+сохраняет специальную управляющую семантику. Ошибки конфигурации DTO не маскируются
+как ошибки данных гидратации.
+
+Эти правила одинаковы для sync, promise API и batch: `throwOnErrors` меняет способ
+доставки исключения, а не причину сбоя. Политика идемпотентности и replay потоков
+в этой поставке не меняется.

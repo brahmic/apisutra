@@ -23,21 +23,7 @@ final readonly class ResultFactory
     public function buildFailedResult(RequestInterface $request, PipelineContext $context, array $audit): ExecutionResult
     {
         $response = $context->response;
-        $code = ErrorCode::ServerError;
-        if ($response !== null) {
-            $code = match ($response->status) {
-                401 => ErrorCode::Unauthorized,
-                403 => ErrorCode::Forbidden,
-                404 => ErrorCode::NotFound,
-                422 => ErrorCode::ValidationFailed,
-                429 => ErrorCode::RateLimited,
-                500 => ErrorCode::ServerError,
-                502 => ErrorCode::BadGateway,
-                503 => ErrorCode::ServiceUnavailable,
-                504 => ErrorCode::GatewayTimeout,
-                default => ErrorCode::ServerError,
-            };
-        }
+        $code = $response !== null ? ErrorCode::fromHttpStatus($response->status) : ErrorCode::ExecutionError;
 
         $contextData = SystemErrorContextBuilder::build(
             traceId: $context->traceId,
@@ -47,7 +33,7 @@ final readonly class ResultFactory
 
         $error = new RequestError(
             code: $code,
-            message: $response?->json('message') ?? 'Ошибка запроса',
+            message: $response?->errorMessage() ?? 'Ошибка запроса',
             response: $response,
             context: $contextData,
             requestClass: $request::class,

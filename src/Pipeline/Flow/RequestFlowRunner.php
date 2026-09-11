@@ -174,10 +174,13 @@ final readonly class RequestFlowRunner
 
     private function hydrateAndProcessDto(RequestInterface $request, PipelineContext $context): mixed
     {
-        $data = $context->response?->json() ?? [];
-        $data = $this->hookRunner->runBeforeHydrate($request, $context, $data);
+        $decoded = $this->responseHydrator->decodeResponse($request, $context);
+        $data = $decoded->data;
+        if (is_array($data)) {
+            $data = $this->hookRunner->runBeforeHydrate($request, $context, $data);
+        }
 
-        $resultData = $this->responseHydrator->hydrateResponse($request, $context, $data);
+        $resultData = $this->responseHydrator->hydrateResponse($request, $context, $data, $decoded);
         $context->dto = is_object($resultData) ? $resultData : null;
         if ($context->dto !== null) {
             $processed = $this->stageProcessor->process(

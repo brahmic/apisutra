@@ -36,6 +36,8 @@ final readonly class DefaultClientErrorMapper implements ClientErrorMapperInterf
         }
 
         return match ($first->code) {
+            ErrorCode::BadRequest => 400,
+            ErrorCode::ClientError => $first->response?->status ?? 400,
             ErrorCode::Unauthorized => 401,
             ErrorCode::Forbidden => 403,
             ErrorCode::NotFound => 404,

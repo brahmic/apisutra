@@ -17,6 +17,7 @@ use Brahmic\ApiSutra\Serialization\Concerns\ReflectionHelperTrait;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoSerialization;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -25,6 +26,9 @@ final class DtoSerializer
     use ReflectionHelperTrait;
 
     private static ?self $default = null;
+
+    /** @var array<int, true> Объекты только текущей ветки сериализации. */
+    private array $serializing = [];
 
     public function __construct(
         private readonly CastRegistry $casts,
@@ -91,6 +95,25 @@ final class DtoSerializer
      * @return array<string, mixed>
      */
     private function serializeResolved(
+        object $dto,
+        ResolvedDtoSerialization $resolved,
+        ?PipelineContext $context,
+        callable $nestedDtoSerializer,
+    ): array {
+        $id = spl_object_id($dto);
+        if (isset($this->serializing[$id]) || count($this->serializing) >= 512) {
+            throw new SerializationException('Циклическая ссылка или превышение глубины сериализации DTO');
+        }
+        $this->serializing[$id] = true;
+        try {
+            return $this->serializeFields($dto, $resolved, $context, $nestedDtoSerializer);
+        } finally {
+            unset($this->serializing[$id]);
+        }
+    }
+
+    /** @return array<string, mixed> */
+    private function serializeFields(
         object $dto,
         ResolvedDtoSerialization $resolved,
         ?PipelineContext $context,

@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Casts;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
+use Brahmic\ApiSutra\Serialization\JsonEncoder;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+use Override;
 
 final class JsonCast implements CastInterface
 {
-    #[\Override]
+    #[Override]
     public function hydrate(mixed $value, ?PipelineContext $context = null): mixed
     {
         if ($value === null) {
@@ -23,13 +25,13 @@ final class JsonCast implements CastInterface
         return $value;
     }
 
-    #[\Override]
+    #[Override]
     public function serialize(mixed $value, ?PipelineContext $context = null): mixed
     {
         if ($value === null) {
             return null;
         }
 
-        return json_encode($value, JSON_UNESCAPED_UNICODE);
+        return JsonEncoder::encode($value);
     }
 }

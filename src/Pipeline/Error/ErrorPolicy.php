@@ -8,6 +8,8 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Exceptions\Request\BadGatewayException;
+use Brahmic\ApiSutra\Exceptions\Request\ClientException;
+use Brahmic\ApiSutra\Exceptions\Request\ServerException;
 use Brahmic\ApiSutra\Exceptions\Request\ForbiddenException;
 use Brahmic\ApiSutra\Exceptions\Request\GatewayTimeoutException;
 use Brahmic\ApiSutra\Exceptions\Request\InternalServerException;
@@ -76,7 +78,7 @@ final readonly class ErrorPolicy
 
     private function mapException(ProviderResponse $response): ?RequestException
     {
-        $message = $response->json('message') ?? "HTTP {$response->status}";
+        $message = $response->errorMessage();
 
         return match (true) {
             $response->status === 401 => new UnauthorizedException($message, $response),
@@ -94,6 +96,8 @@ final readonly class ErrorPolicy
             $response->status === 502 => new BadGatewayException($message, $response),
             $response->status === 503 => new ServiceUnavailableException($message, $response),
             $response->status === 504 => new GatewayTimeoutException($message, $response),
+            $response->status >= 400 && $response->status < 500 => new ClientException($message, $response),
+            $response->status >= 500 => new ServerException($message, $response),
             default => null,
         };
     }

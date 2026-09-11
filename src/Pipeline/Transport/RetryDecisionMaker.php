@@ -12,6 +12,7 @@ use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
 use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
 use Throwable;
 
 final readonly class RetryDecisionMaker
@@ -60,6 +61,8 @@ final readonly class RetryDecisionMaker
             }
         }
 
-        return false;
+        // Явная настройка исходного PSR-класса продолжает работать после нормализации.
+        return $exception instanceof TransportException && $exception->getPrevious() !== null
+            && $this->isRetryException($exception->getPrevious(), $retryConfig);
     }
 }

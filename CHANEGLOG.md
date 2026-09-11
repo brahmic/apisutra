@@ -2,6 +2,26 @@
 
 ## Не выпущено
 
+### 2026-09-12 — строгий JSON и классификация ошибок
+
+- Ошибки исходящего JSON возвращают `serialization_error` до HTTP-вызова;
+  JsonCast, JSON-поля multipart и Base64 больше не подставляют false/пустое тело.
+- Непустой malformed JSON с JSON Content-Type или без Content-Type даёт `response_decoding_error`
+  с сохранением HTTP-ответа и исходного JsonException.
+- PSR-18 ошибки нормализуются до retry; произвольные Throwable не превращаются
+  в ошибки соединения. Сохраняются исходные причины и явные retryExceptions.
+- Последний HTTP-ответ сохраняет свою классификацию после повторов. Для
+  немаппируемых 4xx добавлен `client_error`, для 400 — `bad_request`.
+- Ошибки hooks и гидратации различаются; EarlyReturn после AfterResponse
+  больше не ошибочно превращается в сетевой сбой.
+- Изменён контракт успеха без DTO: JSON `null`, пустое тело и HTTP 204 дают `null`;
+  `text/plain` сохраняет исходную строку, скаляры JSON — своё значение. Непустой
+  ответ без Content-Type считается JSON. Array-only `BeforeHydrate` пропускается
+  для null/скаляров/текста; download, handlers расширений и DTO сохраняют отдельную обработку.
+- Проверено: 875 тестов без падений, 38 с deprecation;
+  standalone JSON smoke работает без Laravel и Guzzle HTTP Client.
+- Согласованный объём и проверки: [план pln-004](.workflow/completed/pln-004-json-error-contracts.md).
+
 ### 2026-09-12 — изоляция кеша, auth scope и безопасная диагностика
 
 Первая поставка выбранных частей AS-04/09/10 с автоматической identity кеша.

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\VO\Http;
 
 use Brahmic\ApiSutra\Support\ArrayPath;
+use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
+use JsonException;
 
 /**
  * Value Object для HTTP-ответа от провайдера.
@@ -52,6 +54,26 @@ readonly class ProviderResponse
         }
 
         return ArrayPath::getByPath($data, $key);
+    }
+
+    /** Строгий разбор JSON; вызывающая сторона выбирает политику пустого/raw ответа. */
+    public function jsonStrict(?string $key = null): mixed
+    {
+        try {
+            $data = json_decode($this->body, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new ResponseDecodingException('Не удалось разобрать JSON ответа: ' . $exception->getMessage(), 0, $exception);
+        }
+
+        return $key === null ? $data : ArrayPath::getByPath($data, $key);
+    }
+
+    /** HTTP-ошибка сохраняет приоритет над невалидным или не-JSON телом ответа. */
+    public function errorMessage(): string
+    {
+        $data = json_decode($this->body, true);
+        $message = is_array($data) ? ($data['message'] ?? null) : null;
+        return is_string($message) && $message !== '' ? $message : "HTTP {$this->status}";
     }
 
     /**

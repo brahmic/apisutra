@@ -55,6 +55,6 @@ describe('ResultFactory', function () {
         $result = $factory->buildFailedResult($request, $context, []);
 
         expect($result->status)->toBe(ResultStatus::FAILED);
-        expect($result->errors->first()?->code)->toBe(ErrorCode::ServerError);
+        expect($result->errors->first()?->code)->toBe(ErrorCode::ExecutionError);
     });
 });

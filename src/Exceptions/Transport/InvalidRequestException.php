@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Exceptions\Transport;
 
-class ConnectionException extends TransportException
+class InvalidRequestException extends TransportException
 {
 }

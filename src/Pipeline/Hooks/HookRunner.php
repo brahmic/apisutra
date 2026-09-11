@@ -14,7 +14,10 @@ use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\Hooks\HookRegistry;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
+use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use ReflectionClass;
+use Throwable;
 
 final readonly class HookRunner
 {
@@ -23,6 +26,30 @@ final readonly class HookRunner
     ) {}
 
     public function runHookStage(Hook $hook, RequestInterface $request, PipelineContext $context): void
+    {
+        try {
+            $this->applyHookStage($hook, $request, $context);
+        } catch (ControlFlowException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            $context->failureCode = ErrorCode::HookError;
+            throw $exception;
+        }
+    }
+
+    public function runBeforeHydrate(RequestInterface $request, PipelineContext $context, array $data): array
+    {
+        try {
+            return $this->applyBeforeHydrate($request, $context, $data);
+        } catch (ControlFlowException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            $context->failureCode = ErrorCode::HookError;
+            throw $exception;
+        }
+    }
+
+    private function applyHookStage(Hook $hook, RequestInterface $request, PipelineContext $context): void
     {
         if ($hook === Hook::BeforeHydrate) {
             return;
@@ -65,7 +92,7 @@ final readonly class HookRunner
         );
     }
 
-    public function runBeforeHydrate(RequestInterface $request, PipelineContext $context, array $data): array
+    private function applyBeforeHydrate(RequestInterface $request, PipelineContext $context, array $data): array
     {
         $dtoClass = $this->resolveDtoClass(Hook::BeforeHydrate, $request, $context);
         $handlers = $this->resolveHandlers(Hook::BeforeHydrate, $request, $dtoClass);

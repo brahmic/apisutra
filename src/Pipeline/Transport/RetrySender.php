@@ -11,13 +11,17 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
+use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
+use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
+use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
 use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\Pipeline\Hooks\HookRunner;
 use Brahmic\ApiSutra\RateLimiting\RateLimiter;
+use Brahmic\ApiSutra\Transport\TransportExceptionNormalizer;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
@@ -69,7 +73,7 @@ final readonly class RetrySender
 
         while ($attempt <= $attempts) {
             if ($this->isTotalTimeoutExceeded($startedAt, $totalTimeoutMs)) {
-                $lastException ??= new ConnectionException('Превышен общий таймаут повторов');
+                $lastException ??= new TimeoutException('Превышен общий таймаут повторов');
                 break;
             }
 
@@ -77,9 +81,16 @@ final readonly class RetrySender
                 $this->delayApplier->apply($request, $context->options);
                 $this->rateLimitApplier->apply($request, $context);
 
-                $response = $retryConfig !== null
-                    ? $this->retryHandler->handle($context->preparedRequest, $context, $retryConfig, $attempt)
-                    : $this->transport->send($context->preparedRequest);
+                // Ответ относится к текущей HTTP-попытке; предыдущий не подставляется при сетевом сбое.
+                $context->response = null;
+                try {
+                    $response = $retryConfig !== null
+                        ? $this->retryHandler->handle($context->preparedRequest, $context, $retryConfig, $attempt)
+                        : $this->transport->send($context->preparedRequest);
+                } catch (Throwable $exception) {
+                    throw TransportExceptionNormalizer::normalize($exception);
+                }
+                $lastException = null;
 
                 $context->response = $response;
                 $this->hookRunner->runHookStage(Hook::AfterResponse, $request, $context);
@@ -100,7 +111,7 @@ final readonly class RetrySender
                     continue;
                 }
 
-                if ($this->retryDecisionMaker->shouldRetry($request, $response, $attempt, $retryConfig)) {
+                if ($attempt < $attempts && $this->retryDecisionMaker->shouldRetry($request, $response, $attempt, $retryConfig)) {
                     if ($response->status === 429) {
                         $retryAfter = $this->retryAfter($response);
                         if ($retryAfter !== null) {
@@ -131,9 +142,11 @@ final readonly class RetrySender
                 }
                 $attempt++;
                 continue;
+            } catch (ControlFlowException $exception) {
+                throw $exception;
             } catch (Throwable $exception) {
                 $lastException = $exception;
-                if ($retryConfig !== null && $this->retryDecisionMaker->isRetryException($exception, $retryConfig) && $attempt < $attempts) {
+                if ($context->failureCode !== ErrorCode::HookError && $retryConfig !== null && $this->retryDecisionMaker->isRetryException($exception, $retryConfig) && $attempt < $attempts) {
                     $this->auditLogger->log(LogLevel::WARNING, 'Повтор запроса после исключения', [
                         'trace' => $context->traceId,
                         'request' => $request::class,
@@ -144,7 +157,7 @@ final readonly class RetrySender
                     continue;
                 }
 
-                throw new ConnectionException($exception->getMessage(), $exception->getCode(), $exception);
+                throw $exception;
             }
         }
 

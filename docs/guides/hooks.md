@@ -61,5 +61,10 @@ final class UnwrapData implements BeforeHydrateHookInterface
 Если `BeforeHydrate` не задан — данные идут в гидрацию как есть.
 В методе запроса `beforeHydrate()` по умолчанию просто возвращает входной массив.
 
+Для успешного ответа без DTO hook вызывается только при данных-массиве. `null`,
+скаляры JSON и `text/plain` проходят без `BeforeHydrate`; `AfterResponse` и
+`AfterHydrate` сохраняются. Подробности и правила пустого тела — в
+[контракте успешного ответа](client-config/responses-errors.md#успешный-ответ-без-dto).
+
 ## Где атрибуты
 Атрибуты‑хуки описаны отдельно: `docs/guides/attributes/hooks.md`.

@@ -8,6 +8,7 @@ use BackedEnum;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DtoInterface;
 use Brahmic\ApiSutra\Enums\Serialization\EnumOutput;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
 use Stringable;
 use UnitEnum;
 use Closure;
@@ -24,10 +25,14 @@ final readonly class EnumSerializationHelper
         EnumOutput $output,
         bool $strictMode,
         Closure $dtoSerializer,
+        int $depth = 0,
     ): array {
+        if ($depth >= 512) {
+            throw new SerializationException('Превышена глубина сериализации массива (512): возможна циклическая ссылка');
+        }
         $result = [];
         foreach ($items as $key => $item) {
-            $result[$key] = $this->serializeValue($item, $output, $strictMode, $dtoSerializer);
+            $result[$key] = $this->serializeValue($item, $output, $strictMode, $dtoSerializer, $depth + 1);
         }
 
         return $result;
@@ -41,6 +46,7 @@ final readonly class EnumSerializationHelper
         EnumOutput $output,
         bool $strictMode,
         Closure $dtoSerializer,
+        int $depth = 0,
     ): mixed {
         if ($value instanceof DtoInterface) {
             return $dtoSerializer($value);
@@ -51,7 +57,7 @@ final readonly class EnumSerializationHelper
         }
 
         if (is_array($value)) {
-            return $this->serializeArray($value, $output, $strictMode, $dtoSerializer);
+            return $this->serializeArray($value, $output, $strictMode, $dtoSerializer, $depth);
         }
 
         return $value;

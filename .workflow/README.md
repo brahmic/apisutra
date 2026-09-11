@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Строгий JSON и корректная классификация ошибок](completed/pln-004-json-error-contracts.md)
 - [Автоматическая identity кеша и опциональная RedactionPolicy](completed/pln-003-automatic-cache-identity.md)
 - [Первая поставка: изоляция кеша, auth scope и диагностика](completed/pln-002-cache-auth-diagnostics.md)
 - [Аудит архитектуры и кода — 2026-09-11](audit/aud-001-architecture-code-2026-09-11/aud-001-readme.md)

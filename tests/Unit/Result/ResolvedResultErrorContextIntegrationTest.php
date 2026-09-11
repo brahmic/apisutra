@@ -11,6 +11,7 @@ use Brahmic\ApiSutra\Tests\Stubs\Core\TestClientErrorMapper;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\SimpleGetRequest;
 use Brahmic\ApiSutra\Tests\Stubs\TestClient;
 use Brahmic\ApiSutra\Transport\MockTransport;
+use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\VO\Errors\ClientError;
 use Brahmic\ApiSutra\VO\Errors\ErrorContextFactoryInterface;
 
@@ -40,11 +41,7 @@ describe('ResolvedResult error context integration', function () {
     it('прокидывает errorContextFactory из ClientConfig', function () {
         $transport = new MockTransport();
         $transport->fake([
-            SimpleGetRequest::class => [
-                'status' => 500,
-                'body' => '{"message":"fail"}',
-                'headers' => [],
-            ],
+            SimpleGetRequest::class => MockResponse::make(['message' => 'fail'], 500),
         ]);
 
         $client = new TestClient(
@@ -63,6 +60,6 @@ describe('ResolvedResult error context integration', function () {
 
         $context = $request->send()->resolved()->errorContext();
 
-        expect($context?->code)->toBe('connection_failed');
+        expect($context?->code)->toBe('server_error');
     });
 });

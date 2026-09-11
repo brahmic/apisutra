@@ -302,3 +302,19 @@ body DTO profile и request-level enum policy.
 - Атрибуты запросов: [Request Attributes](./attributes/request.md)
 - NamingStrategy: [Naming Strategy](./naming-strategy.md)
 - Casts: [Casts](./casts.md)
+
+## Ошибки кодирования JSON
+
+Исходящее JSON-тело, Base64 JSON, JSON-значения multipart и `JsonCast::serialize()`
+кодируются строго. Невалидный UTF-8, INF/NAN, неподдерживаемые значения и циклические
+структуры дают `SerializationException` и `serialization_error` до HTTP-вызова.
+При ошибке `json_encode` исходный `JsonException` доступен как `previous`.
+Для обхода вложенных массивов действует предел 512 уровней; он также останавливает
+циклические массивы до финального кодирования. Для графа DTO проверяются
+повторное вхождение объекта в текущую ветку и предел глубины; повторное использование
+одного DTO в независимых полях разрешено.
+
+SDK не исправляет и не подставляет данные молча. JSON `false` и `[]` сохраняются;
+query остаётся отдельной частью запроса. Binary и обычные текстовые multipart-поля
+не проверяются как JSON. Ошибки доставки через result/исключения описаны в
+[руководстве по ошибкам](errors.md).

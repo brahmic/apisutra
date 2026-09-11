@@ -191,7 +191,7 @@ describe('ExecutionResultBuilder', function () {
         [502, ErrorCode::BadGateway],
         [503, ErrorCode::ServiceUnavailable],
         [504, ErrorCode::GatewayTimeout],
-        [418, ErrorCode::ServerError],
+        [418, ErrorCode::ClientError],
     ]);
 });
 

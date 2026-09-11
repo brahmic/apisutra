@@ -41,7 +41,7 @@ describe('Pipeline EarlyReturn stages', function () {
         expect($transport->getRecorded())->toHaveCount($expectedCalls);
     })->with([
         'BeforeSend' => [Hook::BeforeSend, 0, ResultStatus::SUCCESS],
-        'AfterResponse' => [Hook::AfterResponse, 1, ResultStatus::FAILED],
+        'AfterResponse' => [Hook::AfterResponse, 1, ResultStatus::SUCCESS],
         'BeforeHydrate' => [Hook::BeforeHydrate, 1, ResultStatus::SUCCESS],
         'AfterHydrate' => [Hook::AfterHydrate, 1, ResultStatus::SUCCESS],
     ]);

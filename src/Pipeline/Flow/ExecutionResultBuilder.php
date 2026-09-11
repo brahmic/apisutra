@@ -27,6 +27,14 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
+use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
+use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
+use Brahmic\ApiSutra\Exceptions\Transport\InvalidRequestException;
+use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
+use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
 use Throwable;
 
 /**
@@ -199,23 +207,22 @@ final readonly class ExecutionResultBuilder
         float $startTime,
         Throwable $exception,
     ): ExecutionResult {
-        $code = ErrorCode::ConnectionFailed;
+        $code = $context->failureCode ?? match (true) {
+            $exception instanceof SerializationException => ErrorCode::SerializationError,
+            $exception instanceof ResponseDecodingException => ErrorCode::ResponseDecodingError,
+            $exception instanceof HydrationException => ErrorCode::HydrationError,
+            $exception instanceof TimeoutException => ErrorCode::Timeout,
+            $exception instanceof ConnectionException => ErrorCode::ConnectionFailed,
+            $exception instanceof InvalidRequestException => ErrorCode::InvalidRequest,
+            $exception instanceof TransportException => ErrorCode::TransportError,
+            $exception instanceof ExtensionException => ErrorCode::ExtensionError,
+            default => ErrorCode::ExecutionError,
+        };
         $response = $context->response;
 
         if ($exception instanceof RequestException) {
             $response = $exception->response;
-            $code = match ($exception->response->status) {
-                401 => ErrorCode::Unauthorized,
-                403 => ErrorCode::Forbidden,
-                404 => ErrorCode::NotFound,
-                422 => ErrorCode::ValidationFailed,
-                429 => ErrorCode::RateLimited,
-                500 => ErrorCode::ServerError,
-                502 => ErrorCode::BadGateway,
-                503 => ErrorCode::ServiceUnavailable,
-                504 => ErrorCode::GatewayTimeout,
-                default => ErrorCode::ServerError,
-            };
+            $code = ErrorCode::fromHttpStatus($response->status);
         } elseif ($exception instanceof ConfigurationException) {
             $code = ErrorCode::ConfigurationError;
         }

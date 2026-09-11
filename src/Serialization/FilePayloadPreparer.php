@@ -24,13 +24,16 @@ final class FilePayloadPreparer
         bool $bodyIsRoot,
         array $headers,
     ): array {
-        $preparedBody = $this->prepareJsonBody($body, $bodyIsRoot);
+        $preparedBody = (in_array($fileFormat, [FileFormat::Multipart, FileFormat::Base64], true)
+            || ($fileFormat === FileFormat::Binary && ($files[0]['file'] ?? null) instanceof FileInput))
+            ? null
+            : $this->prepareJsonBody($body, $bodyIsRoot);
 
         return match ($fileFormat) {
             FileFormat::Multipart => $this->prepareMultipartBody($files, $body, $headers),
             FileFormat::Binary => $this->prepareBinaryBody($files, $preparedBody, $headers),
             FileFormat::Base64 => [
-                'body' => json_encode($this->applyBase64Files($files, $body), JSON_UNESCAPED_UNICODE),
+                'body' => JsonEncoder::encode($this->applyBase64Files($files, $body)),
                 'stream' => null,
                 'headers' => $this->ensureJsonContentType($headers),
             ],
@@ -101,7 +104,7 @@ final class FilePayloadPreparer
         foreach ($body as $key => $value) {
             $parts[] = [
                 'name' => $key,
-                'contents' => is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE),
+                'contents' => is_scalar($value) ? (string) $value : JsonEncoder::encode($value),
             ];
         }
 
@@ -174,8 +177,6 @@ final class FilePayloadPreparer
             return null;
         }
 
-        $encoded = json_encode($body, JSON_UNESCAPED_UNICODE);
-
-        return is_string($encoded) ? $encoded : null;
+        return JsonEncoder::encode($body);
     }
 }

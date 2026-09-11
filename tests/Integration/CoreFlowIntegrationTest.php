@@ -98,7 +98,7 @@ describe('Core flow integration', function () {
         $result = $handle->raw();
 
         expect($result->isFailed())->toBeTrue();
-        expect($result->errors->first()?->code)->toBe(ErrorCode::ConnectionFailed);
+        expect($result->errors->first()?->code)->toBe(ErrorCode::ServerError);
         expect($transport->getRecorded())->toHaveCount(2);
 
         $resolved = $handle->resolved();

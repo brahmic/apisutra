@@ -11,7 +11,6 @@ use Brahmic\ApiSutra\Tests\Stubs\Requests\PlainRequest;
 use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Transport\MockTransport;
 use Brahmic\ApiSutra\Hooks\HookRegistry;
-use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
 
 describe('Pipeline hook exceptions', function () {
     it('оборачивает исключения хука в ExecutionResult', function (Hook $hook, int $expectedCalls, string $expectedExceptionClass) {
@@ -40,7 +39,7 @@ describe('Pipeline hook exceptions', function () {
         expect($transport->getRecorded())->toHaveCount($expectedCalls);
     })->with([
         'BeforeSend' => [Hook::BeforeSend, 0, RuntimeException::class],
-        'AfterResponse' => [Hook::AfterResponse, 1, ConnectionException::class],
+        'AfterResponse' => [Hook::AfterResponse, 1, RuntimeException::class],
         'BeforeHydrate' => [Hook::BeforeHydrate, 1, RuntimeException::class],
         'AfterHydrate' => [Hook::AfterHydrate, 1, RuntimeException::class],
     ]);
