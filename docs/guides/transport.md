@@ -3,6 +3,12 @@
 Transport отвечает за фактическую отправку HTTP‑запросов.
 SDK ожидает реализацию `TransportInterface`.
 
+Штатная сериализация принимает относительные endpoint и сохраняет base path,
+исходный query и повторяющиеся параметры по [контракту URI](serialization.md#uri-и-path).
+Абсолютные и подписанные endpoint не поддерживаются; ошибка возникает до HTTP.
+Runtime `withBaseUrl()` остаётся доступен, но не является политикой изоляции credentials
+между origin и не гарантирует работу подписанных URL.
+
 ## Контракт
 ```php
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;

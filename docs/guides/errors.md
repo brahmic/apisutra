@@ -3,6 +3,13 @@
 SDK не бросает исключения по умолчанию. Вместо этого возвращается `ExecutionResult`,
 который содержит статус, ошибки и метаданные.
 
+Ошибки [URI и query](serialization.md#uri-и-path) завершают выполнение до HTTP
+и не запускают retry. Неподдерживаемый вид endpoint даёт `configuration_error`
+(`ConfigurationException`); отсутствующий/недопустимый path-параметр, неподдерживаемая
+query-структура или неоднозначный элемент Comma — `serialization_error`
+(`SerializationException`). Режимы raw/resolved, `dataOrFail()` и `throwOnErrors`
+сохраняют общий контракт доставки ошибок ниже.
+
 ## ExecutionResult
 Ключевые поля:
 - `status`: SUCCESS / PARTIAL / FAILED

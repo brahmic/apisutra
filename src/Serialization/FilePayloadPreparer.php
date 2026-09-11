@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Serialization;
 
 use Brahmic\ApiSutra\Enums\Http\FileFormat;
+use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\VO\Files\FileInput;
 use GuzzleHttp\Psr7\MultipartStream;
@@ -27,6 +28,7 @@ final class FilePayloadPreparer
         mixed $body,
         bool $bodyIsRoot,
         array $headers,
+        BooleanFormat $booleanFormat = BooleanFormat::Numeric,
     ): array {
         $preparedBody = (in_array($fileFormat, [FileFormat::Multipart, FileFormat::Base64], true)
             || ($fileFormat === FileFormat::Binary && ($files[0]['file'] ?? null) instanceof FileInput))
@@ -34,7 +36,7 @@ final class FilePayloadPreparer
             : $this->prepareJsonBody($body, $bodyIsRoot);
 
         return match ($fileFormat) {
-            FileFormat::Multipart => $this->prepareMultipartBody($files, $body, $headers),
+            FileFormat::Multipart => $this->prepareMultipartBody($files, $body, $headers, $booleanFormat),
             FileFormat::Binary => $this->prepareBinaryBody($files, $preparedBody, $headers),
             FileFormat::Base64 => [
                 'body' => JsonEncoder::encode($this->applyBase64Files($files, $body)),
@@ -57,13 +59,13 @@ final class FilePayloadPreparer
      * @param array<string, string> $headers
      * @return array{body: ?string, stream: MultipartStream, headers: array<string, string>}
      */
-    private function prepareMultipartBody(array $files, mixed $body, array $headers): array
+    private function prepareMultipartBody(array $files, mixed $body, array $headers, BooleanFormat $booleanFormat): array
     {
         if (!is_array($body)) {
             throw new ConfigurationException('Multipart payload ожидает body в виде массива');
         }
 
-        $stream = $this->buildMultipartStream($files, $body);
+        $stream = $this->buildMultipartStream($files, $body, $booleanFormat);
         $headers['Content-Type'] = 'multipart/form-data; boundary=' . $stream->getBoundary();
 
         return [
@@ -97,7 +99,7 @@ final class FilePayloadPreparer
      * @param array<int, array{name: string, file: FileInput}> $files
      * @param array<string, mixed> $body
      */
-    private function buildMultipartStream(array $files, array $body): MultipartStream
+    private function buildMultipartStream(array $files, array $body, BooleanFormat $booleanFormat): MultipartStream
     {
         if (!class_exists(MultipartStream::class)) {
             throw new ConfigurationException('MultipartStream недоступен (guzzlehttp/psr7)');
@@ -108,7 +110,8 @@ final class FilePayloadPreparer
         foreach ($body as $key => $value) {
             $parts[] = [
                 'name' => $key,
-                'contents' => is_scalar($value) ? (string) $value : JsonEncoder::encode($value),
+                'contents' => is_bool($value) ? $booleanFormat->format($value)
+                    : (is_scalar($value) ? (string) $value : JsonEncoder::encode($value)),
             ];
         }
 

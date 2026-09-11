@@ -20,6 +20,7 @@ use Brahmic\ApiSutra\Enums\Configuration\NamingStrategy;
 use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
 use Brahmic\ApiSutra\Enums\Http\QueryArrayFormat;
 use Brahmic\ApiSutra\Enums\Serialization\EnumOutput;
+use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Pagination\PaginationRule;
 use Brahmic\ApiSutra\Result\ContinuationTokenExtractorInterface;
@@ -120,6 +121,7 @@ final readonly class ClientConfig
         public ?string $defaultPollRequest = null,
         public ?ContinuationModeApplicatorInterface $continuationModeApplicator = null,
         public RedactionPolicy $redaction = new RedactionPolicy(),
+        public BooleanFormat $textBooleanFormat = BooleanFormat::Numeric,
     ) {
         if ($cache instanceof CacheConfig) {
             $this->cacheConfig = $cache;
@@ -205,6 +207,7 @@ final readonly class ClientConfig
             'defaultPollRequest' => $this->defaultPollRequest,
             'continuationModeApplicator' => $this->continuationModeApplicator,
             'redaction' => $this->redaction,
+            'textBooleanFormat' => $this->textBooleanFormat,
         ];
 
         foreach ($overrides as $key => $value) {

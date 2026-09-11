@@ -22,10 +22,12 @@ class-level request defaults и request-level DX metadata.
 **Параметры:**  
 - `name?: string` — имя параметра (по умолчанию имя свойства)  
 - `arrayFormat?: QueryArrayFormat` — формат массивов  
-- `nullable?: bool` — включать `null` в query  
+- `nullable?: ?bool` — включать `null` в query; null наследует конфиг
 
 Если `arrayFormat` не задан, используется `ClientConfig::queryArrayFormat`.
-`nullable` по умолчанию `false` — `null` в query не включается.
+`nullable` по умолчанию null — наследуется `ClientConfig::serializeNulls` (false).
+Явное true включает `key=`, false исключает null независимо от конфига.
+Правила boolean, пустых значений и списков описаны в [сериализации](../serialization.md#query).
 
 Пример:
 ```php

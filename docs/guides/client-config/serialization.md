@@ -31,7 +31,29 @@ $config = new ClientConfig(
 По умолчанию используется `QueryArrayFormat::Brackets`.
 Меняйте формат, если провайдер ожидает `comma` или `repeat`.
 
+## Текстовый boolean
+
+`textBooleanFormat` необязателен: `BooleanFormat::Numeric` по умолчанию передаёт
+true как `1`, false как `0` в query и скалярных полях multipart.
+Для API, ожидающего слова, настройте клиент:
+
+```php
+use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
+
+$config = new ClientConfig(
+    baseUrl: 'https://api.example',
+    textBooleanFormat: BooleanFormat::Literal,
+);
+```
+
+Точечное переопределение — `#[Cast(BooleanCast::class, BooleanFormat::Numeric)]`
+или Literal; см. [BooleanCast](../casts.md#boolean-в-текстовых-полях).
+Сначала применяется cast, затем формат оставшегося boolean. Строки cast не
+переинтерпретируются. Настройка не меняет JSON, DTO, path или заголовки.
+
 ## Casts
+
 ```php
 use Brahmic\ApiSutra\Casts\DateTimeCast;
 

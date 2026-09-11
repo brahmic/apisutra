@@ -8,6 +8,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
+use Brahmic\ApiSutra\Serialization\UrlQuery;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Override;
 
@@ -38,9 +39,25 @@ final readonly class ApiKeyAuthenticator implements AuthenticatorInterface, Cach
         }
 
         if ($this->query !== null) {
-            $separator = str_contains($request->url, '?') ? '&' : '?';
-            $url = $request->url . $separator . rawurlencode($this->query) . '=' . rawurlencode($this->key);
-            return $request->with(url: $url);
+            [$path, $query] = UrlQuery::split(UrlQuery::append($request->url));
+            $parts = $query === '' ? [] : explode('&', $query);
+            $meta = $request->meta;
+            $previous = $meta['queryAuth'] ?? null;
+            $nameHash = hash('sha256', $this->query);
+            if (is_array($previous) && ($previous['nameHash'] ?? null) === $nameHash) {
+                $index = $previous['index'] ?? null;
+                if (
+                    is_int($index) && isset($parts[$index])
+                    && hash('sha256', $parts[$index]) === ($previous['pairHash'] ?? null)
+                ) {
+                    // Удаляется только ранее добавленная SDK пара, исходные дубли сохраняются.
+                    unset($parts[$index]);
+                    $parts = array_values($parts);
+                }
+            }
+            $pair = rawurlencode($this->query) . '=' . rawurlencode($this->key);
+            $meta['queryAuth'] = ['nameHash' => $nameHash, 'index' => count($parts), 'pairHash' => hash('sha256', $pair)];
+            return $request->with(url: UrlQuery::append($path, implode('&', $parts), $pair), meta: $meta);
         }
 
         return $request;

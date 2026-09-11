@@ -17,7 +17,31 @@
 - `EnumCast`
 - `JsonCast`
 
+## Boolean в текстовых полях
+
+`BooleanCast` без аргументов сохраняет прежнее преобразование в PHP bool, включая
+гидрацию. Необязательный формат меняет только его исходящую сериализацию:
+
+```php
+use Brahmic\ApiSutra\Attributes\DataTransfer\Cast;
+use Brahmic\ApiSutra\Attributes\Request\Query;
+use Brahmic\ApiSutra\Casts\BooleanCast;
+use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
+
+#[Query]
+#[Cast(BooleanCast::class, BooleanFormat::Literal)]
+public bool $enabled = false;
+```
+
+Получится `enabled=false` независимо от клиентского `textBooleanFormat`.
+Numeric даёт строки `1`/`0`. С явным форматом serialize принимает bool или null;
+другие значения вызывают `SerializationException`. Гидрация остаётся прежней.
+Явный текстовый cast на JSON/DTO-поле также возвращает строку: применяйте его только
+там, где этого требует API. Для общего правила query/multipart достаточно
+[настройки клиента](client-config/serialization.md#текстовый-boolean).
+
 ## Регистрация кастов
+
 ```php
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Casts\DateTimeCast;

@@ -3,6 +3,12 @@
 Короткий гайд по авторизации запросов, scope и политике доступа.
 
 ## Базовый authenticator
+
+Для `ApiKeyAuthenticator` с `header: null, query: 'api_key'` ключ добавляется
+после query base URL, endpoint и полей. Повторная авторизация подготовленного запроса
+заменяет только ранее добавленную SDK пару; исходные одноимённые параметры сохраняются.
+Fragment до авторизации удаляется. Правила URI — в [сериализации](serialization.md#uri-и-path).
+
 ```php
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;

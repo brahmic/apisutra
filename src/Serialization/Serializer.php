@@ -13,6 +13,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Pagination\PaginableInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
+use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
 use Brahmic\ApiSutra\Request\RequestPaginationHelper;
 use Brahmic\ApiSutra\Serialization\Enrichment\CredentialsEnricher;
 use Brahmic\ApiSutra\Serialization\VO\RequestPartsBag;
@@ -84,7 +85,7 @@ final class Serializer
             context: $context,
         );
 
-        $prepared = $this->preparePayload($parts);
+        $prepared = $this->preparePayload($parts, $context);
 
         return new PreparedRequest(
             method: $method,
@@ -179,7 +180,7 @@ final class Serializer
     /**
      * @return array{body: ?string, stream: ?MultipartStream, headers: array<string, string>}
      */
-    private function preparePayload(RequestPartsBag $parts): array
+    private function preparePayload(RequestPartsBag $parts, ?PipelineContext $context): array
     {
         return $this->filePayloadPreparer->prepareBodyAndStream(
             fileFormat: $parts->fileFormat,
@@ -187,6 +188,7 @@ final class Serializer
             body: $parts->body,
             bodyIsRoot: $parts->bodyIsRoot,
             headers: $parts->headers,
+            booleanFormat: $context?->config->textBooleanFormat ?? BooleanFormat::Numeric,
         );
     }
 
