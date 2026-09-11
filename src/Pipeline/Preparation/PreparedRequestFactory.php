@@ -20,6 +20,7 @@ final readonly class PreparedRequestFactory
     {
         $prepared = $this->serializer->serialize($request, $context);
 
-        return $this->requestPreparer->applyRequestOverrides($request, $prepared, $context->options);
+        return $this->requestPreparer->applyRequestOverrides($request, $prepared, $context->options)
+            ->with(transportOptions: TimeoutResolver::resolve($context));
     }
 }

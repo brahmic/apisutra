@@ -62,9 +62,11 @@ final readonly class RequestFlowRunner
         PreparedRequest $prepared,
     ): ExecutionResult {
         $this->cacheManager->prepareExecution($request, $context);
+        $context->budget?->check('cache_prepare');
         $prepared = $this->applyBeforeSendStages($request, $context, $prepared);
 
         $cachedResponse = $this->resolveResponse($request, $context);
+        $context->budget?->check('response');
         $this->logResponse($context, $cachedResponse !== null);
 
         $failedResult = $this->handleFailedResponse($request, $context, $audit);
@@ -96,10 +98,13 @@ final readonly class RequestFlowRunner
             $context->preparedRequest,
         );
         $this->applyPreparedResult($processed, $context);
+        $context->budget?->check('before_send');
         $prepared = $this->syncPrepared($context, $prepared);
         $this->authHandler->handleAuthentication($request, $context);
+        $context->budget?->check('authentication');
         $prepared = $this->syncPrepared($context, $prepared);
         $this->hookRunner->runHookStage(Hook::BeforeSend, $request, $context);
+        $context->budget?->check('before_send');
 
         return $prepared;
     }
@@ -123,8 +128,10 @@ final readonly class RequestFlowRunner
     private function resolveResponse(RequestInterface $request, PipelineContext $context): ?ProviderResponse
     {
         $cachedResponse = $this->cacheManager->checkCache($request, $context);
+        $context->budget?->check('cache_lookup');
         if ($cachedResponse instanceof ProviderResponse) {
             $context->response = $cachedResponse;
+            $context->lastResponse = $cachedResponse;
             $this->hookRunner->runHookStage(Hook::AfterResponse, $request, $context);
             return $cachedResponse;
         }
@@ -180,7 +187,9 @@ final readonly class RequestFlowRunner
             $data = $this->hookRunner->runBeforeHydrate($request, $context, $data);
         }
 
+        $context->budget?->check('before_hydrate');
         $resultData = $this->responseHydrator->hydrateResponse($request, $context, $data, $decoded);
+        $context->budget?->check('hydration');
         $context->dto = is_object($resultData) ? $resultData : null;
         if ($context->dto !== null) {
             $processed = $this->stageProcessor->process(
@@ -195,7 +204,9 @@ final readonly class RequestFlowRunner
             }
         }
 
+        $context->budget?->check('after_hydrate');
         $this->hookRunner->runHookStage(Hook::AfterHydrate, $request, $context);
+        $context->budget?->check('after_hydrate');
 
         return $resultData;
     }
@@ -208,9 +219,10 @@ final readonly class RequestFlowRunner
         PreparedRequest $prepared,
         mixed $resultData,
     ): ExecutionResult {
-        $this->cacheManager->storeCache($request, $context);
-
         $meta = $this->resolveMeta($request, $context);
+        $context->budget?->check('before_cache_store');
+        $this->cacheManager->storeCache($request, $context);
+        $context->budget?->check('cache_store');
 
         return $this->resultBuilder->buildSuccessResult(
             request: $request,

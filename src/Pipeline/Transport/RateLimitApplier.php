@@ -27,7 +27,8 @@ final readonly class RateLimitApplier
         }
 
         $key = $this->buildRateLimitKey($config, $context);
-        $this->rateLimiter->acquire($config, $key);
+        $this->rateLimiter->acquire($config, $key, $context->budget);
+        $context->budget?->check('rate_limit');
     }
 
     private function resolveRateLimitConfig(RequestInterface $request, ?RequestOptions $options): ?RateLimitConfig

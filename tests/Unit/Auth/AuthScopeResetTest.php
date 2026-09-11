@@ -41,7 +41,8 @@ it('сбрасывает runtime scope без изменения исходно�
         ->and($reset->getOptions()->getAuthScopeOverride())->toBeNull()
         ->and($secondary->getOptions()->getAuthScopeOverride())->toBe('secondary')
         ->and($reset->getOptions()->getCacheOverride()->ttl)->toBe(120)
-        ->and($reset->getOptions()->getConnectTimeoutOverride())->toBe(7);
+        ->and($reset->getOptions()->getConnectTimeoutOverride())->toBeNull()
+        ->and($secondary->getOptions()->getConnectTimeoutOverride())->toBe(7);
 })->with(['withAuth', 'withoutAuth', 'forceAuth']);
 
 it('не восстанавливает runtime scope исходного request после замены execution options', function (): void {

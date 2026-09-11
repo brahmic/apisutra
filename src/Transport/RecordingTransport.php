@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
-use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
+use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Testing\Fixture;
 use Brahmic\ApiSutra\Testing\FixtureRedactor;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionClass;
 use Throwable;
 
-final class RecordingTransport implements TransportInterface
+final class RecordingTransport implements TimeoutAwareTransportInterface
 {
+    public function assertSupportsTimeouts(TransportOptions $options): void
+    {
+        TransportCapabilities::check($this->transport, $options);
+    }
+
     /**
      * @var array<string, Fixture>
      */

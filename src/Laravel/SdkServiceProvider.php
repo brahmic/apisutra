@@ -19,6 +19,7 @@ use Brahmic\ApiSutra\Resolver\ClientResolver;
 use Brahmic\ApiSutra\Resolver\RequestNamespaceDetector;
 use Brahmic\ApiSutra\Resolver\RequestScanner;
 use Brahmic\ApiSutra\Resolver\ServiceRegistrar;
+use Brahmic\ApiSutra\Transport\GuzzleHttpClient;
 use Brahmic\ApiSutra\Transport\HttpTransport;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\HttpFactory as GuzzleHttpFactory;
@@ -237,6 +238,6 @@ final class SdkServiceProvider extends ServiceProvider
             return null;
         }
 
-        return new GuzzleClient();
+        return new GuzzleHttpClient();
     }
 }

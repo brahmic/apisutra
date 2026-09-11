@@ -24,7 +24,7 @@ final class SequentialBatchStrategy implements BatchStrategyInterface
 
         $results = [];
         foreach ($requests as $index => $request) {
-            $result = $client->send($request)->raw();
+            $result = $context->send($request)->raw();
             $results[$index] = $result;
 
             if ($context->failStrategy === FailStrategy::FailAll && $result->isFailed()) {

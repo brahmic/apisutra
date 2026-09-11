@@ -72,6 +72,10 @@ use Brahmic\ApiSutra\Attributes\Behavior\Timeout;
 final class TimeoutRequest extends AbstractRequest {}
 ```
 
+Единицы — секунды. Неуказанный/null connect timeout наследует конфиг, 0 отключает
+соответствующий SDK-лимит. Runtime имеет приоритет над атрибутом. Полный контракт:
+[Timeouts & Delay](../client-config/timeouts-delay.md).
+
 ## RateLimit
 **Параметры:**  
 - `limit: int`  

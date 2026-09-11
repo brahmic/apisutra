@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Pipeline\Auth;
 
 use Brahmic\ApiSutra\Config\ClientConfig;
-use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthPolicyInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheAwareInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
@@ -17,6 +17,9 @@ use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Request\UnauthorizedException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
+use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
@@ -50,6 +53,7 @@ final readonly class AuthHandler
 
     public function handleAuthentication(RequestInterface $request, PipelineContext $context, bool $forceRefresh = false): void
     {
+        $context->budget?->check('authentication');
         if (!$request instanceof AbstractRequest) {
             return;
         }
@@ -71,12 +75,15 @@ final readonly class AuthHandler
             $refreshAttempts = min(1, $refreshAttempts);
         }
 
+        $context->budget?->check('authentication');
         if ($shouldRefresh && $refreshAttempts > 0) {
             $this->refreshToken($auth, $context, $request, $refreshAttempts, $forceRefresh);
         }
 
+        $context->budget?->check('authentication');
         if ($context->preparedRequest !== null) {
             $context->preparedRequest = $auth->authenticate($context->preparedRequest);
+            $context->budget?->check('authentication');
         }
     }
 
@@ -189,7 +196,7 @@ final readonly class AuthHandler
         $lockToken = $this->refreshLock->acquire($lockKey, $lockTtlSeconds);
 
         if ($lockToken === null) {
-            $lockToken = $this->waitForRefreshLock($auth, $lockKey, $lockTtlSeconds, $forceRefresh);
+            $lockToken = $this->waitForRefreshLock($auth, $lockKey, $lockTtlSeconds, $forceRefresh, $context);
             if ($lockToken === null) {
                 return;
             }
@@ -197,7 +204,9 @@ final readonly class AuthHandler
 
         try {
             for ($i = 0; $i < $attempts; $i++) {
+                $context->budget?->check('auth_refresh');
                 $refreshRequest = $auth->getRefreshRequest();
+                $context->budget?->check('auth_refresh');
                 if ($refreshRequest === null) {
                     return;
                 }
@@ -208,6 +217,10 @@ final readonly class AuthHandler
                 }
 
                 $result = $this->executor->execute($refreshRequest, RequestRole::Dependency, $context, $context->traceId);
+                if ($result->exception instanceof ExecutionDeadlineException) {
+                    throw $result->exception;
+                }
+                $context->budget?->check('auth_refresh', $result->exception);
                 if ($result->isFailed()) {
                     continue;
                 }
@@ -281,7 +294,7 @@ final readonly class AuthHandler
         return $ttl;
     }
 
-    private function waitForRefreshLock(AuthenticatorInterface $auth, string $lockKey, int $ttlSeconds, bool $forceRefresh): ?string
+    private function waitForRefreshLock(AuthenticatorInterface $auth, string $lockKey, int $ttlSeconds, bool $forceRefresh, PipelineContext $context): ?string
     {
         $maxWaitMs = $ttlSeconds * 1000;
         $waitedMs = 0;
@@ -291,7 +304,7 @@ final readonly class AuthHandler
                 return null;
             }
 
-            $this->sleeper->sleepMs(self::REFRESH_LOCK_WAIT_STEP_MS);
+            ($context->budget ?? new ExecutionBudget(new SystemClock()))->wait(self::REFRESH_LOCK_WAIT_STEP_MS, $this->sleeper, 'auth_lock_wait');
             $waitedMs += self::REFRESH_LOCK_WAIT_STEP_MS;
 
             $lockToken = $this->refreshLock->acquire($lockKey, $ttlSeconds);

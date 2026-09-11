@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
+use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Enums\Configuration\Environment;
 use Brahmic\ApiSutra\Enums\RateLimiting\BackoffStrategy;
-use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Hooks\HookRegistry;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
 use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
@@ -14,15 +16,13 @@ use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\Pipeline\Hooks\HookRunner;
 use Brahmic\ApiSutra\Pipeline\Transport\RetrySender;
 use Brahmic\ApiSutra\RateLimiting\RateLimiter;
-use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
-use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\SimpleGetRequest;
+use Brahmic\ApiSutra\Tests\Support\VirtualClock;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\Tests\Support\RecordingPipelineExecutor;
 use Brahmic\ApiSutra\Transport\MockTransport;
-use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
-use Brahmic\ApiSutra\VO\Http\ProviderResponse;
-use Brahmic\ApiSutra\Tests\Stubs\Retry\SlowRetryHandler;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 
 describe('RetrySender total timeout', function () {
     it('останавливает повторы при превышении общего таймаута', function () {
@@ -59,7 +59,18 @@ describe('RetrySender total timeout', function () {
             preparedRequest: $prepared,
         );
 
-        $retryHandler = new SlowRetryHandler(2000);
+        $clock = new VirtualClock();
+        $context->budget = new ExecutionBudget($clock, 1);
+        $retryHandler = new class($clock) implements RetryHandlerInterface {
+            public int $calls = 0;
+            public function __construct(private VirtualClock $clock) {}
+            public function handle(PreparedRequest $request, PipelineContext $context, RetryConfig $config, int $attempt): ProviderResponse
+            {
+                $this->calls++;
+                $this->clock->advance(2);
+                return new ProviderResponse(500, [], '', $request);
+            }
+        };
 
         $retrySender = new RetrySender(
             config: $config,
@@ -73,7 +84,7 @@ describe('RetrySender total timeout', function () {
         );
 
         expect(fn () => $retrySender->sendWithRetry($request, $context))
-            ->toThrow(ConnectionException::class, 'Превышен общий таймаут повторов');
+            ->toThrow(ExecutionDeadlineException::class, 'Исчерпан общий бюджет выполнения');
 
         expect($retryHandler->calls)->toBe(1);
     });

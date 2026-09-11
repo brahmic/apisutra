@@ -6,16 +6,21 @@ namespace Brahmic\ApiSutra\Pipeline\Transport;
 
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Request\RequestOptions;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
+use Brahmic\ApiSutra\Timing\SystemClock;
+use Brahmic\ApiSutra\Timing\SystemSleeper;
 
 final readonly class DelayApplier
 {
     public function __construct(
         private ClientConfig $config,
+        private SleeperInterface $sleeper = new SystemSleeper(),
     ) {}
 
-    public function apply(RequestInterface $request, ?RequestOptions $options = null): void
+    public function apply(RequestInterface $request, ?RequestOptions $options = null, ?ExecutionBudget $budget = null): void
     {
         $delay = $this->config->delay;
         if ($options?->getDelayOverride() !== null) {
@@ -25,7 +30,7 @@ final readonly class DelayApplier
         }
 
         if ($delay > 0) {
-            usleep($delay * 1000);
+            ($budget ?? new ExecutionBudget(new SystemClock()))->wait($delay, $this->sleeper, 'request_delay');
         }
     }
 }

@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Таймауты транспорта и общий бюджет выполнения](completed/pln-006-transport-timeouts-execution-budget.md)
 - [Безопасные повторы и восстановление тела запроса](completed/pln-005-safe-retries-stream-replay.md)
 - [Строгий JSON и корректная классификация ошибок](completed/pln-004-json-error-contracts.md)
 - [Автоматическая identity кеша и опциональная RedactionPolicy](completed/pln-003-automatic-cache-identity.md)

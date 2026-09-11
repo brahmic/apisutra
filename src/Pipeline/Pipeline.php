@@ -12,10 +12,12 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestOptionsProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Pipeline\PipelineExecutorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\EarlyReturnException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Extensions\ExtensionRegistry;
 use Brahmic\ApiSutra\Hooks\HookRegistry;
 use Brahmic\ApiSutra\Pipeline\Attributes\StageProcessor;
@@ -41,6 +43,8 @@ use Brahmic\ApiSutra\RateLimiting\RateLimiter;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\Serialization\Hydrator;
 use Brahmic\ApiSutra\Serialization\Serializer;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
+use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -82,6 +86,7 @@ final class Pipeline implements PipelineExecutorInterface
     private readonly RequestPreparationStep $preparationStep;
     private readonly RequestFlowRunner $flowRunner;
     private readonly PreparedRequestFactory $preparedRequestFactory;
+    private readonly ClockInterface $clock;
 
     /**
      * Собирает зависимости и компоненты пайплайна.
@@ -100,7 +105,9 @@ final class Pipeline implements PipelineExecutorInterface
         private readonly ?LoggerInterface $logger = null,
         private readonly ?AbstractClient $client = null,
         private ?string $traceId = null,
+        ?ClockInterface $clock = null,
     ) {
+        $this->clock = $clock ?? new SystemClock();
         $this->requestPreparer = new RequestPreparer($this->config);
         $this->stageProcessor = new StageProcessor($this->attributes);
         $this->hookRunner = new HookRunner($this->hooks);
@@ -175,6 +182,8 @@ final class Pipeline implements PipelineExecutorInterface
         bool $skipComposite = false,
         bool $skipValidation = false,
     ): ExecutionResult {
+        $clock = $parent?->budget?->clock ?? $this->clock;
+        $startedMs = $clock->monotonicMs();
         $options = null;
         $paginationOptions = null;
         if ($request instanceof RequestExecutionInterface) {
@@ -200,10 +209,26 @@ final class Pipeline implements PipelineExecutorInterface
                 options: $options,
                 paginationOptions: $paginationOptions,
             );
+            $context->budget = new ExecutionBudget($clock, $this->config->retry?->totalTimeoutMs, $parent?->budget, $startedMs);
+            $context->budget->check('started');
             $startTime = $this->contextFactory->start($request, $context, $audit);
+            $context->budget->check('started');
 
-            return $this->runStages($request, $context, $audit, $startTime, $skipComposite, $skipValidation);
+            $result = $this->runStages($request, $context, $audit, $startTime, $skipComposite, $skipValidation);
+            if (!$result->exception instanceof ExecutionDeadlineException) {
+                $context->budget->check('completed', $result->exception);
+            }
+            return $result;
         } catch (Throwable $exception) {
+            if (!$exception instanceof ExecutionDeadlineException && $context?->budget?->remainingMs() === 0) {
+                $exception = new ExecutionDeadlineException('execution', $exception);
+            }
+            if ($exception instanceof ExecutionDeadlineException && $exception->response === null) {
+                $response = $context?->response ?? $context?->lastResponse;
+                if ($response !== null) {
+                    $exception = new ExecutionDeadlineException($exception->stage, $exception->getPrevious(), $response);
+                }
+            }
             if ($this->config->throwOnErrors) {
                 throw $exception;
             }
@@ -227,6 +252,10 @@ final class Pipeline implements PipelineExecutorInterface
             }
 
             return $this->resultBuilder->buildExceptionResult($request, $context, $audit, $startTime, $exception);
+        } finally {
+            if ($parent !== null && $context?->lastResponse !== null) {
+                $parent->lastResponse = $context->lastResponse;
+            }
         }
     }
 
@@ -240,11 +269,13 @@ final class Pipeline implements PipelineExecutorInterface
     ): ExecutionResult {
         if (!$skipValidation) {
             $validationResult = $this->validator->validate($request, $context, $audit, $startTime);
+            $context->budget?->check('validation');
             if ($validationResult instanceof ExecutionResult) {
                 return $validationResult;
             }
 
             $contractValidation = $this->requestContractValidator->validate($request);
+            $context->budget?->check('validation');
             $context->requestContractDebug = $contractValidation->oneOfDebug;
             if ($contractValidation->failed()) {
                 $violation = $contractValidation->violation;
@@ -263,11 +294,13 @@ final class Pipeline implements PipelineExecutorInterface
         }
 
         $compositeResult = $this->compositeHandler->handle($request, $context, $skipComposite);
+        $context->budget?->check('composite');
         if ($compositeResult instanceof ExecutionResult) {
             return $compositeResult;
         }
 
         $prepared = $this->preparationStep->prepare($request, $context);
+        $context->budget?->check('preparation');
 
         try {
             return $this->flowRunner->run($request, $context, $audit, $startTime, $prepared);

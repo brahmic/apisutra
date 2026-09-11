@@ -354,3 +354,10 @@ $config = $config->with(authPolicy: new OnlyWritePolicy());
 `CacheIdentityProviderInterface`; без него HTTP-кеш пропускается. Метод получения
 identity не выполняет авторизацию или refresh. Отдельный tenant провайдера объявляется
 дополнительно. Контракт и ограничения описаны в [настройках кеша](client-config/cache.md).
+
+## Бюджет авторизации и refresh
+
+Если задан `RetryConfig::totalTimeoutMs`, начальная авторизация, ожидание refresh lock
+и refresh после 401 используют deadline родителя. Дочерний запрос не получает новый
+полный бюджет. При его исчерпании сохраняется `ExecutionDeadlineException`, повтор
+refresh не начинается. Подробности — [Timeouts & Delay](client-config/timeouts-delay.md).

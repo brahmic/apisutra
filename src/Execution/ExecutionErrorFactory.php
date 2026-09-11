@@ -9,6 +9,9 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestExecutionInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
+use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\VO\Errors\RequestError;
 use Brahmic\ApiSutra\VO\Errors\SystemErrorContextBuilder;
@@ -24,23 +27,34 @@ final readonly class ExecutionErrorFactory
         $traceId = SystemErrorContextBuilder::resolveTraceId($request);
         $contextData = SystemErrorContextBuilder::build(
             traceId: $traceId,
-            httpStatus: null,
+            httpStatus: $exception instanceof ExecutionDeadlineException ? $exception->response?->status : null,
             requestClass: $requestClass,
         );
+
+        if ($exception instanceof ExecutionDeadlineException) {
+            $contextData['reason'] = 'execution_deadline_exceeded';
+            $contextData['stage'] = $exception->stage;
+        }
 
         return new ExecutionResult(
             data: null,
             status: ResultStatus::FAILED,
             errors: new ErrorCollection([
                 new RequestError(
-                    code: ErrorCode::ConnectionFailed,
+                    code: match (true) {
+                        $exception instanceof TimeoutException => ErrorCode::Timeout,
+                        $exception instanceof ConfigurationException => ErrorCode::ConfigurationError,
+                        default => ErrorCode::ConnectionFailed,
+                    },
                     message: $exception->getMessage(),
                     context: $contextData,
                     requestClass: $requestClass,
+                    response: $exception instanceof ExecutionDeadlineException ? $exception->response : null,
                 ),
             ]),
             requestClass: $requestClass,
             exception: $exception,
+            response: $exception instanceof ExecutionDeadlineException ? $exception->response : null,
         );
     }
 

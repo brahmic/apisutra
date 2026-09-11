@@ -206,3 +206,14 @@ ConnectException. Наличие Guzzle HTTP Client для остальных т
 Эти правила одинаковы для sync, promise API и batch: `throwOnErrors` меняет способ
 доставки исключения, а не причину сбоя. Политика идемпотентности и replay потоков
 в этой поставке не меняется.
+
+## Исчерпание общего бюджета
+
+`ExecutionDeadlineException` является `TimeoutException`. В `raw()->errors` код —
+`timeout`, контекст содержит `reason: execution_deadline_exceeded` и `stage` остановки.
+Это окончательная ошибка выполнения, даже если последний HTTP-ответ имел статус 200
+или 503. Доступный реальный ответ сохраняется в диагностике; до первого HTTP ответа нет.
+`raw()`/`resolved()` показывают ошибку, `dataOrFail()` и `throwOnErrors` выбрасывают её. В исключении
+`response` сохраняет доступный ответ, в `getPrevious()` — исходную причину.
+Таймаут отдельной попытки допускает безопасный retry, общий deadline — нет.
+Полный контракт — [Timeouts & Delay](client-config/timeouts-delay.md).

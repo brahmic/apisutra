@@ -4,14 +4,27 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Tests\Stubs\Retry;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
+use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
 
-final class ConsumingHttpClient implements ClientInterface
+final class ConsumingHttpClient implements ClientInterface, HttpClientOptionsInterface
 {
+    /** @var list<TransportOptions> */
+    public array $options = [];
+
+    public function assertSupportsTimeouts(TransportOptions $options): void {}
+
+    public function sendWithOptions(RequestInterface $request, TransportOptions $options): ResponseInterface
+    {
+        $this->options[] = $options->effective();
+        return $this->sendRequest($request);
+    }
+
     /** @var list<string> */
     public array $bodies = [];
     /** @var list<RequestInterface> */

@@ -43,6 +43,7 @@ final readonly class CompositeFlow
             return $this->buildCompositeResult($request, $context, $resultCollection, ResultStatus::FAILED);
         }
 
+        $context->budget?->check('composite');
         $data = $this->aggregateCompositeData($request, $resultCollection, $context);
         $status = $this->resolveCompositeStatus($resultCollection);
 
@@ -60,7 +61,9 @@ final readonly class CompositeFlow
             return $this->buildCompositeResult($request, $context, $resultCollection, ResultStatus::FAILED);
         }
 
+        $context->budget?->check('dependencies');
         $this->processDependencies($request, $resultCollection, $context);
+        $context->budget?->check('dependencies');
 
         return $this->executeMainRequest($request, $context);
     }
@@ -152,7 +155,7 @@ final readonly class CompositeFlow
         return $this->executor->execute(
             request: $request,
             role: $context->role,
-            parent: $context->parent,
+            parent: $context,
             traceId: $context->traceId,
             skipComposite: true,
             skipValidation: true,

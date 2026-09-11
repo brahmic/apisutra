@@ -112,12 +112,11 @@ describe('AuthHandler refresh lock', function () {
         $lockKey = 'auth_refresh_lock:' . $auth->getCacheKey();
         $cache->set($lockKey, 'locked', 30);
 
-        $method = new ReflectionMethod(AuthHandler::class, 'waitForRefreshLock');
-        $method->setAccessible(true);
+        $request = new AuthRequest('payload');
+        $context = new PipelineContext($request, $config, 'trace-lock');
+        $handler->handleAuthentication($request, $context);
 
-        $result = $method->invoke($handler, $auth, $lockKey, 1, false);
-
-        expect($result)->toBeNull()
+        expect($executor->calls)->toBe(0)
             ->and($sleeper->calls)->toBeGreaterThan(0)
             ->and($sleeper->totalMs)->toBeGreaterThanOrEqual(1000);
     });
@@ -139,14 +138,13 @@ describe('AuthHandler refresh lock', function () {
         $lockKey = 'auth_refresh_lock:' . $auth->getCacheKey();
         $cache->set($lockKey, 'locked', 30);
 
-        $method = new ReflectionMethod(AuthHandler::class, 'waitForRefreshLock');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($handler, $auth, $lockKey, 1, true);
+        $request = new AuthRequest('payload');
+        $context = new PipelineContext($request, $config, 'trace-lock');
+        $handler->handleAuthentication($request, $context, true);
 
         expect($auth->shouldRefreshCalls)->toBe(0)
             ->and($sleeper->calls)->toBeGreaterThan(0)
-            ->and($result)->toBeNull();
+            ->and($executor->calls)->toBe(0);
     });
 
     it('force refresh выполняет refresh даже при shouldRefresh=false', function () {

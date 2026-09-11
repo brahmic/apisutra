@@ -7,14 +7,17 @@ namespace Brahmic\ApiSutra\Retry;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Enums\RateLimiting\BackoffStrategy;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
+use Brahmic\ApiSutra\Timing\SystemClock;
+use Brahmic\ApiSutra\Timing\SystemSleeper;
+use Brahmic\ApiSutra\Transport\TransportCapabilities;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Closure;
 use Override;
-use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
-use Brahmic\ApiSutra\Timing\SystemSleeper;
 
 final class RetryHandler implements RetryHandlerInterface
 {
@@ -53,9 +56,15 @@ final class RetryHandler implements RetryHandlerInterface
         $backoff = $applyBackoff && $attempt > 1 ? $this->calculateDelay($config, $attempt - 1) : 0;
         $delay = max($minimumDelayMs, $backoff);
         if ($delay > 0) {
-            ($sleeper ?? $this->sleeper)->sleepMs($delay);
+            ($context->budget ?? new ExecutionBudget(new SystemClock()))->wait($delay, $sleeper ?? $this->sleeper, 'retry_wait');
         }
 
+        $context->budget?->check('http');
+        if ($request->transportOptions !== null) {
+            $request = $request->with(transportOptions: $request->transportOptions->effective());
+            $context->preparedRequest = $request;
+            TransportCapabilities::check($this->transport, $request->transportOptions);
+        }
         return $this->transport->send($request);
     }
 

@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Tests\Support;
 
-use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\PromiseInterface;
 
-final class FakeTransport implements TransportInterface
+final class FakeTransport implements TimeoutAwareTransportInterface
 {
+    public function assertSupportsTimeouts(TransportOptions $options): void {}
+
     public int $sendCalls = 0;
     public ?ProviderResponse $nextResponse = null;
 

@@ -20,6 +20,7 @@ readonly class PreparedRequest
         public ?string $body = null,
         public ?StreamInterface $stream = null,
         public array $meta = [],
+        public ?TransportOptions $transportOptions = null,
     ) {}
 
     /**
@@ -31,6 +32,7 @@ readonly class PreparedRequest
         ?string $body = null,
         ?StreamInterface $stream = null,
         ?array $meta = null,
+        ?TransportOptions $transportOptions = null,
     ): self {
         return new self(
             method: $this->method,
@@ -39,6 +41,7 @@ readonly class PreparedRequest
             body: $body ?? $this->body,
             stream: $stream ?? $this->stream,
             meta: $meta ?? $this->meta,
+            transportOptions: $transportOptions ?? $this->transportOptions,
         );
     }
 
@@ -53,4 +56,3 @@ readonly class PreparedRequest
         return $this->with(headers: $headers);
     }
 }
-

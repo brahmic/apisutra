@@ -11,30 +11,31 @@ use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResultMeta;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Pipeline\PipelineStage;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
-use Brahmic\ApiSutra\Exceptions\Core\SdkException;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\EarlyReturnException;
+use Brahmic\ApiSutra\Exceptions\Core\SdkException;
+use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
 use Brahmic\ApiSutra\Exceptions\Request\RequestException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
+use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
+use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
+use Brahmic\ApiSutra\Exceptions\Transport\InvalidRequestException;
+use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
+use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
 use Brahmic\ApiSutra\Exceptions\Validation\ValidationException;
 use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Pipeline\Hydration\ResponseHydrator;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\VO\Audit\DebugInfo;
 use Brahmic\ApiSutra\VO\Errors\RequestError;
-use Brahmic\ApiSutra\VO\Errors\ValidationError;
 use Brahmic\ApiSutra\VO\Errors\SystemErrorContextBuilder;
+use Brahmic\ApiSutra\VO\Errors\ValidationError;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
-use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
-use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
-use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
-use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
-use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
-use Brahmic\ApiSutra\Exceptions\Transport\InvalidRequestException;
-use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
-use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
 use Throwable;
 
 /**
@@ -220,7 +221,10 @@ final readonly class ExecutionResultBuilder
         };
         $response = $context->response;
 
-        if ($exception instanceof RequestException) {
+        if ($exception instanceof ExecutionDeadlineException) {
+            $code = ErrorCode::Timeout;
+            $response = $context->response ?? $context->lastResponse ?? $exception->response;
+        } elseif ($exception instanceof RequestException) {
             $response = $exception->response;
             $code = ErrorCode::fromHttpStatus($response->status);
         } elseif ($exception instanceof ConfigurationException) {
@@ -233,6 +237,9 @@ final readonly class ExecutionResultBuilder
             request: $request,
             context: $context,
             response: $response,
+            overrideContext: $exception instanceof ExecutionDeadlineException
+                ? ['reason' => 'execution_deadline_exceeded', 'stage' => $exception->stage]
+                : [],
         );
 
         $this->auditLogger->addAudit($audit, PipelineStage::Failed, $context, $startTime, null);

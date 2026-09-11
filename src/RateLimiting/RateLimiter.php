@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\RateLimiting;
 
 use Brahmic\ApiSutra\Config\RateLimitConfig;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
+use Brahmic\ApiSutra\Timing\SystemClock;
+use Brahmic\ApiSutra\Timing\SystemSleeper;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Psr\SimpleCache\CacheInterface;
@@ -28,21 +33,29 @@ final class RateLimiter
      */
     private array $memory = [];
 
+    public function __construct(
+        private readonly ClockInterface $clock = new SystemClock(),
+        private readonly SleeperInterface $sleeper = new SystemSleeper(),
+    ) {}
+
     /**
      * Получить слот лимита по ключу или применить ожидание/исключение.
      */
-    public function acquire(RateLimitConfig $config, string $key): void
+    public function acquire(RateLimitConfig $config, string $key, ?ExecutionBudget $budget = null): void
     {
+        $budget ??= new ExecutionBudget($this->clock);
+        $budget->check('rate_limit');
         $store = $config->store;
-        $now = time();
+        $now = $budget->clock->unixTime();
 
         $data = $this->loadState($store, $key, $config->period, $now);
+        $budget->check('rate_limit_store');
         if ($this->consumeIfAvailable($store, $key, $data, $config->limit, $config->period)) {
             return;
         }
 
-        $this->handleLimitExceeded($config, $data, $now);
-        $data = $this->startNewWindow($config->period, time());
+        $this->handleLimitExceeded($config, $data, $now, $budget);
+        $data = $this->startNewWindow($config->period, $budget->clock->unixTime());
         $data['count'] = 1;
         $this->store($store, $key, $data, $config->period);
     }
@@ -86,7 +99,7 @@ final class RateLimiter
      *
      * @param array{count: int, reset: int} $data
      */
-    private function handleLimitExceeded(RateLimitConfig $config, array $data, int $now): void
+    private function handleLimitExceeded(RateLimitConfig $config, array $data, int $now, ExecutionBudget $budget): void
     {
         if ($config->behavior === RateLimitBehavior::Throw) {
             // Явная ошибка при превышении лимита
@@ -96,7 +109,7 @@ final class RateLimiter
         $sleepFor = max(0, $data['reset'] - $now);
         if ($sleepFor > 0) {
             // Ожидание следующего окна лимита
-            sleep($sleepFor);
+            $budget->wait($sleepFor * 1000, $this->sleeper, 'rate_limit_wait');
         }
     }
 

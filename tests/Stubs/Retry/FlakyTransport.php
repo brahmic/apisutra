@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Tests\Stubs\Retry;
 
-use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
-use RuntimeException;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\PromiseInterface;
+use RuntimeException;
 
-final class FlakyTransport implements TransportInterface
+final class FlakyTransport implements TimeoutAwareTransportInterface
 {
+    public function assertSupportsTimeouts(TransportOptions $options): void {}
+
     public int $calls = 0;
 
     public function send(PreparedRequest $request): ProviderResponse

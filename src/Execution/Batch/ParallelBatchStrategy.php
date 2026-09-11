@@ -6,6 +6,7 @@ namespace Brahmic\ApiSutra\Execution\Batch;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Enums\Execution\FailStrategy;
+use Brahmic\ApiSutra\Enums\Execution\SendMode;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use GuzzleHttp\Promise\Each;
@@ -29,12 +30,12 @@ final class ParallelBatchStrategy implements BatchStrategyInterface
         $results = [];
         $shouldStop = false;
 
-        $generator = function () use ($requests, $client, &$shouldStop) {
+        $generator = function () use ($requests, $context, &$shouldStop) {
             foreach ($requests as $index => $request) {
                 if ($shouldStop) {
                     break;
                 }
-                yield $index => $client->sendAsync($request)->rawAsync();
+                yield $index => $context->send($request, SendMode::Async)->rawAsync();
             }
         };
 

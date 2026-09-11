@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
-use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\HttpFactory;
+use Override;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface as PsrRequestInterface;
-use Override;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Throwable;
 
-final class HttpTransport implements TransportInterface
+final class HttpTransport implements TimeoutAwareTransportInterface
 {
     public function __construct(
         private readonly ClientInterface $httpClient,
@@ -25,13 +29,36 @@ final class HttpTransport implements TransportInterface
         private readonly StreamFactoryInterface $streamFactory,
     ) {}
 
+    /** Штатная сборка без ручного выбора адаптера и фабрик. */
+    public static function createDefault(): self
+    {
+        $factory = new HttpFactory();
+        return new self(new GuzzleHttpClient(), $factory, $factory);
+    }
+
+    public function assertSupportsTimeouts(TransportOptions $options): void
+    {
+        if ($this->httpClient instanceof HttpClientOptionsInterface) {
+            $this->httpClient->assertSupportsTimeouts($options);
+        } elseif ($options->hasLimits()) {
+            throw new ConfigurationException($this->httpClient::class . ' не поддерживает per-request timeout/connectTimeout/deadline; нужен HttpClientOptionsInterface');
+        }
+    }
+
     #[Override]
     public function send(PreparedRequest $request): ProviderResponse
     {
         $start = microtime(true);
         $psrRequest = $this->buildPsrRequest($request);
+        $options = $request->transportOptions;
+        if ($options !== null) {
+            $this->assertSupportsTimeouts($options);
+            $options = $options->effective();
+        }
         try {
-            $psrResponse = $this->httpClient->sendRequest($psrRequest);
+            $psrResponse = $options !== null && $this->httpClient instanceof HttpClientOptionsInterface
+                ? $this->httpClient->sendWithOptions($psrRequest, $options)
+                : $this->httpClient->sendRequest($psrRequest);
         } catch (Throwable $exception) {
             throw TransportExceptionNormalizer::normalize($exception);
         }

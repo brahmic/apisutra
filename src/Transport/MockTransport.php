@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
-use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Exceptions\Testing\MissingFixtureException;
 use Brahmic\ApiSutra\Exceptions\Testing\UnmockedRequestException;
 use Brahmic\ApiSutra\Testing\Fixture;
@@ -13,11 +13,15 @@ use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Testing\MockSequence;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 
-final class MockTransport implements TransportInterface
+final class MockTransport implements TimeoutAwareTransportInterface
 {
+    /** Fake принимает опции для тестов; реальный HTTP не выполняется. */
+    public function assertSupportsTimeouts(TransportOptions $options): void {}
+
     /**
      * @var array<string, mixed>
      */

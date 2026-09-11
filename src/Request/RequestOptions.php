@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Request;
 
 use Brahmic\ApiSutra\Config\RateLimitConfig;
-use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
 use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
-use Brahmic\ApiSutra\Enums\Request\CredentialsMergeMode;
 use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
+use Brahmic\ApiSutra\Enums\Request\CredentialsMergeMode;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Pagination\PaginationRule;
 use Brahmic\ApiSutra\VO\Cache\CacheOverride;
 
@@ -119,7 +119,8 @@ final readonly class RequestOptions
             idempotencyKey: $overrides['idempotencyKey'] ?? $this->idempotencyKey,
             rateLimitOverride: $overrides['rateLimitOverride'] ?? $this->rateLimitOverride,
             timeoutOverride: $overrides['timeoutOverride'] ?? $this->timeoutOverride,
-            connectTimeoutOverride: $overrides['connectTimeoutOverride'] ?? $this->connectTimeoutOverride,
+            connectTimeoutOverride: array_key_exists('connectTimeoutOverride', $overrides)
+                ? $overrides['connectTimeoutOverride'] : $this->connectTimeoutOverride,
             traceIdOverride: $overrides['traceIdOverride'] ?? $this->traceIdOverride,
             roleOverride: $overrides['roleOverride'] ?? $this->roleOverride,
             rateLimitDisabledOverride: $overrides['rateLimitDisabledOverride'] ?? $this->rateLimitDisabledOverride,

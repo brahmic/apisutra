@@ -6,27 +6,31 @@ namespace Brahmic\ApiSutra\Pipeline\Transport;
 
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RetryConfig;
-use Brahmic\ApiSutra\Retry\RetryHandler;
-use Brahmic\ApiSutra\Retry\RequestBodyReplay;
-use Brahmic\ApiSutra\Retry\RetryAfterDelay;
 use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
-use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
-use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
+use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
+use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
 use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
-use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
 use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\Pipeline\Hooks\HookRunner;
+use Brahmic\ApiSutra\Pipeline\Preparation\TimeoutResolver;
 use Brahmic\ApiSutra\RateLimiting\RateLimiter;
-use Brahmic\ApiSutra\Transport\TransportExceptionNormalizer;
+use Brahmic\ApiSutra\Retry\RequestBodyReplay;
+use Brahmic\ApiSutra\Retry\RetryAfterDelay;
+use Brahmic\ApiSutra\Retry\RetryHandler;
+use Brahmic\ApiSutra\Timing\ExecutionBudget;
+use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
+use Brahmic\ApiSutra\Transport\TransportCapabilities;
+use Brahmic\ApiSutra\Transport\TransportExceptionNormalizer;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
@@ -39,7 +43,7 @@ final readonly class RetrySender
     private RateLimitApplier $rateLimitApplier;
     private DelayApplier $delayApplier;
     private SleeperInterface $sleeper;
-    private RetryAfterDelay $retryAfterDelay;
+    private ?RetryAfterDelay $retryAfterDelay;
 
     public function __construct(
         private ClientConfig $config,
@@ -61,9 +65,9 @@ final readonly class RetrySender
             client: $this->client,
         );
         $this->rateLimitApplier = new RateLimitApplier($this->config, $this->rateLimiter);
-        $this->delayApplier = new DelayApplier($this->config);
         $this->sleeper = $sleeper ?? new SystemSleeper();
-        $this->retryAfterDelay = $retryAfterDelay ?? new RetryAfterDelay();
+        $this->delayApplier = new DelayApplier($this->config, $this->sleeper);
+        $this->retryAfterDelay = $retryAfterDelay;
     }
 
     public function sendWithRetry(RequestInterface $request, PipelineContext $context): ProviderResponse
@@ -75,33 +79,39 @@ final readonly class RetrySender
         $lastException = null;
         $authRetryUsed = 0;
         $authRetryLimit = max(0, $this->config->authRetryAttempts);
-        $startedAt = microtime(true);
-        $totalTimeoutMs = $retryConfig?->totalTimeoutMs;
+        $context->budget ??= new ExecutionBudget(new SystemClock(), $this->config->retry?->totalTimeoutMs, $context->parent?->budget);
+        $retryAfterDelay = $this->retryAfterDelay ?? new RetryAfterDelay(static fn (): int => $context->budget->clock->unixTime());
         $bodyReplay = new RequestBodyReplay($context->preparedRequest);
         $minimumDelayMs = 0;
         $applyBackoff = false;
 
         while ($attempt <= $attempts) {
-            if ($this->isTotalTimeoutExceeded($startedAt, $totalTimeoutMs)) {
-                $lastException ??= new TimeoutException('Превышен общий таймаут повторов');
-                break;
-            }
+            $context->budget->check('before_attempt', $lastException);
 
             try {
-                $this->delayApplier->apply($request, $context->options);
+                $this->delayApplier->apply($request, $context->options, $context->budget);
                 $this->rateLimitApplier->apply($request, $context);
+                $context->budget->check('before_http');
+                $context->preparedRequest = $context->preparedRequest->with(transportOptions: TimeoutResolver::resolve($context));
+                TransportCapabilities::check($this->transport, $context->preparedRequest->transportOptions->effective());
 
                 // Ответ относится к текущей HTTP-попытке; предыдущий не подставляется при сетевом сбое.
                 $context->response = null;
                 try {
                     $response = $this->sendAttempt($context, $retryConfig, $attempt, $minimumDelayMs, $applyBackoff);
                 } catch (Throwable $exception) {
+                    if (!$exception instanceof ExecutionDeadlineException) {
+                        $context->budget->check('http', $exception);
+                    }
                     throw TransportExceptionNormalizer::normalize($exception);
                 }
                 $lastException = null;
 
                 $context->response = $response;
+                $context->lastResponse = $response;
+                $context->budget->check('http_response');
                 $this->hookRunner->runHookStage(Hook::AfterResponse, $request, $context);
+                $context->budget->check('after_response');
 
                 if ($response->status === 401 && $this->config->authRetryOn401) {
                     if ($authRetryLimit <= 0 || $authRetryUsed >= $authRetryLimit) {
@@ -131,7 +141,7 @@ final readonly class RetrySender
                     if (!$this->prepareRepeat($request, $context, $bodyReplay)) {
                         return $response;
                     }
-                    $minimumDelayMs = $this->retryAfterDelay->forResponse($response);
+                    $minimumDelayMs = $retryAfterDelay->forResponse($response);
                     $applyBackoff = true;
                     $this->auditLogger->log(LogLevel::WARNING, 'Повтор запроса после ответа', [
                         'trace' => $context->traceId,
@@ -157,10 +167,15 @@ final readonly class RetrySender
                     || !$this->prepareRepeat($request, $context, $bodyReplay)) {
                     throw $exception;
                 }
-                $minimumDelayMs = $this->retryAfterDelay->fromSeconds($exception->retryAfter);
+                $minimumDelayMs = $retryAfterDelay->fromSeconds($exception->retryAfter);
                 $applyBackoff = true;
                 $attempt++;
                 continue;
+            } catch (ExecutionDeadlineException $exception) {
+                if ($exception->getPrevious() === null && $lastException !== null) {
+                    throw new ExecutionDeadlineException($exception->stage, $lastException);
+                }
+                throw $exception;
             } catch (ControlFlowException $exception) {
                 throw $exception;
             } catch (Throwable $exception) {
@@ -190,16 +205,6 @@ final readonly class RetrySender
         }
 
         throw new ConnectionException('Не удалось выполнить запрос');
-    }
-
-    private function isTotalTimeoutExceeded(float $startedAt, ?int $totalTimeoutMs): bool
-    {
-        if ($totalTimeoutMs === null || $totalTimeoutMs <= 0) {
-            return false;
-        }
-
-        $elapsedMs = (microtime(true) - $startedAt) * 1000;
-        return $elapsedMs >= $totalTimeoutMs;
     }
 
     private function prepareRepeat(RequestInterface $request, PipelineContext $context, RequestBodyReplay $body): bool
@@ -237,7 +242,7 @@ final readonly class RetrySender
         }
         // Собственный handler сохраняет ответственность за свой backoff.
         if ($minimumDelayMs > 0) {
-            $this->sleeper->sleepMs($minimumDelayMs);
+            $context->budget->wait($minimumDelayMs, $this->sleeper, 'retry_wait');
         }
         return $this->retryHandler->handle($context->preparedRequest, $context, $config, $attempt);
     }
