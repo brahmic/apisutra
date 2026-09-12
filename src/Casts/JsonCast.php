@@ -19,7 +19,7 @@ final class JsonCast implements CastInterface
         }
 
         if (is_string($value)) {
-            return json_decode($value, true);
+            return json_decode($value, true, 512, JSON_BIGINT_AS_STRING);
         }
 
         return $value;

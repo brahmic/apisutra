@@ -6,15 +6,15 @@ namespace Brahmic\ApiSutra\Transport;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
-use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
-use Brahmic\ApiSutra\Http\RequestDestination;
-use Brahmic\ApiSutra\Http\DestinationGuard;
-use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
+use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Testing\Fixture;
 use Brahmic\ApiSutra\Testing\FixtureRedactor;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Http\TransportOptions;
@@ -153,13 +153,13 @@ final class RecordingTransport implements TimeoutAwareTransportInterface, Destin
 
         $isJson = $contentType !== null && str_contains((string) $contentType, 'json');
         if ($isJson) {
-            $decoded = json_decode($body, true);
+            $decoded = json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
             if (is_array($decoded)) {
                 return $decoded;
             }
         }
 
-        $decoded = json_decode($body, true);
+        $decoded = json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
         return is_array($decoded) ? $decoded : $body;
     }
 }

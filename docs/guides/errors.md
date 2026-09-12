@@ -197,6 +197,31 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 и `jsonStrict()` дают `configuration_error`. Обработка расширений вне download
 сохраняется. Подробнее — [файловые ответы](files.md).
 
+### Ошибки структуры и диапазона чисел
+
+Строгий `Returns::unwrap` и защита int возвращают `hydration_error` с
+`HydrationException`. Для этих ошибок `RequestError::context` и свойства исключения
+содержат `reason`, `path`, `expected`, `actual`:
+
+| reason | Смысл |
+| --- | --- |
+| `unwrap_path_missing` | Указанный путь отсутствует; actual — `missing`. |
+| `unexpected_response_shape` | По пути найден null/scalar вместо данных объявленного DTO. |
+| `integer_out_of_range` | Число не помещается в int; actual — тип исходного значения. |
+
+Например, `path=data.item.id`, `expected=int`, `actual=string` указывает поле с
+переполнением. Для вложенных DTO используются имена свойств, для коллекций —
+порядковый индекс (`items[1].id`), без включения внешних ключей и значений в диагностику.
+Это сведения о новых проверках; у остальных HydrationException эти свойства могут быть null.
+
+Исходный HTTP-ответ остаётся в результате. Ошибка гидратации не запускает новый HTTP
+retry. `raw()`/`resolved()` сообщают ошибку, `dataOrFail()` и `throwOnErrors` выбрасывают
+исключение; sync и promise API используют один контракт.
+Миграция unwrap описана в [Returns](attributes/response.md#строгий-unwrap),
+числовые типы — в [сериализации](serialization.md#большие-целые-в-ответах).
+
+### Ошибки файлов и транспорта
+
 `FileTransferException` из `Exceptions\Files` содержит стадию, `bytesWritten` и
 `partial`; эти поля доступны и в error context. При ошибке финальной записи
 сохраняется HTTP-статус принятого ответа. Локальная ошибка не вызывает HTTP retry,

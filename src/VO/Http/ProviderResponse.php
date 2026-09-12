@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\VO\Http;
 
-use Brahmic\ApiSutra\Support\ArrayPath;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
+use Brahmic\ApiSutra\Support\ArrayPath;
 use JsonException;
 use Psr\Http\Message\StreamInterface;
-use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 
 /**
  * Value Object для HTTP-ответа от провайдера.
@@ -55,7 +55,7 @@ readonly class ProviderResponse
      */
     public function json(?string $key = null): mixed
     {
-        $data = json_decode($this->stringBody(), true);
+        $data = json_decode($this->stringBody(), true, 512, JSON_BIGINT_AS_STRING);
         if ($key === null) {
             return $data;
         }
@@ -67,7 +67,7 @@ readonly class ProviderResponse
     public function jsonStrict(?string $key = null): mixed
     {
         try {
-            $data = json_decode($this->stringBody(), true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($this->stringBody(), true, 512, JSON_THROW_ON_ERROR | JSON_BIGINT_AS_STRING);
         } catch (JsonException $exception) {
             throw new ResponseDecodingException('Не удалось разобрать JSON ответа: ' . $exception->getMessage(), 0, $exception);
         }
@@ -96,7 +96,7 @@ readonly class ProviderResponse
                 $this->stream->seek($position);
             }
         }
-        $data = $body === null ? null : json_decode($body, true);
+        $data = $body === null ? null : json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
         $message = is_array($data) ? ($data['message'] ?? null) : null;
         return is_string($message) && $message !== '' ? $message : "HTTP {$this->status}";
     }

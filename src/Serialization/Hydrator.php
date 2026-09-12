@@ -7,21 +7,22 @@ namespace Brahmic\ApiSutra\Serialization;
 use Brahmic\ApiSutra\Attributes\AttributeMetadataCache;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Cast as CastAttribute;
 use Brahmic\ApiSutra\Attributes\DataTransfer\DateTimeFrom;
-use Brahmic\ApiSutra\Attributes\DataTransfer\EmptyStringAsNull;
 use Brahmic\ApiSutra\Attributes\DataTransfer\DefaultValue;
+use Brahmic\ApiSutra\Attributes\DataTransfer\EmptyStringAsNull;
 use Brahmic\ApiSutra\Attributes\DataTransfer\From;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Map;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Nested;
-use Brahmic\ApiSutra\Collections\AbstractTypedCollection;
 use Brahmic\ApiSutra\Casts\CastRegistry;
+use Brahmic\ApiSutra\Collections\AbstractTypedCollection;
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DefaultValueProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
+use Brahmic\ApiSutra\Enums\DataTransfer\EmptyStringBehavior;
 use Brahmic\ApiSutra\Enums\DataTransfer\NestedDiscriminatorMode;
 use Brahmic\ApiSutra\Enums\DataTransfer\NestedUnknownVariant;
 use Brahmic\ApiSutra\Enums\DataTransfer\ValueState;
-use Brahmic\ApiSutra\Enums\DataTransfer\EmptyStringBehavior;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\Concerns\ReflectionHelperTrait;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoHydration;
 use Brahmic\ApiSutra\Support\ArrayPath;
@@ -136,10 +137,14 @@ final class Hydrator
                 continue;
             }
 
-            if ($nested !== null) {
-                $value = $this->hydrateNested($value, $nested, $property, $context);
-            } else {
-                $value = $this->applyCasts($value, $cast, $dateTimeFrom, $property, $resolvedHydration, $context);
+            try {
+                if ($nested !== null) {
+                    $value = $this->hydrateNested($value, $nested, $property, $context);
+                } else {
+                    $value = $this->applyCasts($value, $cast, $dateTimeFrom, $property, $resolvedHydration, $context);
+                }
+            } catch (HydrationException $exception) {
+                throw $exception->prependPath($name);
             }
 
             $values[$name] = $value;
@@ -180,10 +185,19 @@ final class Hydrator
     ): array {
         $result = [];
         foreach ($items as $item) {
-            $result[] = $this->hydrate($item, $dtoClass, $context);
+            $result[] = $this->hydrateItem($item, $dtoClass, $context, count($result));
         }
 
         return $result;
+    }
+
+    private function hydrateItem(mixed $item, string $dtoClass, ?PipelineContext $context, int $index): object
+    {
+        try {
+            return $this->hydrate($item, $dtoClass, $context);
+        } catch (HydrationException $exception) {
+            throw $exception->prependPath('[' . $index . ']');
+        }
     }
 
     private function normalizeData(array|object $data): array
@@ -446,7 +460,7 @@ final class Hydrator
                         continue;
                     }
 
-                    $items[] = $this->hydrate($item, $targetType, $context);
+                    $items[] = $this->hydrateItem($item, $targetType, $context, count($items));
                 }
 
                 return $this->wrapCollection($items, $propertyType);
@@ -482,10 +496,17 @@ final class Hydrator
             throw new ConfigurationException('Nested.itemCast должен реализовывать CastInterface: ' . $castClass);
         }
 
-        return array_map(
-            fn (mixed $item): mixed => $cast->hydrate($item, $context),
-            $items,
-        );
+        $index = 0;
+        foreach ($items as $key => $item) {
+            try {
+                $items[$key] = $cast->hydrate($item, $context);
+            } catch (HydrationException $exception) {
+                throw $exception->prependPath('[' . $index . ']');
+            }
+            $index++;
+        }
+
+        return $items;
     }
 
     private function wrapCollection(array $items, ?string $propertyType): mixed
@@ -525,8 +546,10 @@ final class Hydrator
         ?PipelineContext $context,
     ): mixed {
         $items = [];
+        $index = -1;
 
         foreach ($value as $item) {
+            $index++;
             [$discriminator, $payload, $rawItem] = $this->resolveDiscriminatorPayload($item, $nested);
             $class = $this->resolveDiscriminatorClass($nested, $discriminator);
 
@@ -548,7 +571,7 @@ final class Hydrator
                 continue;
             }
 
-            $items[] = $this->hydrate($payload, $class, $context);
+            $items[] = $this->hydrateItem($payload, $class, $context, $index);
         }
 
         return $this->wrapCollection($items, $propertyType);

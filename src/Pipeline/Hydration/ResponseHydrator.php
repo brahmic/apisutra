@@ -11,6 +11,8 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Pagination\PaginableInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Pagination\PaginationItemsContainerInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Core\SdkException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Extensions\ExtensionRegistry;
 use Brahmic\ApiSutra\Pagination\PaginationConfigResolver;
 use Brahmic\ApiSutra\Pagination\PaginationItemsCollectionBuilder;
@@ -18,11 +20,9 @@ use Brahmic\ApiSutra\Serialization\Hydrator;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\VO\Files\FileResponse;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
-use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Brahmic\ApiSutra\VO\Pipeline\DecodedResponse;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use GuzzleHttp\Psr7\Utils as Psr7Utils;
-use Brahmic\ApiSutra\Exceptions\Core\SdkException;
-use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Throwable;
 
 /**
@@ -197,14 +197,14 @@ final readonly class ResponseHydrator
             return [$data, $dtoClass];
         }
 
-        $unwrapped = ArrayPath::getByPath($data, $returns->unwrap);
-        if ($unwrapped !== null) {
-            $data = $unwrapped;
+        $unwrapped = ArrayPath::getByPathWithStatus($data, $returns->unwrap);
+        if ($unwrapped->isMissing()) {
+            throw HydrationException::invalidValue('unwrap_path_missing', 'present', 'missing', $returns->unwrap);
         }
 
         $dtoClass = $returns->type ?? $dtoClass;
 
-        return [$data, $dtoClass];
+        return [$unwrapped->value, $dtoClass];
     }
 
     private function hydrateIfNeeded(mixed $data, ?string $dtoClass, PipelineContext $context): mixed
@@ -213,8 +213,15 @@ final readonly class ResponseHydrator
             return $data;
         }
 
+        $path = $this->resolveReturnsAttribute($context->request)?->unwrap;
+        if (!is_array($data) && !is_object($data)) {
+            throw HydrationException::invalidValue('unexpected_response_shape', $dtoClass, get_debug_type($data), $path ?? '$');
+        }
+
         try {
             return $this->hydrator->hydrate($data, $dtoClass, $context);
+        } catch (HydrationException $exception) {
+            throw $path === null ? $exception : $exception->prependPath($path);
         } catch (SdkException $exception) {
             throw $exception;
         } catch (Throwable $exception) {
@@ -257,6 +264,8 @@ final readonly class ResponseHydrator
 
         try {
             return $this->hydrator->hydrateCollection($items, $pagination->itemsType, $context);
+        } catch (HydrationException $exception) {
+            throw $exception->prependPath($pagination->itemsPath === '' ? '$' : $pagination->itemsPath);
         } catch (SdkException $exception) {
             throw $exception;
         } catch (Throwable $exception) {

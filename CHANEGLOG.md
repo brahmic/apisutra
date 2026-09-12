@@ -2,6 +2,22 @@
 
 ## Не выпущено
 
+### 2026-09-12 — строгий unwrap и точные целочисленные идентификаторы
+
+- `Returns::unwrap` больше не подставляет корень при отсутствующем пути или null.
+  Отсутствующий путь и null/scalar вместо DTO дают разные причины `hydration_error`
+  с сохранённым HTTP-ответом. [Контракт и миграция](docs/guides/attributes/response.md#строгий-unwrap).
+- Большие целочисленные JSON-литералы автоматически сохраняются строками, включая
+  json/jsonStrict, JsonCast, диагностику и record/playback. Обязательных настроек нет.
+  Для ID используйте string/int|string; [подробности](docs/guides/serialization.md#большие-целые-в-ответах).
+- Встроенная гидратация int и IntegerCast отклоняют переполнение. Исходящий IntegerCast
+  возвращает serialization_error до HTTP. Новые ошибки гидратации содержат безопасные
+  reason/path/expected/actual без исходного значения.
+- Изменение поведения: прежние fallback к корню, float для больших ID и ограничение
+  чисел значениями PHP_INT_MAX/MIN больше не применяются в указанных случаях.
+- Проверено: 1255 passed, 36 прежних deprecation, 4019 assertions. Standalone JSON/DTO
+  работает без Laravel/Guzzle HTTP Client.
+
 ### 2026-09-12 — изоляция токенов и безопасные auth-блокировки
 
 - Token cache автоматически разделён по конфигурации клиента, credentials identity,

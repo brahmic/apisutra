@@ -113,7 +113,7 @@ final readonly class RedactionPolicy
             return $body;
         }
 
-        $decoded = json_decode($body, true);
+        $decoded = json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
         if (json_last_error() === JSON_ERROR_NONE) {
             $encoded = json_encode($this->data($decoded), JSON_UNESCAPED_UNICODE);
             return is_string($encoded) ? $encoded : '[redacted-body]';

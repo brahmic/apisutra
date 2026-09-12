@@ -3,14 +3,28 @@
 declare(strict_types=1);
 
 // Запуск: php tests/Support/standalone-json-smoke.php /path/to/no-dev-checkout
+use Brahmic\ApiSutra\Attributes\AttributeRegistry;
+use Brahmic\ApiSutra\Casts\CastRegistry;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RetryConfig;
+use Brahmic\ApiSutra\Enums\Http\HttpMethod;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Brahmic\ApiSutra\Extensions\ExtensionRegistry;
+use Brahmic\ApiSutra\Hooks\HookRegistry;
+use Brahmic\ApiSutra\Pipeline\Hydration\ResponseHydrator;
+use Brahmic\ApiSutra\Serialization\Hydrator;
+use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Tests\Stubs\Core\PsrNetworkFailure;
 use Brahmic\ApiSutra\Tests\Stubs\Core\SequenceHttpClient;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\SimpleResponseDto;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\StringIdentifierDto;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\CacheProbeRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\JsonPayloadRequest;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\UnwrapResponseRequest;
 use Brahmic\ApiSutra\Tests\Stubs\TestClient;
 use Brahmic\ApiSutra\Transport\HttpTransport;
+use Brahmic\ApiSutra\VO\Http\PreparedRequest;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -57,4 +71,41 @@ foreach ([null, 'raw text', false] as $expected) {
         throw new RuntimeException('Нарушен контракт успешного ответа');
     }
 }
-echo "Standalone JSON smoke: сериализация, успешные ответы, ошибки разбора и PSR retry работают без Laravel/Guzzle HTTP Client.\n";
+
+require __DIR__ . '/../Stubs/Dto/SimpleResponseDto.php';
+require __DIR__ . '/../Stubs/Dto/StringIdentifierDto.php';
+require __DIR__ . '/../Stubs/Requests/UnwrapResponseRequest.php';
+
+$config = new ClientConfig(baseUrl: 'https://fixture.test');
+$hydrator = new Hydrator(new CastRegistry());
+$responseHydrator = new ResponseHydrator(
+    $config, $hydrator, new ExtensionRegistry(new CastRegistry(), new HookRegistry(), new AttributeRegistry()),
+);
+$request = new UnwrapResponseRequest();
+$context = new PipelineContext($request, $config, 'standalone');
+foreach ([[], ['data' => ['item' => null]]] as $payload) {
+    try {
+        $responseHydrator->hydrateResponse($request, $context, $payload + ['id' => 7, 'name' => 'fixture']);
+        throw new RuntimeException('Неверный unwrap принят');
+    } catch (HydrationException $exception) {
+        if ($exception->path !== 'data.item') {
+            throw new RuntimeException('Не сохранён путь ошибки');
+        }
+    }
+}
+
+$response = (new MockResponse('{"id":9223372036854775808999}'))
+    ->toProviderResponse(new PreparedRequest(HttpMethod::GET, 'https://fixture.test'));
+$id = $hydrator->hydrate($response->jsonStrict(), StringIdentifierDto::class)->id;
+if ($id !== '9223372036854775808999' || $response->json('id') !== $id) {
+    throw new RuntimeException('Потеряны цифры идентификатора');
+}
+try {
+    $hydrator->hydrate(['id' => $id, 'name' => 'fixture'], SimpleResponseDto::class);
+    throw new RuntimeException('Переполнение int принято');
+} catch (HydrationException $exception) {
+    if ($exception->reason !== 'integer_out_of_range' || $exception->path !== 'id') {
+        throw new RuntimeException('Не сохранена диагностика переполнения');
+    }
+}
+echo "Standalone JSON: прежние контракты, строгий unwrap и точные ID работают без Laravel/Guzzle HTTP Client.\n";

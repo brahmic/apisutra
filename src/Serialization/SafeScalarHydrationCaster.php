@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Serialization;
 
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Stringable;
 
 final readonly class SafeScalarHydrationCaster
@@ -33,11 +34,14 @@ final readonly class SafeScalarHydrationCaster
     private function canHydrateInt(mixed $value): bool
     {
         return is_int($value)
-            || (is_string($value) && preg_match('/^-?\d+$/', $value) === 1);
+            || (is_string($value) && preg_match('/^-?\d+$/', $value) === 1 && !IntegerRange::overflows($value));
     }
 
     private function hydrateInt(mixed $value): int
     {
+        if (IntegerRange::overflows($value)) {
+            throw HydrationException::invalidValue('integer_out_of_range', 'int', get_debug_type($value));
+        }
         return is_int($value) ? $value : (int) $value;
     }
 

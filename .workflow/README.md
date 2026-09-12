@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Строгий Returns::unwrap и сохранение больших целых](completed/pln-012-strict-unwrap-big-integers/pln-012-readme.md)
 - [Изоляция токенов и корректные auth-блокировки](completed/pln-011-auth-token-isolation/pln-011-readme.md)
 - [Замена и очистка тела PreparedRequest](completed/pln-010-prepared-request-body-transitions.md)
 - [Потоковые upload и download](completed/pln-009-streaming-file-transfers.md)

@@ -248,14 +248,21 @@ final readonly class ExecutionResultBuilder
             request: $request,
             context: $context,
             response: $response,
-            overrideContext: $exception instanceof ExecutionDeadlineException
-                ? array_filter(['reason' => 'execution_deadline_exceeded', 'stage' => $exception->stage,
-                    'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial], static fn (mixed $value): bool => $value !== null)
-                : ($exception instanceof FileTransferException
-                    ? ['stage' => $exception->stage, 'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial]
-                    : ($exception instanceof AuthRefreshLockTimeoutException
-                        ? ['reason' => 'auth_refresh_lock_timeout', 'stage' => 'auth_lock_wait']
-                        : ($exception instanceof AuthLockBackendException ? ['reason' => 'auth_lock_backend_error'] : []))),
+            overrideContext: match (true) {
+                $exception instanceof ExecutionDeadlineException => array_filter([
+                    'reason' => 'execution_deadline_exceeded', 'stage' => $exception->stage,
+                    'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial,
+                ], static fn (mixed $value): bool => $value !== null),
+                $exception instanceof FileTransferException => [
+                    'stage' => $exception->stage, 'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial,
+                ],
+                $exception instanceof AuthRefreshLockTimeoutException => [
+                    'reason' => 'auth_refresh_lock_timeout', 'stage' => 'auth_lock_wait',
+                ],
+                $exception instanceof AuthLockBackendException => ['reason' => 'auth_lock_backend_error'],
+                $exception instanceof HydrationException => $exception->context(),
+                default => [],
+            },
         );
 
         $this->auditLogger->addAudit($audit, PipelineStage::Failed, $context, $startTime, null);

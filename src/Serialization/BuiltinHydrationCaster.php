@@ -9,6 +9,7 @@ use Brahmic\ApiSutra\Attributes\DataTransfer\DateTimeFrom;
 use Brahmic\ApiSutra\Casts\DateTimeCast;
 use Brahmic\ApiSutra\Casts\EnumCast;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DtoInterface;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoHydration;
 use Brahmic\ApiSutra\VO\Files\Base64File;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
@@ -62,6 +63,10 @@ final readonly class BuiltinHydrationCaster
         $registryCast = $resolved->casts->get($type);
         if ($registryCast !== null) {
             return $registryCast->hydrate($value, $context);
+        }
+
+        if ($type === 'int' && IntegerRange::overflows($value)) {
+            throw HydrationException::invalidValue('integer_out_of_range', 'int', get_debug_type($value));
         }
 
         if ($this->safeScalarHydrationCaster->canHydrate($type, $value)) {

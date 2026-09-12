@@ -6,19 +6,19 @@ namespace Brahmic\ApiSutra\Transport;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
-use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
-use Brahmic\ApiSutra\Http\RequestDestination;
-use Brahmic\ApiSutra\Http\DestinationGuard;
-use Brahmic\ApiSutra\Files\FileTransferGuard;
-use Brahmic\ApiSutra\Files\DownloadManager;
-use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Testing\MissingFixtureException;
 use Brahmic\ApiSutra\Exceptions\Testing\UnmockedRequestException;
+use Brahmic\ApiSutra\Files\DownloadManager;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
+use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Testing\Fixture;
 use Brahmic\ApiSutra\Testing\MockConfig;
 use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Testing\MockSequence;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Http\TransportOptions;
@@ -58,7 +58,7 @@ final class MockTransport implements TimeoutAwareTransportInterface, Destination
         $grouped = [];
 
         foreach ($files as $file) {
-            $data = json_decode((string) file_get_contents($file), true);
+            $data = json_decode((string) file_get_contents($file), true, 512, JSON_BIGINT_AS_STRING);
             if (!is_array($data)) {
                 continue;
             }
@@ -251,7 +251,7 @@ final class MockTransport implements TimeoutAwareTransportInterface, Destination
             throw new MissingFixtureException("Фикстура {$file} не найдена");
         }
 
-        $data = json_decode((string) file_get_contents($file), true);
+        $data = json_decode((string) file_get_contents($file), true, 512, JSON_BIGINT_AS_STRING);
         if (!is_array($data)) {
             throw new MissingFixtureException("Фикстура {$file} повреждена");
         }
