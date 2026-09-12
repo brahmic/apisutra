@@ -4,28 +4,36 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Pipeline\Auth;
 
+use Brahmic\ApiSutra\Auth\TokenAuthenticator;
 use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthLockLeaseInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthPolicyInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheAwareInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResponseDtoInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Pipeline\PipelineExecutorInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
-use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthLockBackendException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshLockTimeoutException;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Request\UnauthorizedException;
 use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
+use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
+use Throwable;
 
 /**
  * Обработчик авторизации запроса.
@@ -41,14 +49,20 @@ final readonly class AuthHandler
     private const int REFRESH_LOCK_WAIT_STEP_MS = 50;
 
     private AuthRefreshLock $refreshLock;
+    private AuthBindingResolver $bindings;
+    private ClockInterface $clock;
     private SleeperInterface $sleeper;
 
     public function __construct(
         private ClientConfig $config,
         private PipelineExecutorInterface $executor,
         ?SleeperInterface $sleeper = null,
+        ?ClockInterface $clock = null,
+        string $provider = self::class,
     ) {
-        $this->refreshLock = new AuthRefreshLock($this->resolveCacheStore());
+        $this->clock = $clock ?? new SystemClock();
+        $this->bindings = new AuthBindingResolver($config, $provider, $this->clock);
+        $this->refreshLock = new AuthRefreshLock($this->resolveCacheStore(), $config->cacheConfig?->locks, $this->clock);
         $this->sleeper = $sleeper ?? new SystemSleeper();
     }
 
@@ -69,7 +83,13 @@ final readonly class AuthHandler
             return;
         }
 
-        $this->injectCache($auth);
+        $binding = $this->bindings->resolve($auth, $this->resolveAuthScopeOverride($request, $context) ?? $request->getAuthScope());
+        $auth = $binding->auth;
+        $previousVersion = $auth instanceof TokenAuthenticator
+            ? ($this->sentTokenVersion($context) ?? $auth->tokenVersion()) : null;
+        if ($auth instanceof CacheAwareInterface) {
+            $auth->setCache($binding->cache);
+        }
 
         $shouldRefresh = $forceRefresh || $auth->shouldRefresh();
         $refreshAttempts = max(0, $this->config->authRetryAttempts);
@@ -79,7 +99,7 @@ final readonly class AuthHandler
 
         $context->budget?->check('authentication');
         if ($shouldRefresh && $refreshAttempts > 0) {
-            $this->refreshToken($auth, $context, $request, $refreshAttempts, $forceRefresh);
+            $this->refreshToken($auth, $context, $request, $refreshAttempts, $forceRefresh, $binding->lockKey, $previousVersion);
         }
 
         $context->budget?->check('authentication');
@@ -199,20 +219,26 @@ final readonly class AuthHandler
         return false;
     }
 
-    private function refreshToken(AuthenticatorInterface $auth, PipelineContext $context, AbstractRequest $request, int $attempts, bool $forceRefresh): void
-    {
-        $lockKey = $this->resolveRefreshLockKey($auth);
-        $lockTtlSeconds = $this->resolveRefreshLockTtlSeconds();
-        $lockToken = $this->refreshLock->acquire($lockKey, $lockTtlSeconds);
-
-        if ($lockToken === null) {
-            $lockToken = $this->waitForRefreshLock($auth, $lockKey, $lockTtlSeconds, $forceRefresh, $context);
-            if ($lockToken === null) {
+    private function refreshToken(
+        AuthenticatorInterface $auth,
+        PipelineContext $context,
+        AbstractRequest $request,
+        int $attempts,
+        bool $forceRefresh,
+        string $lockKey,
+        ?string $previousVersion,
+    ): void {
+        $lease = $this->waitForRefreshLock($auth, $lockKey, $forceRefresh, $previousVersion, $context);
+        if ($lease === null) {
+            return;
+        }
+        $failure = null;
+        try {
+            $context->budget?->check('auth_lock_wait');
+            // Другой владелец мог обновить токен между проверкой и захватом lease.
+            if ($this->hasUpdatedToken($auth, $forceRefresh, $previousVersion)) {
                 return;
             }
-        }
-
-        try {
             for ($i = 0; $i < $attempts; $i++) {
                 $context->budget?->check('auth_refresh');
                 $refreshRequest = $auth->getRefreshRequest();
@@ -220,12 +246,10 @@ final readonly class AuthHandler
                 if ($refreshRequest === null) {
                     return;
                 }
-
                 if ($refreshRequest instanceof AbstractRequest) {
                     $refreshRequest->setClient($request->getClient());
                     $refreshRequest = $refreshRequest->withoutAuth();
                 }
-
                 $result = $this->executor->execute($refreshRequest, RequestRole::Dependency, $context, $context->traceId);
                 if ($result->exception instanceof ExecutionDeadlineException) {
                     throw $result->exception;
@@ -234,45 +258,35 @@ final readonly class AuthHandler
                 if ($result->isFailed()) {
                     continue;
                 }
-
                 if ($result->data instanceof ResponseDtoInterface) {
                     $auth->processTokenResponse($result->data);
                 }
-
                 return;
             }
+            $prepared = $context->preparedRequest ?? new PreparedRequest($request->getMethod(), $request->getEndpoint());
+            throw new UnauthorizedException(
+                'Не удалось обновить токен',
+                new ProviderResponse(401, [], 'Unauthorized', $prepared, 0),
+            );
+        } catch (Throwable $exception) {
+            $failure = $exception;
+            throw $exception;
         } finally {
-            if ($lockToken !== null) {
-                $this->refreshLock->release($lockKey, $lockToken);
+            try {
+                $lease->release();
+            } catch (Throwable $exception) {
+                if ($failure === null) {
+                    $context->budget?->check('auth_lock_release', $exception);
+                    throw new AuthLockBackendException($exception);
+                }
+                // Вторичная ошибка backend/logger не подменяет исходную причину отказа.
+                try {
+                    (new AuditLogger($this->config))->log(LogLevel::ERROR, 'Не удалось освободить auth-блокировку', [
+                        'reason' => 'auth_lock_backend_error',
+                    ]);
+                } catch (Throwable) {
+                }
             }
-        }
-
-        $prepared = $context->preparedRequest ?? new PreparedRequest(
-            method: $request->getMethod(),
-            url: $request->getEndpoint(),
-        );
-
-        throw new UnauthorizedException(
-            'Не удалось обновить токен',
-            new ProviderResponse(
-                status: 401,
-                headers: [],
-                body: 'Unauthorized',
-                request: $prepared,
-                duration: 0,
-            ),
-        );
-    }
-
-    private function injectCache(AuthenticatorInterface $auth): void
-    {
-        if (!$auth instanceof CacheAwareInterface) {
-            return;
-        }
-
-        $cache = $this->resolveCacheStore();
-        if ($cache !== null) {
-            $auth->setCache($cache);
         }
     }
 
@@ -281,48 +295,67 @@ final readonly class AuthHandler
         return $this->config->cache ?? $this->config->cacheConfig?->store;
     }
 
-    private function resolveRefreshLockKey(AuthenticatorInterface $auth): string
-    {
-        if ($auth instanceof CacheAwareInterface) {
-            return 'auth_refresh_lock:' . $auth->getCacheKey();
-        }
-
-        return 'auth_refresh_lock:' . $auth::class . ':' . (string) spl_object_id($auth);
-    }
-
     private function resolveRefreshLockTtlSeconds(): int
     {
-        $ttl = $this->config->timeout;
-        if ($ttl < self::REFRESH_LOCK_MIN_TTL_SECONDS) {
-            return self::REFRESH_LOCK_MIN_TTL_SECONDS;
-        }
-
-        if ($ttl > self::REFRESH_LOCK_MAX_TTL_SECONDS) {
-            return self::REFRESH_LOCK_MAX_TTL_SECONDS;
-        }
-
-        return $ttl;
+        return max(self::REFRESH_LOCK_MIN_TTL_SECONDS, min(self::REFRESH_LOCK_MAX_TTL_SECONDS, $this->config->timeout));
     }
 
-    private function waitForRefreshLock(AuthenticatorInterface $auth, string $lockKey, int $ttlSeconds, bool $forceRefresh, PipelineContext $context): ?string
-    {
-        $maxWaitMs = $ttlSeconds * 1000;
+    private function waitForRefreshLock(
+        AuthenticatorInterface $auth,
+        string $lockKey,
+        bool $forceRefresh,
+        ?string $previousVersion,
+        PipelineContext $context,
+    ): ?AuthLockLeaseInterface {
+        $ttl = $this->resolveRefreshLockTtlSeconds();
+        $maxWaitMs = $ttl * 1000;
         $waitedMs = 0;
-
-        while ($waitedMs < $maxWaitMs) {
-            if (!$forceRefresh && !$auth->shouldRefresh()) {
+        $start = $this->clock->monotonicMs();
+        $budget = $context->budget ?? new ExecutionBudget($this->clock);
+        while (true) {
+            $budget->check('auth_lock_wait');
+            if ($this->hasUpdatedToken($auth, $forceRefresh, $previousVersion)) {
+                $budget->check('auth_lock_wait');
                 return null;
             }
+            $budget->check('auth_lock_wait');
+            try {
+                $lease = $this->refreshLock->acquireLease($lockKey, $ttl);
+            } catch (Throwable $exception) {
+                $budget->check('auth_lock_wait', $exception);
+                throw new AuthLockBackendException($exception);
+            }
+            if ($lease !== null) {
+                return $lease;
+            }
+            $budget->check('auth_lock_wait');
+            $waitedMs = max($waitedMs, $this->clock->monotonicMs() - $start);
+            if ($waitedMs >= $maxWaitMs) {
+                throw new AuthRefreshLockTimeoutException();
+            }
+            $delay = min(self::REFRESH_LOCK_WAIT_STEP_MS, $maxWaitMs - $waitedMs);
+            $budget->wait($delay, $this->sleeper, 'auth_lock_wait');
+            $waitedMs += $delay;
+        }
+    }
 
-            ($context->budget ?? new ExecutionBudget(new SystemClock()))->wait(self::REFRESH_LOCK_WAIT_STEP_MS, $this->sleeper, 'auth_lock_wait');
-            $waitedMs += self::REFRESH_LOCK_WAIT_STEP_MS;
+    private function hasUpdatedToken(AuthenticatorInterface $auth, bool $forceRefresh, ?string $previousVersion): bool
+    {
+        if ($auth instanceof TokenAuthenticator) {
+            $auth->loadFromCache();
+            return !$auth->shouldRefresh() && (!$forceRefresh || $auth->tokenVersion() !== $previousVersion);
+        }
+        return !$forceRefresh && !$auth->shouldRefresh();
+    }
 
-            $lockToken = $this->refreshLock->acquire($lockKey, $ttlSeconds);
-            if ($lockToken !== null) {
-                return $lockToken;
+    private function sentTokenVersion(PipelineContext $context): ?string
+    {
+        $prepared = $context->response?->request ?? $context->preparedRequest;
+        foreach ($prepared?->headers ?? [] as $name => $value) {
+            if (strcasecmp($name, 'Authorization') === 0 && str_starts_with($value, 'Bearer ')) {
+                return hash('sha256', substr($value, 7));
             }
         }
-
-        return $this->refreshLock->acquire($lockKey, $ttlSeconds);
+        return null;
     }
 }

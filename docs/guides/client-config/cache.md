@@ -224,3 +224,15 @@ ReadOnly не восстанавливает отсутствующие поко
 больше не удаляет посторонние записи общего backend.
 
 Описание атрибута: [Behavior attributes](../attributes/behavior.md).
+
+## Auth-токены и необязательная служба блокировок
+
+Переданный store также используется для токенов, отдельно от HTTP response cache.
+Для встроенного TokenAuthenticator область определяется автоматически; prefix не нужен.
+HTTP-настройки `withoutCache()`/`CacheMode::Disabled` не выключают хранение токена.
+
+`CacheConfig::locks` — необязательный AuthLockProviderInterface для координации refresh
+между процессами. Если он не передан, SDK использует capability выбранного store
+либо локальную службу. Все прежние аргументы CacheConfig сохраняются.
+Контракт, ограничения, обработка ошибок и миграция — в
+[руководстве auth](../auth.md#refresh-lock).

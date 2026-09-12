@@ -21,7 +21,7 @@ use Brahmic\ApiSutra\Tests\Stubs\Requests\DependsOnMainRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\RetryPolicyRequest;
 use Brahmic\ApiSutra\Tests\Stubs\TestClient;
 use Brahmic\ApiSutra\Tests\Support\ArrayCache;
-use Brahmic\ApiSutra\Tests\Support\LockingCache;
+use Brahmic\ApiSutra\Tests\Support\TestAuthLockProvider;
 use Brahmic\ApiSutra\Tests\Support\VirtualClock;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\Transport\MockTransport;
@@ -84,19 +84,19 @@ it('refresh наследует остаток при начальной авто
 
 it('не ждёт auth lock дольше остатка и не начинает refresh', function (): void {
     $clock = new VirtualClock();
-    $cache = new LockingCache();
-    $cache->set('auth_refresh_lock:fixture-lock', 'other-owner');
+    $locks = new TestAuthLockProvider($clock);
+    $locks->busy = true;
     $auth = new LockAwareAuthenticator(cacheKey: 'fixture-lock');
     $transport = new MockTransport();
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', auth: $auth, cache: new CacheConfig(store: $cache),
+        baseUrl: 'https://fixture.test', auth: $auth, cache: new CacheConfig(locks: $locks),
         retry: new RetryConfig(totalTimeoutMs: 125),
     ), $transport, $clock, $clock);
     $result = (new RetryPolicyRequest())->setClient($client)->send()->raw();
     expect($result->exception)->toBeInstanceOf(ExecutionDeadlineException::class)
         ->and($result->exception->stage)->toBe('auth_lock_wait')
         ->and($clock->waits)->toBe([50, 50])->and($transport->getRecorded())->toBe([])
-        ->and($auth->refreshCalls)->toBe(0)->and($cache->get('auth_refresh_lock:fixture-lock'))->toBe('other-owner');
+        ->and($auth->refreshCalls)->toBe(0)->and($locks->releases)->toBe(0);
 });
 
 it('поздний hook не кеширует успех и новое выполнение получает новый бюджет', function (bool $throws): void {

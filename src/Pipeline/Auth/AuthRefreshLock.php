@@ -4,62 +4,51 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Pipeline\Auth;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthLockLeaseInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthLockProviderInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
+use Brahmic\ApiSutra\Timing\SystemClock;
 use Psr\SimpleCache\CacheInterface;
 
 final class AuthRefreshLock
 {
-    /**
-     * @var array<string, array{token: string, expires_at: int}> Локальные блокировки
-     */
-    private array $localLocks = [];
+    private readonly AuthLockProviderInterface $provider;
+
+    /** @var array<string, array{key: string, lease: AuthLockLeaseInterface}> */
+    private array $leases = [];
 
     public function __construct(
-        private readonly ?CacheInterface $cache = null,
-    ) {}
+        ?CacheInterface $cache = null,
+        ?AuthLockProviderInterface $locks = null,
+        ?ClockInterface $clock = null,
+    ) {
+        $this->provider = $locks ?? ($cache instanceof AuthLockProviderInterface ? $cache : new LocalAuthLockProvider($clock ?? new SystemClock()));
+    }
 
+    public function acquireLease(string $key, int $ttlSeconds): ?AuthLockLeaseInterface
+    {
+        return $this->provider->acquire($key, $ttlSeconds);
+    }
+
+    /** Совместимый фасад; release использует тот же lease/backend, что и acquire. */
     public function acquire(string $key, int $ttlSeconds): ?string
     {
-        $token = bin2hex(random_bytes(16));
-
-        if ($this->cache !== null && method_exists($this->cache, 'add')) {
-            $added = $this->cache->add($key, $token, $ttlSeconds);
-            return $added ? $token : null;
+        $lease = $this->acquireLease($key, $ttlSeconds);
+        if ($lease === null) {
+            return null;
         }
-
-        return $this->acquireLocal($key, $token, $ttlSeconds);
+        $token = bin2hex(random_bytes(16));
+        $this->leases[$token] = ['key' => $key, 'lease' => $lease];
+        return $token;
     }
 
     public function release(string $key, string $token): void
     {
-        if ($this->cache !== null) {
-            $current = $this->cache->get($key);
-            if (is_string($current) && hash_equals($current, $token)) {
-                $this->cache->delete($key);
-            }
+        $owned = $this->leases[$token] ?? null;
+        if ($owned === null || $owned['key'] !== $key) {
             return;
         }
-
-        $current = $this->localLocks[$key] ?? null;
-        if (is_array($current) && isset($current['token']) && is_string($current['token']) && hash_equals($current['token'], $token)) {
-            unset($this->localLocks[$key]);
-        }
-    }
-
-    private function acquireLocal(string $key, string $token, int $ttlSeconds): ?string
-    {
-        $lock = $this->localLocks[$key] ?? null;
-        if (is_array($lock)) {
-            $expiresAt = $lock['expires_at'] ?? null;
-            if (is_int($expiresAt) && $expiresAt > time()) {
-                return null;
-            }
-        }
-
-        $this->localLocks[$key] = [
-            'token' => $token,
-            'expires_at' => time() + $ttlSeconds,
-        ];
-
-        return $token;
+        unset($this->leases[$token]);
+        $owned['lease']->release();
     }
 }

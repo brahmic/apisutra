@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Изоляция токенов и корректные auth-блокировки](completed/pln-011-auth-token-isolation/pln-011-readme.md)
 - [Замена и очистка тела PreparedRequest](completed/pln-010-prepared-request-body-transitions.md)
 - [Потоковые upload и download](completed/pln-009-streaming-file-transfers.md)
 - [Внешние и подписанные URL: изоляция credentials](completed/pln-008-external-signed-urls-origin-policy.md)

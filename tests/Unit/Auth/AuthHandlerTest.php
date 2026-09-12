@@ -40,7 +40,10 @@ describe('AuthHandler', function () {
         expect($recorded)->toHaveCount(1)
             ->and($recorded[0]->headers['X-Auth'] ?? null)->toBe('token')
             ->and(RecordingAuthenticator::$authenticateCalls)->toBe(1)
-            ->and(RecordingAuthenticator::$cache)->toBe($cache);
+            ->and(RecordingAuthenticator::$cache)->not->toBe($cache);
+        RecordingAuthenticator::$cache->set('fixture-token', 'local');
+        expect($cache->get('fixture-token'))->toBeNull()
+            ->and(RecordingAuthenticator::$cache->get('fixture-token'))->toBe('local');
     });
 
     it('не применяет аутентификатор для NoAuth', function () {

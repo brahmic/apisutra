@@ -9,12 +9,13 @@ use Psr\SimpleCache\CacheInterface;
 interface CacheAwareInterface
 {
     /**
-     * Установить кеш для хранения токенов
+     * Установить изолированный кеш токенов (возможен локальный backend).
+     * Глобальный clear не поддерживается; удалять только собственные логические ключи.
      */
     public function setCache(CacheInterface $cache): void;
 
     /**
-     * Ключ кеша для токена
+     * Логический ключ токена; pipeline автоматически добавляет область авторизации.
      */
     public function getCacheKey(): string;
 }

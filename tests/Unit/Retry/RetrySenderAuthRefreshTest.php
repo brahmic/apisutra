@@ -11,11 +11,12 @@ use Brahmic\ApiSutra\Enums\Result\ResultStatus;
 use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Tests\Stubs\Auth\LockAwareAuthenticator;
 use Brahmic\ApiSutra\Tests\Stubs\Auth\RefreshingAuthenticator;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\TokenResponseDto;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\ProtectedRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\RefreshTokenRequest;
 use Brahmic\ApiSutra\Tests\Stubs\TestClient;
 use Brahmic\ApiSutra\Tests\Support\FakeSleeper;
-use Brahmic\ApiSutra\Tests\Support\LockingCache;
+use Brahmic\ApiSutra\Tests\Support\TestAuthLockProvider;
 use Brahmic\ApiSutra\Transport\MockTransport;
 
 describe('RetrySender auth refresh', function () {
@@ -121,8 +122,10 @@ describe('RetrySender auth refresh', function () {
     });
 
     it('останавливает 401-цикл при lock-timeout', function () {
-        $cache = new LockingCache();
+        $locks = new TestAuthLockProvider();
+        $locks->busy = true;
         $auth = new LockAwareAuthenticator(cacheKey: 'auth-lock-timeout');
+        $auth->processTokenResponse(new TokenResponseDto('old'));
         $sleeper = new FakeSleeper();
 
         $transport = new MockTransport();
@@ -135,7 +138,7 @@ describe('RetrySender auth refresh', function () {
             baseUrl: 'https://api.test',
             auth: $auth,
             authRetryAttempts: 1,
-            cache: new CacheConfig(store: $cache),
+            cache: new CacheConfig(locks: $locks),
             timeout: 5,
             environment: Environment::Testing,
         );
@@ -144,14 +147,13 @@ describe('RetrySender auth refresh', function () {
         $request = new ProtectedRequest();
         $request->setClient($client);
 
-        $lockKey = 'auth_refresh_lock:' . $auth->getCacheKey();
-        $cache->set($lockKey, 'locked', 30);
 
         $result = $request->send()->raw();
 
         expect($result->isFailed())->toBeTrue();
         expect($auth->refreshCalls)->toBe(0);
-        $client->assertSent(ProtectedRequest::class, null, 2);
+        $client->assertSent(ProtectedRequest::class, null, 1);
+        expect($result->errors->first()->context['reason'])->toBe('auth_refresh_lock_timeout');
         $client->assertSent(RefreshTokenRequest::class, null, 0);
         expect($sleeper->totalMs)->toBeGreaterThanOrEqual(5000);
     });

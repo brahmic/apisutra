@@ -296,6 +296,7 @@ final readonly class CacheManager
                 prefix: $cacheConfig->prefix,
                 mode: $cacheConfig->mode,
                 identity: $cacheConfig->identity,
+                locks: $cacheConfig->locks,
             );
         }
         if ($cacheConfig === null && $this->config->cache !== null) {
@@ -311,6 +312,7 @@ final readonly class CacheManager
                     prefix: $cacheConfig?->prefix ?? '',
                     mode: $attribute->mode,
                     identity: $cacheConfig?->identity,
+                    locks: $cacheConfig?->locks,
                 );
             }
         }

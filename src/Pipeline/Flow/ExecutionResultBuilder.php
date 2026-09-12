@@ -11,11 +11,13 @@ use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResultMeta;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Pipeline\PipelineStage;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthLockBackendException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshLockTimeoutException;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
-use Brahmic\ApiSutra\Exceptions\Files\FileTransferException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\EarlyReturnException;
 use Brahmic\ApiSutra\Exceptions\Core\SdkException;
 use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
+use Brahmic\ApiSutra\Exceptions\Files\FileTransferException;
 use Brahmic\ApiSutra\Exceptions\Request\RequestException;
 use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
@@ -251,7 +253,9 @@ final readonly class ExecutionResultBuilder
                     'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial], static fn (mixed $value): bool => $value !== null)
                 : ($exception instanceof FileTransferException
                     ? ['stage' => $exception->stage, 'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial]
-                    : []),
+                    : ($exception instanceof AuthRefreshLockTimeoutException
+                        ? ['reason' => 'auth_refresh_lock_timeout', 'stage' => 'auth_lock_wait']
+                        : ($exception instanceof AuthLockBackendException ? ['reason' => 'auth_lock_backend_error'] : []))),
         );
 
         $this->auditLogger->addAudit($audit, PipelineStage::Failed, $context, $startTime, null);

@@ -116,7 +116,10 @@ final class Pipeline implements PipelineExecutorInterface
         $this->resultFactory = new ResultFactory($this->errorPolicy);
         $this->auditLogger = new AuditLogger($this->config);
         $this->preparedRequestFactory = new PreparedRequestFactory($this->serializer, $this->requestPreparer);
-        $this->authHandler = new AuthHandler($this->config, $this, $this->sleeper);
+        $this->authHandler = new AuthHandler(
+            $this->config, $this, $this->sleeper, $this->clock,
+            $this->client !== null ? $this->client::class : self::class,
+        );
         $this->cacheManager = new CacheManager(
             $this->config,
             $this->preparedRequestFactory,

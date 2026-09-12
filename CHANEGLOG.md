@@ -2,6 +2,25 @@
 
 ## Не выпущено
 
+### 2026-09-12 — изоляция токенов и безопасные auth-блокировки
+
+- Token cache автоматически разделён по конфигурации клиента, credentials identity,
+  scope и объявленному контексту подключения. Обязательные prefix/account ID не нужны.
+  Встроенный TokenAuthenticator получает отдельное состояние для каждой привязки.
+- Token/lock keys используют безопасный формат digest. Старые username-only записи
+  не читаются и не удаляются; после обновления возможен повторный refresh.
+- Исправлено освобождение локальной блокировки при обычном PSR-16 store. Для общего
+  backend добавлены AuthLockProviderInterface/AuthLockLeaseInterface и необязательный
+  CacheConfig::locks. Без capability автоматически работает локальная служба;
+  одного метода add больше недостаточно для выбора общей блокировки.
+- После ожидания встроенный auth перечитывает токен. При исчерпании ожидания возвращается
+  timeout с причиной auth_refresh_lock_timeout, без основного HTTP. Сохранены deadline,
+  исходный 401 и первичная ошибка при сбое освобождения блокировки.
+- Custom auth получает scoped token store; без стабильной identity хранение локальное.
+  Новые настройки обычному клиенту не требуются. [Контракт и миграция](docs/guides/auth.md#миграция-token-cache).
+- Проверено: 1231 тест без падений (1195 passed, 36 прежних deprecation), 3757 assertions.
+  Standalone auth/body/files/external URL работает без Laravel/Guzzle HTTP Client.
+
 ### 2026-09-12 — замена и очистка подготовленного тела
 
 - Добавлены `PreparedRequest::withBody()`, `withStream()` и `withoutBody()`.
