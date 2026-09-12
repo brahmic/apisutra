@@ -1,3 +1,5 @@
+<img src="docs/assets/apisutra-logo.png" alt="Логотип ApiSutra" width="350">
+
 # ApiSutra
 
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
