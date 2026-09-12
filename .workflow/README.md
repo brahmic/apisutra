@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Валидация в контексте клиента](completed/pln-014-client-validation-context/pln-014-readme.md)
 - [Контракты полей DTO, строгий JsonCast и безопасные ошибки](completed/pln-013-dto-hydration-contracts/pln-013-readme.md)
 - [Строгий Returns::unwrap и сохранение больших целых](completed/pln-012-strict-unwrap-big-integers/pln-012-readme.md)
 - [Изоляция токенов и корректные auth-блокировки](completed/pln-011-auth-token-isolation/pln-011-readme.md)

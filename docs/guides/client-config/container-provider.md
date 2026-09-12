@@ -13,23 +13,19 @@
 
 Что будет без контейнера:
 - `ClientResolverInterface` не будет найден автоматически
-- валидация `#[Validate]` будет пропущена (нет `validatorFactory`)
+- при наличии `#[Validate]` без настроенной фабрики будет `configuration_error`;
+  запросам без этих правил фабрика не нужна
 - `ClientDiscoveryService` возьмёт basePath из `getcwd()`
 - `debug/environment` задаются вручную в `ClientConfig` (не используйте `fromLaravel()`)
 
 Если контейнер всё же нужен — подключите свой провайдер.  
-Контейнер нужен, если вы хотите auto‑resolve клиента, DTO‑валидацию
-или корректный `basePath`/`environment` без Laravel.
+Provider позволяет настроить auto-resolve клиента и получение
+`basePath`/`environment` без Laravel. Для валидации достаточно фабрики.
 
-Если нужна валидация DTO без контейнера — можно явно передать фабрику через
-`Validator::useFactory()`:
-```php
-use Brahmic\ApiSutra\VO\Validation\Validator;
-use Illuminate\Contracts\Validation\Factory;
-
-$factory = app(Factory::class);
-Validator::useFactory($factory);
-```
+Для валидации без контейнера приложения можно настроить фабрику через
+`Validator::useFactory()`; [пример standalone и приоритеты](../validation.md#как-подключается-валидатор).
+Приложение Laravel для этого не требуется, компоненты Illuminate Validation нужны
+только при использовании соответствующих правил.
 
 ## Переопределение через ClientConfig
 ```php
@@ -54,6 +50,12 @@ $config = new ClientConfig(
 );
 ```
 
+Явный `containerProvider` клиента определяет фабрику проверки его запросов.
+Null от `validatorFactory()` не включает fallback к глобальной фабрике: при наличии
+правил это ошибка конфигурации. Ручная проверка уже привязанного запроса использует
+тот же источник. Для standalone DTO provider можно передать явно в
+`Validator::check($dto, provider: $provider)`.
+
 ## Глобальная настройка (bootstrap)
 ```php
 use Brahmic\ApiSutra\Support\ContainerProviderRegistry;
@@ -64,7 +66,7 @@ ContainerProviderRegistry::set($provider);
 ## Зачем это нужно
 Провайдер влияет на:
 - `ClientResolver` для auto‑resolve клиента в запросе
-- `Validator` для валидации DTO
+- `Validator` для валидации запросов и DTO по [правилам выбора контекста](../validation.md#приоритет-фабрики)
 - `ClientDiscoveryService` для basePath
 - `ClientConfig::fromLaravel` для debug/environment
 

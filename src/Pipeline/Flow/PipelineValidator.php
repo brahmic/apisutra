@@ -31,7 +31,7 @@ final readonly class PipelineValidator
     ): ?ExecutionResult {
         $errors = [];
 
-        $validation = Validator::check($request);
+        $validation = Validator::checkForClient($request, $context->config);
         if ($validation->failed()) {
             $errors = array_merge($errors, $validation->errors());
         }

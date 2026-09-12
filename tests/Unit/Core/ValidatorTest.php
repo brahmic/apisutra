@@ -23,9 +23,7 @@ describe('Validator', function () {
     });
 
     it('использует validatorFactory из ContainerProvider', function () {
-        $property = new ReflectionProperty(Validator::class, 'factory');
-        $property->setAccessible(true);
-        $property->setValue(null, null);
+        Validator::resetFactory();
 
         $translator = new Translator(new ArrayLoader(), 'en');
         $factory = new ValidationFactory($translator);

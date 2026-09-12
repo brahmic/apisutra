@@ -1,0 +1,14 @@
+{"case":"client_only_reject","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":0}
+{"case":"global_control","success":false,"manual_passed":false,"error":"validation_failed","validation_message":"global-reject","http_calls":0,"client_factory_calls":null}
+{"case":"global_accept_client_reject","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":0}
+{"case":"global_reject_client_accept","success":false,"manual_passed":false,"error":"validation_failed","validation_message":"global-reject","http_calls":0,"client_factory_calls":0}
+{"case":"static_reject_client_accept","success":false,"manual_passed":false,"error":"validation_failed","validation_message":"static-reject","http_calls":0,"client_factory_calls":0}
+{"case":"missing_factory","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":null}
+{"case":"async_client_only_reject","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":0}
+{"case":"invalid_factory_object","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":null}
+{"case":"sequence_A1","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":0}
+{"case":"sequence_B","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":0}
+{"case":"sequence_A2","success":true,"manual_passed":true,"error":null,"validation_message":null,"http_calls":1,"client_factory_calls":0}
+{"case":"registry_reset_keeps_static_factory","success":false,"manual_passed":false,"error":"validation_failed","validation_message":"static-survives-registry-reset","http_calls":0,"client_factory_calls":null}
+{"case":"dto_without_factory","valid":true}
+{"case":"autodetect_control","success":false,"manual_passed":false,"error":"validation_failed","validation_message":"autodetected-reject","http_calls":0,"client_factory_calls":null}

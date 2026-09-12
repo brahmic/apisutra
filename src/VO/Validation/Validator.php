@@ -6,14 +6,20 @@ namespace Brahmic\ApiSutra\VO\Validation;
 
 use Brahmic\ApiSutra\Attributes\DataTransfer\Label;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Validate;
+use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Contracts\Interfaces\Container\ContainerProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ValidationResult as ValidationResultContract;
 use Brahmic\ApiSutra\Contracts\Interfaces\Validation\ValidatorInterface;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Validation\ValidationException;
 use Brahmic\ApiSutra\Support\ContainerProviderRegistry;
 use Brahmic\ApiSutra\VO\Errors\ValidationError;
 use Illuminate\Contracts\Validation\Factory;
+use Override;
 use ReflectionClass;
 use ReflectionProperty;
+use Throwable;
 
 final class Validator implements ValidatorInterface
 {
@@ -24,8 +30,29 @@ final class Validator implements ValidatorInterface
         self::$factory = $factory;
     }
 
-    #[\Override]
-    public static function check(object $value): ValidationResultContract
+    public static function resetFactory(): void
+    {
+        self::$factory = null;
+    }
+
+    #[Override]
+    public static function check(object $value, ?ContainerProviderInterface $provider = null): ValidationResultContract
+    {
+        // Ручная проверка не должна запускать auto-resolve клиента.
+        if ($provider === null && $value instanceof AbstractRequest && $value->hasClient()) {
+            $provider = $value->getClient()->getConfig()->containerProvider;
+        }
+
+        return self::checkWithProvider($value, $provider);
+    }
+
+    /** @internal Использует клиента текущего выполнения независимо от привязки объекта запроса. */
+    public static function checkForClient(object $value, ClientConfig $config): ValidationResultContract
+    {
+        return self::checkWithProvider($value, $config->containerProvider);
+    }
+
+    private static function checkWithProvider(object $value, ?ContainerProviderInterface $provider): ValidationResultContract
     {
         $reflection = new ReflectionClass($value);
         $rules = [];
@@ -62,10 +89,7 @@ final class Validator implements ValidatorInterface
 
         $messages = array_merge(self::resolveValidationMessages($reflection), $messages);
 
-        $factory = self::resolveFactory();
-        if ($factory === null) {
-            return new ValidationResult(true, []);
-        }
+        $factory = self::resolveFactory($provider);
 
         $validator = $factory->make($inputs, $rules, $messages, $labels);
         if ($validator->fails()) {
@@ -87,27 +111,37 @@ final class Validator implements ValidatorInterface
         return new ValidationResult(true, []);
     }
 
-    public static function validateOrThrow(object $value): void
+    public static function validateOrThrow(object $value, ?ContainerProviderInterface $provider = null): void
     {
-        $result = self::check($value);
+        $result = self::check($value, $provider);
         if ($result->failed()) {
             throw new ValidationException($result->errors());
         }
     }
 
-    private static function resolveFactory(): ?Factory
+    private static function resolveFactory(?ContainerProviderInterface $provider): Factory
     {
-        if (self::$factory !== null) {
+        if ($provider === null && self::$factory !== null) {
             return self::$factory;
         }
 
-        $provider = ContainerProviderRegistry::resolve();
-        $factory = $provider->validatorFactory();
-        if ($factory instanceof Factory) {
-            return $factory;
+        $instruction = $provider !== null
+            ? 'Настройте validatorFactory() в выбранном containerProvider.'
+            : 'Подключите Illuminate Validation через container provider или Validator::useFactory().';
+        try {
+            $factory = ContainerProviderRegistry::resolve($provider)->validatorFactory();
+        } catch (Throwable $exception) {
+            throw new ConfigurationException(
+                'Не удалось получить валидатор для #[Validate]. ' . $instruction,
+                previous: $exception,
+            );
         }
 
-        return null;
+        if (!$factory instanceof Factory) {
+            throw new ConfigurationException('Для #[Validate] недоступна совместимая фабрика валидации. ' . $instruction);
+        }
+
+        return $factory;
     }
 
     /**
@@ -124,7 +158,6 @@ final class Validator implements ValidatorInterface
             return [];
         }
 
-        $method->setAccessible(true);
         $result = $method->invoke(null);
         if (!is_array($result)) {
             return [];
@@ -145,7 +178,6 @@ final class Validator implements ValidatorInterface
             return $value->{$property->getName()} ?? null;
         }
 
-        $property->setAccessible(true);
         return $property->getValue($value);
     }
 

@@ -300,3 +300,13 @@ ConnectException. Наличие Guzzle HTTP Client для остальных т
 `response` сохраняет доступный ответ, в `getPrevious()` — исходную причину.
 Таймаут отдельной попытки допускает безопасный retry, общий deadline — нет.
 Полный контракт — [Timeouts & Delay](client-config/timeouts-delay.md).
+
+
+### Недоступная валидация
+
+Если объявлены `#[Validate]`, но совместимая фабрика недоступна или provider не смог
+её предоставить, запрос завершается с `configuration_error` до HTTP. Список
+`validationErrors` пуст: данные не были проверены. Неверные данные при работающей
+фабрике по-прежнему дают `validation_failed` с ошибками полей.
+Прямые `validate()`/`isValid()`/`errors()` при недоступном движке выбрасывают
+`ConfigurationException`. [Контракт и миграция](validation.md#миграция-и-различие-ошибок).

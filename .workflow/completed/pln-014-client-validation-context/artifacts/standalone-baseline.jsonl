@@ -1,0 +1,4 @@
+{"case":"attributes","success":true,"error":null,"http_calls":1,"illuminate_factory_available":false}
+{"case":"no_attributes","success":true,"error":null,"http_calls":1,"illuminate_factory_available":false}
+{"case":"custom","success":false,"error":"validation_failed","http_calls":0,"illuminate_factory_available":false}
+{"case":"dto","valid":true}
