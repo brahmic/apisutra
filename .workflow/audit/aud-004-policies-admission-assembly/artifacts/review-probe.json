@@ -1,0 +1,12 @@
+{
+    "date": "2026-09-13",
+    "php": "8.5.4",
+    "client_config_parameters": 49,
+    "context_constructor_public": true,
+    "send_in_context_public": true,
+    "generator_closed_after_break": false,
+    "generator_closed_after_destruction": true,
+    "baseline_files_checked": 22,
+    "baseline_files_changed": [],
+    "scope": "Language/lifecycle probe and source comparison; no implementation of planned controls"
+}

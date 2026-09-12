@@ -102,6 +102,13 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Настройки, допуск и сборка: проверка, проекты и вопросы](audit/aud-004-policies-admission-assembly/aud-004-readme.md)
+- [Внутренняя сборка клиента — отложено до востребования пользователем](backlog/pln-022-client-assembly.md)
+- [Необязательный допуск — отложено до востребования пользователем](backlog/pln-023-execution-admission.md)
+- [Политики выполнения — отложено до востребования пользователем](backlog/pln-024-execution-policies.md)
+- [Политики приложения, допуск и сборка клиента — актуальная дискуссия](discussion/dsc-004-client-policies-and-assembly.md)
+- [Фабрика сборки клиента: прежние сценарии и эскизы — обсуждение закрыто](discussion/dsc-003-client-assembly-factory.md)
+- [Четыре направления развития архитектуры — для обсуждения](discussion/dsc-002-architecture-directions.md)
 - [Уточнение типов расширений — до востребования](backlog/pln-021-static-analysis-contracts.md)
 
 - [Анализ четырёх оставшихся направлений](audit/aud-003-remaining-work/aud-003-readme.md)
