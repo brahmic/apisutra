@@ -1,4 +1,6 @@
-<img src="docs/assets/apisutra-logo.png" alt="Логотип ApiSutra" width="233">
+<p align="center">
+  <img src="docs/assets/apisutra-logo.png" alt="Логотип ApiSutra" width="233">
+</p>
 
 # ApiSutra
 
