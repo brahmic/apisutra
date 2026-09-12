@@ -197,7 +197,7 @@ readonly class ExecutionResult implements ResultInterface
         $url = $prepared->url;
         if ($redactSensitive) {
             $headers = $policy->headers($headers);
-            $url = $policy->url($url);
+            $url = $prepared->destination?->preserveUrl ? $prepared->destination->diagnosticUrl() : $policy->url($url);
             $body = $policy->data($body);
             $query = $query !== null ? $policy->query($query) : null;
             $form = $policy->data($form);
@@ -210,7 +210,7 @@ readonly class ExecutionResult implements ResultInterface
             $bodyRaw = $policy->body($bodyRaw, $contentType);
         }
 
-        return [
+        $snapshot = [
             'method' => $prepared->method->value,
             'url' => $url,
             'headers' => $headers,
@@ -224,6 +224,8 @@ readonly class ExecutionResult implements ResultInterface
                 : null,
             'credentialsEnrichment' => $credentials,
         ];
+        return $redactSensitive && $prepared->destination !== null
+            ? $prepared->destination->redactReferences($snapshot) : $snapshot;
     }
 
     public function requestDebugJson(

@@ -9,6 +9,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResultMeta;
 use Brahmic\ApiSutra\Contracts\Interfaces\Pagination\PaginableInterface;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Enums\Pipeline\PipelineStage;
 use Brahmic\ApiSutra\Pipeline\Attributes\StageProcessor;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
@@ -61,10 +62,12 @@ final readonly class RequestFlowRunner
         float $startTime,
         PreparedRequest $prepared,
     ): ExecutionResult {
+        $this->retrySender->assertDestinationSupported($context);
         $this->cacheManager->prepareExecution($request, $context);
         $context->budget?->check('cache_prepare');
         $prepared = $this->applyBeforeSendStages($request, $context, $prepared);
 
+        DestinationGuard::checkContext($context);
         $cachedResponse = $this->resolveResponse($request, $context);
         $context->budget?->check('response');
         $this->logResponse($context, $cachedResponse !== null);

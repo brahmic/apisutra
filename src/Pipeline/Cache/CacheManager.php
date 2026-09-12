@@ -93,12 +93,23 @@ final readonly class CacheManager
     public function prepareExecution(RequestInterface $request, PipelineContext $context): void
     {
         $context->cacheExecution = null;
+        if ($context->destination?->preserveUrl) {
+            $mode = $context->options?->getCacheOverride()->mode;
+            $attribute = $request instanceof AbstractRequest ? $request->getCacheAttribute() : null;
+            if (
+                ($mode !== null && $mode !== CacheMode::Disabled)
+                || ($mode === null && $attribute !== null && $attribute->mode !== CacheMode::Disabled)
+            ) {
+                throw new ConfigurationException('HTTP cache для готового URL не поддерживается');
+            }
+            return;
+        }
         $state = $this->resolveCacheState($request, $context->options);
         if ($state === null || $context->preparedRequest === null) {
             return;
         }
         [$cache, $override] = $state;
-        $scope = $this->scope($request, $cache, $context->options);
+        $scope = $this->scope($request, $cache, $context->options, $context);
         if ($scope === null || $this->identities->request($request) === null) {
             (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Кеш пропущен: identity не определена', [
                 'trace' => $context->traceId,
@@ -219,14 +230,14 @@ final readonly class CacheManager
     {
         $cache = $this->resolveCacheConfig($request);
         return $cache !== null
-            && $this->scope($request, $cache, $context->options) === $state->scopeIdentity
+            && $this->scope($request, $cache, $context->options, $context) === $state->scopeIdentity
             && $this->identities->request($request) === $state->tenantIdentity;
     }
 
-    private function scope(RequestInterface $request, CacheConfig $cache, ?RequestOptions $options): ?string
+    private function scope(RequestInterface $request, CacheConfig $cache, ?RequestOptions $options, ?PipelineContext $context = null): ?string
     {
         $options ??= $request instanceof AbstractRequest ? $request->getOptions() : null;
-        $context = new PipelineContext($request, $this->config, '', options: $options);
+        $context ??= new PipelineContext($request, $this->config, '', options: $options);
         $auth = $this->authHandler->resolveForCache($request, $context);
         return $this->identities->scope($auth, $cache, $options?->getCacheScopeOverride() ?? $cache->prefix);
     }

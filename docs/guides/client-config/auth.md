@@ -25,7 +25,7 @@ $config = new ClientConfig(
 );
 ```
 
-Если задан только `auth` — он применяется ко всем запросам,
+Если задан только `auth` — он применяется к обычным относительным запросам на исходном origin,
 кроме помеченных `#[NoAuth]`.
 Если вы используете только `authScopes`, то scope нужно указывать
 на каждом запросе (`#[AuthScope]` или runtime‑override), иначе auth не применится.
@@ -46,7 +46,7 @@ final class LegacySystemRequest extends AbstractRequest {}
 ## AuthPolicy
 Ограничивает, какие запросы можно выполнять с дефолтным auth.
 
-Без `AuthPolicy` дефолтный `auth` применяется ко всем запросам.
+Без `AuthPolicy` дефолтный `auth` применяется к обычным относительным запросам на исходном origin.
 `AuthPolicy` полезен, когда нужно явно ограничить список запросов
 для дефолтной авторизации.
 
@@ -97,3 +97,28 @@ $config = new ClientConfig(
 - Примеры для всех встроенных authenticator: `docs/guides/auth.md`
 - Сериализация и этап enrichment: `docs/guides/serialization.md`
 - Debug и redaction: `docs/guides/client-config/observability.md`
+
+## OriginPolicy
+
+Необязательная настройка для исключений из изоляции credentials. Без неё автоматически
+доверяется только origin `ClientConfig.baseUrl`; `withBaseUrl()` не меняет эту границу.
+
+```php
+use Brahmic\ApiSutra\Auth\BearerAuthenticator;
+use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Config\OriginPolicy;
+
+$config = new ClientConfig(
+    baseUrl: 'https://api.example',
+    auth: new BearerAuthenticator('token'),
+    originPolicy: new OriginPolicy(allowedOrigins: ['https://storage.example']),
+);
+```
+
+Список содержит точные origin: схема, host, необязательный порт. Без path, query,
+userinfo, wildcard и завершающего slash. Разрешение само по себе не включает auth:
+нужен `withAuth()`/`withAuthScope()` на соответствующем исполнении.
+Для готового URL явный выбор auth нужен и при совпадении origin, но query auth запрещён.
+
+`withCredentialsEnrichment(true)` и `withRequestEnrichers(true)` также проверяют origin.
+Полные правила, ограничения и миграция описаны в [гайде внешних URL](../external-urls.md).

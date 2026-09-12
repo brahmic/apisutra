@@ -15,6 +15,8 @@ use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
 use Brahmic\ApiSutra\Request\RequestPaginationHelper;
+use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Serialization\Enrichment\CredentialsEnricher;
 use Brahmic\ApiSutra\Serialization\VO\RequestPartsBag;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
@@ -64,8 +66,23 @@ final class Serializer
         $method = $request->getMethod();
         $endpoint = $request->getEndpoint();
         $baseUrl = $this->resolveBaseUrl($request, $context);
+        $options = $context?->options ?? ($request instanceof AbstractRequest ? $request->getOptions() : null);
+        $fullUrl = $options?->getUrlOverride();
+        if ($fullUrl === null && RequestDestination::isAbsolute($endpoint)) {
+            $fullUrl = $endpoint;
+        }
+        if ($fullUrl !== null) {
+            $fullUrl = explode('#', $fullUrl, 2)[0];
+            RequestDestination::validateFullUrl($fullUrl);
+        }
+        $destination = $baseUrl !== '' || $fullUrl !== null
+            ? new RequestDestination($fullUrl ?? $baseUrl, $context?->config->baseUrl ?: ($fullUrl ?? $baseUrl), $fullUrl !== null)
+            : null;
+        if ($context !== null) {
+            $context->destination = $destination;
+        }
         $paginationOverrides = $this->resolvePaginationOverrides($request, $context);
-        $placeholders = $this->urlBuilder->extractPathParams($endpoint);
+        $placeholders = $fullUrl !== null ? [] : $this->urlBuilder->extractPathParams($endpoint);
         $parts = $this->buildParts(
             request: $request,
             context: $context,
@@ -78,7 +95,14 @@ final class Serializer
         $continuationMode = null;
         [$parts, $continuationMode] = $this->applyContinuationModeApplicator($request, $parts, $context);
 
-        $url = $this->buildPreparedUrl(
+        if ($fullUrl !== null) {
+            foreach ($parts->query as $query) {
+                if (($query['value'] ?? null) !== []) {
+                    throw new ConfigurationException('Готовый URL несовместим с дополнительными query-параметрами');
+                }
+            }
+        }
+        $url = $fullUrl ?? $this->buildPreparedUrl(
             baseUrl: $baseUrl,
             endpoint: $endpoint,
             parts: $parts,
@@ -91,6 +115,7 @@ final class Serializer
             method: $method,
             url: $url,
             headers: $prepared['headers'],
+            destination: $destination,
             body: $prepared['body'],
             stream: $prepared['stream'],
             meta: [
@@ -259,11 +284,20 @@ final class Serializer
             return [];
         }
 
+        $isolated = $context?->destination?->requiresIsolation() ?? false;
+        $credentials = $context?->options?->getCredentialsEnrichmentEnabledOverride();
+        $custom = $context?->options?->getRequestEnrichersEnabledOverride();
+        if ($isolated && ($credentials === true || $custom === true)) {
+            $context->destination->assertCredentialsAllowed($config->originPolicy);
+        }
         $enrichers = [];
-        if ($config->credentialsConfig !== null) {
+        if ($config->credentialsConfig !== null && (!$isolated || $credentials === true)) {
             $enrichers[] = new CredentialsEnricher($config->credentialsConfig);
         }
 
+        if ($custom === false || ($isolated && $custom !== true)) {
+            return $enrichers;
+        }
         foreach ($config->requestEnrichers as $enricher) {
             if ($enricher instanceof RequestPartsEnricherInterface) {
                 $enrichers[] = $enricher;

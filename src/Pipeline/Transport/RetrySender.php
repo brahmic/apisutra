@@ -13,6 +13,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
 use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
@@ -70,8 +71,19 @@ final readonly class RetrySender
         $this->retryAfterDelay = $retryAfterDelay;
     }
 
+    /** Проверка поддержки до auth/refresh и любых HTTP-попыток этого исполнения. */
+    public function assertDestinationSupported(PipelineContext $context): void
+    {
+        DestinationGuard::checkContext($context);
+        DestinationGuard::checkCapability($this->transport, $context->destination);
+        if ($this->retryConfigResolver->resolve($context->request, $context->options) !== null) {
+            DestinationGuard::checkCapability($this->retryHandler, $context->destination);
+        }
+    }
+
     public function sendWithRetry(RequestInterface $request, PipelineContext $context): ProviderResponse
     {
+        $this->assertDestinationSupported($context);
         $retryConfig = $this->retryConfigResolver->resolve($request, $context->options);
         $attempts = $retryConfig?->attempts ?? 1;
 
@@ -86,6 +98,7 @@ final readonly class RetrySender
         $applyBackoff = false;
 
         while ($attempt <= $attempts) {
+            DestinationGuard::checkContext($context);
             $context->budget->check('before_attempt', $lastException);
 
             try {
@@ -113,7 +126,10 @@ final readonly class RetrySender
                 $this->hookRunner->runHookStage(Hook::AfterResponse, $request, $context);
                 $context->budget->check('after_response');
 
-                if ($response->status === 401 && $this->config->authRetryOn401) {
+                if (
+                    $response->status === 401 && $this->config->authRetryOn401
+                    && (!$context->destination?->requiresIsolation() || $this->authHandler->resolveForCache($request, $context) !== null)
+                ) {
                     if ($authRetryLimit <= 0 || $authRetryUsed >= $authRetryLimit) {
                         return $response;
                     }

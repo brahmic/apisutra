@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\VO\Http;
 
+use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
@@ -14,6 +15,7 @@ final readonly class TransportOptions
         public int $timeoutMs = 0,
         public int $connectTimeoutMs = 0,
         public ?ExecutionBudget $budget = null,
+        public ?RequestDestination $destination = null,
     ) {
         if ($timeoutMs < 0 || $connectTimeoutMs < 0) {
             throw new ConfigurationException('Транспортные таймауты должны быть >= 0');
@@ -33,7 +35,7 @@ final readonly class TransportOptions
         if ($timeout > 0 && $connect > 0) {
             $connect = min($connect, $timeout);
         }
-        return new self($timeout, $connect, $this->budget);
+        return new self($timeout, $connect, $this->budget, $this->destination);
     }
 
     public function hasLimits(): bool

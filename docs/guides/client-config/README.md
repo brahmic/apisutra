@@ -24,3 +24,5 @@
 - Для provider‑wide кредов в `body/query/form` используйте:
   - `credentialsConfig` (встроенный `CredentialsEnricher`)
   - `requestEnrichers` (кастомные `RequestPartsEnricherInterface`)
+
+Политика переноса credentials: [OriginPolicy](auth.md#originpolicy), необязательна.

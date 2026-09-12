@@ -122,6 +122,7 @@ final readonly class ClientConfig
         public ?ContinuationModeApplicatorInterface $continuationModeApplicator = null,
         public RedactionPolicy $redaction = new RedactionPolicy(),
         public BooleanFormat $textBooleanFormat = BooleanFormat::Numeric,
+        public OriginPolicy $originPolicy = new OriginPolicy(),
     ) {
         if ($cache instanceof CacheConfig) {
             $this->cacheConfig = $cache;
@@ -208,6 +209,7 @@ final readonly class ClientConfig
             'continuationModeApplicator' => $this->continuationModeApplicator,
             'redaction' => $this->redaction,
             'textBooleanFormat' => $this->textBooleanFormat,
+            'originPolicy' => $this->originPolicy,
         ];
 
         foreach ($overrides as $key => $value) {

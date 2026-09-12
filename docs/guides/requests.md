@@ -245,3 +245,12 @@ $resolved = $handle->resolvedAsync();// PromiseInterface<ResolvedResultInterface
 - Валидация: `docs/guides/validation.md`
 - Client discovery: `docs/guides/client-discovery.md`
 - Resources: `docs/guides/resources.md`
+
+## Полный URL для отдельного исполнения
+
+`withUrl($url)` задаёт готовый абсолютный адрес, `withoutUrl()` очищает override.
+Исходный request/config не меняется. Base path/query не дописываются; auth, общие
+request enrichers и кеш автоматически не включаются. Для относительных endpoint
+остаётся `withBaseUrl()`, со встроенной изоляцией credentials при смене origin.
+
+Полный контракт, пример загрузки и миграция: [внешние URL](external-urls.md).

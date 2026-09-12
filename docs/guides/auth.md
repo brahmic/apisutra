@@ -2,6 +2,10 @@
 
 Короткий гайд по авторизации запросов, scope и политике доступа.
 
+Для готового URL и чужого origin автоматическое наследование auth выключено.
+Явный выбор credentials ограничен [OriginPolicy](client-config/auth.md#originpolicy);
+`forceAuth()` не отменяет эту проверку. Подробности: [внешние URL](external-urls.md).
+
 ## Базовый authenticator
 
 Для `ApiKeyAuthenticator` с `header: null, query: 'api_key'` ключ добавляется

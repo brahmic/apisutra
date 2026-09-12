@@ -2,6 +2,32 @@
 
 ## Не выпущено
 
+### 2026-09-12 — готовые URL и изоляция credentials
+
+- Добавлены immutable `withUrl()`/`withoutUrl()` и поддержка абсолютного HTTP/HTTPS
+  endpoint. Готовые path/query сохраняются до фактического HTTP, включая `%2f`, `+`,
+  повторяющиеся ключи, пустой `?` и dot-segments; base URL не дописывается, fragment удаляется.
+- Для готового URL автоматически выключены auth, credentials enrichment, общие
+  request enrichers и HTTP cache. Дополнительные query, query auth и явный cache
+  вызывают `configuration_error` до HTTP.
+- Внешний `withBaseUrl()` больше не наследует credentials. Необязательная `OriginPolicy`
+  разрешает точные origin для явно включённого auth/enrichment; forceAuth её не отменяет.
+  Добавлен явный выбор `withRequestEnrichers()`. На исходном origin относительные
+  запросы сохраняют прежние настройки без нового конфига.
+- Назначение проверяется до auth/cache и на каждой отправке. 401 без выбранного auth
+  не запускает refresh исходного аккаунта. Сохраняются deadline и воспроизводимость тела.
+- `DestinationAwareInterface` описывает обязательную гарантию транспорта/PSR-клиента
+  и собственного retry handler для защищаемого вызова. Штатная сборка обеспечивает её
+  автоматически; неподдерживающий адаптер отклоняется до auth/HTTP.
+- Изолированный Guzzle-клиент исключает скрытые credentials/payload defaults и redirects.
+  Настройки сетевого соединения сохраняются; несовместимые raw cURL overrides отклоняются.
+- Готовые ссылки маскируются целиком до path/query в безопасном debug/logger/recorder,
+  без обязательной RedactionPolicy. Raw-доступ остаётся исходным.
+- Изменения внешнего `withBaseUrl()` и требований к стороннему транспорту не полностью
+  обратно совместимы. Контракт и миграция: [внешние URL](docs/guides/external-urls.md).
+- Проверено: 1101 тест без падений (1065 passed, 36 прежних deprecation),
+  3133 assertions; 12 новых локальных HTTP-сценариев и standalone без Laravel/Guzzle Client.
+
 ### 2026-09-12 — URI и query без потери значений
 
 - URL собирается по компонентам: сохраняются base path, query из base URL и endpoint,

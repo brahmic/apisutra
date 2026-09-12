@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Retry;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
@@ -19,8 +22,13 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Closure;
 use Override;
 
-final class RetryHandler implements RetryHandlerInterface
+final class RetryHandler implements RetryHandlerInterface, DestinationAwareInterface
 {
+    public function assertSupportsDestination(RequestDestination $destination): void
+    {
+        DestinationGuard::checkCapability($this->transport, $destination);
+    }
+
     private readonly ?Closure $jitterResolver;
 
     public function __construct(
@@ -59,6 +67,9 @@ final class RetryHandler implements RetryHandlerInterface
             ($context->budget ?? new ExecutionBudget(new SystemClock()))->wait($delay, $sleeper ?? $this->sleeper, 'retry_wait');
         }
 
+        DestinationGuard::checkContext($context);
+        DestinationGuard::checkRequest($request);
+        DestinationGuard::checkCapability($this, $request->destination);
         $context->budget?->check('http');
         if ($request->transportOptions !== null) {
             $request = $request->with(transportOptions: $request->transportOptions->effective());

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
@@ -21,8 +24,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Throwable;
 
-final class HttpTransport implements TimeoutAwareTransportInterface
+final class HttpTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface
 {
+    public function assertSupportsDestination(RequestDestination $destination): void
+    {
+        DestinationGuard::checkCapability($this->httpClient, $destination);
+    }
+
     public function __construct(
         private readonly ClientInterface $httpClient,
         private readonly RequestFactoryInterface $requestFactory,
@@ -48,9 +56,14 @@ final class HttpTransport implements TimeoutAwareTransportInterface
     #[Override]
     public function send(PreparedRequest $request): ProviderResponse
     {
+        DestinationGuard::checkRequest($request);
+        DestinationGuard::checkCapability($this, $request->destination);
         $start = microtime(true);
         $psrRequest = $this->buildPsrRequest($request);
         $options = $request->transportOptions;
+        if ($request->destination !== null) {
+            $options = new TransportOptions($options?->timeoutMs ?? 0, $options?->connectTimeoutMs ?? 0, $options?->budget, $request->destination);
+        }
         if ($options !== null) {
             $this->assertSupportsTimeouts($options);
             $options = $options->effective();
@@ -94,6 +107,14 @@ final class HttpTransport implements TimeoutAwareTransportInterface
             $psrRequest = $psrRequest->withBody($this->streamFactory->createStream($request->body));
         }
 
+        if ($request->destination?->preserveUrl) {
+            $target = $request->destination->requestTarget();
+            // Фабрика URI может потерять пустой '?'; request target задаётся отдельно.
+            if ($psrRequest->getRequestTarget() !== rtrim($target, '?') && $psrRequest->getRequestTarget() !== $target) {
+                throw new ConfigurationException('PSR-фабрика изменяет готовый request target');
+            }
+            $psrRequest = $psrRequest->withRequestTarget($target);
+        }
         return $psrRequest;
     }
 

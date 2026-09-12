@@ -233,7 +233,7 @@ final readonly class ExecutionResultBuilder
 
         $error = $this->createRequestError(
             code: $code,
-            message: $exception->getMessage(),
+            message: $context->destination?->preserveUrl ? 'Ошибка выполнения запроса по готовому URL' : $exception->getMessage(),
             request: $request,
             context: $context,
             response: $response,
@@ -247,7 +247,7 @@ final readonly class ExecutionResultBuilder
             'trace' => $context->traceId,
             'request' => $request::class,
             'exception' => $exception::class,
-            'message' => $exception->getMessage(),
+            'message' => $context->destination?->preserveUrl ? 'Ошибка выполнения запроса по готовому URL' : $exception->getMessage(),
         ]);
 
         $result = $this->createFailedResult(

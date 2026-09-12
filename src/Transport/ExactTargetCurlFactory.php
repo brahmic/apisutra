@@ -1,0 +1,71 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\Transport;
+
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use GuzzleHttp\Handler\CurlFactory;
+use GuzzleHttp\Handler\CurlFactoryInterface;
+use GuzzleHttp\Handler\EasyHandle;
+use GuzzleHttp\Utils;
+use Psr\Http\Message\RequestInterface;
+
+/** Устанавливает проверенный request target после подготовки cURL штатной фабрикой. */
+final readonly class ExactTargetCurlFactory implements CurlFactoryInterface
+{
+    private CurlFactory $factory;
+
+    public function __construct()
+    {
+        $this->factory = new CurlFactory(0);
+    }
+
+    /** @param array<string, mixed> $options */
+    public function create(RequestInterface $request, array $options): EasyHandle
+    {
+        $easy = $this->factory->create($request, $options);
+        $uri = $request->getUri();
+        $natural = ($uri->getPath() === '' ? '/' : $uri->getPath()) . ($uri->getQuery() === '' ? '' : '?' . $uri->getQuery());
+        $success = curl_setopt($easy->handle, CURLOPT_PATH_AS_IS, true);
+        if ($request->getRequestTarget() !== $natural) {
+            $target = $request->getRequestTarget();
+            if ($this->usesForwardProxy($request, $options)) {
+                $target = $uri->getScheme() . '://' . $uri->getAuthority() . $target;
+            }
+            $success = $success && curl_setopt($easy->handle, CURLOPT_REQUEST_TARGET, $target);
+        }
+        if (!$success) {
+            $this->factory->release($easy);
+            throw new ConfigurationException('cURL не поддерживает сохранение request target');
+        }
+        return $easy;
+    }
+
+    /** @param array<string, mixed> $options */
+    private function usesForwardProxy(RequestInterface $request, array $options): bool
+    {
+        if ($request->getUri()->getScheme() !== 'http') {
+            return false;
+        }
+        $proxy = $options['proxy'] ?? null;
+        if (is_array($proxy)) {
+            $no = $proxy['no'] ?? [];
+            // Используем те же правила no_proxy, что установленная версия Guzzle.
+            $excluded = method_exists(Utils::class, 'isUriInNoProxy')
+                ? Utils::isUriInNoProxy($request->getUri(), $no)
+                : Utils::isHostInNoProxy($request->getUri()->getHost(), $no);
+            if ($excluded) {
+                return false;
+            }
+            $proxy = $proxy['http'] ?? null;
+        }
+        $proxy ??= Utils::getenv('http_proxy') ?: Utils::getenv('all_proxy') ?: Utils::getenv('ALL_PROXY');
+        return is_string($proxy) && $proxy !== '' && !str_starts_with(strtolower($proxy), 'socks');
+    }
+
+    public function release(EasyHandle $easy): void
+    {
+        $this->factory->release($easy);
+    }
+}

@@ -27,7 +27,7 @@ final readonly class RequestPreparationStep
         $this->auditLogger->log(LogLevel::DEBUG, 'HTTP запрос подготовлен', [
             'trace' => $context->traceId,
             'method' => $prepared->method->value,
-            'url' => $prepared->url,
+            'url' => $prepared->destination?->preserveUrl ? $prepared->destination->diagnosticUrl() : $prepared->url,
         ], is_array($secretFields) ? array_values(array_filter($secretFields, 'is_string')) : []);
 
         return $prepared;

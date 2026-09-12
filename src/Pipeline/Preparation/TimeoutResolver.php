@@ -20,6 +20,7 @@ final class TimeoutResolver
             self::milliseconds($options?->getTimeoutOverride() ?? $attribute?->seconds ?? $context->config->timeout),
             self::milliseconds($options?->getConnectTimeoutOverride() ?? $attribute?->connectTimeout ?? $context->config->connectTimeout),
             $context->budget,
+            $context->destination,
         );
     }
 

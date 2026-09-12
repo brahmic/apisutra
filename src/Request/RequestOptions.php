@@ -62,6 +62,8 @@ final readonly class RequestOptions
         private ?string $credentialsScopeOverride,
         private ?ContinuationMode $continuationModeOverride,
         private ?string $cacheScopeOverride = null,
+        private ?string $urlOverride = null,
+        private ?bool $requestEnrichersEnabledOverride = null,
     ) {
         if ($cacheScopeOverride !== null && trim($cacheScopeOverride) === '') {
             throw new ConfigurationException('Пространство кеша не должно быть пустым');
@@ -131,12 +133,41 @@ final readonly class RequestOptions
             credentialsScopeOverride: $overrides['credentialsScopeOverride'] ?? $this->credentialsScopeOverride,
             continuationModeOverride: $overrides['continuationModeOverride'] ?? $this->continuationModeOverride,
             cacheScopeOverride: $overrides['cacheScopeOverride'] ?? $this->cacheScopeOverride,
+            urlOverride: array_key_exists('urlOverride', $overrides) ? $overrides['urlOverride'] : $this->urlOverride,
+            requestEnrichersEnabledOverride: $overrides['requestEnrichersEnabledOverride'] ?? $this->requestEnrichersEnabledOverride,
         );
     }
 
     /**
-     * Переопределить baseUrl только для текущего вызова.
+     * Передать готовый полный URL только для текущего вызова.
      */
+    public function withUrl(string $url): self
+    {
+        return $this->with(['urlOverride' => $url]);
+    }
+
+    public function withoutUrl(): self
+    {
+        return $this->with(['urlOverride' => null]);
+    }
+
+    public function getUrlOverride(): ?string
+    {
+        return $this->urlOverride;
+    }
+
+    /** Явный выбор общих enrichers для назначения запроса. */
+    public function withRequestEnrichers(bool $enabled = true): self
+    {
+        return $this->with(['requestEnrichersEnabledOverride' => $enabled]);
+    }
+
+    public function getRequestEnrichersEnabledOverride(): ?bool
+    {
+        return $this->requestEnrichersEnabledOverride;
+    }
+
+    /** Переопределить base URL для относительного endpoint. */
     public function withBaseUrl(string $url): self
     {
         return $this->with(['baseUrlOverride' => $url]);

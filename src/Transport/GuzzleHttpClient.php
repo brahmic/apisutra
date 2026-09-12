@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Http\Origin;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\VO\Http\TransportOptions;
@@ -15,9 +18,18 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /** Штатный адаптер с известным cURL handler; Guzzle остаётся опциональной зависимостью. */
-final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOptionsInterface
+final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOptionsInterface, DestinationAwareInterface
 {
+    public function assertSupportsDestination(RequestDestination $destination): void
+    {
+        if ($this->customCurl) {
+            throw new ConfigurationException('Низкоуровневые cURL overrides несовместимы с изоляцией назначения');
+        }
+    }
+
     private Client $client;
+    private Client $isolatedClient;
+    private bool $customCurl;
 
     /** @param array<string, mixed> $config Настройки клиента без подмены HTTP handler. */
     public function __construct(array $config = [])
@@ -28,6 +40,11 @@ final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOpti
         if (array_key_exists('handler', $config)) {
             throw new ConfigurationException('Для собственного Guzzle handler используйте адаптер HttpClientOptionsInterface с явной поддержкой таймаутов');
         }
+        $this->customCurl = ($config['curl'] ?? []) !== [];
+        // Отдельный клиент не наследует auth, cookies, сертификат клиента и payload defaults.
+        $isolated = array_intersect_key($config, array_flip(['verify', 'proxy', 'force_ip_resolve', 'version', 'timeout', 'connect_timeout', 'read_timeout']));
+        $isolated['handler'] = HandlerStack::create(new CurlHandler(['handle_factory' => new ExactTargetCurlFactory()]));
+        $this->isolatedClient = new Client($isolated);
         $config['handler'] = HandlerStack::create(new CurlHandler());
         $this->client = new Client($config);
     }
@@ -45,6 +62,23 @@ final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOpti
     public function sendWithOptions(RequestInterface $request, TransportOptions $options): ResponseInterface
     {
         $effective = $options->effective();
+        $destination = $effective->destination;
+        if ($destination?->requiresIsolation()) {
+            $this->assertSupportsDestination($destination);
+            if (
+                Origin::fromUrl((string) $request->getUri()) !== $destination->origin
+                || ($destination->preserveUrl && $request->getRequestTarget() !== $destination->requestTarget())
+            ) {
+                throw new ConfigurationException('HTTP-клиент получил изменённое назначение запроса');
+            }
+            return $this->isolatedClient->send($request, [
+                'timeout' => $effective->timeoutMs / 1000,
+                'connect_timeout' => $effective->connectTimeoutMs / 1000,
+                'http_errors' => false,
+                'allow_redirects' => false,
+                'cookies' => false,
+            ]);
+        }
         return $this->client->send($request, [
             'timeout' => $effective->timeoutMs / 1000,
             'connect_timeout' => $effective->connectTimeoutMs / 1000,

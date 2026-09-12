@@ -10,6 +10,10 @@ query-структура или неоднозначный элемент Comma 
 (`SerializationException`). Режимы raw/resolved, `dataOrFail()` и `throwOnErrors`
 сохраняют общий контракт доставки ошибок ниже.
 
+Конфликт готового URL с query/auth/cache, запрещённый перенос credentials,
+поздняя смена назначения и неподдерживающий изоляцию транспорт также дают
+`configuration_error` без retry. См. [внешние URL](external-urls.md).
+
 ## ExecutionResult
 Ключевые поля:
 - `status`: SUCCESS / PARTIAL / FAILED

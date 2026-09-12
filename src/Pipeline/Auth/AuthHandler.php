@@ -14,6 +14,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Pipeline\PipelineExecutorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Request\UnauthorizedException;
@@ -53,6 +54,7 @@ final readonly class AuthHandler
 
     public function handleAuthentication(RequestInterface $request, PipelineContext $context, bool $forceRefresh = false): void
     {
+        DestinationGuard::checkContext($context);
         $context->budget?->check('authentication');
         if (!$request instanceof AbstractRequest) {
             return;
@@ -83,6 +85,7 @@ final readonly class AuthHandler
         $context->budget?->check('authentication');
         if ($context->preparedRequest !== null) {
             $context->preparedRequest = $auth->authenticate($context->preparedRequest);
+            DestinationGuard::checkContext($context);
             $context->budget?->check('authentication');
         }
     }
@@ -100,6 +103,13 @@ final readonly class AuthHandler
     private function shouldSkipAuth(AbstractRequest $request, PipelineContext $context): bool
     {
         $override = $this->resolveAuthOverride($request, $context);
+        if ($context->destination?->requiresIsolation()) {
+            $explicit = in_array($override, [AuthOverride::Enable, AuthOverride::ForceEnable], true);
+            if (!$explicit) {
+                return true;
+            }
+            $context->destination->assertCredentialsAllowed($this->config->originPolicy);
+        }
         if ($override === AuthOverride::ForceEnable) {
             return false;
         }

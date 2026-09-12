@@ -48,8 +48,24 @@ trait RequestOptionsChainTrait
     }
 
     /**
-     * Переопределить baseUrl только для текущего вызова.
+     * Передать готовый полный URL только для текущего вызова.
      */
+    public function withUrl(string $url): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withUrl($url));
+    }
+
+    public function withoutUrl(): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withoutUrl());
+    }
+
+    public function withRequestEnrichers(bool $enabled = true): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withRequestEnrichers($enabled));
+    }
+
+    /** Переопределить base URL для относительного endpoint. */
     public function withBaseUrl(string $url): RequestExecutionInterface
     {
         return $this->executionFromOptions(

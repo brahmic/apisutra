@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Tests\Stubs\Retry;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -12,8 +14,10 @@ use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
 
-final class ConsumingHttpClient implements ClientInterface, HttpClientOptionsInterface
+final class ConsumingHttpClient implements ClientInterface, HttpClientOptionsInterface, DestinationAwareInterface
 {
+    public function assertSupportsDestination(RequestDestination $destination): void {}
+
     /** @var list<TransportOptions> */
     public array $options = [];
 

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
@@ -17,8 +20,13 @@ use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionClass;
 use Throwable;
 
-final class RecordingTransport implements TimeoutAwareTransportInterface
+final class RecordingTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface
 {
+    public function assertSupportsDestination(RequestDestination $destination): void
+    {
+        DestinationGuard::checkCapability($this->transport, $destination);
+    }
+
     public function assertSupportsTimeouts(TransportOptions $options): void
     {
         TransportCapabilities::check($this->transport, $options);
@@ -46,6 +54,8 @@ final class RecordingTransport implements TimeoutAwareTransportInterface
     #[\Override]
     public function send(PreparedRequest $request): ProviderResponse
     {
+        DestinationGuard::checkRequest($request);
+        DestinationGuard::checkCapability($this, $request->destination);
         $response = $this->transport->send($request);
         $this->record($request, $response);
         return $response;
@@ -75,7 +85,7 @@ final class RecordingTransport implements TimeoutAwareTransportInterface
             'request' => [
                 'class' => $request->meta['requestClass'] ?? null,
                 'method' => $request->method->value,
-                'url' => $request->url,
+                'url' => $request->destination?->preserveUrl ? $request->destination->diagnosticUrl() : $request->url,
                 'headers' => $request->headers,
                 'body' => $this->normalizeBody($request->body, $request->headers['Content-Type'] ?? null),
             ],
@@ -95,6 +105,7 @@ final class RecordingTransport implements TimeoutAwareTransportInterface
             is_array($secretFields) ? array_values(array_filter($secretFields, 'is_string')) : [],
         );
 
+        $payload = $request->destination?->redactReferences($payload) ?? $payload;
         $file = $this->resolveFilename($payload['request']['class']);
         file_put_contents($file, json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }

@@ -37,7 +37,7 @@ final readonly class ResultFactory
 
         $error = new RequestError(
             code: $code,
-            message: $response?->errorMessage() ?? 'Ошибка запроса',
+            message: $context->destination?->redactReferences($response?->errorMessage() ?? 'Ошибка запроса') ?? ($response?->errorMessage() ?? 'Ошибка запроса'),
             response: $response,
             context: $contextData,
             requestClass: $request::class,

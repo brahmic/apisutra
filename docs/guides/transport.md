@@ -5,9 +5,8 @@ SDK ожидает реализацию `TransportInterface`.
 
 Штатная сериализация принимает относительные endpoint и сохраняет base path,
 исходный query и повторяющиеся параметры по [контракту URI](serialization.md#uri-и-path).
-Абсолютные и подписанные endpoint не поддерживаются; ошибка возникает до HTTP.
-Runtime `withBaseUrl()` остаётся доступен, но не является политикой изоляции credentials
-между origin и не гарантирует работу подписанных URL.
+Полные и подписанные URL поддерживаются через `withUrl()` или абсолютный endpoint;
+для них и внешнего `withBaseUrl()` действует [изоляция назначения](external-urls.md).
 
 ## Контракт
 ```php
@@ -127,3 +126,41 @@ public static function make(
 ## Где детали
 - Тестирование: `docs/guides/testing.md`
 - Быстрый старт: `docs/guides/quickstart.md`
+
+## Изоляция назначения
+
+Для готового URL и смены origin транспорт должен реализовать
+`Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface`:
+метод `assertSupportsDestination(RequestDestination $destination): void` подтверждает,
+что фактическая отправка сохраняет target, исключает redirects и автоматические
+credentials исходного клиента. Если это невозможно, метод бросает `ConfigurationException`
+до I/O. Одна лишь поддержка таймаутов этой гарантии не даёт.
+
+`HttpTransport` проверяет поддержку также у вложенного PSR-клиента. Если тот реализует
+`HttpClientOptionsInterface`, `TransportOptions.destination` передаёт выбранное назначение
+в `sendWithOptions()` и сохраняется при `effective()`. PSR-клиент без options-интерфейса
+может заявлять capability только если обеспечивает её при любом `sendRequest()`.
+Копии `PreparedRequest.with()` сохраняют `destination`. Перед отправкой изменённой копии
+проверяйте `DestinationGuard::checkRequest($request)`; при собственном retry handler
+нужна та же capability и проверка непосредственно в месте I/O.
+
+Штатные HttpTransport, MockTransport и RecordingTransport поддерживают контракт;
+recorder делегирует проверку вложенному транспорту. `HttpTransport::createDefault()`
+выбирает всё автоматически. Для обычных относительных same-origin запросов новый
+интерфейс не обязателен. Прямой низкоуровневый PreparedRequest без destination не
+содержит исходного origin: гарантия pipeline не появляется от одного абсолютного URL.
+
+Штатный Guzzle-адаптер использует отдельный клиент для защищаемых вызовов. Он сохраняет
+настройки verify, proxy, force_ip_resolve, version и таймаутов. Auth, cookies, произвольные
+headers/query/body defaults, callbacks/debug и клиентские TLS cert/ssl_key не наследуются.
+Непустые низкоуровневые `curl` overrides дают ошибку для защищаемого вызова;
+их совместимость нельзя предполагать. Для обычной отправки исходная конфигурация сохранена.
+`ExactTargetCurlFactory` сохраняет path и пустой query delimiter на cURL-границе,
+включая absolute-form при HTTP proxy. Redirects автоматически не выполняются.
+
+Hooks и собственный PHP-код остаются доверенными расширениями. Проверка защищает
+штатный путь отправки; она не изолирует код, который самостоятельно копирует секреты,
+удаляет контракт назначения или обращается к сети. Проверка destination не является
+SSRF-фильтром, DNS-политикой или ограничением доступных адресов.
+
+Миграция и пользовательский API: [внешние URL](external-urls.md).

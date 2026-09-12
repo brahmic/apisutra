@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Transport;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Exceptions\Testing\MissingFixtureException;
 use Brahmic\ApiSutra\Exceptions\Testing\UnmockedRequestException;
@@ -17,8 +20,11 @@ use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 
-final class MockTransport implements TimeoutAwareTransportInterface
+final class MockTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface
 {
+    /** Fake не добавляет credentials и не выполняет redirects. */
+    public function assertSupportsDestination(RequestDestination $destination): void {}
+
     /** Fake принимает опции для тестов; реальный HTTP не выполняется. */
     public function assertSupportsTimeouts(TransportOptions $options): void {}
 
@@ -79,6 +85,8 @@ final class MockTransport implements TimeoutAwareTransportInterface
     #[\Override]
     public function send(PreparedRequest $request): ProviderResponse
     {
+        DestinationGuard::checkRequest($request);
+        DestinationGuard::checkCapability($this, $request->destination);
         $this->recorded[] = $request;
 
         $response = $this->findResponse($request);
