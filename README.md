@@ -1,5 +1,9 @@
 # ApiSutra
 
+[![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
+[![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](./composer.json)
+[![Packagist Version](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
+
 ApiSutra — фреймворк для построения SDK‑клиентов внешних API на PHP.
 Он даёт декларативные запросы и DTO через атрибуты, единый pipeline выполнения
 и расширяемость без копипаста.
@@ -96,6 +100,10 @@ vendor/bin/pest tests/Unit/Core/ValidatorTest.php
 
 Тестовые зависимости включают Pest и компоненты Illuminate для проверки
 Laravel-интеграции. Приложение ihpoh и база данных для запуска не нужны.
+
+GitHub Actions запускает тесты на PHP 8.4 и 8.5 при каждом push и pull request.
+Проверку также можно запустить вручную во вкладке Actions. Бейдж Tests показывает
+результат проверки push в ветке `master`.
 
 ## Документация
 
