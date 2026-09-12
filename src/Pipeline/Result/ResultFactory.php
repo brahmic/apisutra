@@ -11,6 +11,7 @@ use Brahmic\ApiSutra\Enums\Result\ResultStatus;
 use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\VO\Errors\RequestError;
+use Brahmic\ApiSutra\VO\Audit\DebugInfo;
 use Brahmic\ApiSutra\VO\Errors\SystemErrorContextBuilder;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 
@@ -46,6 +47,10 @@ final readonly class ResultFactory
         $exception = $response ? $this->errorPolicy->getRequestExceptionInternal($request, $response) : null;
 
         return new ExecutionResult(
+            redaction: $context->config->redaction,
+            debug: $context->config->debug
+                ? new DebugInfo($response?->request ?? $context->preparedRequest, $response)
+                : null,
             data: null,
             status: ResultStatus::FAILED,
             errors: new ErrorCollection([$error]),

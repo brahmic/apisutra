@@ -98,3 +98,18 @@ final class CreateOrder extends AbstractRequest implements DependsOnRequestInter
 - `Dependency` — запрос зависимости
 
 Роль используется в audit‑логах, debug‑данных и хуках.
+
+## Замена подготовленного HTTP-тела
+
+В hook до первой отправки присваивайте контексту новую копию:
+`$context->preparedRequest = $context->preparedRequest->withBody($text)` либо
+`->withStream($stream)`. Для удаления используйте `->withoutBody()`;
+`with(body: null)` и `with(stream: null)` сохраняют прежнее значение.
+При смене формата явно обновляйте Content-Type. Полный контракт, пример hook и
+миграция — в [руководстве транспорта](transport.md#замена-и-очистка-тела-preparedrequest).
+
+При включённом debug итоговый результат отражает фактически отправленный запрос
+полученного ответа, включая последнюю retry-попытку. При сбое без ответа используется
+актуальный prepared request контекста. Изменение контекста в `AfterResponse` не
+подменяет отправленное тело в debug; redaction сохраняется. Замена тела после
+первой попытки останавливает повтор с `body_changed`.

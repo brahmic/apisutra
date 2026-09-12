@@ -113,7 +113,7 @@ final readonly class ExecutionResultBuilder
     ): ExecutionResult {
         $duration = (microtime(true) - $startTime) * 1000;
         $debug = $this->config->debug
-            ? new DebugInfo($prepared, $context->response, $duration)
+            ? new DebugInfo($context->response?->request ?? $context->preparedRequest ?? $prepared, $context->response, $duration)
             : null;
 
         $this->auditLogger->addAudit($audit, PipelineStage::Completed, $context, $startTime, $debug);
@@ -190,7 +190,7 @@ final readonly class ExecutionResultBuilder
         EarlyReturnException $exception,
     ): ExecutionResult {
         $resultData = $this->responseHydrator->hydrateResponse($request, $context, $exception->data);
-        $debug = $this->config->debug ? new DebugInfo($prepared, null, null) : null;
+        $debug = $this->config->debug ? new DebugInfo($context->preparedRequest ?? $prepared, null, null) : null;
 
         $this->auditLogger->addAudit($audit, PipelineStage::Completed, $context, $startTime, $debug);
         $this->auditLogger->log(LogLevel::INFO, 'Запрос завершен', [
@@ -347,6 +347,9 @@ final readonly class ExecutionResultBuilder
             status: ResultStatus::FAILED,
             errors: $errors,
             validationErrors: $validationErrors,
+            debug: $this->config->debug
+                ? new DebugInfo($response?->request ?? $context->preparedRequest, $response)
+                : null,
             traceId: $context->traceId,
             audit: $audit,
             requestClass: $request::class,

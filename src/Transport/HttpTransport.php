@@ -9,6 +9,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
 use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Http\RequestBodyGuard;
 use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Files\DownloadManager;
 use Brahmic\ApiSutra\Files\BorrowedStream;
@@ -66,6 +67,7 @@ final class HttpTransport implements TimeoutAwareTransportInterface, Destination
     #[Override]
     public function send(PreparedRequest $request): ProviderResponse
     {
+        RequestBodyGuard::check($request);
         DestinationGuard::checkRequest($request);
         FileTransferGuard::checkCapability($this, FileTransferGuard::options($request));
         DestinationGuard::checkCapability($this, $request->destination);

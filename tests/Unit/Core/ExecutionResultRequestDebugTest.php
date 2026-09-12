@@ -52,7 +52,7 @@ describe('ExecutionResult request debug', function () {
             ->and($snapshot['hasStream'] ?? null)->toBeFalse();
     });
 
-    it('может вернуть заголовки без маскировки и json-представление', function () {
+    it('может вернуть заголовки без маскировки и json-представление', function (bool $useStream): void {
         $prepared = new PreparedRequest(
             method: HttpMethod::POST,
             url: 'https://api.test/v1/resource',
@@ -60,8 +60,8 @@ describe('ExecutionResult request debug', function () {
                 'X-Api-Key' => 'my-secret-key',
                 'X-Mode' => 'raw',
             ],
-            body: '{"x":"y"}',
-            stream: Utils::streamFor('payload'),
+            body: $useStream ? null : '{"x":"y"}',
+            stream: $useStream ? Utils::streamFor('payload') : null,
         );
         $result = new ExecutionResult(
             data: null,
@@ -75,12 +75,12 @@ describe('ExecutionResult request debug', function () {
         $decoded = is_string($json) ? json_decode($json, true) : null;
 
         expect($snapshot['headers']['X-Api-Key'] ?? null)->toBe('my-secret-key')
-            ->and($snapshot['hasStream'] ?? null)->toBeTrue()
+            ->and($snapshot['hasStream'] ?? null)->toBe($useStream)
             ->and($decoded['method'] ?? null)->toBe('POST')
             ->and($decoded['headers']['X-Api-Key'] ?? null)->toBe('my-secret-key')
-            ->and($decoded['bodyRaw'] ?? null)->toBe('{"x":"y"}')
-            ->and($decoded['hasStream'] ?? null)->toBeTrue();
-    });
+            ->and($decoded['bodyRaw'] ?? null)->toBe($useStream ? null : '{"x":"y"}')
+            ->and($decoded['hasStream'] ?? null)->toBe($useStream);
+    })->with([false, true]);
 
     it('возвращает oneOf диагностику из meta prepared запроса', function () {
         $prepared = new PreparedRequest(

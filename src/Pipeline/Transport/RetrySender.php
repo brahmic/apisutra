@@ -14,6 +14,7 @@ use Brahmic\ApiSutra\Core\AbstractClient;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Http\RequestBodyGuard;
 use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
@@ -78,10 +79,12 @@ final readonly class RetrySender
         DestinationGuard::checkContext($context);
         FileTransferGuard::checkContext($context);
         DestinationGuard::checkCapability($this->transport, $context->destination);
-        FileTransferGuard::checkCapability($this->transport, $context->fileTransfer);
+        $transfer = $context->preparedRequest !== null
+            ? FileTransferGuard::options($context->preparedRequest) : $context->fileTransfer;
+        FileTransferGuard::checkCapability($this->transport, $transfer);
         if ($this->retryConfigResolver->resolve($context->request, $context->options) !== null) {
             DestinationGuard::checkCapability($this->retryHandler, $context->destination);
-            FileTransferGuard::checkCapability($this->retryHandler, $context->fileTransfer);
+            FileTransferGuard::checkCapability($this->retryHandler, $transfer);
         }
     }
 
@@ -104,6 +107,7 @@ final readonly class RetrySender
         while ($attempt <= $attempts) {
             DestinationGuard::checkContext($context);
             FileTransferGuard::checkContext($context);
+            RequestBodyGuard::check($context->preparedRequest);
             $context->budget->check('before_attempt', $lastException);
 
             try {
@@ -252,6 +256,7 @@ final readonly class RetrySender
         int $minimumDelayMs,
         bool $applyBackoff,
     ): ProviderResponse {
+        RequestBodyGuard::check($context->preparedRequest);
         if ($config === null) {
             return $this->transport->send($context->preparedRequest);
         }

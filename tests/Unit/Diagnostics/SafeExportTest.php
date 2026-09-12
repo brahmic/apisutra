@@ -58,7 +58,7 @@ it('использует политику клиента в logger и requestDeb
         ->and($transport->getRecorded()[0]->headers['X-Provider'])->toBe('fixture-secret');
 });
 
-it('recorder маскирует credentials без Fixture и не потребляет stream', function (): void {
+it('recorder маскирует credentials без Fixture и не потребляет stream', function (bool $useStream): void {
     $directory = sys_get_temp_dir() . '/apisutra-redaction-' . bin2hex(random_bytes(8));
     $stream = Utils::streamFor('prefix-file-content');
     $stream->seek(7);
@@ -66,8 +66,8 @@ it('recorder маскирует credentials без Fixture и не потреб�
         method: HttpMethod::POST,
         url: 'https://api.test/upload?access_token=fixture-secret',
         headers: ['aUtHoRiZaTiOn' => 'fixture-secret', 'Content-Type' => 'application/json'],
-        body: '{"token":"fixture-secret","nested":{"custom":"fixture-secret"}}',
-        stream: $stream,
+        body: $useStream ? null : '{"token":"fixture-secret","nested":{"custom":"fixture-secret"}}',
+        stream: $useStream ? $stream : null,
         meta: ['credentialsEnrichment' => ['secretKeys' => ['custom']]],
     );
     $transport = new MockTransport();
@@ -97,7 +97,7 @@ it('recorder маскирует credentials без Fixture и не потреб�
         }
         $stream->close();
     }
-});
+})->with([false, true]);
 
 it('client record сохраняет дополнительные правила конфигурации без Fixture', function (): void {
     $directory = sys_get_temp_dir() . '/apisutra-client-record-' . bin2hex(random_bytes(8));

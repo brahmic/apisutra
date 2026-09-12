@@ -190,6 +190,16 @@ Debug и recorder показывают метаданные потока, не �
 Даже `requestDebug(false)` не создаёт строковую копию. Для воспроизведения файлов
 используйте [ручную файловую fixture](testing.md#файловые-ответы).
 
+### Замена файлового тела в hook
+
+`withBody($json)` заменяет поток строкой, `withStream($stream)` выбирает новый поток,
+`withoutBody()` удаляет всё исходящее тело. При multipart → JSON явно задайте
+`Content-Type: application/json`. Старые Content-Length/Transfer-Encoding убираются
+автоматически, исходный поток остаётся открытым. Очистка upload не включает HTTP-кеш
+и не сбрасывает download target, назначение или общий бюджет. Поток, добавленный hook,
+требует `FileStreamingInterface` даже при исходном запросе без файла.
+Полный контракт и пример — [управление телом](transport.md#замена-и-очистка-тела-preparedrequest).
+
 ### Совместимость при обновлении
 
 - Binary находится в `PreparedRequest.stream`, `body = null`; учитывайте это

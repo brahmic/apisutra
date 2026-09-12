@@ -8,6 +8,71 @@ SDK ожидает реализацию `TransportInterface`.
 Полные и подписанные URL поддерживаются через `withUrl()` или абсолютный endpoint;
 для них и внешнего `withBaseUrl()` действует [изоляция назначения](external-urls.md).
 
+## Замена и очистка тела PreparedRequest
+
+Обычная сериализация работает автоматически; новые настройки клиента не нужны.
+Следующий API предназначен для hooks и собственных адаптеров, которые меняют уже
+подготовленное HTTP-тело. У `PreparedRequest` ровно один источник: строка `body`
+(включая `''`), поток `stream` либо отсутствие тела (оба `null`).
+
+| Операция | Результат |
+| --- | --- |
+| `withBody($text)` или `with(body: $text)` | Строка заменяет всё тело, прежний поток убирается. |
+| `withStream($stream)` или `with(stream: $stream)` | Поток заменяет всё тело, прежняя строка убирается. |
+| `withoutBody()` | Убирает строку и поток. Повторная очистка допустима. |
+| `with(body: null)` / `with(stream: null)` | Сохраняет прежнее тело; это не очистка. |
+
+Каждый метод возвращает новую копию, не читает, не перематывает и не закрывает поток.
+Одновременные ненулевые `body` и `stream` в конструкторе или `with()` вызывают
+`ConfigurationException`, в том числе для пустой строки. В pipeline сохраняется
+обычная обработка ошибок: `configuration_error` либо исключение при `throwOnErrors`.
+Некорректный запрос не отправляется; hook после auth не отменяет уже выполненную auth.
+
+При замене/очистке SDK удаляет унаследованные `Content-Length` и `Transfer-Encoding`
+без учёта регистра. Явный `headers` в том же `with()` заменяет весь массив заголовков
+и сохраняется как новый снимок. Перед HTTP SDK проверяет явную длину по известному
+размеру передаваемого тела. Неверная или дублирующаяся `Content-Length`, а также её
+сочетание с `Transfer-Encoding` дают `configuration_error`. Неизвестный размер потока
+не вычисляется чтением: за явно указанную длину отвечает вызывающий код.
+
+`Content-Type` и прикладные заголовки сохраняются. При смене формата задайте тип явно;
+SDK не угадывает MIME по содержимому. Собственные digest и подписи пересчитывает
+код, который их сформировал. Пример замены multipart на JSON:
+
+```php
+use Brahmic\ApiSutra\Contracts\Interfaces\Hooks\HookInterface;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+
+final class ReplacePayloadHook implements HookInterface
+{
+    public function handle(PipelineContext $context): ?array
+    {
+        $context->preparedRequest = $context->preparedRequest
+            ->withBody('{"mode":"metadata"}')
+            ->withHeader('Content-Type', 'application/json');
+
+        return null;
+    }
+}
+```
+
+Для полной очистки в hook используйте
+`$context->preparedRequest = $context->preparedRequest->withoutBody()`.
+URL, destination policy, auth-заголовки, transport options, общий бюджет и цель download
+сохраняются. Происхождение файловой операции и запрет её кеширования тоже сохраняются.
+
+После замены удаляется прежний снимок `meta.body`/`bodyIsRoot`. Debug показывает новую
+строку в `bodyRaw` либо `hasStream: true`, без чтения потока и восстановления структуры
+из raw-тела. При `debug: true` итоговый debug берёт запрос из полученного ответа,
+а при ошибке без ответа — из актуального контекста. Redaction действует как обычно.
+Смена тела между попытками запрещает retry с `body_changed`;
+[подробности повторов](retries-rate-limit.md).
+
+**Миграция:** `with(body: ...)` поверх потока теперь действительно отправляет строку.
+Вместо одновременных `body`/`stream` выберите один источник. Вместо попытки очистить
+через `with(...: null)` используйте `withoutBody()`. При смене формата обновляйте
+`Content-Type`; прежние framing headers автоматически удаляются.
+
 ## Потоковые файлы
 
 Штатный транспорт автоматически поддерживает binary/multipart upload и `#[Download]`

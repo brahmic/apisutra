@@ -81,7 +81,7 @@ describe('ExecutionResultBuilder', function () {
 
         expect($result->status)->toBe(ResultStatus::SUCCESS);
         expect($result->debug)->not->toBeNull();
-        expect($result->debug?->preparedRequest)->toBe($prepared);
+        expect($result->debug?->preparedRequest)->toBe($context->response->request);
         expect($result->debug?->response)->toBe($context->response);
     });
 

@@ -121,3 +121,29 @@ it('применяет backoff только между основными поп
         ->and($scenario->sleeper->calls)->toBe(2)
         ->and($scenario->sleeper->totalMs)->toBe($expectedMs);
 })->with([[BackoffStrategy::Constant, 20], [BackoffStrategy::Linear, 30], [BackoffStrategy::Exponential, 30]]);
+
+it('замена строки или очистка тела после ответа запрещает второй HTTP', function (string $operation, int $status): void {
+    $scenario = new RetryScenario(
+        new ClientConfig(baseUrl: 'https://fixture.test', retry: new RetryConfig(attempts: 3), authRetryAttempts: 1),
+        new RetryPolicyRequest(),
+        new PreparedRequest(HttpMethod::GET, 'https://fixture.test', stream: Utils::streamFor('original')),
+        [new Response($status, [], 'original failure')],
+    );
+    $scenario->hooks->on(Hook::AfterResponse, new class ($operation) implements HookInterface {
+        public function __construct(private string $operation)
+        {
+        }
+
+        public function handle(PipelineContext $context): ?array
+        {
+            $context->preparedRequest = $this->operation === 'clear'
+                ? $context->preparedRequest->withoutBody()
+                : $context->preparedRequest->withBody('replacement');
+            return null;
+        }
+    });
+    expect($scenario->run()->body)->toBe('original failure')
+        ->and($scenario->http->bodies)->toBe(['original'])
+        ->and($scenario->context->retryRefusalReason)->toBe('body_changed')
+        ->and($scenario->sleeper->calls)->toBe(0);
+})->with(['clear', 'replace'])->with([503, 401]);

@@ -9,6 +9,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
 use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Http\RequestBodyGuard;
 use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
@@ -77,6 +78,7 @@ final class RetryHandler implements RetryHandlerInterface, DestinationAwareInter
 
         DestinationGuard::checkContext($context);
         FileTransferGuard::checkContext($context);
+        RequestBodyGuard::check($request);
         DestinationGuard::checkRequest($request);
         DestinationGuard::checkCapability($this, $request->destination);
         FileTransferGuard::checkCapability($this, FileTransferGuard::options($request));
