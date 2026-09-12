@@ -11,10 +11,11 @@ class RateLimitException extends ClientException
 {
     public function __construct(
         string $message,
-        ProviderResponse $response,
+        ?ProviderResponse $response,
         public readonly ?int $retryAfter = null,
         int $code = 0,
         ?SdkException $previous = null,
+        public readonly ?ProviderResponse $lastResponse = null,
     ) {
         parent::__construct($message, $response, $code, $previous);
     }

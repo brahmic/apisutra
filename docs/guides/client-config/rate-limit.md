@@ -1,31 +1,129 @@
 # Rate Limit
 
-Настройка rate‑limit через `RateLimitConfig`.
+Лимитер ограничивает частоту отправки HTTP-запросов. По умолчанию он отключён
+(`ClientConfig::rateLimit = null`). Для включения достаточно `RateLimitConfig`:
 
-## Базовая настройка
 ```php
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RateLimitConfig;
-use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 
 $config = new ClientConfig(
     baseUrl: 'https://api.example',
-    rateLimit: new RateLimitConfig(
-        limit: 10,
-        period: 60,
-        behavior: RateLimitBehavior::Wait,
-    ),
+    rateLimit: new RateLimitConfig(),
 );
 ```
 
+Это 100 запросов за 60 секунд с ожиданием свободного места. Префикс, ключ,
+хранилище и дополнительные пакеты не нужны. Лимит внешнего API SDK не определяет
+автоматически: при необходимости укажите его `limit` и `period`.
+
+## Параметры
+
+| Параметр | По умолчанию | Назначение |
+| --- | --- | --- |
+| `limit` | `100` | Положительное число разрешённых отправок за окно |
+| `period` | `60` | Положительная длительность окна в секундах |
+| `behavior` | `RateLimitBehavior::Wait` | Ожидание или немедленный локальный отказ |
+| `store` | `null` | Необязательный `Psr\SimpleCache\CacheInterface` |
+| `key` | `null` | Необязательный ключ группы лимита; иначе используется baseUrl |
+
+Период должен быть представим в микросекундах штатного sleeper
+(`period <= intdiv(PHP_INT_MAX, 1_000_000)`), а конец окна — в целочисленном времени. Нулевые, отрицательные и чрезмерные значения дают `ConfigurationException`
+при создании конфига или до отправки запроса при применении атрибута.
+
 ## Переопределение на запросе
-`#[RateLimit]` или runtime‑опции `withRateLimit()/withoutRateLimit()`.
+
+Для `AbstractRequest` приоритет: runtime-опции вызова → настройки экземпляра запроса →
+`#[RateLimit]` → конфигурация клиента. При отсутствии собственного store переопределение
+использует store клиента. `withRateLimit()` задаёт параметры, `withoutRateLimit()`
+отключает лимитер для вызова; нулевой limit не служит выключателем.
 
 ## Ключ и store
-- `RateLimitConfig::key` позволяет задать собственный ключ лимита.
-- без ключа используется `baseUrl`, чтобы лимитировать на уровне провайдера.
-- `store` (PSR‑16) делает лимит межпроцессным; без store лимит локальный.
 
-## Поведение
-- `RateLimitBehavior::Wait` — ждать до конца окна
-- `RateLimitBehavior::Throw` — бросать `RateLimitException`
+Без store счётчик хранится в памяти экземпляра лимитера клиента. Создание другого
+клиента создаёт независимый счётчик. Автоматического объединения клиентов нет.
+
+Если нужно использовать существующее PSR-16 хранилище, передайте его явно:
+
+```php
+use Brahmic\ApiSutra\Config\RateLimitConfig;
+
+// $store — уже настроенное приложением PSR-16 хранилище.
+$config = $config->with(rateLimit: new RateLimitConfig(limit: 10, period: 60, store: $store));
+```
+
+Store позволяет обмениваться счётчиком между клиентами/процессами, однако обычные
+get/set **не обеспечивают атомарность**: конкурентные процессы могут превысить квоту.
+Передача store не превращает лимитер в строгий распределённый ограничитель.
+
+Ключ группы — `key ?? baseUrl`. Одинаковый custom key в одном store объединяет лимит,
+в том числе для разных baseUrl. Credentials и класс SDK не создают отдельных групп.
+Если требуются независимые квоты, задайте разные ключи по правилам вашей интеграции.
+SDK автоматически кодирует ключ в переносимый PSR-16 формат; пользовательский префикс
+не требуется. При прямом вызове `RateLimiter::acquire()` вызывающий код передаёт готовый
+ключ, совместимый со своим store.
+
+## Ожидание, отказ и ошибки
+
+`RateLimitBehavior::Wait` ждёт окончания окна и повторно проверяет квоту. Если место
+занял другой участник, ожидание повторяется. Заданный общий бюджет выполнения ограничивает
+ожидание: если оно не помещается в остаток, возвращается `timeout` без sleep и нового HTTP.
+Без общего бюджета дополнительный предел ожидания не вводится. Ожидание блокирует
+текущий поток, в том числе при использовании текущего promise API.
+
+`RateLimitBehavior::Throw` даёт локальный `RateLimitException`. По обычному result-first
+контракту исключение попадает в результат; `throwOnErrors` или `dataOrFail()` выбрасывают его.
+
+| Причина остановки | SDK code | Context |
+| --- | --- | --- |
+| Локальная квота исчерпана | `rate_limited` | `reason=local_rate_limit_exceeded`, `stage=rate_limit`, `retryAfter` в секундах |
+| Чтение/запись store не удались, включая set=false | `execution_error` | `reason=rate_limit_backend_error`, `stage=rate_limit_store` |
+| Ожидание не помещается в общий бюджет | `timeout` | `reason=execution_deadline_exceeded`, `stage=rate_limit_wait` |
+
+Локальный отказ и ошибка backend не запускают HTTP retry, даже при
+`retryExceptions: [Throwable::class]`. При сбое store SDK останавливает отправку;
+скрытого переключения на память или повтора неподтверждённой записи нет.
+
+```php
+use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
+use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
+
+$result = $request->withRateLimit(10, 60, RateLimitBehavior::Throw)->send()->raw();
+$error = $result->errors->first();
+if ($error?->code === ErrorCode::RateLimited
+    && ($error->context['reason'] ?? null) === 'local_rate_limit_exceeded') {
+    $retryAfterSeconds = $error->context['retryAfter'];
+    // Приложение решает, когда выполнить следующую операцию.
+}
+```
+
+Если HTTP ещё не было, `result.response` и `error.response` равны null: искусственный
+429 не создаётся. Если локальный отказ остановил повтор после HTTP-ошибки, результат
+сохраняет последний фактический ответ; его httpStatus описывает предыдущую попытку,
+а reason — локальную причину остановки. Реальный HTTP 429 сохраняет собственный ответ
+и обычную [политику retry/Retry-After](../retries-rate-limit.md).
+
+`RateLimitException::response` равен null для локальной квоты; `retryAfter` содержит
+целое неотрицательное число секунд. Отдельный `lastResponse` хранит предыдущий ответ,
+если он был. `RateLimitBackendException` из `Exceptions\RateLimiting` также предоставляет
+lastResponse, а исходное исключение store — через `getPrevious()` для ручного разбора.
+Сообщение backend не включается в автоматические сообщения и логи SDK.
+
+SDK не создаёт очередь заданий и не управляет worker. Отложенная обработка операций
+остаётся ответственностью приложения.
+
+## Миграция
+
+- `RequestException::$response` теперь имеет тип `?ProviderResponse`. Проверьте наличие
+  ответа в обработчиках RateLimitException, ClientException и RequestException перед
+  чтением status. Пользовательские наследники, повторно объявляющие свойство response,
+  должны согласовать его тип с базовым. Иерархия catch и существующие аргументы
+  конструкторов сохранены; RateLimitException получил необязательный lastResponse.
+- Локальный отказ определяйте по SDK-коду/reason/retryAfter, а не по искусственному 429.
+- Ошибка store теперь останавливает отправку; set=false больше не игнорируется.
+- Нулевые/отрицательные и непредставимые параметры отклоняются. Используйте
+  withoutRateLimit или отсутствие конфигурации для отключения.
+- После пробуждения ожидание может продолжиться, если окно занял другой участник.
+- Формат физических ключей изменился. При обновлении возможен однократный сброс
+  накопленной квоты; смешанные версии могут вести отдельные счётчики. Старые записи
+  остаются до штатного TTL. Массовая очистка store и новый адаптер не требуются.

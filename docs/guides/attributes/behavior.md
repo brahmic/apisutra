@@ -77,6 +77,10 @@ final class TimeoutRequest extends AbstractRequest {}
 [Timeouts & Delay](../client-config/timeouts-delay.md).
 
 ## RateLimit
+
+`limit` и `period` должны быть положительными; ошибки параметров останавливают
+отправку. [Полный контракт и defaults](../client-config/rate-limit.md).
+
 **Параметры:**  
 - `limit: int`  
 - `period: int`  

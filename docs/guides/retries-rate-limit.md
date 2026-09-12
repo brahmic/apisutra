@@ -134,13 +134,18 @@ $config = $config->with(rateLimit: new RateLimitConfig(
 ## Rate Limit для конкретного запроса
 ```php
 use Brahmic\ApiSutra\Attributes\Behavior\RateLimit;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 
 #[RateLimit(limit: 10, period: 1, behavior: RateLimitBehavior::Throw)]
 final class Search extends AbstractRequest {}
 ```
 
 Runtime‑override: `withRateLimit()` и `withoutRateLimit()`.  
-Для межпроцессного лимита задайте `RateLimitConfig::store` (PSR‑16).
+Необязательный `RateLimitConfig::store` позволяет обмениваться счётчиком через PSR-16,
+но не гарантирует строгую квоту между конкурентными процессами. Без store счётчик
+принадлежит экземпляру клиента. Defaults, локальные отказы и миграция описаны
+в [контракте rate-limit](client-config/rate-limit.md).
 
 ### Ключ лимита
 По умолчанию ключ строится из `baseUrl`. Можно переопределить через `RateLimitConfig::key`

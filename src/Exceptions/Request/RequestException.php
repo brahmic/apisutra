@@ -11,7 +11,7 @@ class RequestException extends SdkException
 {
     public function __construct(
         string $message,
-        public readonly ProviderResponse $response,
+        public readonly ?ProviderResponse $response,
         int $code = 0,
         ?SdkException $previous = null,
     ) {

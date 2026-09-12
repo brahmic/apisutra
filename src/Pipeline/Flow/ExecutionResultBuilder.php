@@ -18,6 +18,8 @@ use Brahmic\ApiSutra\Exceptions\ControlFlow\EarlyReturnException;
 use Brahmic\ApiSutra\Exceptions\Core\SdkException;
 use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
 use Brahmic\ApiSutra\Exceptions\Files\FileTransferException;
+use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
+use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
 use Brahmic\ApiSutra\Exceptions\Request\RequestException;
 use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
@@ -235,9 +237,15 @@ final readonly class ExecutionResultBuilder
         if ($exception instanceof ExecutionDeadlineException) {
             $code = ErrorCode::Timeout;
             $response = $context->response ?? $context->lastResponse ?? $exception->response;
+        } elseif ($exception instanceof RateLimitException && $exception->response === null) {
+            $response = $context->response ?? $context->lastResponse ?? $exception->lastResponse;
+            $code = ErrorCode::RateLimited;
+        } elseif ($exception instanceof RateLimitBackendException) {
+            $response = $context->response ?? $context->lastResponse ?? $exception->lastResponse;
+            $code = ErrorCode::ExecutionError;
         } elseif ($exception instanceof RequestException) {
             $response = $exception->response;
-            $code = ErrorCode::fromHttpStatus($response->status);
+            $code = $response === null ? ErrorCode::ExecutionError : ErrorCode::fromHttpStatus($response->status);
         } elseif ($exception instanceof ConfigurationException) {
             $code = ErrorCode::ConfigurationError;
         }
@@ -249,6 +257,12 @@ final readonly class ExecutionResultBuilder
             context: $context,
             response: $response,
             overrideContext: match (true) {
+                $exception instanceof RateLimitException && $exception->response === null => [
+                    'reason' => 'local_rate_limit_exceeded', 'stage' => 'rate_limit', 'retryAfter' => $exception->retryAfter,
+                ],
+                $exception instanceof RateLimitBackendException => [
+                    'reason' => 'rate_limit_backend_error', 'stage' => 'rate_limit_store',
+                ],
                 $exception instanceof ExecutionDeadlineException => array_filter([
                     'reason' => 'execution_deadline_exceeded', 'stage' => $exception->stage,
                     'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial,

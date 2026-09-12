@@ -17,8 +17,7 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 describe('Rate limit key', function () {
     function buildRateLimitKey(string $rawKey): string
     {
-        $algo = in_array('xxh3', hash_algos(), true) ? 'xxh3' : 'sha256';
-        return 'rate:' . hash($algo, $rawKey);
+        return hash('sha256', 'apisutra.rate-limit.v2:' . $rawKey);
     }
 
     it('стабилен для одного baseUrl', function () {

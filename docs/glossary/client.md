@@ -28,7 +28,8 @@ VO конфигурации кеширования. Параметры: store (P
 Enum режима кеша. Значения: Enabled, Disabled, ReadOnly, WriteOnly. Управляет чтением/записью кеша.
 
 ## RateLimitConfig
-VO конфигурации rate‑limit. Параметры: limit, period, behavior (RateLimitBehavior), store (PSR-16 для распределённых лимитов). Группирует настройки throttling.
+VO конфигурации rate‑limit. Параметры: limit, period, behavior (RateLimitBehavior), store (необязательный PSR-16 счётчик без гарантии атомарности).
+[Область счётчика и настройки](../guides/client-config/rate-limit.md).
 
 ## BackoffStrategy
 Namespace: `Brahmic\ApiSutra\Enums\RateLimiting\BackoffStrategy`.

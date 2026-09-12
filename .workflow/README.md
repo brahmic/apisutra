@@ -102,6 +102,9 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Исправление существующего rate limiter](completed/pln-016-rate-limit-correctness.md)
+- [Общая координация лимитов — до востребования](backlog/pln-015-shared-rate-limit-coordination.md)
+- [Проверка rate limiting и решения](audit/aud-002-rate-limit-contracts/aud-002-readme.md)
 - [Валидация в контексте клиента](completed/pln-014-client-validation-context/pln-014-readme.md)
 - [Контракты полей DTO, строгий JsonCast и безопасные ошибки](completed/pln-013-dto-hydration-contracts/pln-013-readme.md)
 - [Строгий Returns::unwrap и сохранение больших целых](completed/pln-012-strict-unwrap-big-integers/pln-012-readme.md)

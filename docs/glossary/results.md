@@ -134,13 +134,14 @@ Extends ControlFlowException. Позволяет прервать выполне
 Extends SdkException. Ошибки сети: DNS, таймаут соединения, недоступность хоста.
 
 ### RequestException
-Extends SdkException. Базовый класс HTTP-ошибок. Содержит ProviderResponse.
+Extends SdkException. Базовый класс ошибок запроса. Содержит nullable ProviderResponse: при локальном
+rate-limit HTTP-ответ отсутствует. См. [контракт](../guides/client-config/rate-limit.md).
 
 ### ApiException
 Общий базовый класс ошибок API провайдера в конкретном SDK. Используется для доменных исключений, которые не сводятся напрямую к HTTP коду.
 
 ### ClientException
-Extends RequestException. Ошибки клиента (4xx). Подклассы: UnauthorizedException (401), PaymentRequiredException (402), ForbiddenException (403), NotFoundException (404), RequestTimeoutException (408), UnprocessableEntityException (422), RateLimitException (429).
+Extends RequestException. Ошибки клиента (4xx). Подклассы: UnauthorizedException (401), PaymentRequiredException (402), ForbiddenException (403), NotFoundException (404), RequestTimeoutException (408), UnprocessableEntityException (422), RateLimitException (HTTP 429 или локальное исчерпание квоты).
 
 ### ValidationException
 Extends SdkException. Локальная валидация DTO/Request (не HTTP). Выбрасывается методом validate() при ошибках. Свойство: errors (array). Для интеграции с Laravel ValidationException — преобразуйте в Exception Handler.

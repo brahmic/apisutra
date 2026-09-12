@@ -127,6 +127,19 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 Для успешных запросов с oneOf в `requestDebug()` дополнительно доступен блок `oneOf`
 с краткой диагностикой выбранного варианта.
 
+## Локальный rate-limit и HTTP 429
+
+Локальная квота даёт `rate_limited` с `reason=local_rate_limit_exceeded` и `retryAfter`
+в секундах. Если HTTP ещё не было, response равен null. Сбой store даёт `execution_error`
+с `reason=rate_limit_backend_error`. Обе причины останавливают HTTP retry. Реальный
+ответ 429 сохраняет прежнюю HTTP-обработку. Подробный [контракт и примеры](client-config/rate-limit.md#ожидание-отказ-и-ошибки).
+
+`RequestException::$response` имеет тип `?ProviderResponse`, поэтому обработчики
+всей этой иерархии должны проверять наличие ответа. `catch (RateLimitException)`
+и retryAfter сохранены. При локальном отказе после предыдущей HTTP-попытки её ответ
+доступен в результате и в exception.lastResponse; exception.response остаётся null.
+[Изменения совместимости](client-config/rate-limit.md#миграция).
+
 ## throwOnErrors
 Если `ClientConfig::throwOnErrors = true`:
 - sync‑вызовы бросают исключение

@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+// Запуск: php tests/Support/standalone-rate-limit-smoke.php /path/to/no-dev-checkout
+use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Config\RateLimitConfig;
+use Brahmic\ApiSutra\Config\RetryConfig;
+use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
+use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
+use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
+use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
+use Brahmic\ApiSutra\Tests\Stubs\Core\SequenceHttpClient;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\RetryPolicyRequest;
+use Brahmic\ApiSutra\Tests\Stubs\TestClient;
+use Brahmic\ApiSutra\Tests\Support\StrictCache;
+use Brahmic\ApiSutra\Tests\Support\VirtualClock;
+use Brahmic\ApiSutra\Transport\HttpTransport;
+use GuzzleHttp\Psr7\HttpFactory;
+use GuzzleHttp\Psr7\Response;
+
+$checkout = $argv[1] ?? '';
+if (!is_file($checkout . '/vendor/autoload.php')) {
+    throw new RuntimeException('Укажите checkout с установленными --no-dev зависимостями');
+}
+require $checkout . '/vendor/autoload.php';
+foreach (['Core/SequenceHttpClient', 'Requests/RetryPolicyRequest', 'TestClient'] as $stub) {
+    require __DIR__ . '/../Stubs/' . $stub . '.php';
+}
+foreach (['ArrayCache', 'StrictCache', 'VirtualClock'] as $support) {
+    require __DIR__ . '/' . $support . '.php';
+}
+if (class_exists('Illuminate\Container\Container') || class_exists('GuzzleHttp\Client')) {
+    throw new RuntimeException('В проверяемом checkout присутствуют dev-зависимости');
+}
+$factory = new HttpFactory();
+$http = new SequenceHttpClient([new Response(200, [], '{}')]);
+$clock = new VirtualClock();
+$store = new StrictCache();
+$client = new TestClient(new ClientConfig(
+    baseUrl: 'https://fixture.test',
+    rateLimit: new RateLimitConfig(limit: 1, behavior: RateLimitBehavior::Throw, store: $store),
+    retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryExceptions: [Throwable::class]),
+), new HttpTransport($http, $factory, $factory), $clock, $clock);
+if (!$client->send(new RetryPolicyRequest())->raw()->isSuccess()) {
+    throw new RuntimeException('Первый запрос должен пройти через строгий store');
+}
+$result = $client->sendAsync(new RetryPolicyRequest())->raw();
+if (!$result->exception instanceof RateLimitException || $result->response !== null
+    || $result->errors->first()?->code !== ErrorCode::RateLimited
+    || ($result->errors->first()?->context['retryAfter'] ?? null) !== 60 || $http->calls !== 1) {
+    throw new RuntimeException('Нарушен контракт локального отказа');
+}
+$store->clear();
+$store->failWrites = true;
+$result = $client->send(new RetryPolicyRequest())->raw();
+if (!$result->exception instanceof RateLimitBackendException || $result->response !== null
+    || $result->errors->first()?->code !== ErrorCode::ExecutionError || $http->calls !== 1 || $clock->waits !== []) {
+    throw new RuntimeException('Сбой store должен остановить отправку без retry');
+}
+echo "Standalone rate-limit: строгий PSR-16 store, локальный отказ и ошибка записи работают без Laravel/Guzzle HTTP Client.\n";

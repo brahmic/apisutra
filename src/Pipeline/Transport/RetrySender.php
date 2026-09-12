@@ -18,6 +18,8 @@ use Brahmic\ApiSutra\Http\RequestBodyGuard;
 use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
+use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
+use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
 use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
 use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
@@ -204,6 +206,16 @@ final readonly class RetrySender
             } catch (ControlFlowException $exception) {
                 throw $exception;
             } catch (Throwable $exception) {
+                // Локальный отказ не является HTTP-попыткой и не допускает слепого повтора записи.
+                if ($exception instanceof RateLimitBackendException) {
+                    throw new RateLimitBackendException($exception->getPrevious(), $context->response ?? $context->lastResponse);
+                }
+                if ($exception instanceof RateLimitException && $exception->response === null) {
+                    throw new RateLimitException(
+                        $exception->getMessage(), null, $exception->retryAfter, $exception->getCode(),
+                        $exception, $context->response ?? $context->lastResponse,
+                    );
+                }
                 $lastException = $exception;
                 if ($context->failureCode !== ErrorCode::HookError && $retryConfig !== null && $this->retryDecisionMaker->isRetryException($exception, $retryConfig) && $attempt < $attempts) {
                     if (!$this->prepareRepeat($request, $context, $bodyReplay)) {

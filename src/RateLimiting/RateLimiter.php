@@ -7,15 +7,15 @@ namespace Brahmic\ApiSutra\RateLimiting;
 use Brahmic\ApiSutra\Config\RateLimitConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
-use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
 use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
-use Brahmic\ApiSutra\VO\Http\PreparedRequest;
-use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Psr\SimpleCache\CacheInterface;
+use Throwable;
 
 /**
  * Лимитер запросов с in-memory и/или PSR-16 хранилищем.
@@ -24,7 +24,7 @@ use Psr\SimpleCache\CacheInterface;
  * - Без внешнего store лимиты хранятся в памяти экземпляра (per-client).
  * - Ключ лимита формируется снаружи и должен включать нужный scope (например, baseUrl/endpoint).
  * - Не следует хешировать параметры запроса по умолчанию, чтобы не размазывать лимиты.
- * - При использовании store лимиты могут быть общими между процессами.
+ * - Store позволяет обмениваться счётчиком; get/set не обеспечивают атомарную квоту.
  */
 final class RateLimiter
 {
@@ -44,20 +44,21 @@ final class RateLimiter
     public function acquire(RateLimitConfig $config, string $key, ?ExecutionBudget $budget = null): void
     {
         $budget ??= new ExecutionBudget($this->clock);
-        $budget->check('rate_limit');
         $store = $config->store;
-        $now = $budget->clock->unixTime();
 
-        $data = $this->loadState($store, $key, $config->period, $now);
-        $budget->check('rate_limit_store');
-        if ($this->consumeIfAvailable($store, $key, $data, $config->limit, $config->period)) {
-            return;
+        while (true) {
+            $budget->check('rate_limit');
+            $now = $budget->clock->unixTime();
+            $data = $this->loadState($store, $key, $config->period, $now);
+            $budget->check('rate_limit_store');
+            if ($this->consumeIfAvailable($store, $key, $data, $config->limit, $config->period)) {
+                $budget->check('rate_limit_store');
+                return;
+            }
+
+            // После ожидания другой участник уже мог занять новое окно.
+            $this->handleLimitExceeded($config, $data, $now, $budget);
         }
-
-        $this->handleLimitExceeded($config, $data, $now, $budget);
-        $data = $this->startNewWindow($config->period, $budget->clock->unixTime());
-        $data['count'] = 1;
-        $this->store($store, $key, $data, $config->period);
     }
 
     /**
@@ -67,8 +68,11 @@ final class RateLimiter
      */
     private function loadState(?CacheInterface $store, string $key, int $period, int $now): array
     {
-        // Загружаем состояние из store или из локальной памяти
-        $data = $store?->get($key) ?? $this->memory[$key] ?? null;
+        try {
+            $data = $store !== null ? $store->get($key) : ($this->memory[$key] ?? null);
+        } catch (Throwable $exception) {
+            throw new RateLimitBackendException($exception);
+        }
         if (!is_array($data) || ($data['reset'] ?? 0) <= $now) {
             return $this->startNewWindow($period, $now);
         }
@@ -108,6 +112,9 @@ final class RateLimiter
 
         $sleepFor = max(0, $data['reset'] - $now);
         if ($sleepFor > 0) {
+            if ($sleepFor > intdiv(PHP_INT_MAX, 1_000_000)) {
+                throw new ConfigurationException('Ожидание rate-limit должно быть представимым в микросекундах штатного sleeper');
+            }
             // Ожидание следующего окна лимита
             $budget->wait($sleepFor * 1000, $this->sleeper, 'rate_limit_wait');
         }
@@ -122,11 +129,8 @@ final class RateLimiter
     {
         return new RateLimitException(
             'Превышен лимит запросов',
-            new ProviderResponse(429, [], '', new PreparedRequest(
-                method: HttpMethod::GET,
-                url: '',
-            ), 0),
-            $data['reset'] - $now,
+            null,
+            max(0, $data['reset'] - $now),
         );
     }
 
@@ -137,7 +141,9 @@ final class RateLimiter
      */
     private function startNewWindow(int $period, int $now): array
     {
-        // Новое окно лимита
+        if ($now > PHP_INT_MAX - $period) {
+            throw new ConfigurationException('RateLimitConfig::period должен позволять вычислить конец окна без переполнения');
+        }
         return ['count' => 0, 'reset' => $now + $period];
     }
 
@@ -149,7 +155,14 @@ final class RateLimiter
     private function store(?CacheInterface $store, string $key, array $data, int $ttl): void
     {
         if ($store !== null) {
-            $store->set($key, $data, $ttl);
+            try {
+                $saved = $store->set($key, $data, $ttl);
+            } catch (Throwable $exception) {
+                throw new RateLimitBackendException($exception);
+            }
+            if (!$saved) {
+                throw new RateLimitBackendException();
+            }
             return;
         }
 

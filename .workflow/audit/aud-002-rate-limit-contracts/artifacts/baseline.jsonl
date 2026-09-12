@@ -1,0 +1,10 @@
+{"case":"strict_store_key","results":[{"success":false,"code":"execution_error","response_status":null,"response_url":null,"retry_after_exception":null,"retry_after_context":null}],"http_calls":0}
+{"case":"new_client_resets_local_limit","results":[{"success":true,"code":null,"response_status":200,"response_url":"https:\/\/fixture.test\/items","retry_after_exception":null,"retry_after_context":null},{"success":true,"code":null,"response_status":200,"response_url":"https:\/\/fixture.test\/items","retry_after_exception":null,"retry_after_context":null}],"http_calls":2}
+{"case":"same_url_distinct_credentials","results":[{"success":true,"code":null,"response_status":200,"response_url":"https:\/\/fixture.test\/items","retry_after_exception":null,"retry_after_context":null},{"success":false,"code":"rate_limited","response_status":429,"response_url":"","retry_after_exception":60,"retry_after_context":null}],"http_calls":1}
+{"case":"custom_key_across_urls","results":[{"success":true,"code":null,"response_status":200,"response_url":"https:\/\/first.fixture.test\/items","retry_after_exception":null,"retry_after_context":null},{"success":false,"code":"rate_limited","response_status":429,"response_url":"","retry_after_exception":60,"retry_after_context":null}],"http_calls":1}
+{"case":"failed_store_writes","allowed":2,"stored":null}
+{"case":"wake_overwrites_consumed_window","allowed_in_new_window":2,"stored_count":1,"waits_ms":[1000]}
+{"case":"zero_limit","accepted":true,"allowed":2,"waits_ms":[60000,60000]}
+{"case":"zero_period","accepted":true,"allowed":2,"waits_ms":[]}
+{"case":"negative_period","accepted":true,"allowed":2,"waits_ms":[]}
+{"case":"deadline_control","blocked":true,"exception":"Brahmic\\ApiSutra\\Exceptions\\Transport\\ExecutionDeadlineException","waits_ms":[]}

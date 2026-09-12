@@ -10,6 +10,8 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
+use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
 use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
 use Brahmic\ApiSutra\Result\ExecutionResult;
@@ -25,15 +27,25 @@ final readonly class ExecutionErrorFactory
             ? $request->getRequest()::class
             : $request::class;
         $traceId = SystemErrorContextBuilder::resolveTraceId($request);
+        $localRateLimit = $exception instanceof RateLimitException && $exception->response === null;
+        $response = match (true) {
+            $exception instanceof ExecutionDeadlineException => $exception->response,
+            $localRateLimit, $exception instanceof RateLimitBackendException => $exception->lastResponse,
+            default => null,
+        };
         $contextData = SystemErrorContextBuilder::build(
             traceId: $traceId,
-            httpStatus: $exception instanceof ExecutionDeadlineException ? $exception->response?->status : null,
+            httpStatus: $response?->status,
             requestClass: $requestClass,
         );
 
         if ($exception instanceof ExecutionDeadlineException) {
             $contextData['reason'] = 'execution_deadline_exceeded';
             $contextData['stage'] = $exception->stage;
+        } elseif ($localRateLimit) {
+            $contextData += ['reason' => 'local_rate_limit_exceeded', 'stage' => 'rate_limit', 'retryAfter' => $exception->retryAfter];
+        } elseif ($exception instanceof RateLimitBackendException) {
+            $contextData += ['reason' => 'rate_limit_backend_error', 'stage' => 'rate_limit_store'];
         }
 
         return new ExecutionResult(
@@ -42,6 +54,8 @@ final readonly class ExecutionErrorFactory
             errors: new ErrorCollection([
                 new RequestError(
                     code: match (true) {
+                        $localRateLimit => ErrorCode::RateLimited,
+                        $exception instanceof RateLimitBackendException => ErrorCode::ExecutionError,
                         $exception instanceof TimeoutException => ErrorCode::Timeout,
                         $exception instanceof ConfigurationException => ErrorCode::ConfigurationError,
                         default => ErrorCode::ConnectionFailed,
@@ -49,12 +63,12 @@ final readonly class ExecutionErrorFactory
                     message: $exception->getMessage(),
                     context: $contextData,
                     requestClass: $requestClass,
-                    response: $exception instanceof ExecutionDeadlineException ? $exception->response : null,
+                    response: $response,
                 ),
             ]),
             requestClass: $requestClass,
             exception: $exception,
-            response: $exception instanceof ExecutionDeadlineException ? $exception->response : null,
+            response: $response,
         );
     }
 

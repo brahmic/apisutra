@@ -85,8 +85,6 @@ final readonly class RateLimitApplier
     {
         // Ключ задаётся по приоритету: override → атрибут → baseUrl (default).
         $rawKey = $config->key ?? $context->config->baseUrl;
-        $algo = in_array('xxh3', hash_algos(), true) ? 'xxh3' : 'sha256';
-
-        return 'rate:' . hash($algo, $rawKey);
+        return hash('sha256', 'apisutra.rate-limit.v2:' . $rawKey);
     }
 }
