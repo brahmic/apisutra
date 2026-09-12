@@ -40,6 +40,7 @@ use Brahmic\ApiSutra\Transport\TransportExceptionNormalizer;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
+use Brahmic\ApiSutra\Exceptions\Testing\RecordingException;
 use Throwable;
 
 final readonly class RetrySender
@@ -125,6 +126,10 @@ final readonly class RetrySender
                 try {
                     $response = $this->sendAttempt($context, $retryConfig, $attempt, $minimumDelayMs, $applyBackoff);
                 } catch (Throwable $exception) {
+                    if ($exception instanceof RecordingException) {
+                        $context->response = $exception->response;
+                        $context->lastResponse = $exception->response;
+                    }
                     if (!$exception instanceof ExecutionDeadlineException) {
                         $context->budget->check('http', $exception);
                     }
@@ -204,7 +209,7 @@ final readonly class RetrySender
             } catch (ControlFlowException $exception) {
                 throw $exception;
             } catch (Throwable $exception) {
-                if ($exception instanceof AuthRefreshFailedException) {
+                if ($exception instanceof AuthRefreshFailedException || $exception instanceof RecordingException) {
                     throw $exception;
                 }
                 // Локальный отказ не является HTTP-попыткой и не допускает слепого повтора записи.

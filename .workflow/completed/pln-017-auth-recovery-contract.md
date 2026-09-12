@@ -90,7 +90,7 @@
 2. Реализовать результат восстановления и корректный executing-client context.
 3. Переработать решение о повторе и доставку ошибки refresh; синхронизировать
    ExecutionResultBuilder и обёртки. Общая коррекция классификации batch принадлежит
-   [pln-019](../current/pln-019-contract-regressions-diagnostics.md), но собственные новые ошибки
+   [pln-019](pln-019-contract-regressions-diagnostics.md), но собственные новые ошибки
    этого плана должны правильно работать сразу.
 4. Проверить матрицу: auth отсутствует, NoAuth, фиксированные Bearer/API key,
    TokenAuthenticator с/без refresh, пользовательский существующий authenticator,

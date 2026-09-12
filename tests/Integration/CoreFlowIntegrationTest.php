@@ -2,10 +2,16 @@
 
 declare(strict_types=1);
 
+use Brahmic\ApiSutra\Enums\Http\HttpMethod;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\ContractFlowRequest;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\PolymorphicOwnerPersonDto;
+use Brahmic\ApiSutra\Tests\Support\SpyCache;
+use Brahmic\ApiSutra\Tests\Support\FailingRateLimitStore;
 use Acme\Discovery\FlowClient;
 use Acme\Discovery\Requests\DiscoveryDtoRequest;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RetryConfig;
+use Brahmic\ApiSutra\Config\RateLimitConfig;
 use Brahmic\ApiSutra\Enums\Configuration\Environment;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\RateLimiting\BackoffStrategy;
@@ -149,4 +155,40 @@ describe('Core flow integration', function () {
         expect($result->items())->toBe([1, 2]);
         expect($transport->getRecorded())->toHaveCount(2);
     });
+});
+
+it('пять HTTP методов проходят path query header body и readonly Nested mapping без провайдера', function (HttpMethod $method): void {
+    $transport = new MockTransport();
+    $transport->fake(['*' => MockResponse::success([
+        'is_active' => false, 'count' => 0, 'note' => null,
+        'group' => ['owners' => [['person' => ['name' => 'fixture']]]],
+    ])]);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test'), $transport);
+    $handle = $client->send(new ContractFlowRequest($method));
+    $dto = $handle->dataOrFail();
+    $sent = $transport->getRecorded()[0];
+    expect($sent->method)->toBe($method)->and($sent->url)->toContain('/items/a%2Fb?offset=0')
+        ->and($sent->headers['X-Fixture'])->toBe('fixture')
+        ->and($dto->active)->toBeFalse()->and($dto->count)->toBe(0)
+        ->and($dto->note)->toBeNull()->and($dto->missing)->toBe('default')
+        ->and($dto->group->owners[0])->toBeInstanceOf(PolymorphicOwnerPersonDto::class)
+        ->and($dto->group->owners[0]->name)->toBe('fixture');
+    if (in_array($method, [HttpMethod::POST, HttpMethod::PUT, HttpMethod::PATCH], true)) {
+        expect(json_decode($sent->body, true, flags: JSON_THROW_ON_ERROR)['enabled'])->toBeFalse();
+    }
+})->with([HttpMethod::GET, HttpMethod::POST, HttpMethod::PUT, HttpMethod::PATCH, HttpMethod::DELETE]);
+
+it('withCache без TTL сохраняет прежний TTL после отключения, disabled rate limit не обращается к store', function (): void {
+    $cache = new SpyCache();
+    $store = new FailingRateLimitStore();
+    $store->failure = 'read';
+    $transport = new MockTransport();
+    $transport->fake(['*' => MockResponse::success(['id' => 1, 'name' => 'fixture'])]);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cache: $cache, rateLimit: new RateLimitConfig(store: $store)), $transport);
+    $execution = (new DiscoveryDtoRequest())->setClient($client)->withCache(10)->withoutCache()->withCache()
+        ->withRateLimit(1, 60)->withoutRateLimit();
+    expect($execution->send()->raw()->isSuccess())->toBeTrue()
+        ->and($cache->lastSetTtl)->toBe(10)->and($store->reads)->toBe(0);
+    expect($execution->send()->raw()->isSuccess())->toBeTrue()
+        ->and($transport->getRecorded())->toHaveCount(1);
 });

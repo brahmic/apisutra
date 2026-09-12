@@ -2,7 +2,7 @@
 
 - Дата создания: 2026-09-12
 - Дата обновления: 2026-09-12
-- Статус: новый
+- Статус: завершён
 
 ## Основание и границы
 
@@ -153,8 +153,8 @@ Recorder уже включается приложением явно. Его о�
 
 ## Зависимости, совместимость и завершение
 
-Предпочтительно выполнять после [auth recovery](../completed/pln-017-auth-recovery-contract.md)
-и [Laravel](../completed/pln-018-laravel-integration.md), чтобы общая матрица учитывала их ошибки.
+Предпочтительно выполнять после [auth recovery](pln-017-auth-recovery-contract.md)
+и [Laravel](pln-018-laravel-integration.md), чтобы общая матрица учитывала их ошибки.
 Новых runtime-пакетов нет. Лимит safe export действует по умолчанию и допускает необязательную настройку;
 лимит fixture, префиксы и обязательная RedactionPolicy не вводятся. Большие исходные HTTP-ответы сами по себе не запрещаются —
 ограничения относятся к диагностическим копиям и явно включённой записи.
@@ -187,3 +187,67 @@ response и явно указать это в документации резу�
 execution-копия не гарантирует сброс настроек, оставшихся на исходном request.
 После проверки В3–В5 согласованы пользователем (О1 аудита); изменения src/tests
 не выполнялись.
+
+
+## Матрица nullable runtime-полей — 2026-09-12
+
+Проверены публичные методы, внутреннее копирование и существующие HTTP-регрессии.
+Null в пустых опциях означает отсутствие override, но null в with-методе может
+сохранять предыдущее значение. Новая execution наследует исходные request-опции.
+
+| Поля | Установка / сброс | Наблюдаемый контракт |
+| --- | --- | --- |
+| baseUrlOverride | withBaseUrl / empty options | Меняет базу URI; отдельного reset нет |
+| urlOverride | withUrl / withoutUrl | Null явно возвращает обычную сборку URI |
+| cacheTtlOverride, cacheModeOverride | withCache/WriteOnly/ReadOnly / withoutCache | Null TTL сохраняет прежний TTL; Disabled выключает чтение/запись |
+| cacheScopeOverride | withCacheScope / empty | Пространство кеша внутри автоматической identity, само кеш не включает |
+| retryEnabledOverride, retryAttemptsOverride | withRetry / withoutRetry | Число обычных попыток; auth retry независим |
+| authOverride, authScopeOverride | withAuthScope/forceAuthScope / withAuth/forceAuth/withoutAuth | Default auth очищает scope; Disable выключает auth |
+| delayOverride | withDelay / withoutDelay | withoutDelay задаёт 0; null наследует defaults |
+| idempotencyKey | withIdempotencyKey / empty | Ключ общий для попыток, отдельного reset нет |
+| rateLimitOverride, rateLimitDisabledOverride | withRateLimit / withoutRateLimit | Disabled важнее сохранённого объекта override; store/HTTP не вызываются |
+| timeoutOverride, connectTimeoutOverride | withTimeout / empty | 0 отключает SDK-лимит; null connect очищает прежний override и наследует конфиг |
+| traceIdOverride | withTraceId / empty | Корреляция текущего исполнения, отдельного reset нет |
+| roleOverride | withRole / empty | Роль исполнения; отдельного reset нет |
+| paginationRuleOverride | withPaginationRule/rules / empty | Выбранное правило обхода, отдельного reset нет |
+| credentialsEnrichmentEnabledOverride | with/withoutCredentialsEnrichment / empty | Явное выключение обогащения credentials |
+| credentialsMergeModeOverride, credentialsScopeOverride | withCredentialsMergeMode/Scope / empty | Порядок слияния/выбор scope, отдельного reset нет |
+| continuationModeOverride | withContinuationMode / empty | Core-mode; mapping принадлежит провайдеру |
+| requestEnrichersEnabledOverride | withRequestEnrichers / empty | Явное false отключает request enrichers |
+| downloadTarget | withDownloadTo / withoutDownloadTo | Null явно убирает цель скачивания |
+| PaginationOptions.page, limit | withPage/Limit / empty | Set-флаги отличают override от отсутствия; отдельного null-reset нет |
+| PaginationOptions.cursor | withCursor / withCursor(null) | Null явно очищает cursor, «0» не теряется |
+| PreparedRequest.body, stream | withBody/Stream / withoutBody | Одна форма тела; null в with сохраняет, withoutBody очищает обе |
+| PreparedRequest.transportOptions, destination, fileTransfer | with / новый PreparedRequest | Null в with сохраняет значение, отдельного reset нет |
+| PreparedRequest headers/meta/url (nullable аргументы with) | with / [] для headers/meta | Null сохраняет; [] заменяет снимок, очистка body убирает его metadata |
+
+Покрытие: AuthScopeResetTest, TimeoutContractTest, PreparedBodyContractTest,
+ExternalUrlContractTest, StreamingFileContractTest, PaginationOptionsTest,
+PipelineContextOptionsTest, CredentialsEnrichmentTest и CoreFlowIntegrationTest.
+Последний дополнен wire-сценарием пяти методов с path/query/header/body,
+readonly DTO/From/вложенным discriminator, false/0/null/missing и совместной
+проверкой восстановленного TTL и отключённого rate limit. Custom meta resolver,
+DTO items container, offset и страницы с withPage уже проверяются отдельной
+Pagination suite; переустройство этих механизмов не потребовалось.
+
+
+## Реализация и приёмка — 2026-09-12
+
+Все три части выполнены. Сохранены ошибки страниц и обёрток, добавлены cursor-history
+и один guard-result iterator, terminal RecordingException с реальным ответом,
+атомарная публикация через временный файл и exclusive link. Неудачная запись не
+разрешает повтор HTTP. Invalid UTF-8 проверяется до redaction/кодирования fixture.
+Safe context/requestDebug ограничены 64 KiB; необязательный maxBodyBytes сохраняет
+маскирование. FixtureRedactor явно применяет redaction без диагностического лимита.
+Результат raw и потоки не обрезаются. Duration только уточнён в документации.
+
+`vendor/bin/pest --compact`: 1491 passed, 34 deprecation, 5530 assertions.
+Новые матрицы: PaginationFailureContractTest, BatchFailureContractTest,
+RecordingContractTest, SafeExportTest и дополненный CoreFlowIntegrationTest.
+Проверены два процесса recorder (20 новых файлов плюс сохранённый существующий),
+JSON более 1 MiB без обрезки и сбой каталога/кодирования. Принудительное завершение
+процесса не тестировалось: возможен скрытый временный файл, незавершённая JSON
+не публикуется по порядку write → link. Это ограничение описано в testing guide.
+
+Standalone contracts/JSON в отдельной --no-dev копии и Laravel verify.php прошли.
+Guides и changelog содержат migration-последствия. Новых runtime-зависимостей нет.

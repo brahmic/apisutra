@@ -234,6 +234,9 @@ final class Pipeline implements PipelineExecutorInterface
                     $exception = new ExecutionDeadlineException($exception->stage, $exception->getPrevious(), $response);
                 }
             }
+            if ($context !== null) {
+                $context->failureException = $exception;
+            }
             if ($this->config->throwOnErrors) {
                 if ($exception instanceof AuthDependencyException) {
                     throw $exception->dependencyResult->exception ?? $exception;

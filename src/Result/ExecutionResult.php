@@ -190,10 +190,12 @@ readonly class ExecutionResult implements ResultInterface
         $secretFields = $credentials['secretKeys'] ?? [];
         $secretKeys = is_array($secretFields) ? array_values(array_filter($secretFields, 'is_string')) : [];
         $policy = $this->redaction->withFields($secretKeys);
-        $body = $prepared->meta['body'] ?? null;
+        $bodySize = $prepared->body !== null ? strlen($prepared->body) : null;
+        $bodyOmitted = $redactSensitive && $bodySize !== null && $bodySize > $policy->maxBodyBytes;
+        $body = $bodyOmitted ? null : ($prepared->meta['body'] ?? null);
         $query = is_array($prepared->meta['query'] ?? null) ? $prepared->meta['query'] : null;
         $form = $this->extractForm($body, $headers);
-        $bodyRaw = $prepared->body;
+        $bodyRaw = $bodyOmitted ? null : $prepared->body;
         $url = $prepared->url;
         if ($redactSensitive) {
             $headers = $policy->headers($headers);
@@ -215,6 +217,9 @@ readonly class ExecutionResult implements ResultInterface
             'url' => $url,
             'headers' => $headers,
             'bodyRaw' => $bodyRaw,
+            'bodySize' => $bodySize,
+            'bodyOmitted' => $bodyOmitted || $prepared->stream !== null,
+            'bodyOmissionReason' => $bodyOmitted ? 'body_size_limit' : ($prepared->stream !== null ? 'stream' : null),
             'body' => $body,
             'query' => $query,
             'form' => $form,

@@ -31,7 +31,7 @@ readonly class ProviderResponse
      * @param array<string, array<int, string>> $headers HTTP заголовки (key => [values])
      * @param string $body Тело ответа (raw content)
      * @param PreparedRequest $request Оригинальный подготовленный запрос
-     * @param float $duration Время выполнения запроса в секундах
+     * @param float $duration Время выполнения запроса в миллисекундах
      */
     public function __construct(
         public int $status,

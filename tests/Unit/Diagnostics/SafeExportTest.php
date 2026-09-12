@@ -126,3 +126,20 @@ it('client record сохраняет дополнительные правила
         }
     }
 });
+
+it('ограничивает safe тело до декодирования и позволяет увеличить лимит сохраняя маскирование', function (): void {
+    $body = json_encode(['padding' => str_repeat('x', 70000), 'token' => 'fixture-secret'], JSON_THROW_ON_ERROR);
+    $prepared = new PreparedRequest(HttpMethod::POST, 'https://fixture.test', body: $body, meta: ['body' => ['padding' => str_repeat('x', 70000)]]);
+    $result = new ExecutionResult(null, ResultStatus::SUCCESS, new ErrorCollection([]), debug: new DebugInfo($prepared));
+    $safe = $result->requestDebug();
+    expect($safe['bodyRaw'])->toBeNull()->and($safe['body'])->toBeNull()
+        ->and($safe['bodyOmissionReason'])->toBe('body_size_limit')->and($safe['bodySize'])->toBe(strlen($body))
+        ->and($result->requestDebug(false)['bodyRaw'])->toBe($body);
+    $policy = new RedactionPolicy(maxBodyBytes: 100000);
+    $larger = new ExecutionResult(null, ResultStatus::SUCCESS, new ErrorCollection([]), debug: new DebugInfo($prepared), redaction: $policy);
+    expect($larger->requestDebug()['bodyRaw'])->toContain('padding')->not->toContain('fixture-secret')
+        ->and($larger->requestDebug()['bodyOmitted'])->toBeFalse();
+    $context = (new RedactionPolicy())->context(['response' => ['body' => $body, 'headers' => ['Authorization' => 'fixture-secret']]]);
+    expect($context['response']['body'])->toBeNull()->and($context['response']['bodySize'])->toBe(strlen($body))
+        ->and(json_encode($context))->not->toContain('fixture-secret');
+});

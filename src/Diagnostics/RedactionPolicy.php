@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Diagnostics;
 
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+
 /**
  * Маскирование диагностических копий; исходные запросы и потоки не изменяются.
  */
@@ -27,12 +29,17 @@ final readonly class RedactionPolicy
         private array $headers = [],
         private array $fields = [],
         private array $paths = [],
-    ) {}
+        public int $maxBodyBytes = 65536,
+    ) {
+        if ($maxBodyBytes <= 0) {
+            throw new ConfigurationException('Лимит диагностического тела должен быть положительным');
+        }
+    }
 
     /** @param list<string> $fields */
     public function withFields(array $fields): self
     {
-        return new self($this->headers, [...$this->fields, ...$fields], $this->paths);
+        return new self($this->headers, [...$this->fields, ...$fields], $this->paths, $this->maxBodyBytes);
     }
 
     /**
@@ -136,7 +143,7 @@ final readonly class RedactionPolicy
      * @param array<string, mixed> $context
      * @return array<string, mixed>
      */
-    public function context(array $context): array
+    public function context(array $context, bool $limitBodies = true): array
     {
         $headers = is_array($context['headers'] ?? null) ? $context['headers'] : [];
         $type = null;
@@ -145,6 +152,18 @@ final readonly class RedactionPolicy
                 $type = is_array($value) ? ($value[0] ?? null) : $value;
             }
         }
+        $raw = $context['bodyRaw'] ?? $context['body'] ?? null;
+        $size = is_string($raw) ? strlen($raw) : null;
+        if ($limitBodies && $size !== null && $size > $this->maxBodyBytes) {
+            foreach (['body', 'bodyRaw', 'form'] as $field) {
+                if (array_key_exists($field, $context)) {
+                    $context[$field] = null;
+                }
+            }
+            $context['bodyOmitted'] = true;
+            $context['bodyOmissionReason'] = 'body_size_limit';
+            $context['bodySize'] = $size;
+        }
         foreach ($context as $name => $value) {
             $key = strtolower((string) $name);
             if ($key === 'headers' && is_array($value)) {
@@ -152,13 +171,21 @@ final readonly class RedactionPolicy
             } elseif (in_array($key, ['url', 'uri'], true) && is_string($value)) {
                 $context[$name] = $this->url($value);
             } elseif (in_array($key, ['body', 'bodyraw'], true)) {
-                $context[$name] = is_string($value) ? $this->body($value, $type) : $this->data($value);
+                $encoded = is_array($value) && $limitBodies ? json_encode($value) : null;
+                if (is_string($encoded) && strlen($encoded) > $this->maxBodyBytes) {
+                    $context[$name] = null;
+                    $context['bodyOmitted'] = true;
+                    $context['bodyOmissionReason'] = 'body_size_limit';
+                    $context['bodySize'] = strlen($encoded);
+                } else {
+                    $context[$name] = is_string($value) ? $this->body($value, $type) : $this->data($value);
+                }
             } elseif ($key === 'query' && is_array($value)) {
                 $context[$name] = $this->query($value);
             } elseif ($this->isSensitive((string) $name, (string) $name)) {
                 $context[$name] = '***';
             } elseif (is_array($value)) {
-                $context[$name] = $this->context($value);
+                $context[$name] = $this->context($value, $limitBodies);
             }
         }
 

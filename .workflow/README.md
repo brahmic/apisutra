@@ -105,7 +105,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 - [Анализ четырёх оставшихся направлений](audit/aud-003-remaining-work/aud-003-readme.md)
 - [Auth retry после восстановления авторизации](completed/pln-017-auth-recovery-contract.md)
 - [Предсказуемая Laravel-интеграция](completed/pln-018-laravel-integration.md)
-- [Остаточные контракты и диагностика](current/pln-019-contract-regressions-diagnostics.md)
+- [Остаточные контракты и диагностика](completed/pln-019-contract-regressions-diagnostics.md)
 - [Общая приёмка и подготовка выпуска](current/pln-020-release-readiness.md)
 
 - [Исправление существующего rate limiter](completed/pln-016-rate-limit-correctness.md)

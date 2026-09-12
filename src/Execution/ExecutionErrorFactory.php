@@ -24,6 +24,16 @@ use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
 use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthLockBackendException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshLockTimeoutException;
+use Brahmic\ApiSutra\Exceptions\Testing\RecordingException;
+use Brahmic\ApiSutra\Exceptions\Files\FileTransferException;
+use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
+use Brahmic\ApiSutra\Exceptions\Transport\InvalidRequestException;
+use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
+use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
+use Brahmic\ApiSutra\Exceptions\Validation\ValidationException;
 use Throwable;
 
 final readonly class ExecutionErrorFactory
@@ -33,6 +43,16 @@ final readonly class ExecutionErrorFactory
         if ($exception instanceof AuthDependencyException) {
             return $exception->dependencyResult;
         }
+        $source = $request instanceof RequestExecutionInterface ? $request->getRequest() : $request;
+        $pipeline = $source instanceof AbstractRequest ? $source->getContext() : null;
+        if ($pipeline?->failureException instanceof AuthDependencyException
+            && $pipeline->failureException->dependencyResult->exception === $exception) {
+            return $pipeline->failureException->dependencyResult;
+        }
+        if ($pipeline?->failureException !== $exception) {
+            $pipeline = null;
+        }
+        $response ??= $pipeline?->response;
         $requestClass = $request instanceof RequestExecutionInterface
             ? $request->getRequest()::class
             : $request::class;
@@ -41,7 +61,7 @@ final readonly class ExecutionErrorFactory
         $response = match (true) {
             $exception instanceof ExecutionDeadlineException => $exception->response,
             $localRateLimit, $exception instanceof RateLimitBackendException => $exception->lastResponse,
-            $exception instanceof RequestException => $exception->response,
+            $exception instanceof RequestException, $exception instanceof RecordingException => $exception->response,
             default => $response,
         };
         $contextData = SystemErrorContextBuilder::build(
@@ -50,11 +70,25 @@ final readonly class ExecutionErrorFactory
             requestClass: $requestClass,
         );
 
-        if ($exception instanceof AuthRefreshFailedException) {
+        if ($pipeline?->retryRefusalReason !== null) {
+            $contextData['retryRefusalReason'] = $pipeline->retryRefusalReason;
+        }
+        if ($exception instanceof RecordingException) {
+            $contextData['reason'] = 'recording_failed';
+        } elseif ($exception instanceof HydrationException) {
+            $contextData += $exception->context();
+        } elseif ($exception instanceof AuthRefreshLockTimeoutException) {
+            $contextData += ['reason' => 'auth_refresh_lock_timeout', 'stage' => 'auth_lock_wait'];
+        } elseif ($exception instanceof AuthLockBackendException) {
+            $contextData['reason'] = 'auth_lock_backend_error';
+        } elseif ($exception instanceof AuthRefreshFailedException) {
             $contextData['reason'] = 'auth_refresh_failed';
         } elseif ($exception instanceof ExecutionDeadlineException) {
             $contextData['reason'] = 'execution_deadline_exceeded';
             $contextData['stage'] = $exception->stage;
+            $contextData += array_filter(['bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial], static fn (mixed $value): bool => $value !== null);
+        } elseif ($exception instanceof FileTransferException) {
+            $contextData += ['stage' => $exception->stage, 'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial];
         } elseif ($localRateLimit) {
             $contextData += ['reason' => 'local_rate_limit_exceeded', 'stage' => 'rate_limit', 'retryAfter' => $exception->retryAfter];
         } elseif ($exception instanceof RateLimitBackendException) {
@@ -75,7 +109,13 @@ final readonly class ExecutionErrorFactory
                         $exception instanceof HydrationException => ErrorCode::HydrationError,
                         $exception instanceof ResponseDecodingException => ErrorCode::ResponseDecodingError,
                         $exception instanceof ConnectionException => ErrorCode::ConnectionFailed,
-                        default => ErrorCode::ExecutionError,
+                        $exception instanceof FileTransferException => ErrorCode::FileTransferError,
+                        $exception instanceof SerializationException => ErrorCode::SerializationError,
+                        $exception instanceof InvalidRequestException => ErrorCode::InvalidRequest,
+                        $exception instanceof TransportException => ErrorCode::TransportError,
+                        $exception instanceof ExtensionException => ErrorCode::ExtensionError,
+                        $exception instanceof ValidationException => ErrorCode::ValidationFailed,
+                        default => $pipeline?->failureCode ?? ErrorCode::ExecutionError,
                     },
                     message: $exception->getMessage(),
                     context: $contextData,
@@ -86,6 +126,7 @@ final readonly class ExecutionErrorFactory
             requestClass: $requestClass,
             exception: $exception,
             response: $response,
+            validationErrors: $exception instanceof ValidationException ? $exception->errors : [],
         );
     }
 

@@ -329,3 +329,11 @@ ConnectException. Наличие Guzzle HTTP Client для остальных т
 основной — в `response`, refresh — в `AuthRefreshFailedException::dependencyResult`.
 Автоматический context содержит `reason=auth_refresh_failed`, без credentials и
 полного результата зависимости. [Контракт восстановления](auth.md#восстановление-после-401-и-миграция).
+
+
+Batch/pool сохраняют классификацию и фактический ответ HTTP, decoding, hydration,
+configuration и hook ошибок независимо от throwOnErrors. `connection_failed` означает
+подтверждённую сетевую ошибку; неизвестное исключение даёт `execution_error`.
+Существующее различие стратегий по выбрасыванию исключений сохраняется.
+Ошибка [recording](testing.md#ошибки-recording-и-миграция) может сопровождаться HTTP 200:
+основная операция уже выполнена, повторять её как сетевой сбой нельзя.

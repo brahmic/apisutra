@@ -98,3 +98,30 @@ raw-снимка запроса доступны `requestDebug(false)` и `reque
 recorder применяет базовую защиту даже без пользовательского Fixture. Fixture
 добавляет свои правила и replacement values; старые уже записанные файлы
 автоматически не переписываются.
+
+
+## Размер safe debug/log
+
+По умолчанию тело в safe debug/log ограничено 64 KiB (65536 байт). При превышении
+тело пропускается целиком: `bodyOmitted=true`, `bodyOmissionReason=body_size_limit`,
+`bodySize` содержит исходный размер. JSON не обрезается. Исходный HTTP-ответ и replay
+fixture сохраняют свой размер; потоки не читаются и не перематываются для диагностики.
+`ProviderResponse::duration`, `DebugInfo::duration` и `PipelineEvent::duration` измеряются
+в миллисекундах; timestamp остаётся Unix-временем в секундах.
+
+RedactionPolicy по-прежнему необязательна. Её передают для дополнительных секретных
+полей либо когда нужно увеличить лимит, сохранив маскирование:
+
+```php
+use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
+
+$config = new ClientConfig(
+    baseUrl: 'https://api.example.test',
+    redaction: new RedactionPolicy(maxBodyBytes: 262144),
+);
+```
+
+Миграция: код, читавший большие тела из `requestDebug()`, должен учитывать маркер
+пропуска или увеличить предел. Явный `requestDebug(false)` остаётся raw-доступом
+без маскирования и ограничения размера; для обычного разбора увеличьте safe-предел.

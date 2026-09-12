@@ -2,6 +2,27 @@
 
 ## Не выпущено
 
+### 2026-09-12 — ошибки пагинации, safe диагностика и запись fixtures
+
+- Пагинация сохраняет исходные коды и ответы страниц; cursor Partial останавливается
+  после ошибки. Любой повтор посещённого cursor ловится до повторной отправки.
+  Iterator сообщает guard отдельным FAILED результатом без дополнительного HTTP.
+- Batch/pool сохраняют HTTP, decoding/hydration и hook ошибки при throwOnErrors;
+  неизвестное исключение больше не выдаётся за сетевой сбой.
+- Safe debug/log по умолчанию пропускает тело свыше 64 KiB с размером и причиной.
+  RedactionPolicy необязательна; maxBodyBytes позволяет увеличить предел с маскированием.
+  Raw-ответы и replay fixtures этим пределом не ограничиваются.
+- Recorder атомарно публикует целую fixture без перезаписи чужого файла. Невалидный
+  UTF-8 и файловый сбой дают recording_failed с фактическим HTTP-ответом и previous.
+  SDK не повторяет HTTP из-за сбоя записи, даже если сама операция уже прошла успешно.
+- Duration описан в миллисекундах без изменения значений. Существующие runtime TTL,
+  disabled rate limit и правила nullable/reset сохранены.
+- Миграция: учитывать [guard iterator](docs/guides/pagination.md#ошибки-защитная-остановка-и-миграция),
+  [safe limit](docs/guides/logging.md#размер-safe-debuglog) и
+  [ошибки recorder](docs/guides/testing.md#ошибки-recording-и-миграция).
+- Проверено: 1491 passed, 34 deprecation, 5530 assertions; запись из двух процессов,
+  большой JSON, standalone contracts/JSON и Laravel integration прошли.
+
 ### 2026-09-12 — предсказуемое подключение Laravel
 
 - Безопасный SdkServiceProvider подключается package discovery. Пользовательские

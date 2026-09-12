@@ -17,7 +17,7 @@ final class FixtureRedactor
      */
     public function redact(array $payload, ?Fixture $fixture = null, array $secretFields = []): array
     {
-        $payload = $this->policy->withFields($secretFields)->context($payload);
+        $payload = $this->policy->withFields($secretFields)->context($payload, limitBodies: false);
         if ($fixture === null) {
             return $payload;
         }

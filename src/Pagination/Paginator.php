@@ -97,11 +97,13 @@ final class Paginator implements IteratorAggregate
         $cursor = $this->cursor;
         $config = $this->getPaginationConfig();
         $lastMetaPage = null;
+        $visited = $cursor === null ? [] : [hash('sha256', $cursor) => true];
         $iterations = 0;
         $maxPages = $config->maxPages;
 
         while (true) {
             if ($this->isMaxPagesReached($maxPages, $iterations)) {
+                yield $this->guardResult($this->buildGuardError('достигнут лимит страниц', $page, 'pagination_max_pages_reached'));
                 return;
             }
 
@@ -119,12 +121,19 @@ final class Paginator implements IteratorAggregate
             }
 
             // Guard: проверяем условия продолжения пагинации
-            if ($this->hasGuardViolation($meta, $page, $config, $cursor, $lastMetaPage)) {
+            if ($this->hasGuardViolation($meta, $page, $config, $cursor, $lastMetaPage, $visited)) {
+                $error = $this->buildPaginationGuardError($meta, $page, $config, $cursor, $lastMetaPage, $visited);
+                if ($error !== null) {
+                    yield $this->guardResult($error);
+                }
                 return;
             }
 
             $lastMetaPage = $meta->currentPage;
             $cursor = $meta->nextCursor;
+            if ($cursor !== null) {
+                $visited[hash('sha256', $cursor)] = true;
+            }
             $page++;
         }
     }
@@ -139,12 +148,13 @@ final class Paginator implements IteratorAggregate
         $cursor = $this->cursor;
         $config = $this->getPaginationConfig();
         $lastMetaPage = null;
+        $visited = $cursor === null ? [] : [hash('sha256', $cursor) => true];
         $iterations = 0;
         $maxPages = $config->maxPages;
 
         while ($condition($page)) {
             if ($this->isMaxPagesReached($maxPages, $iterations)) {
-                $errors[] = $this->buildGuardError('достигнут лимит страниц', $page);
+                $errors[] = $this->buildGuardError('достигнут лимит страниц', $page, 'pagination_max_pages_reached');
                 break;
             }
 
@@ -153,22 +163,20 @@ final class Paginator implements IteratorAggregate
             $results[] = $result;
 
             if ($result->isFailed()) {
-                $traceId = $result->traceId ?? SystemErrorContextBuilder::resolveTraceId($this->request);
-                $httpStatus = $result->errors->first()?->response?->status;
-                $contextData = SystemErrorContextBuilder::build(
-                    traceId: $traceId,
-                    httpStatus: $httpStatus,
-                    requestClass: $this->request::class,
-                );
-
-                $errors[] = new RequestError(
-                    code: ErrorCode::ServerError,
-                    message: 'Ошибка загрузки страницы',
-                    requestClass: $this->request::class,
-                    context: array_merge($contextData, ['page' => $page]),
-                );
-
-                if ($this->failStrategy === FailStrategy::FailAll) {
+                foreach ($result->errors as $error) {
+                    $errors[] = new RequestError(
+                        code: $error->code,
+                        message: $error->message,
+                        requestClass: $error->requestClass ?? $this->request::class,
+                        response: $error->response ?? $result->response,
+                        nested: $error->nested,
+                        context: array_merge($error->context, ['page' => $page]),
+                    );
+                }
+                if ($result->errors->first() === null) {
+                    $errors[] = $this->buildGuardError('ошибка загрузки страницы', $page, 'pagination_page_failed');
+                }
+                if ($this->failStrategy === FailStrategy::FailAll || $this->isCursorBased($config, $cursor, null)) {
                     break;
                 }
 
@@ -184,9 +192,12 @@ final class Paginator implements IteratorAggregate
                 break;
             }
 
-            // Guard: проверяем условия продолжения пагинации
-            if ($this->hasGuardViolation($meta, $page, $config, $cursor, $lastMetaPage)) {
-                $error = $this->buildPaginationGuardError($meta, $page, $config, $cursor, $lastMetaPage);
+            if (!$condition($page + 1)) {
+                break;
+            }
+            // Проверяем прогресс только при продолжении выборки.
+            if ($this->hasGuardViolation($meta, $page, $config, $cursor, $lastMetaPage, $visited)) {
+                $error = $this->buildPaginationGuardError($meta, $page, $config, $cursor, $lastMetaPage, $visited);
                 if ($error !== null) {
                     $errors[] = $error;
                 }
@@ -195,6 +206,9 @@ final class Paginator implements IteratorAggregate
 
             $lastMetaPage = $meta->currentPage;
             $cursor = $meta->nextCursor;
+            if ($cursor !== null) {
+                $visited[hash('sha256', $cursor)] = true;
+            }
             $page++;
         }
 
@@ -212,6 +226,14 @@ final class Paginator implements IteratorAggregate
             errors: new ErrorCollection($errors),
             meta: $meta,
             nested: $results,
+        );
+    }
+
+    private function guardResult(RequestError $error): ExecutionResult
+    {
+        return new ExecutionResult(
+            data: null, status: ResultStatus::FAILED, errors: new ErrorCollection([$error]),
+            requestClass: $this->request::class,
         );
     }
 
@@ -240,9 +262,10 @@ final class Paginator implements IteratorAggregate
         return $config->cursorParam !== null || $cursor !== null || $nextCursor !== null;
     }
 
-    private function hasCursorProgress(?string $cursor, ?string $nextCursor): bool
+    /** @param array<string, true> $visited */
+    private function hasCursorProgress(?string $cursor, ?string $nextCursor, array $visited): bool
     {
-        return $nextCursor !== null && $nextCursor !== $cursor;
+        return $nextCursor !== null && $nextCursor !== $cursor && !isset($visited[hash('sha256', $nextCursor)]);
     }
 
     private function hasPageProgress(?int $lastMetaPage, PaginationMeta $meta): bool
@@ -258,7 +281,7 @@ final class Paginator implements IteratorAggregate
         return $meta->currentPage > $lastMetaPage;
     }
 
-    private function buildGuardError(string $reason, int $page): RequestError
+    private function buildGuardError(string $reason, int $page, string $code = 'pagination_stalled'): RequestError
     {
         $contextData = SystemErrorContextBuilder::build(
             traceId: SystemErrorContextBuilder::resolveTraceId($this->request),
@@ -267,10 +290,10 @@ final class Paginator implements IteratorAggregate
         );
 
         return new RequestError(
-            code: ErrorCode::ServerError,
+            code: ErrorCode::ExecutionError,
             message: 'Пагинация остановлена: ' . $reason,
             requestClass: $this->request::class,
-            context: array_merge($contextData, ['page' => $page]),
+            context: array_merge($contextData, ['page' => $page, 'reason' => $code]),
         );
     }
 
@@ -283,7 +306,8 @@ final class Paginator implements IteratorAggregate
         int $page,
         PaginationConfig $config,
         ?string $cursor,
-        ?int $lastMetaPage
+        ?int $lastMetaPage,
+        array $visited,
     ): bool {
         // Guard: останавливаемся, если достигнут расчётный предел страниц
         if ($this->reachedTotalPages($meta, $page)) {
@@ -292,7 +316,7 @@ final class Paginator implements IteratorAggregate
 
         // Guard: проверяем прогресс по cursor/page
         if ($this->isCursorBased($config, $cursor, $meta->nextCursor)) {
-            return !$this->hasCursorProgress($cursor, $meta->nextCursor);
+            return !$this->hasCursorProgress($cursor, $meta->nextCursor, $visited);
         }
 
         return !$this->hasPageProgress($lastMetaPage, $meta);
@@ -307,14 +331,15 @@ final class Paginator implements IteratorAggregate
         int $page,
         PaginationConfig $config,
         ?string $cursor,
-        ?int $lastMetaPage
+        ?int $lastMetaPage,
+        array $visited,
     ): ?RequestError {
         if ($this->reachedTotalPages($meta, $page)) {
             return null; // естественное завершение, не ошибка
         }
 
         if ($this->isCursorBased($config, $cursor, $meta->nextCursor)) {
-            if (!$this->hasCursorProgress($cursor, $meta->nextCursor)) {
+            if (!$this->hasCursorProgress($cursor, $meta->nextCursor, $visited)) {
                 return $this->buildGuardError('cursor не изменился', $page);
             }
         } elseif (!$this->hasPageProgress($lastMetaPage, $meta)) {

@@ -23,7 +23,7 @@ readonly class DebugInfo
     /**
      * @param PreparedRequest|null $preparedRequest Подготовленный HTTP-запрос (метод, URL, заголовки, тело)
      * @param ProviderResponse|null $response Ответ от провайдера (статус, заголовки, тело)
-     * @param float|null $duration Время выполнения запроса в секундах
+     * @param float|null $duration Время выполнения запроса в миллисекундах
      * @param array<DebugInfo> $nested Отладочная информация вложенных запросов (batch/pool)
      */
     public function __construct(

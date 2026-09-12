@@ -43,6 +43,7 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
+use Brahmic\ApiSutra\Exceptions\Testing\RecordingException;
 use Throwable;
 
 /**
@@ -246,7 +247,10 @@ final readonly class ExecutionResultBuilder
         };
         $response = $context->response;
 
-        if ($exception instanceof ExecutionDeadlineException) {
+        if ($exception instanceof RecordingException) {
+            $response = $exception->response;
+            $code = ErrorCode::ExecutionError;
+        } elseif ($exception instanceof ExecutionDeadlineException) {
             $code = ErrorCode::Timeout;
             $response = $context->response ?? $context->lastResponse ?? $exception->response;
         } elseif ($exception instanceof RateLimitException && $exception->response === null) {
@@ -270,6 +274,7 @@ final readonly class ExecutionResultBuilder
             response: $response,
             overrideContext: match (true) {
                 $exception instanceof AuthRefreshFailedException => ['reason' => 'auth_refresh_failed'],
+                $exception instanceof RecordingException => ['reason' => 'recording_failed'],
                 $exception instanceof RateLimitException && $exception->response === null => [
                     'reason' => 'local_rate_limit_exceeded', 'stage' => 'rate_limit', 'retryAfter' => $exception->retryAfter,
                 ],

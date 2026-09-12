@@ -17,12 +17,16 @@ use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 
+use Throwable;
+
 class PipelineContext
 {
     public ?CacheExecutionState $cacheExecution = null;
     public ?RequestDestination $destination = null;
     public ?FileTransferOptions $fileTransfer = null;
     public ?ErrorCode $failureCode = null;
+    /** Исключение этого исполнения: связывает диагностику с доставкой в batch/pool. */
+    public ?Throwable $failureException = null;
     public ?string $retryRefusalReason = null;
     public ?ExecutionBudget $budget = null;
     public ?ProviderResponse $lastResponse = null;
