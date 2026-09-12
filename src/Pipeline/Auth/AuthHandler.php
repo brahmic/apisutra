@@ -16,20 +16,22 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Pipeline\PipelineExecutorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Timing\SleeperInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Core\AbstractClient;
+use Brahmic\ApiSutra\Execution\ExecutionErrorFactory;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthDependencyException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshFailedException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Exceptions\Auth\AuthLockBackendException;
 use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshLockTimeoutException;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
-use Brahmic\ApiSutra\Exceptions\Request\UnauthorizedException;
 use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
 use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
-use Brahmic\ApiSutra\VO\Http\PreparedRequest;
-use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
@@ -59,6 +61,7 @@ final readonly class AuthHandler
         ?SleeperInterface $sleeper = null,
         ?ClockInterface $clock = null,
         string $provider = self::class,
+        private ?AbstractClient $client = null,
     ) {
         $this->clock = $clock ?? new SystemClock();
         $this->bindings = new AuthBindingResolver($config, $provider, $this->clock);
@@ -68,19 +71,43 @@ final readonly class AuthHandler
 
     public function handleAuthentication(RequestInterface $request, PipelineContext $context, bool $forceRefresh = false): void
     {
+        $this->authenticate($request, $context, $forceRefresh);
+    }
+
+    /** Разрешает повтор только после фактического восстановления credentials. */
+    public function recoverAuthentication(RequestInterface $request, PipelineContext $context): bool
+    {
+        try {
+            return $this->authenticate($request, $context, true);
+        } catch (ExecutionDeadlineException | AuthRefreshLockTimeoutException | AuthLockBackendException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            if ($context->response === null) {
+                throw $exception;
+            }
+            throw new AuthRefreshFailedException(
+                $context->response,
+                $exception instanceof AuthDependencyException ? $exception->dependencyResult : null,
+                $exception,
+            );
+        }
+    }
+
+    private function authenticate(RequestInterface $request, PipelineContext $context, bool $forceRefresh): bool
+    {
         DestinationGuard::checkContext($context);
         $context->budget?->check('authentication');
         if (!$request instanceof AbstractRequest) {
-            return;
+            return false;
         }
 
         if ($this->shouldSkipAuth($request, $context)) {
-            return;
+            return false;
         }
 
         $auth = $this->resolveAuthenticator($request, $context);
         if ($auth === null) {
-            return;
+            return false;
         }
 
         $binding = $this->bindings->resolve($auth, $this->resolveAuthScopeOverride($request, $context) ?? $request->getAuthScope());
@@ -97,17 +124,22 @@ final readonly class AuthHandler
             $refreshAttempts = min(1, $refreshAttempts);
         }
 
+        $recovered = false;
         $context->budget?->check('authentication');
         if ($shouldRefresh && $refreshAttempts > 0) {
-            $this->refreshToken($auth, $context, $request, $refreshAttempts, $forceRefresh, $binding->lockKey, $previousVersion);
+            $recovered = $this->refreshToken($auth, $context, $refreshAttempts, $forceRefresh, $binding->lockKey, $previousVersion);
         }
 
+        if ($forceRefresh && !$recovered) {
+            return false;
+        }
         $context->budget?->check('authentication');
         if ($context->preparedRequest !== null) {
             $context->preparedRequest = $auth->authenticate($context->preparedRequest);
             DestinationGuard::checkContext($context);
             $context->budget?->check('authentication');
         }
+        return $recovered;
     }
 
     /** Выбор auth без refresh, внедрения store и вызова authenticate. */
@@ -222,52 +254,74 @@ final readonly class AuthHandler
     private function refreshToken(
         AuthenticatorInterface $auth,
         PipelineContext $context,
-        AbstractRequest $request,
         int $attempts,
         bool $forceRefresh,
         string $lockKey,
         ?string $previousVersion,
-    ): void {
+    ): bool {
+        if ($this->hasUpdatedToken($auth, $forceRefresh, $previousVersion)) {
+            return true;
+        }
+        $refreshRequest = $auth->getRefreshRequest();
+        $context->budget?->check('auth_refresh');
+        if ($refreshRequest === null) {
+            return false;
+        }
         $lease = $this->waitForRefreshLock($auth, $lockKey, $forceRefresh, $previousVersion, $context);
         if ($lease === null) {
-            return;
+            return true;
         }
         $failure = null;
         try {
             $context->budget?->check('auth_lock_wait');
             // Другой владелец мог обновить токен между проверкой и захватом lease.
             if ($this->hasUpdatedToken($auth, $forceRefresh, $previousVersion)) {
-                return;
+                return true;
             }
             for ($i = 0; $i < $attempts; $i++) {
                 $context->budget?->check('auth_refresh');
-                $refreshRequest = $auth->getRefreshRequest();
-                $context->budget?->check('auth_refresh');
-                if ($refreshRequest === null) {
-                    return;
+                if ($i > 0) {
+                    $refreshRequest = $auth->getRefreshRequest();
+                    if ($refreshRequest === null) {
+                        break;
+                    }
                 }
                 if ($refreshRequest instanceof AbstractRequest) {
-                    $refreshRequest->setClient($request->getClient());
+                    if ($this->client !== null) {
+                        $refreshRequest->setClient($this->client);
+                    }
                     $refreshRequest = $refreshRequest->withoutAuth();
                 }
-                $result = $this->executor->execute($refreshRequest, RequestRole::Dependency, $context, $context->traceId);
+                $lastResponse = $context->lastResponse;
+                $context->lastResponse = null;
+                try {
+                    $result = $this->executor->execute($refreshRequest, RequestRole::Dependency, $context, $context->traceId);
+                } catch (ExecutionDeadlineException $exception) {
+                    throw $exception;
+                } catch (Throwable $exception) {
+                    $result = (new ExecutionErrorFactory())->buildExceptionResult($refreshRequest, $exception, $context->lastResponse);
+                } finally {
+                    $context->lastResponse ??= $lastResponse;
+                }
                 if ($result->exception instanceof ExecutionDeadlineException) {
                     throw $result->exception;
                 }
                 $context->budget?->check('auth_refresh', $result->exception);
-                if ($result->isFailed()) {
+                if (!$result->isSuccess()) {
                     continue;
                 }
-                if ($result->data instanceof ResponseDtoInterface) {
+                try {
+                    if (!$result->data instanceof ResponseDtoInterface) {
+                        throw HydrationException::invalidValue('auth_refresh_dto_required', ResponseDtoInterface::class, get_debug_type($result->data));
+                    }
                     $auth->processTokenResponse($result->data);
+                } catch (Throwable $exception) {
+                    $result = (new ExecutionErrorFactory())->buildExceptionResult($refreshRequest, $exception, $result->response);
+                    throw new AuthDependencyException($result);
                 }
-                return;
+                return true;
             }
-            $prepared = $context->preparedRequest ?? new PreparedRequest($request->getMethod(), $request->getEndpoint());
-            throw new UnauthorizedException(
-                'Не удалось обновить токен',
-                new ProviderResponse(401, [], 'Unauthorized', $prepared, 0),
-            );
+            throw new AuthDependencyException($result);
         } catch (Throwable $exception) {
             $failure = $exception;
             throw $exception;

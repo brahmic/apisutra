@@ -12,6 +12,8 @@ use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Pipeline\PipelineStage;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
 use Brahmic\ApiSutra\Exceptions\Auth\AuthLockBackendException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthDependencyException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshFailedException;
 use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshLockTimeoutException;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\EarlyReturnException;
@@ -220,6 +222,16 @@ final readonly class ExecutionResultBuilder
         float $startTime,
         Throwable $exception,
     ): ExecutionResult {
+        if ($exception instanceof AuthDependencyException) {
+            $dependency = $exception->dependencyResult;
+            if ($this->config->throwOnErrors) {
+                throw $dependency->exception ?? $exception;
+            }
+            return $this->createFailedResult(
+                $request, $context, $audit, $dependency->errors,
+                $dependency->exception ?? $exception, $dependency->validationErrors, $dependency->response,
+            );
+        }
         $code = $context->failureCode ?? match (true) {
             $exception instanceof FileTransferException => ErrorCode::FileTransferError,
             $exception instanceof SerializationException => ErrorCode::SerializationError,
@@ -257,6 +269,7 @@ final readonly class ExecutionResultBuilder
             context: $context,
             response: $response,
             overrideContext: match (true) {
+                $exception instanceof AuthRefreshFailedException => ['reason' => 'auth_refresh_failed'],
                 $exception instanceof RateLimitException && $exception->response === null => [
                     'reason' => 'local_rate_limit_exceeded', 'stage' => 'rate_limit', 'retryAfter' => $exception->retryAfter,
                 ],

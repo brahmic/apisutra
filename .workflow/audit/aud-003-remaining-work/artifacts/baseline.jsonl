@@ -1,0 +1,16 @@
+{"case":"auth_none","httpCalls":2,"mainCalls":2,"refreshRequests":0,"code":"unauthorized","errorMessage":"HTTP 401","responseStatus":401,"responseBody":"{\"error\":\"original unauthorized\"}","originalHeader":"original"}
+{"case":"auth_fixed_bearer","httpCalls":2,"mainCalls":2,"refreshRequests":0,"code":"unauthorized","errorMessage":"HTTP 401","responseStatus":401,"responseBody":"{\"error\":\"original unauthorized\"}","originalHeader":"original"}
+{"case":"auth_refresh_ok","httpCalls":3,"mainCalls":2,"refreshRequests":1,"code":null,"errorMessage":null,"responseStatus":200,"responseBody":"{\"ok\":true}","originalHeader":null}
+{"case":"auth_refresh_failed","httpCalls":2,"mainCalls":1,"refreshRequests":1,"code":"unauthorized","errorMessage":"Не удалось обновить токен","responseStatus":401,"responseBody":"Unauthorized","originalHeader":null}
+{"case":"auth_refresh_untyped","httpCalls":2,"mainCalls":1,"refreshRequests":1,"code":"unauthorized","errorMessage":"Не удалось обновить токен","responseStatus":401,"responseBody":"Unauthorized","originalHeader":null}
+{"case":"auth_refresh_ok_unbound","httpCalls":1,"mainCalls":1,"refreshRequests":1,"code":"configuration_error","errorMessage":"Клиент не установлен для запроса","responseStatus":401,"responseBody":"{\"error\":\"original unauthorized\"}","originalHeader":"original"}
+{"case":"laravel_incoming_overrides_explicit","query":"incoming","customFactoryPreserved":false,"customRegistryPreserved":false,"clientPreserved":true}
+{"case":"laravel_without_http","query":null,"customFactoryPreserved":false,"customRegistryPreserved":false,"clientPreserved":true}
+{"case":"cursor_zero","httpCalls":2,"urls":["https:\/\/fixture.test\/paginated?page=1","https:\/\/fixture.test\/paginated?page=2&cursor=0"],"status":"success","code":null,"message":null,"responseStatus":null}
+{"case":"cursor_cycle","httpCalls":5,"urls":["https:\/\/fixture.test\/paginated?page=1","https:\/\/fixture.test\/paginated?page=2&cursor=A","https:\/\/fixture.test\/paginated?page=3&cursor=B","https:\/\/fixture.test\/paginated?page=4&cursor=A","https:\/\/fixture.test\/paginated?page=5&cursor=B"],"status":"partial","code":"server_error","message":"Пагинация остановлена: достигнут лимит страниц","responseStatus":null}
+{"case":"cursor_failure","httpCalls":2,"urls":["https:\/\/fixture.test\/paginated?page=1","https:\/\/fixture.test\/paginated?page=2&cursor=A"],"status":"partial","code":"server_error","message":"Ошибка загрузки страницы","responseStatus":null}
+{"case":"cursor_partial_failure","httpCalls":5,"urls":["https:\/\/fixture.test\/paginated?page=1","https:\/\/fixture.test\/paginated?page=2&cursor=A","https:\/\/fixture.test\/paginated?page=3&cursor=A","https:\/\/fixture.test\/paginated?page=4&cursor=A","https:\/\/fixture.test\/paginated?page=5&cursor=A"],"status":"partial","code":"server_error","message":"Ошибка загрузки страницы","responseStatus":null}
+{"case":"runtime_rate_limit_disable","disabled":true,"storedOverrideLimit":2}
+{"case":"runtime_cache_reenable","ttl":10}
+{"case":"parallel_batch_http_error","throwOnErrors":false,"code":"forbidden","responseStatus":403,"httpCalls":1}
+{"case":"parallel_batch_http_error","throwOnErrors":true,"code":"connection_failed","responseStatus":null,"httpCalls":1}

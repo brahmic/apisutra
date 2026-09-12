@@ -14,7 +14,7 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 
 describe('RetryDecisionMaker', function () {
-    it('не ретраит 401 при authRetryOn401', function () {
+    it('сохраняет явный обычный retryOn 401 при authRetryOn401', function () {
         $config = new ClientConfig(baseUrl: 'https://api.test', authRetryOn401: true, environment: Environment::Testing);
         $decision = new RetryDecisionMaker($config, new ErrorPolicy());
 
@@ -28,7 +28,7 @@ describe('RetryDecisionMaker', function () {
         );
         $retryConfig = new RetryConfig(retryOn: [401]);
 
-        expect($decision->shouldRetry($request, $response, 1, $retryConfig))->toBeFalse();
+        expect($decision->shouldRetry($request, $response, 1, $retryConfig))->toBeTrue();
     });
 
     it('ретраит по списку статусов', function () {

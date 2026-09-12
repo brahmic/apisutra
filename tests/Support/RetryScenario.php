@@ -22,6 +22,7 @@ use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use GuzzleHttp\Psr7\HttpFactory;
 use Psr\Http\Message\ResponseInterface;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\TokenResponseDto;
 use Throwable;
 
 final readonly class RetryScenario
@@ -43,7 +44,7 @@ final readonly class RetryScenario
         $this->hooks = new HookRegistry();
         $this->sender = new RetrySender(
             $config, $transport, new RetryHandler($transport), new RateLimiter(),
-            new HookRunner($this->hooks), new AuthHandler($config, new RecordingPipelineExecutor()),
+            new HookRunner($this->hooks), new AuthHandler($config, new RecordingPipelineExecutor(new TokenResponseDto('fixture'))),
             new ErrorPolicy(), new AuditLogger($config), sleeper: $this->sleeper,
             retryAfterDelay: new RetryAfterDelay(static fn (): int => 1_800_000_000),
         );

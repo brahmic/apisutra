@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 // Запуск: php tests/Support/standalone-auth-smoke.php /path/to/no-dev-checkout
 use Brahmic\ApiSutra\Auth\TokenAuthenticator;
+use Brahmic\ApiSutra\Auth\BearerAuthenticator;
 use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthRefreshLock;
@@ -43,8 +44,8 @@ foreach (['a', 'b'] as $name) {
         new Response(200, ['Content-Type' => 'application/json'], '{"id":1,"name":"fixture"}'),
     ]);
     $client = new TestClient(new ClientConfig(baseUrl: 'https://' . $name . '.fixture.test', auth: $auth, cache: $store), new HttpTransport($http, $factory, $factory));
-    $request = (new AuthRequest('fixture'))->setClient($client)->withoutCache();
-    if (!$request->send()->raw()->isSuccess() || !$request->sendAsync()->raw()->isSuccess()
+    $request = (new AuthRequest('fixture'))->withoutCache();
+    if (!$client->send($request)->raw()->isSuccess() || !$client->sendAsync($request)->raw()->isSuccess()
         || count($http->requests) !== 3 || $http->requests[2]->getHeaderLine('Authorization') !== 'Bearer token-' . $name) {
         throw new RuntimeException('Нарушена изоляция токенов standalone');
     }
@@ -67,3 +68,10 @@ if ($result->errors->first()?->context['reason'] !== 'auth_refresh_lock_timeout'
     throw new RuntimeException('Нарушен контракт ожидания auth lock');
 }
 echo "Standalone auth: token isolation, refresh, PSR-16, lease и async работают без Laravel/Guzzle HTTP Client.\n";
+
+$http = new ConsumingHttpClient([new Response(401, [], 'original')]);
+$client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', auth: new BearerAuthenticator('fixture')), new HttpTransport($http, $factory, $factory));
+$result = $client->send(new AuthRequest('fixture'))->raw();
+if (count($http->requests) !== 1 || $result->response?->body !== 'original') {
+    throw new RuntimeException('Постоянный токен не должен разрешать auth retry');
+}

@@ -19,6 +19,7 @@ use Brahmic\ApiSutra\Contracts\Interfaces\Hooks\HookInterface;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use GuzzleHttp\Psr7\Request;
+use Brahmic\ApiSutra\Tests\Stubs\Auth\RefreshingAuthenticator;
 
 it('восстанавливает фактически отправленные байты при HTTP и auth retry', function (bool $multipart, int $status): void {
     $stream = $multipart
@@ -28,7 +29,7 @@ it('восстанавливает фактически отправленные
         $stream->seek(7);
     }
     $scenario = new RetryScenario(
-        new ClientConfig(baseUrl: 'https://fixture.test', retry: new RetryConfig(attempts: 2, baseDelay: 20, jitter: false), authRetryAttempts: 1),
+        new ClientConfig(baseUrl: 'https://fixture.test', auth: new RefreshingAuthenticator(), retry: new RetryConfig(attempts: 2, baseDelay: 20, jitter: false), authRetryAttempts: 1),
         new RetryPolicyRequest(),
         new PreparedRequest(HttpMethod::GET, 'https://fixture.test', stream: $stream),
         [new Response($status, ['Retry-After' => '0']), new Response(200, [], '{}')],

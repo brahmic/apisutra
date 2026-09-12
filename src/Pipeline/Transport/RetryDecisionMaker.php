@@ -36,9 +36,6 @@ final readonly class RetryDecisionMaker
         if ($retryConfig === null) {
             return false;
         }
-        if ($response->status === 401 && $this->config->authRetryOn401) {
-            return false;
-        }
 
         if ($request instanceof AbstractRequest && $request->shouldRetryInternal($response, $attempt)) {
             return true;

@@ -6,6 +6,7 @@ namespace Brahmic\ApiSutra\Pipeline;
 
 use Brahmic\ApiSutra\Attributes\AttributeRegistry;
 use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthDependencyException;
 use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestExecutionInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
@@ -119,6 +120,7 @@ final class Pipeline implements PipelineExecutorInterface
         $this->authHandler = new AuthHandler(
             $this->config, $this, $this->sleeper, $this->clock,
             $this->client !== null ? $this->client::class : self::class,
+            $this->client,
         );
         $this->cacheManager = new CacheManager(
             $this->config,
@@ -233,6 +235,9 @@ final class Pipeline implements PipelineExecutorInterface
                 }
             }
             if ($this->config->throwOnErrors) {
+                if ($exception instanceof AuthDependencyException) {
+                    throw $exception->dependencyResult->exception ?? $exception;
+                }
                 throw $exception;
             }
 

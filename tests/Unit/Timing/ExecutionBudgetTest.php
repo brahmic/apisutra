@@ -96,7 +96,7 @@ it('не ждёт auth lock дольше остатка и не начинает
     expect($result->exception)->toBeInstanceOf(ExecutionDeadlineException::class)
         ->and($result->exception->stage)->toBe('auth_lock_wait')
         ->and($clock->waits)->toBe([50, 50])->and($transport->getRecorded())->toBe([])
-        ->and($auth->refreshCalls)->toBe(0)->and($locks->releases)->toBe(0);
+        ->and($auth->refreshCalls)->toBe(1)->and($locks->releases)->toBe(0);
 });
 
 it('поздний hook не кеширует успех и новое выполнение получает новый бюджет', function (bool $throws): void {

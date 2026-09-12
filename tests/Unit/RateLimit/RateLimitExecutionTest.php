@@ -32,7 +32,7 @@ it('возвращает локальную квоту без вымышленн
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test', throwOnErrors: $throw,
         rateLimit: new RateLimitConfig(limit: 1, behavior: RateLimitBehavior::Throw, store: $store),
-        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryExceptions: [Throwable::class]),
+        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryOn: [401, 503], retryExceptions: [Throwable::class]),
     ), $transport, $clock, $clock);
     $client->send(new RetryPolicyRequest())->raw();
     $send = fn () => ($async ? $client->sendAsync(new RetryPolicyRequest()) : $client->send(new RetryPolicyRequest()))->raw();
@@ -74,7 +74,7 @@ it('останавливает HTTP при отказе backend и не раск
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test', logger: $logger,
         rateLimit: new RateLimitConfig(store: $store),
-        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryExceptions: [Throwable::class]),
+        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryOn: [401, 503], retryExceptions: [Throwable::class]),
     ), $transport);
     $result = $client->send(new RetryPolicyRequest())->raw();
     $error = $result->errors->first();
@@ -101,7 +101,7 @@ it('сохраняет фактический ответ при локально
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test', throwOnErrors: $throw, auth: new BearerAuthenticator('fixture-token'),
         rateLimit: new RateLimitConfig(limit: $failure === 'quota' ? 1 : 2, behavior: RateLimitBehavior::Throw, store: $store),
-        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryExceptions: [Throwable::class]),
+        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, retryOn: [401, 503], retryExceptions: [Throwable::class]),
     ), $transport, $clock, $clock);
     try {
         if ($mode === 'batch' || $mode === 'parallel') {

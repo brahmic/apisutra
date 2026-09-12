@@ -16,7 +16,7 @@ describe('ExecutionErrorFactory', function () {
         $result = $factory->buildExceptionResult($request, $exception);
 
         expect($result->status)->toBe(ResultStatus::FAILED);
-        expect($result->errors->first()?->code)->toBe(ErrorCode::ConnectionFailed);
+        expect($result->errors->first()?->code)->toBe(ErrorCode::ExecutionError);
         expect($result->errors->first()?->message)->toBe('Ошибка');
         expect($result->exception)->toBe($exception);
     });

@@ -1,0 +1,19 @@
+{
+  "head": "c10ec96",
+  "date": "2026-09-12",
+  "sourceHashesMatch": true,
+  "checks": [
+    {
+      "script": "probe.php",
+      "records": 16,
+      "matchesBaseline": true
+    },
+    {
+      "script": "recorder-probe.php",
+      "records": 2,
+      "matchesBaseline": true
+    }
+  ],
+  "fullSuiteRerun": false,
+  "reason": "Код и постоянные тесты не изменялись; проверены планы и целевые воспроизведения."
+}

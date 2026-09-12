@@ -323,3 +323,9 @@ ConnectException. Наличие Guzzle HTTP Client для остальных т
 фабрике по-прежнему дают `validation_failed` с ошибками полей.
 Прямые `validate()`/`isValid()`/`errors()` при недоступном движке выбрасывают
 `ConfigurationException`. [Контракт и миграция](validation.md#миграция-и-различие-ошибок).
+
+
+При отказе обновления авторизации после основного 401 сохраняются оба ответа:
+основной — в `response`, refresh — в `AuthRefreshFailedException::dependencyResult`.
+Автоматический context содержит `reason=auth_refresh_failed`, без credentials и
+полного результата зависимости. [Контракт восстановления](auth.md#восстановление-после-401-и-миграция).

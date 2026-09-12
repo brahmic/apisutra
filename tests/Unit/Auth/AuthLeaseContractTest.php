@@ -67,7 +67,7 @@ it('исчерпание ожидания прекращает исполнен�
     expect($result->errors->first()->code->value)->toBe('timeout')
         ->and($result->errors->first()->context['reason'])->toBe($deadline ? 'execution_deadline_exceeded' : 'auth_refresh_lock_timeout')
         ->and($transport->getRecorded())->toHaveCount($after401 ? 1 : 0)
-        ->and($auth->refreshCalls)->toBe(0);
+        ->and($auth->refreshCalls)->toBe(1);
     if ($after401) {
         expect($result->response->status)->toBe(401);
     }

@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Brahmic\ApiSutra\Tests\Stubs\Auth\RefreshingAuthenticator;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\RefreshTokenRequest;
+
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
@@ -127,13 +130,17 @@ it('сетевой сбой POST не обходит безопасность о
 
 it('auth retry использует политику клиента даже при withoutRetry', function (bool $safe): void {
     $transport = new MockTransport();
-    $transport->fake(['*' => MockResponse::sequence([MockResponse::make([], 401), MockResponse::success(['ok' => true])])]);
+    RefreshingAuthenticator::reset();
+    $transport->fake([
+        RefreshTokenRequest::class => MockResponse::success(['token' => 'fixture']),
+        '*' => MockResponse::sequence([MockResponse::make([], 401), MockResponse::success(['ok' => true])]),
+    ]);
     $sleeper = new FakeSleeper();
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', retry: new RetryConfig(safeMethods: $safe ? [HttpMethod::POST] : []), authRetryAttempts: 1,
+        baseUrl: 'https://fixture.test', auth: new RefreshingAuthenticator(), retry: new RetryConfig(safeMethods: $safe ? [HttpMethod::POST] : []), authRetryAttempts: 1,
     ), $transport, $sleeper);
     $result = (new RetryPolicyRequest(HttpMethod::POST))->setClient($client)->withoutRetry()->send()->raw();
-    expect($transport->getRecorded())->toHaveCount($safe ? 2 : 1)
+    expect($transport->getRecorded())->toHaveCount($safe ? 3 : 1)
         ->and($result->isSuccess())->toBe($safe)
         ->and($sleeper->calls)->toBe(0);
 })->with([false, true]);

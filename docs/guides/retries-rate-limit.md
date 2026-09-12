@@ -177,8 +177,12 @@ final class CreateOrder extends AbstractRequest {}
 в пределах отдельного authRetryAttempts. `withoutRetry()` самостоятельно не отключает
 этот механизм. Проверки безопасности операции и тела действуют и здесь: POST/PATCH
 требуют явного разрешения. Auth retry не добавляет обычный backoff.
-Текущий механизм ещё не исключает повтор с неизменяемыми credentials, когда refresh
-недоступен; это ограничение не следует принимать за гарантию обновления токена.
+Повтор разрешается только после успешного refresh с типизированным DTO и
+`processTokenResponse()` либо после обнаружения обновлённого TokenAuthenticator в кеше.
+Без auth или при `getRefreshRequest() === null` сохраняется исходный 401. Явная обычная
+политика `retryOn: [401]` продолжает работать в пределах обычных attempts и backoff.
+Отказ refresh не запускает повтор основной операции, даже при `retryExceptions: [Throwable::class]`.
+[Ошибки и миграция](auth.md#восстановление-после-401-и-миграция).
 
 ## Где детали
 - `docs/guides/attributes/behavior.md` — `Retry`, `RateLimit`, `Idempotent`

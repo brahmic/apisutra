@@ -8,7 +8,7 @@ use Brahmic\ApiSutra\Enums\Configuration\Environment;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
 use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshLockTimeoutException;
-use Brahmic\ApiSutra\Exceptions\Request\UnauthorizedException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthDependencyException;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
 use Brahmic\ApiSutra\Tests\Stubs\Auth\LockAwareAuthenticator;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\TokenResponseDto;
@@ -207,7 +207,7 @@ describe('AuthHandler refresh lock', function () {
         );
 
         expect(fn() => $handler->handleAuthentication($request, $context))
-            ->toThrow(UnauthorizedException::class)
+            ->toThrow(AuthDependencyException::class)
             ->and($executor->calls)->toBe(1);
     });
 });

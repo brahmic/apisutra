@@ -17,6 +17,7 @@ use Brahmic\ApiSutra\Http\DestinationGuard;
 use Brahmic\ApiSutra\Http\RequestBodyGuard;
 use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshFailedException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
 use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
 use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
@@ -139,29 +140,26 @@ final readonly class RetrySender
 
                 if (
                     $response->status === 401 && $this->config->authRetryOn401
+                    && $authRetryUsed < $authRetryLimit
                     && (!$context->destination?->requiresIsolation() || $this->authHandler->resolveForCache($request, $context) !== null)
                 ) {
-                    if ($authRetryLimit <= 0 || $authRetryUsed >= $authRetryLimit) {
-                        return $response;
-                    }
                     if (!$this->prepareRepeat($request, $context, $bodyReplay)) {
                         return $response;
                     }
-                    $this->auditLogger->log(LogLevel::WARNING, 'Повторная аутентификация при 401', [
-                        'trace' => $context->traceId,
-                        'request' => $request::class,
-                        'attempt' => $attempt,
-                        'auth_attempt' => $authRetryUsed + 1,
-                        'auth_attempts' => $authRetryLimit,
-                    ]);
-                    $this->authHandler->handleAuthentication($request, $context, true);
-                    if (!$this->prepareRepeat($request, $context, $bodyReplay)) {
-                        return $response;
+                    if ($this->authHandler->recoverAuthentication($request, $context)) {
+                        if (!$this->prepareRepeat($request, $context, $bodyReplay)) {
+                            return $response;
+                        }
+                        $authRetryUsed++;
+                        $this->auditLogger->log(LogLevel::WARNING, 'Повтор после восстановления авторизации', [
+                            'trace' => $context->traceId,
+                            'request' => $request::class,
+                            'auth_attempt' => $authRetryUsed,
+                        ]);
+                        $minimumDelayMs = 0;
+                        $applyBackoff = false;
+                        continue;
                     }
-                    $authRetryUsed++;
-                    $minimumDelayMs = 0;
-                    $applyBackoff = false;
-                    continue;
                 }
 
                 if ($attempt < $attempts && $this->retryDecisionMaker->shouldRetry($request, $response, $attempt, $retryConfig)) {
@@ -206,6 +204,9 @@ final readonly class RetrySender
             } catch (ControlFlowException $exception) {
                 throw $exception;
             } catch (Throwable $exception) {
+                if ($exception instanceof AuthRefreshFailedException) {
+                    throw $exception;
+                }
                 // Локальный отказ не является HTTP-попыткой и не допускает слепого повтора записи.
                 if ($exception instanceof RateLimitBackendException) {
                     throw new RateLimitBackendException($exception->getPrevious(), $context->response ?? $context->lastResponse);

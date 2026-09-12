@@ -151,14 +151,14 @@ describe('RetrySender auth refresh', function () {
         $result = $request->send()->raw();
 
         expect($result->isFailed())->toBeTrue();
-        expect($auth->refreshCalls)->toBe(0);
+        expect($auth->refreshCalls)->toBe(1);
         $client->assertSent(ProtectedRequest::class, null, 1);
         expect($result->errors->first()->context['reason'])->toBe('auth_refresh_lock_timeout');
         $client->assertSent(RefreshTokenRequest::class, null, 0);
         expect($sleeper->totalMs)->toBeGreaterThanOrEqual(5000);
     });
 
-    it('не применяет общий retry для 401 даже если retryOn содержит 401', function () {
+    it('применяет явно заданный обычный retry для 401 без auth retry', function () {
         RefreshingAuthenticator::reset();
 
         $transport = new MockTransport();
@@ -189,7 +189,7 @@ describe('RetrySender auth refresh', function () {
 
         expect($result->isFailed())->toBeTrue();
         expect(RefreshingAuthenticator::$refreshCalls)->toBe(0);
-        $client->assertSent(ProtectedRequest::class, null, 1);
+        $client->assertSent(ProtectedRequest::class, null, 3);
     });
 
     it('совмещает refresh и retry при последующей ошибке', function () {

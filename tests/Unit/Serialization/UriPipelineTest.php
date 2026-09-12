@@ -103,7 +103,7 @@ it('доставляет исходные query байты до PSR клиент
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://api.test/v1?base=%2F&base=+',
         auth: new ApiKeyAuthenticator('fixture key', header: null, query: 'key'),
-        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, jitter: false),
+        retry: new RetryConfig(attempts: 3, baseDelay: 0, maxDelay: 0, jitter: false, retryOn: [401, 503]),
     ), new HttpTransport($http, $factory, $factory), new FakeSleeper(), new VirtualClock());
     $result = (new UriQueryRequest(false, '/items/%2F?key=original&x=+&x=%20#ignored'))->setClient($client)->send()->raw();
     expect($result->isSuccess())->toBeTrue()->and($http->requests)->toHaveCount(3);

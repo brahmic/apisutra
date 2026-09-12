@@ -1,0 +1,23 @@
+{
+  "head": "c10ec96",
+  "php": "8.5.4",
+  "command": "vendor/bin/pest --display-deprecations",
+  "result": "Tests:    34 deprecated, 1413 passed (5125 assertions)",
+  "duration": "Duration: 6.37s",
+  "deprecationLocations": {
+    "tests/Unit/Core/TransportTestingTest.php:120": 1,
+    "tests/Unit/Extensions/ExtensionRegistryTest.php:55": 1,
+    "src/Laravel/RequestFactory.php:282": 2,
+    "tests/Unit/Pipeline/PipelineSkipFlagsTest.php:102": 4,
+    "src/Pipeline/Flow/RequestContractValidator.php:492": 17,
+    "tests/Unit/Resolver/ClientDiscoveryServiceTest.php:115": 1,
+    "tests/Unit/Resolver/ClientDiscoveryServiceTest.php:171": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:23": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:42": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:62": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:81": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:100": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:119": 1,
+    "tests/Unit/Retry/RetryHandlerDelayTest.php:138": 1
+  }
+}

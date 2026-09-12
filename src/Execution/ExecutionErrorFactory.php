@@ -17,12 +17,22 @@ use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\VO\Errors\RequestError;
 use Brahmic\ApiSutra\VO\Errors\SystemErrorContextBuilder;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthDependencyException;
+use Brahmic\ApiSutra\Exceptions\Auth\AuthRefreshFailedException;
+use Brahmic\ApiSutra\Exceptions\Request\RequestException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
+use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
+use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Throwable;
 
 final readonly class ExecutionErrorFactory
 {
-    public function buildExceptionResult(RequestInterface $request, Throwable $exception): ExecutionResult
+    public function buildExceptionResult(RequestInterface $request, Throwable $exception, ?ProviderResponse $response = null): ExecutionResult
     {
+        if ($exception instanceof AuthDependencyException) {
+            return $exception->dependencyResult;
+        }
         $requestClass = $request instanceof RequestExecutionInterface
             ? $request->getRequest()::class
             : $request::class;
@@ -31,7 +41,8 @@ final readonly class ExecutionErrorFactory
         $response = match (true) {
             $exception instanceof ExecutionDeadlineException => $exception->response,
             $localRateLimit, $exception instanceof RateLimitBackendException => $exception->lastResponse,
-            default => null,
+            $exception instanceof RequestException => $exception->response,
+            default => $response,
         };
         $contextData = SystemErrorContextBuilder::build(
             traceId: $traceId,
@@ -39,7 +50,9 @@ final readonly class ExecutionErrorFactory
             requestClass: $requestClass,
         );
 
-        if ($exception instanceof ExecutionDeadlineException) {
+        if ($exception instanceof AuthRefreshFailedException) {
+            $contextData['reason'] = 'auth_refresh_failed';
+        } elseif ($exception instanceof ExecutionDeadlineException) {
             $contextData['reason'] = 'execution_deadline_exceeded';
             $contextData['stage'] = $exception->stage;
         } elseif ($localRateLimit) {
@@ -58,7 +71,11 @@ final readonly class ExecutionErrorFactory
                         $exception instanceof RateLimitBackendException => ErrorCode::ExecutionError,
                         $exception instanceof TimeoutException => ErrorCode::Timeout,
                         $exception instanceof ConfigurationException => ErrorCode::ConfigurationError,
-                        default => ErrorCode::ConnectionFailed,
+                        $exception instanceof RequestException && $response !== null => ErrorCode::fromHttpStatus($response->status),
+                        $exception instanceof HydrationException => ErrorCode::HydrationError,
+                        $exception instanceof ResponseDecodingException => ErrorCode::ResponseDecodingError,
+                        $exception instanceof ConnectionException => ErrorCode::ConnectionFailed,
+                        default => ErrorCode::ExecutionError,
                     },
                     message: $exception->getMessage(),
                     context: $contextData,
