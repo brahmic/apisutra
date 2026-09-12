@@ -93,7 +93,7 @@ reset-сценариев уже имеют тесты и завершённые 
 ## Выводы и четыре плана
 
 1. [Auth retry и ошибки refresh](../../completed/pln-017-auth-recovery-contract.md) — A1–A4.
-2. [Предсказуемая Laravel-интеграция](../../current/pln-018-laravel-integration.md) — L1–L3.
+2. [Предсказуемая Laravel-интеграция](../../completed/pln-018-laravel-integration.md) — L1–L3.
 3. [Остаточные контракты и диагностика](../../current/pln-019-contract-regressions-diagnostics.md) — P1–P4, E1, O1, D1–D4.
 4. [Приёмка и подготовка выпуска](../../current/pln-020-release-readiness.md) — R1–R3 и итоговая сверка issue.
 

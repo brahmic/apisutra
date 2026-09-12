@@ -23,13 +23,11 @@ use Brahmic\ApiSutra\Transport\GuzzleHttpClient;
 use Brahmic\ApiSutra\Transport\HttpTransport;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\HttpFactory as GuzzleHttpFactory;
-use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Psr\Http\Client\ClientInterface as PsrClientInterface;
 use Psr\Http\Message\RequestFactoryInterface as PsrRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface as PsrStreamFactoryInterface;
 use Psr\SimpleCache\CacheInterface;
-use ReflectionClass;
 
 /**
  * ServiceProvider пакета ApiSutra.
@@ -44,42 +42,48 @@ final class SdkServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(RequestFactoryInterface::class, function () {
+        // Маркер принадлежит контейнеру приложения, а не глобальному процессу worker.
+        $marker = self::class . '.registered';
+        if ($this->app->bound($marker)) {
+            return;
+        }
+        $this->app->instance($marker, true);
+        $this->app->singletonIf(RequestFactoryInterface::class, function () {
             return new RequestFactory();
         });
-        $this->app->singleton(ClientResponseAdapterInterface::class, function () {
+        $this->app->singletonIf(ClientResponseAdapterInterface::class, function () {
             return new ClientResponseAdapter();
         });
-        $this->app->singleton(ClientRegistry::class, function () {
+        $this->app->singletonIf(ClientRegistry::class, function () {
             return new ClientRegistry();
         });
-        $this->app->singleton(ClassMapProvider::class, function () {
+        $this->app->singletonIf(ClassMapProvider::class, function () {
             return new ClassMapProvider();
         });
-        $this->app->singleton(RequestScanner::class, function ($app) {
+        $this->app->singletonIf(RequestScanner::class, function ($app) {
             return new RequestScanner($app->make(ClassMapProvider::class));
         });
-        $this->app->singleton(RequestNamespaceDetector::class, function ($app) {
+        $this->app->singletonIf(RequestNamespaceDetector::class, function ($app) {
             return new RequestNamespaceDetector($app->make(RequestScanner::class));
         });
-        $this->app->singleton(ClientDiscoveryCache::class, function () {
+        $this->app->singletonIf(ClientDiscoveryCache::class, function () {
             $store = null;
             if ($this->app->bound(CacheInterface::class)) {
                 $store = $this->app->make(CacheInterface::class);
             }
             return new ClientDiscoveryCache($store);
         });
-        $this->app->singleton(ClientDiscoveryService::class, function ($app) {
+        $this->app->singletonIf(ClientDiscoveryService::class, function ($app) {
             return new ClientDiscoveryService(
                 $app->make(ClientRegistry::class),
                 $app->make(RequestNamespaceDetector::class),
                 $app->make(ClientDiscoveryCache::class),
             );
         });
-        $this->app->singleton(ClientResolverInterface::class, function ($app) {
+        $this->app->singletonIf(ClientResolverInterface::class, function ($app) {
             return new ClientResolver($app->make(ClientRegistry::class));
         });
-        $this->app->singleton(ServiceRegistrar::class, function ($app) {
+        $this->app->singletonIf(ServiceRegistrar::class, function ($app) {
             return new ServiceRegistrar(
                 $app->make(ClientRegistry::class),
                 $app->make(RequestNamespaceDetector::class),
@@ -87,10 +91,7 @@ final class SdkServiceProvider extends ServiceProvider
         });
         $this->registerDefaultTransport();
 
-        $this->app->resolving(function (object $object, $app): void {
-            if (!$object instanceof MultiServiceClientInterface) {
-                return;
-            }
+        $this->app->resolving(MultiServiceClientInterface::class, function (MultiServiceClientInterface $object, $app): void {
 
             $registrar = $app->make(ServiceRegistrar::class);
             if ($registrar instanceof ServiceRegistrar) {
@@ -98,36 +99,10 @@ final class SdkServiceProvider extends ServiceProvider
             }
         });
 
-        $this->app->resolving(function (object $object, $app): void {
-            if (!$object instanceof AbstractRequest) {
-                return;
-            }
+        $this->app->resolving(AbstractRequest::class, function (AbstractRequest $object, $app): void {
 
-            $factory = $app->make(RequestFactoryInterface::class);
-            $httpRequest = $app->make(Request::class);
-            $filled = $factory->make($object::class, $httpRequest);
-
-            $this->copyRequestState($object, $filled);
             $this->resolveClient($object, $app);
         });
-    }
-
-    /**
-     * Перенести заполненные данные запроса из фабрики в DI‑экземпляр.
-     *
-     * Копируются только изменяемые свойства, чтобы не ломать readonly‑контракты.
-     */
-    private function copyRequestState(AbstractRequest $target, AbstractRequest $source): void
-    {
-        $reflection = new ReflectionClass($source);
-        foreach ($reflection->getProperties() as $property) {
-            if ($property->isStatic() || $property->isReadOnly()) {
-                continue;
-            }
-
-            $property->setAccessible(true);
-            $property->setValue($target, $property->getValue($source));
-        }
     }
 
     /**
@@ -149,7 +124,7 @@ final class SdkServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->app->singleton(TransportInterface::class, function ($app) {
+        $this->app->singletonIf(TransportInterface::class, function ($app) {
             return $this->resolveDefaultTransport($app);
         });
     }
@@ -192,7 +167,10 @@ final class SdkServiceProvider extends ServiceProvider
         }
 
         $client = $app->make(PsrClientInterface::class);
-        return $client instanceof PsrClientInterface ? $client : null;
+        if (!$client instanceof PsrClientInterface) {
+            throw new ConfigurationException('Binding PSR-18 клиента должен реализовывать ClientInterface');
+        }
+        return $client;
     }
 
     private function resolvePsrRequestFactory(mixed $app): ?PsrRequestFactoryInterface
@@ -206,7 +184,10 @@ final class SdkServiceProvider extends ServiceProvider
         }
 
         $factory = $app->make(PsrRequestFactoryInterface::class);
-        return $factory instanceof PsrRequestFactoryInterface ? $factory : null;
+        if (!$factory instanceof PsrRequestFactoryInterface) {
+            throw new ConfigurationException('Binding PSR-17 request factory имеет неверный тип');
+        }
+        return $factory;
     }
 
     private function resolvePsrStreamFactory(mixed $app): ?PsrStreamFactoryInterface
@@ -220,7 +201,10 @@ final class SdkServiceProvider extends ServiceProvider
         }
 
         $factory = $app->make(PsrStreamFactoryInterface::class);
-        return $factory instanceof PsrStreamFactoryInterface ? $factory : null;
+        if (!$factory instanceof PsrStreamFactoryInterface) {
+            throw new ConfigurationException('Binding PSR-17 stream factory имеет неверный тип');
+        }
+        return $factory;
     }
 
     private function resolveDefaultPsrFactory(): ?GuzzleHttpFactory

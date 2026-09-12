@@ -22,7 +22,7 @@ HEAD тоже включает workflow. Нет проверок состава 
 ## Границы и зависимости
 
 Готовность к выпуску зависит от завершения [017](../completed/pln-017-auth-recovery-contract.md),
-[018](pln-018-laravel-integration.md), [019](pln-019-contract-regressions-diagnostics.md).
+[018](../completed/pln-018-laravel-integration.md), [019](pln-019-contract-regressions-diagnostics.md).
 Продуктовые решения по всем четырём планам согласованы 2026-09-12 — О1/О2 в
 [аудите](../audit/aud-003-remaining-work/aud-003-readme.md#ответы); реализация ещё
 не начата. Архивы, Composer metadata и подготовку quality jobs можно делать раньше.

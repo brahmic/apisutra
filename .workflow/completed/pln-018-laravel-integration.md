@@ -2,7 +2,7 @@
 
 - Дата создания: 2026-09-12
 - Дата обновления: 2026-09-12
-- Статус: новый
+- Статус: завершён
 
 ## Основание и цель
 
@@ -93,7 +93,7 @@ repository; установка должна не подтягивать require-
    только при вызове. Проверка Validate уже реализована и не переделывается.
 8. Запустить Unit/Laravel, Core/RequestFactory, Resolver, Auth/TokenIsolation,
    Execution и полный composer test; точные каталоги сверить при реализации.
-   Подключение integration job к общей матрице координировать с [pln-020](pln-020-release-readiness.md).
+   Подключение integration job к общей матрице координировать с [pln-020](../current/pln-020-release-readiness.md).
 
 ## Совместимость и документация
 
@@ -119,3 +119,26 @@ bindings сохраняются, standalone остаётся работоспо�
 для намеренного переноса входящих данных. Package discovery добавлять только
 после устранения автоматического копирования HTTP-данных и перезаписи bindings.
 Готовность настоящего Laravel-приложения/config:cache этой проверкой не утверждается.
+
+
+## Реализация и приёмка — 2026-09-12
+
+Убрано глобальное заполнение request из HTTP. Default bindings регистрируются
+условно; повторная регистрация provider не дублирует callbacks. Реальный bootstrap
+выявил дополнительный TypeError при разрешении строкового env: resolving callbacks
+ограничены AbstractRequest/MultiServiceClientInterface. Некорректные явные PSR bindings
+не маскируются fallback. Добавлено package discovery metadata.
+
+[Laravel приложение](../../tests/Integration/Laravel/README.md) использует собственный lock
+и path-пакет без require-dev ядра. Его vendor находится в исключённой из Git
+`.laravel-integration/vendor` вне tests: иначе поиск datasets Pest обходит циклическую
+ссылку path-пакета. Основные integration-тесты сохранены в общей PHPUnit suite.
+
+Проверены HTTP, явная фабрика, readonly/обязательный конструктор, bindings до/после
+provider, существующий клиент, два namespace, Artisan, sync dispatch двух заданий
+в одном процессе, повторный bootstrap и config:cache. Проверка job lifecycle не
+объявляется проверкой Octane или внешнего queue worker. Требования БД/Redis не добавлены.
+
+`vendor/bin/pest --compact`: 1443 passed, 33 прежних deprecation, 5268 assertions.
+`php tests/Integration/Laravel/verify.php`, `composer validate --strict` для обоих
+проектов и standalone auth в отдельной --no-dev копии прошли. Guides/changelog обновлены.

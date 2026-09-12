@@ -8,6 +8,7 @@
     <testsuites>
         <testsuite name="ApiSutra">
             <directory>tests</directory>
+            <exclude>tests/Integration/Laravel</exclude>
         </testsuite>
     </testsuites>
     <source>

@@ -74,3 +74,8 @@ $user = $request->send()->dataOrFail();
 - [Attributes](./attributes/README.md)
 - [ClientConfig](./client-config/README.md)
 - [Transport](./transport.md)
+
+В Laravel provider подключается package discovery без обязательной публикации конфига.
+Обычный DI сохраняет заданные значения SDK-запроса; перенос входящих HTTP-данных
+выполняется явной RequestFactory. Пользовательские bindings имеют приоритет.
+[Подключение, миграция и тестирование](laravel.md).
