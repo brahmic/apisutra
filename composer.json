@@ -2,7 +2,7 @@
     "name": "brahmic/apisutra",
     "description": "API Core SDK for declarative API clients",
     "type": "library",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "guzzlehttp/promises": "^2.0",
         "guzzlehttp/psr7": "^2.0",
