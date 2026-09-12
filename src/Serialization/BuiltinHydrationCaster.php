@@ -8,7 +8,9 @@ use Brahmic\ApiSutra\Attributes\DataTransfer\Cast as CastAttribute;
 use Brahmic\ApiSutra\Attributes\DataTransfer\DateTimeFrom;
 use Brahmic\ApiSutra\Casts\DateTimeCast;
 use Brahmic\ApiSutra\Casts\EnumCast;
+use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DtoInterface;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoHydration;
 use Brahmic\ApiSutra\VO\Files\Base64File;
@@ -50,6 +52,9 @@ final readonly class BuiltinHydrationCaster
         }
 
         if ($cast !== null) {
+            if (!class_exists($cast->class) || !is_subclass_of($cast->class, CastInterface::class)) {
+                throw new ConfigurationException('Неверный класс DTO cast: ' . $cast->class);
+            }
             $castInstance = new $cast->class(...$cast->args);
 
             return $castInstance->hydrate($value, $context);
@@ -84,6 +89,9 @@ final readonly class BuiltinHydrationCaster
         }
 
         if (is_subclass_of($type, DtoInterface::class)) {
+            if (!is_array($value) && !is_object($value)) {
+                throw HydrationException::invalidValue('unexpected_response_shape', $type, get_debug_type($value));
+            }
             return ($this->dtoHydrator)($value, $type, $context);
         }
 

@@ -91,6 +91,40 @@ final readonly class OtherLastNamesBlockDto extends BaseBlockDto
 - для nullable non-constructor property при `Missing` hydrator инициализирует `null`
 - для non-nullable missing non-constructor property hydrator бросает явную ошибку
 
+## Обязательные поля и ошибки гидратации
+
+Обязательность следует из PHP-типа и объявления DTO; дополнительные настройки
+клиента или флаги `required` не нужны. Правила применяются после `From`/fallback,
+нормализации пустой строки, `DefaultValue` и автодефолта typed collections.
+
+| Объявление и вход | Результат |
+| --- | --- |
+| Параметр конструктора с default, поле отсутствует | Значение constructor default. |
+| Параметр конструктора без default, поле отсутствует, в том числе `?T` | `required_field_missing`. Nullable разрешает null, но не делает аргумент необязательным. |
+| Nullable public property вне constructor chain, без default, поле отсутствует | Null. |
+| Non-nullable public property вне constructor chain, без default, поле отсутствует | `required_field_missing`. |
+| Найден explicit null | Принимается nullable/mixed; constructor default и fallback его не заменяют. Применимый `DefaultValue` для Null может задать замену. |
+| После преобразования null, а тип не допускает null | `null_not_allowed`. |
+| После допустимых casts значение не подходит типу | `invalid_field_type`; scalar вместо вложенного DTO — `unexpected_response_shape`. |
+
+Конструктор вызывается один раз; проверяется тип его параметра, даже если он
+преобразует значение для свойства другого типа. Сохраняются существующие scalar
+conversions и выбор union-веток. Пользовательские casts имеют прежний приоритет.
+
+Прямой `DTO::from()` выдаёт `HydrationException` с `reason`, `path`, `expected`,
+`actual`. В запросе это `hydration_error` с сохранённым HTTP-ответом. Путь содержит
+имена свойств DTO и порядковые индексы (`items[1].id`), при наличии unwrap — его
+префикс. Это не обязательно буквальный путь `From` внутри ответа.
+
+Неверные объявления классов, casts, карт `Nested`, timezone и конфликты readonly
+инициализации остаются ошибками конфигурации. Произвольная ошибка пользовательского
+конструктора или computed не классифицируется как ошибка конкретного поля.
+
+При миграции обновите обработку прежних `ArgumentCountError`/`TypeError` и
+`ConfigurationException` для перечисленных ошибок данных. Успешные defaults/null
+сценарии сохраняются. Строгий вложенный JSON описан в [JsonCast](casts.md#jsoncast),
+доступ к исходному ответу — в [диагностике](errors.md#подробная-диагностика-гидратации).
+
 ## Маппинг полей
 Когда ключи ответа/запроса отличаются от имени свойства.
 - `Map` — когда нужен один и тот же внешний ключ и для гидрации, и для сериализации.
@@ -294,7 +328,7 @@ final readonly class ProviderDtoHydrationProfile implements DtoHydrationProfileI
 ### Практические правила
 - default поведение ядра не меняется: `''` остаётся `''`
 - `EmptyStringAsNull` полезен в основном для `?string`
-- если `'' -> null` включено для non-nullable поля и после `DefaultValue` значение всё ещё `null`, hydrator бросает `ConfigurationException`
+- если `'' -> null` включено для non-nullable поля и после `DefaultValue` значение всё ещё `null`, hydrator бросает `HydrationException` с reason `null_not_allowed`
 - `DefaultValue(... when: [Null])` совместим с этой нормализацией: после `'' -> null` будет работать как для обычного `null`
 
 `DefaultValue` может задавать значение по условию `ValueState`:

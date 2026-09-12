@@ -32,6 +32,7 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionParameter;
 use ReflectionProperty;
 
 final class Hydrator
@@ -41,6 +42,7 @@ final class Hydrator
     private static ?self $default = null;
     private readonly NamingStrategyResolver $namingStrategyResolver;
     private readonly BuiltinHydrationCaster $builtinHydrationCaster;
+    private readonly HydrationValueValidator $valueValidator;
 
     public function __construct(
         private readonly CastRegistry $casts,
@@ -48,6 +50,7 @@ final class Hydrator
         private readonly ?DtoHydrationProfileResolver $profileResolver = null,
     ) {
         $this->namingStrategyResolver = new NamingStrategyResolver();
+        $this->valueValidator = new HydrationValueValidator();
         $this->builtinHydrationCaster = new BuiltinHydrationCaster(
             typeSelector: new HydrationTypeSelector(),
             dtoHydrator: fn (mixed $nestedValue, string $dtoClass, ?PipelineContext $nestedContext): object => $this->hydrate($nestedValue, $dtoClass, $nestedContext),
@@ -73,6 +76,9 @@ final class Hydrator
         string $dtoClass,
         ?PipelineContext $context = null,
     ): object {
+        if (!class_exists($dtoClass) || !(new ReflectionClass($dtoClass))->isInstantiable()) {
+            throw new ConfigurationException('Недоступен класс DTO для гидратации: ' . $dtoClass);
+        }
         $array = $this->normalizeData($data);
 
         if (is_subclass_of($dtoClass, ResponseDtoInterface::class)) {
@@ -80,6 +86,8 @@ final class Hydrator
         }
 
         $metadata = $this->getHydrationMetadata($dtoClass);
+        $constructor = $metadata['constructor'];
+        $constructorNames = array_fill_keys(array_column($constructor ?? [], 'name'), true);
         $resolvedHydration = $this->resolveHydration($dtoClass);
         $values = [];
 
@@ -106,7 +114,7 @@ final class Hydrator
             $state = $resolved->state;
             $value = $resolved->value;
 
-            [$state, $value, $emptyStringNormalized] = $this->normalizeEmptyStringValue(
+            [$state, $value] = $this->normalizeEmptyStringValue(
                 state: $state,
                 value: $value,
                 cast: $cast,
@@ -119,13 +127,6 @@ final class Hydrator
             if ($default !== null && $this->shouldApplyDefault($default, $state)) {
                 $value = $this->resolveDefaultValue($default, $value, $state, $array, $context);
                 $state = $value === null ? ValueState::Null : ValueState::Present;
-            }
-
-            if ($emptyStringNormalized && $value === null && !$property->getType()?->allowsNull()) {
-                throw new ConfigurationException(
-                    'Нормализация empty string в null несовместима с non-nullable DTO property: '
-                    . $dtoClass . '::$' . $property->getName(),
-                );
             }
 
             if ($state === ValueState::Missing && $this->shouldAutoDefaultEmptyTypedCollection($property, $default, $state)) {
@@ -147,11 +148,14 @@ final class Hydrator
                 throw $exception->prependPath($name);
             }
 
+            // Для constructor-first проверяется параметр: конструктор может преобразовать значение для свойства.
+            if (!isset($constructorNames[$name])) {
+                $this->valueValidator->assertValue($value, $property->getType(), $property->getDeclaringClass(), $name);
+            }
             $values[$name] = $value;
         }
 
         $reflection = new ReflectionClass($dtoClass);
-        $constructor = $metadata['constructor'];
         if ($constructor === null) {
             return $this->instantiateWithoutConstructorMetadata($reflection, $metadata['properties'], $values);
         }
@@ -194,6 +198,9 @@ final class Hydrator
     private function hydrateItem(mixed $item, string $dtoClass, ?PipelineContext $context, int $index): object
     {
         try {
+            if (!is_array($item) && !is_object($item)) {
+                throw HydrationException::invalidValue('unexpected_response_shape', $dtoClass, get_debug_type($item));
+            }
             return $this->hydrate($item, $dtoClass, $context);
         } catch (HydrationException $exception) {
             throw $exception->prependPath('[' . $index . ']');
@@ -244,7 +251,7 @@ final class Hydrator
 
     /**
      * @param array<string, mixed> $values
-     * @param array<int, array{name: string, hasDefault: bool, default: mixed}> $constructor
+     * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool, default: mixed}> $constructor
      * @return array<string, mixed>
      */
     private function buildConstructorArguments(array $values, array $constructor): array
@@ -255,12 +262,20 @@ final class Hydrator
             $paramName = $parameter['name'];
 
             if (array_key_exists($paramName, $values)) {
+                $reflection = $parameter['reflection'];
+                $this->valueValidator->assertValue(
+                    $values[$paramName], $reflection->getType(), $reflection->getDeclaringClass(), $paramName,
+                );
                 $args[$paramName] = $values[$paramName];
                 continue;
             }
 
             if ($parameter['hasDefault']) {
                 $args[$paramName] = $parameter['default'];
+            } elseif (!$parameter['reflection']->isVariadic()) {
+                throw HydrationException::invalidValue(
+                    'required_field_missing', (string) ($parameter['reflection']->getType() ?? 'mixed'), 'missing', $paramName,
+                );
             }
         }
 
@@ -279,7 +294,7 @@ final class Hydrator
      *   dateTimeFrom: ?DateTimeFrom,
      *   default: ?DefaultValue
      * }> $properties
-     * @param array<int, array{name: string, hasDefault: bool, default: mixed}> $constructor
+     * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool, default: mixed}> $constructor
      * @return array<string, array{property: ReflectionProperty, value: mixed}>
      */
     private function buildRemainingPropertyAssignments(array $values, array $properties, array $constructor): array
@@ -320,10 +335,7 @@ final class Hydrator
             }
 
             if (!$property->hasDefaultValue()) {
-                throw new ConfigurationException(
-                    'Отсутствует обязательное DTO property вне constructor chain: '
-                    . $property->getDeclaringClass()->getName() . '::$' . $name,
-                );
+                throw HydrationException::invalidValue('required_field_missing', (string) ($property->getType() ?? 'mixed'), 'missing', $name);
             }
         }
 
@@ -437,6 +449,10 @@ final class Hydrator
         $propertyType = $this->getPrimaryType($property);
         $targetType = $nested->type ?? $propertyType;
 
+        if ($nested->type !== null && (!class_exists($nested->type) || !(new ReflectionClass($nested->type))->isInstantiable())) {
+            throw new ConfigurationException('Неверный класс Nested.type: ' . $nested->type);
+        }
+
         if (is_array($value) && $this->isDiscriminatedNested($nested)) {
             return $this->hydrateDiscriminatedNested(
                 value: $value,
@@ -470,6 +486,9 @@ final class Hydrator
         }
 
         if ($targetType !== null && class_exists($targetType)) {
+            if (!is_object($value)) {
+                throw HydrationException::invalidValue('unexpected_response_shape', $targetType, get_debug_type($value));
+            }
             return $this->hydrate($value, $targetType, $context);
         }
 
@@ -548,6 +567,12 @@ final class Hydrator
         $items = [];
         $index = -1;
 
+        foreach ($nested->map ?? [] as $class) {
+            if (!is_string($class) || !class_exists($class) || !(new ReflectionClass($class))->isInstantiable()) {
+                throw new ConfigurationException('Nested.map должен содержать доступные классы DTO');
+            }
+        }
+
         foreach ($value as $item) {
             $index++;
             [$discriminator, $payload, $rawItem] = $this->resolveDiscriminatorPayload($item, $nested);
@@ -559,11 +584,9 @@ final class Hydrator
                 }
 
                 if ($nested->unknownVariant === NestedUnknownVariant::Error) {
-                    throw new ConfigurationException(
-                        sprintf(
-                            'Неизвестный вариант Nested discriminator: %s',
-                            $discriminator ?? 'null',
-                        ),
+                    throw HydrationException::invalidValue(
+                        'unknown_nested_variant', 'variant: ' . implode('|', array_keys($nested->map ?? [])),
+                        $discriminator === null ? 'missing' : 'string', '[' . $index . ']',
                     );
                 }
 
@@ -651,7 +674,7 @@ final class Hydrator
      *     emptyStringAsNull: ?EmptyStringAsNull,
      *     default: ?DefaultValue
      *   }>,
-     *   constructor: ?array<int, array{name: string, hasDefault: bool, default: mixed}>
+     *   constructor: ?array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool, default: mixed}>
      * }
      */
     private function getHydrationMetadata(string $dtoClass): array
@@ -691,6 +714,7 @@ final class Hydrator
             foreach ($constructor->getParameters() as $parameter) {
                 $params[] = [
                     'name' => $parameter->getName(),
+                    'reflection' => $parameter,
                     'hasDefault' => $parameter->isDefaultValueAvailable(),
                     'default' => $parameter->isDefaultValueAvailable()
                         ? $parameter->getDefaultValue()

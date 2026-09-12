@@ -199,7 +199,7 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 
 ### Ошибки структуры и диапазона чисел
 
-Строгий `Returns::unwrap` и защита int возвращают `hydration_error` с
+Нарушения контрактов полей DTO, строгий `Returns::unwrap`, JsonCast и защита int возвращают `hydration_error` с
 `HydrationException`. Для этих ошибок `RequestError::context` и свойства исключения
 содержат `reason`, `path`, `expected`, `actual`:
 
@@ -208,6 +208,12 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 | `unwrap_path_missing` | Указанный путь отсутствует; actual — `missing`. |
 | `unexpected_response_shape` | По пути найден null/scalar вместо данных объявленного DTO. |
 | `integer_out_of_range` | Число не помещается в int; actual — тип исходного значения. |
+| `required_field_missing` | Обязательное поле отсутствует. |
+| `null_not_allowed` | Итоговое значение null не допускается объявленным типом. |
+| `invalid_field_type` | Значение после casts не подходит типу поля или параметра. |
+| `invalid_json` | JsonCast не может разобрать вложенную JSON-строку. |
+| `invalid_datetime` | Дата не принята выбранной политикой Throw; expected включает формат. |
+| `unknown_nested_variant` | Nested в режиме Error не нашёл вариант; expected содержит объявленные допустимые варианты. |
 
 Например, `path=data.item.id`, `expected=int`, `actual=string` указывает поле с
 переполнением. Для вложенных DTO используются имена свойств, для коллекций —
@@ -219,6 +225,38 @@ retry. `raw()`/`resolved()` сообщают ошибку, `dataOrFail()` и `th
 исключение; sync и promise API используют один контракт.
 Миграция unwrap описана в [Returns](attributes/response.md#строгий-unwrap),
 числовые типы — в [сериализации](serialization.md#большие-целые-в-ответах).
+
+### Подробная диагностика гидратации
+
+Автоматический ERROR log для перечисленных встроенных ошибок содержит
+`reason`, `path`, `expected`, `actual`, `httpStatus`, класс запроса (`request`) и
+`traceId`. Actual сообщает тип или missing/null, а сообщение не включает исходное
+значение. Например, `items[2].price`, expected `float`, actual `array` указывает
+нарушенный контракт. Для `Nested` режимы Skip/KeepRaw сохраняют прежнее поведение.
+
+Если для расследования нужно само значение, прочитайте исходный ответ из результата:
+
+```php
+// $request — настроенный запрос SDK-провайдера с объявленным DTO ответа.
+$result = $request->send()->raw();
+$error = $result->errors->first();
+$diagnostic = $error?->context;           // Путь, причина и ожидаемый тип.
+$body = $result->response?->body;         // Исходное тело HTTP-ответа без маскирования.
+```
+
+`response` и его body доступны при `debug: false`: ошибка гидратации не маскирует
+и не пересобирает ответ. SDK не требует нового режима конфигурации или хранилища
+диагностических данных. Провайдер может явно сохранить нужный ответ при обработке
+результата по своим правилам доступа и маскирования. Raw body и `previous` не являются
+очищенным экспортом; не отправляйте их целиком в общий автоматический лог.
+Гарантия безопасных сообщений относится к перечисленным встроенным проверкам,
+а не к произвольному тексту пользовательских casts/конструкторов.
+
+Миграция: ошибки missing/null/типов, дат и Nested Error теперь дают
+`HydrationException` / `hydration_error` вместо прежних ошибок PHP или
+`configuration_error`. Повреждённый JSON в JsonCast больше не превращается в null.
+[Правила обязательности и defaults](dto.md#обязательные-поля-и-ошибки-гидратации)
+работают автоматически, без новых обязательных настроек.
 
 ### Ошибки файлов и транспорта
 

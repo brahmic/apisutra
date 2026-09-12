@@ -271,6 +271,9 @@ final readonly class ExecutionResultBuilder
             'request' => $request::class,
             'exception' => $exception::class,
             'message' => $context->destination?->preserveUrl ? 'Ошибка выполнения запроса по готовому URL' : $exception->getMessage(),
+            ...($exception instanceof HydrationException ? $exception->context() + [
+                'httpStatus' => $response?->status, 'traceId' => $context->traceId,
+            ] : []),
         ]);
 
         $result = $this->createFailedResult(

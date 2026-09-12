@@ -9,10 +9,13 @@ use Brahmic\ApiSutra\Config\DateTimeSerializationPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
 use Brahmic\ApiSutra\Enums\Serialization\DateTimeInvalidBehavior;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use Override;
+use Stringable;
 use Throwable;
 
 final class DateTimeCast implements CastInterface
@@ -36,54 +39,48 @@ final class DateTimeCast implements CastInterface
         return new self(serializePolicy: $policy);
     }
 
-    #[\Override]
+    #[Override]
     public function hydrate(mixed $value, ?PipelineContext $context = null): ?DateTimeInterface
     {
         if ($value === null || $value === '') {
             return null;
         }
 
-        if ($this->hydratePolicy === null) {
-            $timezone = $this->timezone ? new DateTimeZone($this->timezone) : null;
-            $date = DateTimeImmutable::createFromFormat($this->format, (string) $value, $timezone ?: null);
-
-            if ($date === false) {
-                return new DateTimeImmutable((string) $value, $timezone ?: null);
-            }
-
-            return $date;
-        }
-
-        $stringValue = (string) $value;
         $parse = $this->hydratePolicy;
-        $timezone = $parse->defaultTimezone ? new DateTimeZone($parse->defaultTimezone) : null;
+        $format = $parse?->format ?? $this->format;
+        $timezoneName = $parse !== null ? $parse->defaultTimezone : $this->timezone;
+        $timezone = $this->resolveTimezone($timezoneName);
+        if (!is_scalar($value) && !$value instanceof Stringable) {
+            return $this->handleInvalid($parse, $value);
+        }
+        $stringValue = (string) $value;
         $hasOffset = $this->hasOffset($stringValue);
 
-        $date = DateTimeImmutable::createFromFormat($parse->format, $stringValue, $timezone ?: null);
-        if ($date === false) {
-            if ($parse->strictFormat) {
-                return $this->handleInvalid($parse, $stringValue);
+        try {
+            $date = DateTimeImmutable::createFromFormat($format, $stringValue, $timezone);
+            if ($date === false) {
+                if ($parse?->strictFormat) {
+                    return $this->handleInvalid($parse, $value);
+                }
+                $date = new DateTimeImmutable($stringValue, $timezone);
             }
-
-            try {
-                $date = new DateTimeImmutable($stringValue, $timezone ?: null);
-            } catch (Throwable $exception) {
-                return $this->handleInvalid($parse, $stringValue, $exception);
-            }
+        } catch (HydrationException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            return $this->handleInvalid($parse, $value, $exception);
         }
 
-        if (!$hasOffset && $parse->strictMissingTimezone) {
-            return $this->handleInvalid($parse, $stringValue);
+        if (!$hasOffset && $parse?->strictMissingTimezone) {
+            return $this->handleInvalid($parse, $value);
         }
-
-        if ($hasOffset && !$parse->preserveOffset && $timezone !== null) {
+        if ($hasOffset && $parse !== null && !$parse->preserveOffset && $timezone !== null) {
             $date = $date->setTimezone($timezone);
         }
 
         return $date;
     }
 
-    #[\Override]
+    #[Override]
     public function serialize(mixed $value, ?PipelineContext $context = null): ?string
     {
         if ($value === null) {
@@ -115,20 +112,26 @@ final class DateTimeCast implements CastInterface
         return (bool) preg_match(self::OFFSET_PATTERN, $value);
     }
 
+    private function resolveTimezone(?string $timezone): ?DateTimeZone
+    {
+        try {
+            return $timezone ? new DateTimeZone($timezone) : null;
+        } catch (Throwable $exception) {
+            throw new ConfigurationException('Некорректная timezone в конфигурации DateTimeCast', previous: $exception);
+        }
+    }
+
     private function handleInvalid(
-        DateTimeHydrationPolicy $config,
-        string $value,
+        ?DateTimeHydrationPolicy $config,
+        mixed $value,
         ?Throwable $exception = null,
     ): ?DateTimeInterface {
-        if ($config->invalidBehavior === DateTimeInvalidBehavior::Null) {
+        if ($config?->invalidBehavior === DateTimeInvalidBehavior::Null) {
             return null;
         }
 
-        $message = 'Не удалось распарсить дату: ' . $value;
-        if ($exception !== null) {
-            $message .= '. ' . $exception->getMessage();
-        }
-
-        throw new ConfigurationException($message);
+        throw HydrationException::invalidValue(
+            'invalid_datetime', 'date: ' . ($config?->format ?? $this->format), get_debug_type($value), previous: $exception,
+        );
     }
 }

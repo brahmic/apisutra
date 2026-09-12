@@ -6,7 +6,11 @@ namespace Brahmic\ApiSutra\Casts;
 
 use BackedEnum;
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+use Override;
+use TypeError;
 use UnitEnum;
 
 final class EnumCast implements CastInterface
@@ -15,7 +19,7 @@ final class EnumCast implements CastInterface
         private readonly ?string $enumClass = null,
     ) {}
 
-    #[\Override]
+    #[Override]
     public function hydrate(mixed $value, ?PipelineContext $context = null): mixed
     {
         if ($value === null) {
@@ -24,13 +28,20 @@ final class EnumCast implements CastInterface
 
         if ($this->enumClass !== null && enum_exists($this->enumClass)) {
             $class = $this->enumClass;
-            return $class::tryFrom($value);
+            if (!is_subclass_of($class, BackedEnum::class)) {
+                throw new ConfigurationException('EnumCast::hydrate требует backed enum');
+            }
+            try {
+                return $class::tryFrom($value);
+            } catch (TypeError $exception) {
+                throw HydrationException::invalidValue('invalid_field_type', $class, get_debug_type($value), previous: $exception);
+            }
         }
 
         return $value;
     }
 
-    #[\Override]
+    #[Override]
     public function serialize(mixed $value, ?PipelineContext $context = null): mixed
     {
         if ($value instanceof UnitEnum) {

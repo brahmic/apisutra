@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Контракты полей DTO, строгий JsonCast и безопасные ошибки](completed/pln-013-dto-hydration-contracts/pln-013-readme.md)
 - [Строгий Returns::unwrap и сохранение больших целых](completed/pln-012-strict-unwrap-big-integers/pln-012-readme.md)
 - [Изоляция токенов и корректные auth-блокировки](completed/pln-011-auth-token-isolation/pln-011-readme.md)
 - [Замена и очистка тела PreparedRequest](completed/pln-010-prepared-request-body-transitions.md)

@@ -21,10 +21,11 @@ class HydrationException extends SdkException
         parent::__construct($message, $code, $previous);
     }
 
-    public static function invalidValue(string $reason, string $expected, string $actual, string $path = ''): self
+    public static function invalidValue(string $reason, string $expected, string $actual, string $path = '', ?Throwable $previous = null): self
     {
         return new self(
             'Некорректные данные в ' . ($path === '' ? '$' : $path) . ': ожидается ' . $expected . ', получено ' . $actual,
+            previous: $previous,
             reason: $reason,
             path: $path,
             expected: $expected,

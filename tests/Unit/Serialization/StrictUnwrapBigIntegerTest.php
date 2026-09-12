@@ -147,6 +147,6 @@ it('декодирует integer литералы без потери цифр �
 
 it('сохраняет permissive malformed JSON и приоритет HTTP ошибки', function (): void {
     $response = MockResponse::make('{broken', 503)->toProviderResponse(new PreparedRequest(HttpMethod::GET, 'https://api.test'));
-    expect($response->json())->toBeNull()->and((new JsonCast())->hydrate('{broken'))->toBeNull()
+    expect($response->json())->toBeNull()->and(fn () => (new JsonCast())->hydrate('{broken'))->toThrow(HydrationException::class)
         ->and($response->errorMessage())->toBe('HTTP 503');
 });

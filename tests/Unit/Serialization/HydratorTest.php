@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Brahmic\ApiSutra\Casts\CastRegistry;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Enums\Configuration\Environment;
 use Brahmic\ApiSutra\Enums\Configuration\NamingStrategy;
@@ -167,7 +168,7 @@ describe('Hydrator', function () {
     it('не делает небезопасный int cast для нечисловой строки', function () {
         expect(fn () => ScalarInvalidIntDto::from([
             'intValue' => 'abc',
-        ]))->toThrow(\TypeError::class);
+        ]))->toThrow(HydrationException::class);
     });
 
     it('дает From приоритет над Map при гидрации', function () {
@@ -320,8 +321,8 @@ describe('Hydrator', function () {
         expect(fn () => EmptyStringNonNullableDto::from([
             'name' => '',
         ]))->toThrow(
-            \Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException::class,
-            'Нормализация empty string в null несовместима с non-nullable DTO property',
+            HydrationException::class,
+            'Некорректные данные в name',
         );
     });
 
@@ -363,8 +364,8 @@ describe('Hydrator', function () {
         expect(fn () => InheritedRequiredPayloadDto::from([
             'status' => 'active',
         ]))->toThrow(
-            \Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException::class,
-            'Отсутствует обязательное DTO property вне constructor chain',
+            HydrationException::class,
+            'Некорректные данные в result',
         );
     });
 });

@@ -7,7 +7,7 @@ use Brahmic\ApiSutra\Collections\RawCollection;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Enums\Configuration\Environment;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
-use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\Hydrator;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\PolymorphicOwnerOrganizationDto;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\PolymorphicOwnerPersonDto;
@@ -113,7 +113,7 @@ describe('Nested discriminator mode', function () {
                 ['foreign' => ['id' => 'x-1']],
             ],
         ], PolymorphicOwnersArrayKeyErrorDto::class, $context))
-            ->toThrow(ConfigurationException::class, 'Неизвестный вариант Nested discriminator: foreign');
+            ->toThrow(HydrationException::class, 'Некорректные данные в owners[1]');
     });
 
     it('сохраняет value-mode для array', function () {

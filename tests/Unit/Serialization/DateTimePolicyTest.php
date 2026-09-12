@@ -11,6 +11,7 @@ use Brahmic\ApiSutra\Enums\Configuration\Environment;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Enums\Serialization\DateTimeInvalidBehavior;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\DtoSerializer;
 use Brahmic\ApiSutra\Serialization\Hydrator;
 use Brahmic\ApiSutra\Serialization\Serializer;
@@ -75,13 +76,13 @@ describe('DateTime policy', function () {
     it('DtoHydrate включает strictMissingTimezone', function () {
         expect(fn () => StrictMissingTimezoneDateTimeDto::from([
             'created_at' => '2024-01-01T10:00:00',
-        ]))->toThrow(ConfigurationException::class);
+        ]))->toThrow(HydrationException::class);
     });
 
     it('DtoHydrate включает strictFormat без fallback', function () {
         expect(fn () => StrictFormatDateTimeDto::from([
             'created_at' => '2024-01-01T10:00:00',
-        ]))->toThrow(ConfigurationException::class);
+        ]))->toThrow(HydrationException::class);
     });
 
     it('DtoHydrate поддерживает invalidBehavior=Null для nullable свойства', function () {

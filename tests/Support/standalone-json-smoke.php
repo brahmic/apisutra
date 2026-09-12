@@ -5,6 +5,7 @@ declare(strict_types=1);
 // Запуск: php tests/Support/standalone-json-smoke.php /path/to/no-dev-checkout
 use Brahmic\ApiSutra\Attributes\AttributeRegistry;
 use Brahmic\ApiSutra\Casts\CastRegistry;
+use Brahmic\ApiSutra\Casts\JsonCast;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
@@ -17,6 +18,9 @@ use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Tests\Stubs\Core\PsrNetworkFailure;
 use Brahmic\ApiSutra\Tests\Stubs\Core\SequenceHttpClient;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\SimpleResponseDto;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\HydrationRequiredNullableDto;
+use Brahmic\ApiSutra\Tests\Stubs\Dto\HydrationJsonPayloadDto;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\HydrationProbeRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\StringIdentifierDto;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\CacheProbeRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\JsonPayloadRequest;
@@ -108,4 +112,37 @@ try {
         throw new RuntimeException('Не сохранена диагностика переполнения');
     }
 }
+require __DIR__ . '/../Stubs/Dto/HydrationRequiredNullableDto.php';
+require __DIR__ . '/../Stubs/Dto/HydrationJsonPayloadDto.php';
+require __DIR__ . '/../Stubs/Requests/HydrationProbeRequest.php';
+try {
+    $hydrator->hydrate([], HydrationRequiredNullableDto::class);
+    throw new RuntimeException('Отсутствующий обязательный nullable аргумент принят');
+} catch (HydrationException $exception) {
+    if ($exception->reason !== 'required_field_missing' || $exception->path !== 'note') {
+        throw new RuntimeException('Не сохранена диагностика обязательного поля');
+    }
+}
+if ($hydrator->hydrate(['note' => null], HydrationRequiredNullableDto::class)->note !== null) {
+    throw new RuntimeException('Изменено допустимое nullable значение');
+}
+try {
+    (new JsonCast())->hydrate('{broken');
+    throw new RuntimeException('Невалидный вложенный JSON принят');
+} catch (HydrationException $exception) {
+    if (!$exception->getPrevious() instanceof JsonException) {
+        throw new RuntimeException('Потеряна причина ошибки JSON');
+    }
+}
+$rawBody = '{"payload":"fixture-secret"}';
+$http = new SequenceHttpClient([new Response(200, ['Content-Type' => 'application/json'], $rawBody)]);
+$client = new TestClient($config, new HttpTransport($http, $factory, $factory));
+$result = (new HydrationProbeRequest(HydrationJsonPayloadDto::class))->setClient($client)->send()->raw();
+if ($result->errors->first()?->code->value !== 'hydration_error'
+    || $result->errors->first()?->context['path'] !== 'payload'
+    || $result->response?->body !== $rawBody || $result->debug !== null
+    || str_contains($result->errors->first()->message, 'fixture-secret')) {
+    throw new RuntimeException('Нарушен standalone контракт JsonCast/диагностики');
+}
+echo "Standalone JSON/DTO: обязательные поля, JsonCast и raw response работают без Laravel/Guzzle HTTP Client.\n";
 echo "Standalone JSON: прежние контракты, строгий unwrap и точные ID работают без Laravel/Guzzle HTTP Client.\n";
