@@ -7,6 +7,7 @@
 Изменения совместимости: [миграция на следующий выпуск](docs/guides/migration.md).
 
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
+[![Test count](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbrahmic%2Fapisutra%2Fbadges%2Ftest-count.json)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
 [![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](./composer.json)
 [![Packagist Version](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
 
@@ -114,6 +115,15 @@ Laravel-интеграции. Приложение ihpoh и база данны�
 GitHub Actions запускает тесты на PHP 8.4 и 8.5 при каждом push и pull request.
 Проверку также можно запустить вручную во вкладке Actions. Бейдж Tests показывает
 результат проверки push в ветке `master`.
+
+Бейдж Test count показывает число прошедших тестов из JUnit-отчёта одного прогона:
+PHP 8.4 с зависимостями из `composer.lock`. Другие сочетания PHP и зависимостей
+не суммируются; отдельная Laravel-проверка также не входит в это число.
+При падениях или пропусках бейдж показывает их количество, при отсутствии отчёта —
+`unavailable`. Данные обновляются после push или ручного запуска в `master` и
+публикуются в служебной ветке `badges` через `GITHUB_TOKEN` с правом `contents: write`
+только у задания публикации. Ветка создаётся автоматически при первом запуске;
+до него бейдж с количеством недоступен. Shields.io может обновлять картинку с задержкой.
 
 ## Документация
 

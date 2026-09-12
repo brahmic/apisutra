@@ -2,6 +2,7 @@ name: Tests
 
 on:
   push:
+    branches-ignore: ['badges']
   pull_request:
   workflow_dispatch:
 
@@ -50,12 +51,63 @@ jobs:
         run: composer update --prefer-stable --no-interaction --prefer-dist --no-progress
 
       - name: Run tests
+        id: run-tests
         if: matrix.dependencies != 'lowest'
-        run: composer test -- --fail-on-deprecation --fail-on-warning
+        run: composer test -- --fail-on-deprecation --fail-on-warning --log-junit "${{ runner.temp }}/junit.xml"
 
       - name: Run tests with legacy dependency diagnostics
         if: matrix.dependencies == 'lowest'
         run: composer test -- --display-deprecations --fail-on-warning
+
+      - name: Generate test count badge
+        if: >-
+          !cancelled() && matrix.php == '8.4' && matrix.dependencies == 'locked'
+          && github.ref == 'refs/heads/master'
+          && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        env:
+          TEST_OUTCOME: ${{ steps.run-tests.outcome }}
+        run: python3 .github/scripts/test-count-badge.py "${{ runner.temp }}/junit.xml" "${{ runner.temp }}/test-count.json" "$TEST_OUTCOME"
+
+      - name: Upload test count badge
+        if: >-
+          !cancelled() && matrix.php == '8.4' && matrix.dependencies == 'locked'
+          && github.ref == 'refs/heads/master'
+          && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-count-badge
+          path: ${{ runner.temp }}/test-count.json
+          if-no-files-found: error
+          retention-days: 7
+
+  test-count:
+    name: Publish test count badge
+    needs: tests
+    if: >-
+      !cancelled() && github.ref == 'refs/heads/master'
+      && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    concurrency:
+      group: test-count-badge
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: test-count-badge
+          path: ${{ runner.temp }}/test-count-badge
+      - uses: actions/github-script@v9
+        env:
+          BADGE_PATH: ${{ runner.temp }}/test-count-badge/test-count.json
+        with:
+          script: |
+            const publish = require('./.github/scripts/publish-test-count.cjs');
+            await publish({ github, context, core });
 
   quality:
     name: Quality and distribution
@@ -77,6 +129,8 @@ jobs:
       - run: composer lint
       - run: composer analyse
       - run: composer check-docs
+      - run: python3 .github/scripts/test_test_count_badge.py
+      - run: node --test .github/scripts/publish-test-count.test.cjs
       - run: composer check-package
 
   laravel:
