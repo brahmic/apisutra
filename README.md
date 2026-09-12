@@ -7,7 +7,7 @@
 Изменения совместимости: [миграция на следующий выпуск](docs/guides/migration.md).
 
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
-[![Test count](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbrahmic%2Fapisutra%2Fbadges%2Ftest-count.json)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
+[![Test count](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbrahmic%2Fapisutra%2Frefs%2Fheads%2Fbadges%2Ftest-count.json&cacheSeconds=300)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
 [![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](./composer.json)
 [![Packagist Version](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
 
