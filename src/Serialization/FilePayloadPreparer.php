@@ -8,6 +8,7 @@ use Brahmic\ApiSutra\Enums\Http\FileFormat;
 use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\VO\Files\FileInput;
+use Brahmic\ApiSutra\Files\BorrowedStream;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\LimitStream;
 use GuzzleHttp\Psr7\NoSeekStream;
@@ -20,7 +21,7 @@ final class FilePayloadPreparer
      * @param array<int, array{name: string, file: FileInput}> $files
      * @param mixed $body
      * @param array<string, string> $headers
-     * @return array{body: ?string, stream: ?MultipartStream, headers: array<string, string>}
+     * @return array{body: ?string, stream: ?StreamInterface, headers: array<string, string>}
      */
     public function prepareBodyAndStream(
         ?FileFormat $fileFormat,
@@ -78,14 +79,14 @@ final class FilePayloadPreparer
     /**
      * @param array<int, array{name: string, file: FileInput}> $files
      * @param array<string, string> $headers
-     * @return array{body: ?string, stream: ?MultipartStream, headers: array<string, string>}
+     * @return array{body: ?string, stream: ?StreamInterface, headers: array<string, string>}
      */
     private function prepareBinaryBody(array $files, ?string $preparedBody, array $headers): array
     {
         $fileItem = $files[0]['file'] ?? null;
         if ($fileItem instanceof FileInput) {
-            $preparedBody = (string) $fileItem->stream;
             $headers['Content-Type'] = $fileItem->mimeType ?? 'application/octet-stream';
+            return ['body' => null, 'stream' => $this->preserveFilePosition($fileItem->stream), 'headers' => $headers];
         }
 
         return [
@@ -134,6 +135,7 @@ final class FilePayloadPreparer
 
     private function preserveFilePosition(StreamInterface $stream): StreamInterface
     {
+        $stream = new BorrowedStream($stream);
         try {
             $offset = $stream->tell();
             return $offset > 0 ? new LimitStream($stream, -1, $offset) : $stream;

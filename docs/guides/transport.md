@@ -8,6 +8,31 @@ SDK ожидает реализацию `TransportInterface`.
 Полные и подписанные URL поддерживаются через `withUrl()` или абсолютный endpoint;
 для них и внешнего `withBaseUrl()` действует [изоляция назначения](external-urls.md).
 
+## Потоковые файлы
+
+Штатный транспорт автоматически поддерживает binary/multipart upload и `#[Download]`
+с ограниченным расходом памяти. Сторонний транспорт, PSR-клиент и собственный retry
+handler должны реализовать `FileStreamingInterface::assertSupportsFileTransfer()`.
+Проверка происходит до auth/HTTP. Одного PSR-18 недостаточно для гарантии памяти;
+неподдерживаемый адаптер даёт `configuration_error`, без fallback к строке.
+
+`FileTransferOptions` описывает upload/download и необязательную цель. Режим передаётся
+через `PreparedRequest.fileTransfer` и `TransportOptions.fileTransfer`. Для download
+`HttpTransport` создаёт отдельный sink каждой попытки в `TransportOptions.sink`.
+PSR-клиент должен писать прямо в него и вернуть его как body PSR-ответа; не закрывать
+sink. `HttpTransport` возвращает `ProviderResponse(body: null, stream: ...)`.
+Для обычного ответа `body` остаётся строкой, `stream = null`.
+
+Адаптер обязан сохранять upload-диапазон и не закрывать чужие потоки. Он не должен
+материализовывать большой файл, включать скрытый sink/debug, менять тело defaults
+или добавлять redirects. Штатный Guzzle подавляет эти файловые defaults и отклоняет
+raw cURL overrides для потокового вызова. Таймауты и origin policy продолжают действовать.
+Custom retry handler обязан передавать файловые опции транспорта без изменений.
+
+Контракт владения и миграция — в [гайде файлов](files.md). Сам пакет не получает
+новых обязательных зависимостей; standalone адаптер может работать без Laravel
+и Guzzle HTTP Client.
+
 ## Контракт
 ```php
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;

@@ -39,9 +39,9 @@ describe('CacheManager file uploads', function () {
         $first = $request->withCache()->send()->raw();
         $second = $request->withCache()->send()->raw();
 
-        expect($first->data)->toBe(['value' => 1])
-            ->and($second->data)->toBe(['value' => 2])
-            ->and($transport->getRecorded())->toHaveCount(2)
+        expect($first->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($second->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($transport->getRecorded())->toHaveCount(0)
             ->and($cache->lastSetKey)->toBeNull();
     });
 
@@ -69,9 +69,9 @@ describe('CacheManager file uploads', function () {
         $first = $request->withCache()->send()->raw();
         $second = $request->withCache()->send()->raw();
 
-        expect($first->data)->toBe(['value' => 1])
-            ->and($second->data)->toBe(['value' => 2])
-            ->and($transport->getRecorded())->toHaveCount(2)
+        expect($first->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($second->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($transport->getRecorded())->toHaveCount(0)
             ->and($cache->lastSetKey)->toBeNull();
     });
 
@@ -99,9 +99,9 @@ describe('CacheManager file uploads', function () {
         $first = $request->withCache()->send()->raw();
         $second = $request->withCache()->send()->raw();
 
-        expect($first->data)->toBe(['value' => 1])
-            ->and($second->data)->toBe(['value' => 2])
-            ->and($transport->getRecorded())->toHaveCount(2)
+        expect($first->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($second->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($transport->getRecorded())->toHaveCount(0)
             ->and($cache->lastSetKey)->toBeNull();
     });
 });

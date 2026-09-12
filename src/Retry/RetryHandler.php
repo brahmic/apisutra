@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Retry;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetryHandlerInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
@@ -22,8 +25,13 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Closure;
 use Override;
 
-final class RetryHandler implements RetryHandlerInterface, DestinationAwareInterface
+final class RetryHandler implements RetryHandlerInterface, DestinationAwareInterface, FileStreamingInterface
 {
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+        FileTransferGuard::checkCapability($this->transport, $options);
+    }
+
     public function assertSupportsDestination(RequestDestination $destination): void
     {
         DestinationGuard::checkCapability($this->transport, $destination);
@@ -68,8 +76,10 @@ final class RetryHandler implements RetryHandlerInterface, DestinationAwareInter
         }
 
         DestinationGuard::checkContext($context);
+        FileTransferGuard::checkContext($context);
         DestinationGuard::checkRequest($request);
         DestinationGuard::checkCapability($this, $request->destination);
+        FileTransferGuard::checkCapability($this, FileTransferGuard::options($request));
         $context->budget?->check('http');
         if ($request->transportOptions !== null) {
             $request = $request->with(transportOptions: $request->transportOptions->effective());

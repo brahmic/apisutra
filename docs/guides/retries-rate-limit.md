@@ -174,3 +174,12 @@ final class CreateOrder extends AbstractRequest {}
 - `docs/guides/attributes/behavior.md` — `Retry`, `RateLimit`, `Idempotent`
 - `docs/guides/client-config/retry.md`
 - `docs/guides/client-config/rate-limit.md`
+
+## Файловые операции
+
+Binary/multipart upload сохраняют начальную позицию при разрешённом повторе.
+Non-seekable upload допускает одну отправку; после отказа от строковой копии
+это правило действует и для binary. Каждая попытка download получает отдельный
+временный файл; пользовательский sink заполняется только окончательным результатом.
+Локальные ошибки чтения/записи не запускают HTTP повтор даже при широком
+`retryExceptions`. Подробный контракт — [файлы](files.md).

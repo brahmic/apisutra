@@ -11,18 +11,34 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
+use Brahmic\ApiSutra\Files\StreamCopy;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 
-final class SequenceHttpClient implements ClientInterface, HttpClientOptionsInterface
+final class SequenceHttpClient implements ClientInterface, HttpClientOptionsInterface, FileStreamingInterface
 {
     /** @var list<TransportOptions> */
     public array $options = [];
+
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+        if ($options->upload) {
+            throw new ConfigurationException('SequenceHttpClient поддерживает только download');
+        }
+    }
 
     public function assertSupportsTimeouts(TransportOptions $options): void {}
 
     public function sendWithOptions(RequestInterface $request, TransportOptions $options): ResponseInterface
     {
         $this->options[] = $options->effective();
-        return $this->sendRequest($request);
+        $response = $this->sendRequest($request);
+        if ($options->sink !== null) {
+            StreamCopy::copy($response->getBody(), $options->sink, $options->budget);
+            return $response->withBody($options->sink);
+        }
+        return $response;
     }
 
     public int $calls = 0;

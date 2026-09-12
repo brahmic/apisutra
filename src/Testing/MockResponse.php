@@ -28,6 +28,12 @@ readonly class MockResponse
         return new self($data, 200, ['Content-Type' => 'application/json']);
     }
 
+    /** @param array<string, string> $headers */
+    public static function file(string $path, int $status = 200, array $headers = []): self
+    {
+        return new MockFileResponse($path, $status, $headers);
+    }
+
     public static function notFound(): self
     {
         return new self(['message' => 'Not Found'], 404, ['Content-Type' => 'application/json']);

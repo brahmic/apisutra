@@ -15,6 +15,7 @@ readonly class FileInput
         public string $filename,
         public ?string $mimeType = null,
         public ?int $size = null,
+        private ?StreamInterface $ownedStream = null,
     ) {}
 
     public static function fromPath(string $path): self
@@ -25,10 +26,11 @@ readonly class FileInput
         }
 
         return new self(
-            stream: Utils::streamFor($resource),
+            stream: $stream = Utils::streamFor($resource),
+            ownedStream: $stream,
             filename: basename($path),
             mimeType: mime_content_type($path) ?: null,
-            size: filesize($path) ?: null,
+            size: ($size = filesize($path)) !== false ? $size : null,
         );
     }
 
@@ -53,7 +55,8 @@ readonly class FileInput
         $size = filesize($path);
 
         return new self(
-            stream: Utils::streamFor($resource),
+            stream: $stream = Utils::streamFor($resource),
+            ownedStream: $stream,
             filename: basename($path),
             mimeType: $mimeType ?: null,
             size: $size !== false ? $size : null,
@@ -63,7 +66,8 @@ readonly class FileInput
     public static function fromContent(string $content, string $filename): self
     {
         return new self(
-            stream: Utils::streamFor($content),
+            stream: $stream = Utils::streamFor($content),
+            ownedStream: $stream,
             filename: $filename,
             mimeType: null,
             size: strlen($content),
@@ -80,10 +84,17 @@ readonly class FileInput
         );
     }
 
+    /** Закрывает только собственную ручку; копии FileInput разделяют её. */
+    public function close(): void
+    {
+        $this->ownedStream?->close();
+    }
+
     public function withMimeType(string $mimeType): self
     {
         return new self(
             stream: $this->stream,
+            ownedStream: $this->ownedStream,
             filename: $this->filename,
             mimeType: $mimeType,
             size: $this->size,

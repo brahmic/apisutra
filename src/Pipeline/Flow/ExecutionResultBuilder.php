@@ -12,6 +12,7 @@ use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Pipeline\PipelineStage;
 use Brahmic\ApiSutra\Enums\Result\ResultStatus;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Files\FileTransferException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\EarlyReturnException;
 use Brahmic\ApiSutra\Exceptions\Core\SdkException;
 use Brahmic\ApiSutra\Exceptions\Extension\ExtensionException;
@@ -116,12 +117,19 @@ final readonly class ExecutionResultBuilder
             : null;
 
         $this->auditLogger->addAudit($audit, PipelineStage::Completed, $context, $startTime, $debug);
-        $this->auditLogger->log(LogLevel::INFO, 'Запрос завершен', [
-            'trace' => $context->traceId,
-            'request' => $request::class,
-            'status' => ResultStatus::SUCCESS->value,
-            'duration_ms' => $duration,
-        ]);
+        try {
+            $this->auditLogger->log(LogLevel::INFO, 'Запрос завершен', [
+                'trace' => $context->traceId,
+                'request' => $request::class,
+                'status' => ResultStatus::SUCCESS->value,
+                'duration_ms' => $duration,
+            ]);
+        } catch (Throwable $exception) {
+            // Уже сохранённый файл нельзя объявить неуспешным из-за итогового logger.
+            if ($context->fileTransfer?->target === null) {
+                throw $exception;
+            }
+        }
 
         return $this->createSuccessResult(
             request: $request,
@@ -209,6 +217,7 @@ final readonly class ExecutionResultBuilder
         Throwable $exception,
     ): ExecutionResult {
         $code = $context->failureCode ?? match (true) {
+            $exception instanceof FileTransferException => ErrorCode::FileTransferError,
             $exception instanceof SerializationException => ErrorCode::SerializationError,
             $exception instanceof ResponseDecodingException => ErrorCode::ResponseDecodingError,
             $exception instanceof HydrationException => ErrorCode::HydrationError,
@@ -238,8 +247,11 @@ final readonly class ExecutionResultBuilder
             context: $context,
             response: $response,
             overrideContext: $exception instanceof ExecutionDeadlineException
-                ? ['reason' => 'execution_deadline_exceeded', 'stage' => $exception->stage]
-                : [],
+                ? array_filter(['reason' => 'execution_deadline_exceeded', 'stage' => $exception->stage,
+                    'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial], static fn (mixed $value): bool => $value !== null)
+                : ($exception instanceof FileTransferException
+                    ? ['stage' => $exception->stage, 'bytesWritten' => $exception->bytesWritten, 'partial' => $exception->partial]
+                    : []),
         );
 
         $this->auditLogger->addAudit($audit, PipelineStage::Failed, $context, $startTime, null);

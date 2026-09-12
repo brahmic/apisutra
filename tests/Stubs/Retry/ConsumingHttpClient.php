@@ -12,10 +12,20 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Throwable;
 
-final class ConsumingHttpClient implements ClientInterface, HttpClientOptionsInterface, DestinationAwareInterface
+final class ConsumingHttpClient implements ClientInterface, HttpClientOptionsInterface, DestinationAwareInterface, FileStreamingInterface
 {
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+        if ($options->download) {
+            throw new ConfigurationException('Тестовый адаптер поддерживает только upload');
+        }
+    }
+
     public function assertSupportsDestination(RequestDestination $destination): void {}
 
     /** @var list<TransportOptions> */

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Transport;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\Origin;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
@@ -18,8 +20,15 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /** Штатный адаптер с известным cURL handler; Guzzle остаётся опциональной зависимостью. */
-final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOptionsInterface, DestinationAwareInterface
+final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOptionsInterface, DestinationAwareInterface, FileStreamingInterface
 {
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+        if ($this->customCurl) {
+            throw new ConfigurationException('Низкоуровневые cURL overrides несовместимы с потоковыми файлами');
+        }
+    }
+
     public function assertSupportsDestination(RequestDestination $destination): void
     {
         if ($this->customCurl) {
@@ -63,6 +72,21 @@ final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOpti
     {
         $effective = $options->effective();
         $destination = $effective->destination;
+        $fileOptions = [];
+        if ($effective->fileTransfer !== null) {
+            $this->assertSupportsFileTransfer($effective->fileTransfer);
+            $fileOptions = [
+                'sink' => $effective->sink,
+                'debug' => false,
+                'body' => null,
+                'json' => null,
+                'form_params' => null,
+                'multipart' => null,
+            ];
+            if ($effective->fileTransfer->download && $effective->sink === null) {
+                throw new ConfigurationException('Потоковый download требует sink');
+            }
+        }
         if ($destination?->requiresIsolation()) {
             $this->assertSupportsDestination($destination);
             if (
@@ -77,13 +101,13 @@ final readonly class GuzzleHttpClient implements ClientInterface, HttpClientOpti
                 'http_errors' => false,
                 'allow_redirects' => false,
                 'cookies' => false,
-            ]);
+            ] + $fileOptions);
         }
         return $this->client->send($request, [
             'timeout' => $effective->timeoutMs / 1000,
             'connect_timeout' => $effective->connectTimeoutMs / 1000,
             'http_errors' => false,
             'allow_redirects' => false,
-        ]);
+        ] + $fileOptions);
     }
 }

@@ -10,6 +10,8 @@ use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\ResultMeta;
 use Brahmic\ApiSutra\Contracts\Interfaces\Pagination\PaginableInterface;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
+use Brahmic\ApiSutra\Files\DownloadManager;
 use Brahmic\ApiSutra\Enums\Pipeline\PipelineStage;
 use Brahmic\ApiSutra\Pipeline\Attributes\StageProcessor;
 use Brahmic\ApiSutra\Pipeline\Auth\AuthHandler;
@@ -68,6 +70,7 @@ final readonly class RequestFlowRunner
         $prepared = $this->applyBeforeSendStages($request, $context, $prepared);
 
         DestinationGuard::checkContext($context);
+        FileTransferGuard::checkContext($context);
         $cachedResponse = $this->resolveResponse($request, $context);
         $context->budget?->check('response');
         $this->logResponse($context, $cachedResponse !== null);
@@ -227,7 +230,10 @@ final readonly class RequestFlowRunner
         $this->cacheManager->storeCache($request, $context);
         $context->budget?->check('cache_store');
 
-        return $this->resultBuilder->buildSuccessResult(
+        if ($context->fileTransfer?->download && $context->response !== null) {
+            DownloadManager::deliver($context->response, $context->fileTransfer->target, $context->budget);
+        }
+        $result = $this->resultBuilder->buildSuccessResult(
             request: $request,
             context: $context,
             audit: $audit,
@@ -236,6 +242,7 @@ final readonly class RequestFlowRunner
             data: $resultData,
             meta: $meta,
         );
+        return $result;
     }
 
     private function resolveMeta(RequestInterface $request, PipelineContext $context): ?ResultMeta

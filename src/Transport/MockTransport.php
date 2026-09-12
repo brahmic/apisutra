@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Transport;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
+use Brahmic\ApiSutra\Files\DownloadManager;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Exceptions\Testing\MissingFixtureException;
 use Brahmic\ApiSutra\Exceptions\Testing\UnmockedRequestException;
@@ -20,9 +25,11 @@ use Brahmic\ApiSutra\VO\Http\TransportOptions;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 
-final class MockTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface
+final class MockTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface, FileStreamingInterface
 {
     /** Fake не добавляет credentials и не выполняет redirects. */
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void {}
+
     public function assertSupportsDestination(RequestDestination $destination): void {}
 
     /** Fake принимает опции для тестов; реальный HTTP не выполняется. */
@@ -61,6 +68,9 @@ final class MockTransport implements TimeoutAwareTransportInterface, Destination
                 continue;
             }
 
+            if (($data['request']['bodyOmitted'] ?? false) || ($data['response']['bodyOmitted'] ?? false)) {
+                throw new ConfigurationException('Фикстура не содержит файловое тело; используйте MockResponse::file()');
+            }
             $response = $data['response'] ?? [];
             $body = $response['body'] ?? [];
             $status = (int) ($response['status'] ?? 200);
@@ -86,6 +96,7 @@ final class MockTransport implements TimeoutAwareTransportInterface, Destination
     public function send(PreparedRequest $request): ProviderResponse
     {
         DestinationGuard::checkRequest($request);
+        FileTransferGuard::checkCapability($this, FileTransferGuard::options($request));
         DestinationGuard::checkCapability($this, $request->destination);
         $this->recorded[] = $request;
 
@@ -94,7 +105,17 @@ final class MockTransport implements TimeoutAwareTransportInterface, Destination
             throw new UnmockedRequestException('Незамоканный запрос');
         }
 
-        return $response ?? MockResponse::notFound()->toProviderResponse($request);
+        $response ??= MockResponse::notFound()->toProviderResponse($request);
+        if ($request->fileTransfer?->download && $response->stream === null) {
+            $sink = DownloadManager::temporary($request->fileTransfer->target);
+            $body = $response->body ?? '';
+            for ($offset = 0, $length = strlen($body); $offset < $length; $offset += $count) {
+                $count = $sink->write(substr($body, $offset, 65536));
+            }
+            $sink->rewind();
+            return new ProviderResponse($response->status, $response->headers, null, $request, $response->duration, $sink);
+        }
+        return $response;
     }
 
     #[\Override]
@@ -235,6 +256,9 @@ final class MockTransport implements TimeoutAwareTransportInterface, Destination
             throw new MissingFixtureException("Фикстура {$file} повреждена");
         }
 
+        if (($data['request']['bodyOmitted'] ?? false) || ($data['response']['bodyOmitted'] ?? false)) {
+            throw new ConfigurationException('Фикстура не содержит файловое тело; используйте MockResponse::file()');
+        }
         $response = $data['response'] ?? [];
         $body = $response['body'] ?? [];
         $status = (int) ($response['status'] ?? 200);

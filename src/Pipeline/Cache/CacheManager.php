@@ -93,14 +93,16 @@ final readonly class CacheManager
     public function prepareExecution(RequestInterface $request, PipelineContext $context): void
     {
         $context->cacheExecution = null;
-        if ($context->destination?->preserveUrl) {
+        $fileOperation = $this->isDownloadRequest($request)
+            || ($context->preparedRequest !== null && $this->isFileUpload($context->preparedRequest));
+        if ($context->destination?->preserveUrl || $fileOperation) {
             $mode = $context->options?->getCacheOverride()->mode;
             $attribute = $request instanceof AbstractRequest ? $request->getCacheAttribute() : null;
             if (
                 ($mode !== null && $mode !== CacheMode::Disabled)
                 || ($mode === null && $attribute !== null && $attribute->mode !== CacheMode::Disabled)
             ) {
-                throw new ConfigurationException('HTTP cache для готового URL не поддерживается');
+                throw new ConfigurationException($fileOperation ? 'HTTP cache для файловых операций не поддерживается' : 'HTTP cache для готового URL не поддерживается');
             }
             return;
         }

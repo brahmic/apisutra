@@ -42,7 +42,7 @@ final readonly class ResponseHydrator
     public function decodeResponse(RequestInterface $request, PipelineContext $context): DecodedResponse
     {
         if ($this->isDownloadRequest($request)) {
-            return new DecodedResponse($context->response?->json() ?? []);
+            return new DecodedResponse([]);
         }
 
         $handler = $this->extensions->resolveResponseHandler($context->response, $context);
@@ -120,7 +120,10 @@ final readonly class ResponseHydrator
             throw new ConfigurationException('Нет ответа для загрузки файла');
         }
 
-        $stream = Psr7Utils::streamFor($response->body);
+        $stream = $response->stream ?? Psr7Utils::streamFor($response->body);
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
         $contentType = $response->header('Content-Type');
         $contentDisposition = $response->header('Content-Disposition');
 
@@ -133,7 +136,7 @@ final readonly class ResponseHydrator
             stream: $stream,
             filename: $filename,
             mimeType: $contentType,
-            size: strlen($response->body),
+            size: $stream->getSize(),
             config: $this->config,
         );
     }

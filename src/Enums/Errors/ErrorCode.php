@@ -7,6 +7,7 @@ namespace Brahmic\ApiSutra\Enums\Errors;
 enum ErrorCode: string
 {
     case ExecutionError = 'execution_error';
+    case FileTransferError = 'file_transfer_error';
     case HookError = 'hook_error';
     case ResponseDecodingError = 'response_decoding_error';
     case TransportError = 'transport_error';
@@ -56,6 +57,7 @@ enum ErrorCode: string
     {
         return match ($this) {
             self::ExecutionError => 'Ошибка исполнения',
+            self::FileTransferError => 'Ошибка файловой передачи',
             self::HookError => 'Ошибка hook',
             self::ResponseDecodingError => 'Ошибка разбора ответа',
             self::TransportError => 'Ошибка транспорта',

@@ -10,6 +10,7 @@ use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Enums\Request\CredentialsMergeMode;
 use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 use Brahmic\ApiSutra\Pagination\PaginationRule;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Цепочка runtime-опций запроса.
@@ -48,8 +49,18 @@ trait RequestOptionsChainTrait
     }
 
     /**
-     * Передать готовый полный URL только для текущего вызова.
+     * Задать назначение скачиваемого файла только для текущего вызова.
      */
+    public function withDownloadTo(string|StreamInterface $target, bool $overwrite = false): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withDownloadTo($target, $overwrite));
+    }
+
+    public function withoutDownloadTo(): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withoutDownloadTo());
+    }
+
     public function withUrl(string $url): RequestExecutionInterface
     {
         return $this->executionFromOptions($this->currentOptions()->withUrl($url));

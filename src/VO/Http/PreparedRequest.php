@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\VO\Http;
 
 use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Psr\Http\Message\StreamInterface;
 
@@ -23,6 +24,7 @@ readonly class PreparedRequest
         public array $meta = [],
         public ?TransportOptions $transportOptions = null,
         public ?RequestDestination $destination = null,
+        public ?FileTransferOptions $fileTransfer = null,
     ) {}
 
     /**
@@ -36,6 +38,7 @@ readonly class PreparedRequest
         ?array $meta = null,
         ?TransportOptions $transportOptions = null,
         ?RequestDestination $destination = null,
+        ?FileTransferOptions $fileTransfer = null,
     ): self {
         return new self(
             method: $this->method,
@@ -46,6 +49,7 @@ readonly class PreparedRequest
             meta: $meta ?? $this->meta,
             transportOptions: $transportOptions ?? $this->transportOptions,
             destination: $destination ?? $this->destination,
+            fileTransfer: $fileTransfer ?? $this->fileTransfer,
         );
     }
 

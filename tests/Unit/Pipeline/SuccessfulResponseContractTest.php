@@ -103,7 +103,7 @@ it('передаёт исходные байты download и обработчи�
         extensions: [new TestResponseExtension()],
     ), new HttpTransport($http, $factory, $factory));
     $request = $download ? new DownloadCacheRequest() : new CacheProbeRequest();
-    $result = $request->setClient($client)->send()->raw();
+    $result = $request->setClient($client)->withoutCache()->send()->raw();
     expect($result->isSuccess())->toBeTrue();
     if ($download) {
         expect($result->data->content())->toBe('{not JSON');

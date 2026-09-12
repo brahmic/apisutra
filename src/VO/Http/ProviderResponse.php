@@ -7,6 +7,8 @@ namespace Brahmic\ApiSutra\VO\Http;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
 use JsonException;
+use Psr\Http\Message\StreamInterface;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 
 /**
  * Value Object для HTTP-ответа от провайдера.
@@ -34,10 +36,15 @@ readonly class ProviderResponse
     public function __construct(
         public int $status,
         public array $headers,
-        public string $body,
+        public ?string $body,
         public PreparedRequest $request,
         public float $duration,
-    ) {}
+        public ?StreamInterface $stream = null,
+    ) {
+        if (($body === null) === ($stream === null)) {
+            throw new ConfigurationException('HTTP-ответ должен содержать строку либо поток');
+        }
+    }
 
     /**
      * Декодирует JSON-тело ответа и возвращает данные.
@@ -48,7 +55,7 @@ readonly class ProviderResponse
      */
     public function json(?string $key = null): mixed
     {
-        $data = json_decode($this->body, true);
+        $data = json_decode($this->stringBody(), true);
         if ($key === null) {
             return $data;
         }
@@ -60,7 +67,7 @@ readonly class ProviderResponse
     public function jsonStrict(?string $key = null): mixed
     {
         try {
-            $data = json_decode($this->body, true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($this->stringBody(), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new ResponseDecodingException('Не удалось разобрать JSON ответа: ' . $exception->getMessage(), 0, $exception);
         }
@@ -69,9 +76,27 @@ readonly class ProviderResponse
     }
 
     /** HTTP-ошибка сохраняет приоритет над невалидным или не-JSON телом ответа. */
+    private function stringBody(): string
+    {
+        return $this->body ?? throw new ConfigurationException('Потоковый ответ нужно читать явно через stream');
+    }
+
     public function errorMessage(): string
     {
-        $data = json_decode($this->body, true);
+        $body = $this->body;
+        if ($body === null && $this->stream?->isSeekable()) {
+            $position = $this->stream->tell();
+            try {
+                $this->stream->rewind();
+                $body = $this->stream->read(65537);
+                if (strlen($body) > 65536 || !$this->stream->eof()) {
+                    $body = null;
+                }
+            } finally {
+                $this->stream->seek($position);
+            }
+        }
+        $data = $body === null ? null : json_decode($body, true);
         $message = is_array($data) ? ($data['message'] ?? null) : null;
         return is_string($message) && $message !== '' ? $message : "HTTP {$this->status}";
     }

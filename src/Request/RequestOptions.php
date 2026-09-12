@@ -14,6 +14,8 @@ use Brahmic\ApiSutra\Enums\Request\CredentialsMergeMode;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Pagination\PaginationRule;
 use Brahmic\ApiSutra\VO\Cache\CacheOverride;
+use Brahmic\ApiSutra\VO\Files\DownloadTarget;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Набор runtime-опций запроса.
@@ -64,6 +66,7 @@ final readonly class RequestOptions
         private ?string $cacheScopeOverride = null,
         private ?string $urlOverride = null,
         private ?bool $requestEnrichersEnabledOverride = null,
+        private ?DownloadTarget $downloadTarget = null,
     ) {
         if ($cacheScopeOverride !== null && trim($cacheScopeOverride) === '') {
             throw new ConfigurationException('Пространство кеша не должно быть пустым');
@@ -135,12 +138,28 @@ final readonly class RequestOptions
             cacheScopeOverride: $overrides['cacheScopeOverride'] ?? $this->cacheScopeOverride,
             urlOverride: array_key_exists('urlOverride', $overrides) ? $overrides['urlOverride'] : $this->urlOverride,
             requestEnrichersEnabledOverride: $overrides['requestEnrichersEnabledOverride'] ?? $this->requestEnrichersEnabledOverride,
+            downloadTarget: array_key_exists('downloadTarget', $overrides) ? $overrides['downloadTarget'] : $this->downloadTarget,
         );
     }
 
     /**
-     * Передать готовый полный URL только для текущего вызова.
+     * Задать назначение скачиваемого файла только для текущего вызова.
      */
+    public function withDownloadTo(string|StreamInterface $target, bool $overwrite = false): self
+    {
+        return $this->with(['downloadTarget' => new DownloadTarget($target, $overwrite)]);
+    }
+
+    public function withoutDownloadTo(): self
+    {
+        return $this->with(['downloadTarget' => null]);
+    }
+
+    public function getDownloadTarget(): ?DownloadTarget
+    {
+        return $this->downloadTarget;
+    }
+
     public function withUrl(string $url): self
     {
         return $this->with(['urlOverride' => $url]);

@@ -179,6 +179,7 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 | Подтверждённый timeout | `timeout` |
 | PSR-18 request failure | `invalid_request` |
 | Прочий PSR-18 client failure | `transport_error` |
+| Локальное чтение, запись или публикация файла | `file_transfer_error` |
 | Конфигурация | `configuration_error` |
 | Неизвестное исключение исполнения | `execution_error` |
 
@@ -191,8 +192,16 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 [контракте успешного ответа](client-config/responses-errors.md#успешный-ответ-без-dto).
 Публичный `ProviderResponse::jsonStrict()` выполняет строгий разбор по явному вызову;
 существующий `json()` сохраняет permissive-поведение для совместимости, в том числе
-для пользовательских обработчиков HTTP-ошибок. Download и response handlers
-расширений сохраняют собственную обработку формата.
+для пользовательских обработчиков HTTP-ошибок обычных строковых ответов.
+Потоковый download требует явного чтения `ProviderResponse.stream`: его `json()`
+и `jsonStrict()` дают `configuration_error`. Обработка расширений вне download
+сохраняется. Подробнее — [файловые ответы](files.md).
+
+`FileTransferException` из `Exceptions\Files` содержит стадию, `bytesWritten` и
+`partial`; эти поля доступны и в error context. При ошибке финальной записи
+сохраняется HTTP-статус принятого ответа. Локальная ошибка не вызывает HTTP retry,
+даже если в `retryExceptions` указан общий `Throwable`. При deadline во время
+копирования код остаётся `timeout`, с данными о частичной записи.
 
 Известные транспортные исключения нормализуются до решения retry. Исходное исключение
 доступно в `previous`; явно настроенный исходный класс в `retryExceptions` продолжает

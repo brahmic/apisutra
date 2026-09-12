@@ -43,7 +43,7 @@ describe('CacheManager download', function () {
             ->and($cache->lastSetKey)->toBeNull();
     });
 
-    it('кеширует download при withCache()', function () {
+    it('отклоняет кеш download при withCache()', function () {
         $cache = new SpyCache();
         $transport = new MockTransport();
         $transport->fake([
@@ -66,14 +66,13 @@ describe('CacheManager download', function () {
         $first = $request->withCache()->send()->raw();
         $second = $request->withCache()->send()->raw();
 
-        expect($first->data)->toBeInstanceOf(FileResponse::class)
-            ->and($second->data)->toBeInstanceOf(FileResponse::class)
-            ->and($second->data->content())->toBe('file-1')
-            ->and($transport->getRecorded())->toHaveCount(1)
-            ->and($cache->lastSetKey)->not->toBeNull();
+        expect($first->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($second->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($transport->getRecorded())->toHaveCount(0)
+            ->and($cache->lastSetKey)->toBeNull();
     });
 
-    it('кеширует download при #[Cache]', function () {
+    it('отклоняет кеш download при #[Cache]', function () {
         $cache = new SpyCache();
         $transport = new MockTransport();
         $transport->fake([
@@ -96,10 +95,9 @@ describe('CacheManager download', function () {
         $first = $request->send()->raw();
         $second = $request->send()->raw();
 
-        expect($first->data)->toBeInstanceOf(FileResponse::class)
-            ->and($second->data)->toBeInstanceOf(FileResponse::class)
-            ->and($second->data->content())->toBe('file-1')
-            ->and($transport->getRecorded())->toHaveCount(1)
-            ->and($cache->lastSetKey)->not->toBeNull();
+        expect($first->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($second->errors->first()?->code->value)->toBe('configuration_error')
+            ->and($transport->getRecorded())->toHaveCount(0)
+            ->and($cache->lastSetKey)->toBeNull();
     });
 });

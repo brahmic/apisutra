@@ -8,6 +8,7 @@ use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Extensions\Archive\Response\ArchiveResponse;
 use Psr\Http\Message\StreamInterface;
+use Brahmic\ApiSutra\Files\DownloadManager;
 
 /**
  * Value Object для работы с файловым ответом от провайдера.
@@ -136,17 +137,13 @@ readonly class FileResponse
      */
     public function saveTo(string $path): void
     {
-        $resource = fopen($path, 'wb');
-        if ($resource === false) {
-            throw new ConfigurationException("Не удалось сохранить файл: {$path}");
-        }
+        DownloadManager::save($this->stream, new DownloadTarget($path, overwrite: true));
+    }
 
-        $this->stream->rewind();
-        while (!$this->stream->eof()) {
-            fwrite($resource, $this->stream->read(8192));
-        }
-
-        fclose($resource);
+    /** Явно закрывает общий поток FileResponse и raw response. */
+    public function close(): void
+    {
+        $this->stream->close();
     }
 
     private function detectArchiveFormat(?string $mimeType, string $content): string
@@ -172,12 +169,15 @@ readonly class FileResponse
     private function readMagicBytes(): string
     {
         if ($this->stream->isSeekable()) {
-            $this->stream->rewind();
-            $magic = $this->stream->read(4);
-            $this->stream->rewind();
-            return $magic;
+            $position = $this->stream->tell();
+            try {
+                $this->stream->rewind();
+                return $this->stream->read(4);
+            } finally {
+                $this->stream->seek($position);
+            }
         }
 
-        return $this->stream->read(4);
+        return '';
     }
 }

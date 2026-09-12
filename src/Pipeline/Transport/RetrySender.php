@@ -14,6 +14,7 @@ use Brahmic\ApiSutra\Core\AbstractClient;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Enums\Hooks\Hook;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\RetryableException;
 use Brahmic\ApiSutra\Exceptions\Transport\ConnectionException;
@@ -75,9 +76,12 @@ final readonly class RetrySender
     public function assertDestinationSupported(PipelineContext $context): void
     {
         DestinationGuard::checkContext($context);
+        FileTransferGuard::checkContext($context);
         DestinationGuard::checkCapability($this->transport, $context->destination);
+        FileTransferGuard::checkCapability($this->transport, $context->fileTransfer);
         if ($this->retryConfigResolver->resolve($context->request, $context->options) !== null) {
             DestinationGuard::checkCapability($this->retryHandler, $context->destination);
+            FileTransferGuard::checkCapability($this->retryHandler, $context->fileTransfer);
         }
     }
 
@@ -99,6 +103,7 @@ final readonly class RetrySender
 
         while ($attempt <= $attempts) {
             DestinationGuard::checkContext($context);
+            FileTransferGuard::checkContext($context);
             $context->budget->check('before_attempt', $lastException);
 
             try {

@@ -15,6 +15,7 @@ use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
 use Throwable;
+use Brahmic\ApiSutra\Exceptions\Files\FileTransferException;
 
 final readonly class RetryDecisionMaker
 {
@@ -61,6 +62,9 @@ final readonly class RetryDecisionMaker
 
     public function isRetryException(Throwable $exception, RetryConfig $retryConfig): bool
     {
+        if ($exception instanceof FileTransferException) {
+            return false;
+        }
         foreach ($retryConfig->retryExceptions as $class) {
             if ($exception instanceof $class) {
                 return true;

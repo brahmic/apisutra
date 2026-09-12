@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Transport;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
@@ -20,8 +23,13 @@ use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionClass;
 use Throwable;
 
-final class RecordingTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface
+final class RecordingTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface, FileStreamingInterface
 {
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+        FileTransferGuard::checkCapability($this->transport, $options);
+    }
+
     public function assertSupportsDestination(RequestDestination $destination): void
     {
         DestinationGuard::checkCapability($this->transport, $destination);
@@ -55,6 +63,7 @@ final class RecordingTransport implements TimeoutAwareTransportInterface, Destin
     public function send(PreparedRequest $request): ProviderResponse
     {
         DestinationGuard::checkRequest($request);
+        FileTransferGuard::checkCapability($this, FileTransferGuard::options($request));
         DestinationGuard::checkCapability($this, $request->destination);
         $response = $this->transport->send($request);
         $this->record($request, $response);
@@ -88,11 +97,14 @@ final class RecordingTransport implements TimeoutAwareTransportInterface, Destin
                 'url' => $request->destination?->preserveUrl ? $request->destination->diagnosticUrl() : $request->url,
                 'headers' => $request->headers,
                 'body' => $this->normalizeBody($request->body, $request->headers['Content-Type'] ?? null),
+                'bodyOmitted' => $request->stream !== null,
             ],
             'response' => [
                 'status' => $response->status,
                 'headers' => $response->headers,
                 'body' => $this->normalizeBody($response->body, $response->header('Content-Type')),
+                'bodyOmitted' => $response->stream !== null,
+                'size' => $response->stream?->getSize(),
             ],
             'recorded_at' => gmdate('c'),
         ];

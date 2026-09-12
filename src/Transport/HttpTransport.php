@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Transport;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\DestinationAwareInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\FileStreamingInterface;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Http\RequestDestination;
 use Brahmic\ApiSutra\Http\DestinationGuard;
+use Brahmic\ApiSutra\Files\FileTransferGuard;
+use Brahmic\ApiSutra\Files\DownloadManager;
+use Brahmic\ApiSutra\Files\BorrowedStream;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\HttpClientOptionsInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TimeoutAwareTransportInterface;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
@@ -24,8 +29,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Throwable;
 
-final class HttpTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface
+final class HttpTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface, FileStreamingInterface
 {
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+        FileTransferGuard::checkCapability($this->httpClient, $options);
+    }
+
     public function assertSupportsDestination(RequestDestination $destination): void
     {
         DestinationGuard::checkCapability($this->httpClient, $destination);
@@ -57,12 +67,19 @@ final class HttpTransport implements TimeoutAwareTransportInterface, Destination
     public function send(PreparedRequest $request): ProviderResponse
     {
         DestinationGuard::checkRequest($request);
+        FileTransferGuard::checkCapability($this, FileTransferGuard::options($request));
         DestinationGuard::checkCapability($this, $request->destination);
         $start = microtime(true);
         $psrRequest = $this->buildPsrRequest($request);
         $options = $request->transportOptions;
-        if ($request->destination !== null) {
-            $options = new TransportOptions($options?->timeoutMs ?? 0, $options?->connectTimeoutMs ?? 0, $options?->budget, $request->destination);
+        $transfer = FileTransferGuard::options($request);
+        $sink = $transfer?->download ? DownloadManager::temporary($transfer->target) : null;
+        if ($request->destination !== null || $transfer !== null) {
+            $options = new TransportOptions(
+                $options?->timeoutMs ?? 0, $options?->connectTimeoutMs ?? 0,
+                $options?->budget, $request->destination, $transfer,
+                $sink === null ? null : new BorrowedStream($sink),
+            );
         }
         if ($options !== null) {
             $this->assertSupportsTimeouts($options);
@@ -76,6 +93,13 @@ final class HttpTransport implements TimeoutAwareTransportInterface, Destination
             throw TransportExceptionNormalizer::normalize($exception);
         }
 
+        if ($sink !== null) {
+            if ($psrResponse->getBody() !== $options->sink) {
+                throw new ConfigurationException('HTTP-клиент не вернул управляемый поток download');
+            }
+            $sink->rewind();
+            return new ProviderResponse($psrResponse->getStatusCode(), $psrResponse->getHeaders(), null, $request, (microtime(true) - $start) * 1000, $sink);
+        }
         return $this->buildProviderResponse($psrResponse, $request, $start);
     }
 
@@ -102,7 +126,7 @@ final class HttpTransport implements TimeoutAwareTransportInterface, Destination
         }
 
         if ($request->stream !== null) {
-            $psrRequest = $psrRequest->withBody($request->stream);
+            $psrRequest = $psrRequest->withBody(new BorrowedStream($request->stream));
         } elseif ($request->body !== null) {
             $psrRequest = $psrRequest->withBody($this->streamFactory->createStream($request->body));
         }

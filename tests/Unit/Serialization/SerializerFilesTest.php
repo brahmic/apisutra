@@ -61,8 +61,8 @@ describe('Serializer файлы', function () {
 
         $prepared = $serializer->serialize($request, $context);
 
-        expect($prepared->stream)->toBeNull()
-            ->and($prepared->body)->toBe('PDF')
+        expect((string) $prepared->stream)->toBe('PDF')
+            ->and($prepared->body)->toBeNull()
             ->and($prepared->headers['Content-Type'] ?? null)->toBe('application/pdf')
             ->and($prepared->meta['files'])->toHaveCount(1);
     });

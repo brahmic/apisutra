@@ -16,6 +16,8 @@ use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Enums\Serialization\BooleanFormat;
 use Brahmic\ApiSutra\Request\RequestPaginationHelper;
 use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\Files\DownloadManager;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Serialization\Enrichment\CredentialsEnricher;
 use Brahmic\ApiSutra\Serialization\VO\RequestPartsBag;
@@ -111,7 +113,20 @@ final class Serializer
 
         $prepared = $this->preparePayload($parts, $context);
 
+        $download = $request instanceof AbstractRequest && $request->hasDownload();
+        $target = $options?->getDownloadTarget();
+        if ($target !== null && !$download) {
+            throw new ConfigurationException('withDownloadTo требует #[Download]');
+        }
+        DownloadManager::validate($target);
+        $transfer = $download || $prepared['stream'] !== null || $parts->files !== []
+            ? new FileTransferOptions($prepared['stream'] !== null, $download, $target)
+            : null;
+        if ($context !== null) {
+            $context->fileTransfer = $transfer;
+        }
         return new PreparedRequest(
+            fileTransfer: $transfer,
             method: $method,
             url: $url,
             headers: $prepared['headers'],

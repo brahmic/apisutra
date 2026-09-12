@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\VO\Pipeline;
 
 use Brahmic\ApiSutra\Http\RequestDestination;
+use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
@@ -20,6 +21,7 @@ class PipelineContext
 {
     public ?CacheExecutionState $cacheExecution = null;
     public ?RequestDestination $destination = null;
+    public ?FileTransferOptions $fileTransfer = null;
     public ?ErrorCode $failureCode = null;
     public ?string $retryRefusalReason = null;
     public ?ExecutionBudget $budget = null;

@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Потоковые upload и download](completed/pln-009-streaming-file-transfers.md)
 - [Внешние и подписанные URL: изоляция credentials](completed/pln-008-external-signed-urls-origin-policy.md)
 - [Корректная сборка URI и сериализация query](completed/pln-007-uri-query-contracts.md)
 - [Таймауты транспорта и общий бюджет выполнения](completed/pln-006-transport-timeouts-execution-budget.md)

@@ -21,6 +21,7 @@ final class TimeoutResolver
             self::milliseconds($options?->getConnectTimeoutOverride() ?? $attribute?->connectTimeout ?? $context->config->connectTimeout),
             $context->budget,
             $context->destination,
+            $context->fileTransfer,
         );
     }
 
