@@ -29,7 +29,8 @@ final readonly class OperationDescriptorView
         public ?string $returnsUnwrap = null,
         public ?array $resourcePath = null,
         public ?string $resourceLabel = null,
-    ) {}
+    ) {
+    }
 
     public function title(): ?string
     {

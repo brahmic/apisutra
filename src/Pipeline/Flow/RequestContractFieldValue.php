@@ -12,7 +12,8 @@ final readonly class RequestContractFieldValue
         public string $path,
         public ValueState $state,
         public mixed $value,
-    ) {}
+    ) {
+    }
 
     public function isFilled(): bool
     {

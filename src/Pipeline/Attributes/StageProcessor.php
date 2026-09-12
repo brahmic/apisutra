@@ -12,7 +12,8 @@ final readonly class StageProcessor
 {
     public function __construct(
         private AttributeRegistry $attributes,
-    ) {}
+    ) {
+    }
 
     public function process(
         object $target,

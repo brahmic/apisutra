@@ -30,7 +30,8 @@ final readonly class CompositeFlow
     public function __construct(
         private Hydrator $hydrator,
         private PipelineExecutorInterface $executor,
-    ) {}
+    ) {
+    }
 
     public function executeComposite(
         CompositeRequestInterface $request,
@@ -75,8 +76,8 @@ final readonly class CompositeFlow
             : null;
 
         return [
-            $execution?->mode ?? ExecutionMode::Sequential,
-            $execution?->failStrategy ?? FailStrategy::FailAll,
+            $execution->mode ?? ExecutionMode::Sequential,
+            $execution->failStrategy ?? FailStrategy::FailAll,
         ];
     }
 
@@ -189,8 +190,7 @@ final readonly class CompositeFlow
         ResultCollection $results,
         RequestInterface $request,
         PipelineContext $context,
-    ): array
-    {
+    ): array {
         $errors = [];
         foreach ($results->all() as $result) {
             if ($result->isFailed()) {

@@ -489,7 +489,6 @@ final class RequestContractValidator
             return $request->{$property->getName()};
         }
 
-        $property->setAccessible(true);
 
         return $property->getValue($request);
     }

@@ -20,7 +20,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport());
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 1);
 
@@ -39,7 +38,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport());
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 1);
 
@@ -59,7 +57,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport());
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 2);
 
@@ -78,7 +75,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport());
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 3);
 
@@ -97,7 +93,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport());
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 3);
 
@@ -116,7 +111,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport());
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 3);
 
@@ -135,7 +129,6 @@ describe('RetryHandler delay', function () {
         $handler = new RetryHandler(new FakeTransport(), static fn (): int => 50);
 
         $method = new ReflectionMethod(RetryHandler::class, 'calculateDelay');
-        $method->setAccessible(true);
 
         $delay = $method->invoke($handler, $config, 1);
 

@@ -232,7 +232,9 @@ final class Paginator implements IteratorAggregate
     private function guardResult(RequestError $error): ExecutionResult
     {
         return new ExecutionResult(
-            data: null, status: ResultStatus::FAILED, errors: new ErrorCollection([$error]),
+            data: null,
+            status: ResultStatus::FAILED,
+            errors: new ErrorCollection([$error]),
             requestClass: $this->request::class,
         );
     }

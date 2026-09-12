@@ -22,8 +22,7 @@ final readonly class DefaultPaginationMetaResolver implements PaginationMetaReso
         array $meta,
         PaginationConfig $config,
         ?PipelineContext $context
-    ): PaginationMeta
-    {
+    ): PaginationMeta {
         $total = $meta['total'] ?? $meta['count'] ?? null;
         $currentPage = (int) ($meta['page'] ?? $meta['currentPage'] ?? $meta['current_page'] ?? 1);
         $perPage = (int) ($meta['per_page'] ?? $meta['perPage'] ?? $meta['limit'] ?? $meta['page_size'] ?? 0);

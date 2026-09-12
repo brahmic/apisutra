@@ -118,7 +118,10 @@ final class Pipeline implements PipelineExecutorInterface
         $this->auditLogger = new AuditLogger($this->config);
         $this->preparedRequestFactory = new PreparedRequestFactory($this->serializer, $this->requestPreparer);
         $this->authHandler = new AuthHandler(
-            $this->config, $this, $this->sleeper, $this->clock,
+            $this->config,
+            $this,
+            $this->sleeper,
+            $this->clock,
             $this->client !== null ? $this->client::class : self::class,
             $this->client,
         );
@@ -187,7 +190,7 @@ final class Pipeline implements PipelineExecutorInterface
         bool $skipComposite = false,
         bool $skipValidation = false,
     ): ExecutionResult {
-        $clock = $parent?->budget?->clock ?? $this->clock;
+        $clock = $parent->budget->clock ?? $this->clock;
         $startedMs = $clock->monotonicMs();
         $options = null;
         $paginationOptions = null;
@@ -229,7 +232,7 @@ final class Pipeline implements PipelineExecutorInterface
                 $exception = new ExecutionDeadlineException('execution', $exception);
             }
             if ($exception instanceof ExecutionDeadlineException && $exception->response === null) {
-                $response = $context?->response ?? $context?->lastResponse;
+                $response = $context->response ?? $context?->lastResponse;
                 if ($response !== null) {
                     $exception = new ExecutionDeadlineException($exception->stage, $exception->getPrevious(), $response);
                 }

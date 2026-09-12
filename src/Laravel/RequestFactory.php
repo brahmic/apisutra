@@ -279,7 +279,6 @@ final class RequestFactory implements RequestFactoryInterface
                 continue;
             }
 
-            $property->setAccessible(true);
             $property->setValue($request, $values[$name]);
         }
     }

@@ -33,7 +33,7 @@ final class FileTransferGuard
     public static function options(PreparedRequest $request): ?FileTransferOptions
     {
         if ($request->stream !== null && !$request->fileTransfer?->upload) {
-            return new FileTransferOptions(true, $request->fileTransfer?->download ?? false, $request->fileTransfer?->target);
+            return new FileTransferOptions(true, $request->fileTransfer->download ?? false, $request->fileTransfer?->target);
         }
         return $request->fileTransfer ?? ($request->stream !== null ? new FileTransferOptions(upload: true) : null);
     }

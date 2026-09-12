@@ -23,7 +23,8 @@ final readonly class CredentialsEnricher implements RequestPartsEnricherInterfac
 {
     public function __construct(
         private CredentialsEnrichmentConfig $config,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function enrich(
@@ -43,12 +44,12 @@ final readonly class CredentialsEnricher implements RequestPartsEnricherInterfac
         $scope = $this->resolveScope($request, $context);
         $scopeConfig = $this->resolveScopeConfig($scope);
         $mergeMode = $options?->getCredentialsMergeModeOverride()
-            ?? $scopeConfig?->mergeMode
+            ?? $scopeConfig->mergeMode
             ?? $this->config->mergeMode;
 
-        $bodyDefaults = $this->mergeDefaults($this->config->body, $scopeConfig?->body ?? []);
-        $queryDefaults = $this->mergeDefaults($this->config->query, $scopeConfig?->query ?? []);
-        $formDefaults = $this->mergeDefaults($this->config->form, $scopeConfig?->form ?? []);
+        $bodyDefaults = $this->mergeDefaults($this->config->body, $scopeConfig->body ?? []);
+        $queryDefaults = $this->mergeDefaults($this->config->query, $scopeConfig->query ?? []);
+        $formDefaults = $this->mergeDefaults($this->config->form, $scopeConfig->form ?? []);
 
         $changed = false;
         $appliedBody = [];

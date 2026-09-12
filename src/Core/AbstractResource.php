@@ -10,7 +10,8 @@ abstract class AbstractResource
 {
     public function __construct(
         protected readonly ClientInterface $client,
-    ) {}
+    ) {
+    }
 
     /**
      * Создать вложенный ресурс

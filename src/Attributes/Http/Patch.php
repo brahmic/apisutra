@@ -11,5 +11,6 @@ readonly class Patch
 {
     public function __construct(
         public string $path,
-    ) {}
+    ) {
+    }
 }

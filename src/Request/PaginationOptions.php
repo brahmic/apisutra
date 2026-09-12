@@ -13,7 +13,8 @@ final readonly class PaginationOptions
         private bool $limitSet,
         private ?string $cursor,
         private bool $cursorSet,
-    ) {}
+    ) {
+    }
 
     public static function empty(): self
     {

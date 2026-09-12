@@ -1,0 +1,700 @@
+{
+  "date": "2026-09-12",
+  "level": 5,
+  "scope": "src",
+  "entries": [
+    {
+      "file": "src/Auth/ApiKeyAuthenticator.php",
+      "line": 24,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Auth\\ApiKeyAuthenticator::getCacheIdentity() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Auth/BasicAuthenticator.php",
+      "line": 22,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Auth\\BasicAuthenticator::getCacheIdentity() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Auth/BearerAuthenticator.php",
+      "line": 21,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Auth\\BearerAuthenticator::getCacheIdentity() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Auth/HmacAuthenticator.php",
+      "line": 22,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Auth\\HmacAuthenticator::getCacheIdentity() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Auth/TokenAuthenticator.php",
+      "line": 47,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Auth\\TokenAuthenticator::getCacheIdentity() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Casts/CastRegistry.php",
+      "line": 38,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with class-string<Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface> will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Casts/CastRegistry.php",
+      "line": 40,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Casts/DateTimeCast.php",
+      "line": 127,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Casts\\DateTimeCast::handleInvalid() never returns DateTimeInterface so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 41,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 98,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 101,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 109,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 112,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 139,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 145,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 155,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 173,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 251,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 269,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 280,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractCollection.php",
+      "line": 299,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Collections/AbstractTypedCollection.php",
+      "line": 26,
+      "identifier": "identical.alwaysFalse",
+      "message": "Strict comparison using === between class-string<T of object (class Brahmic\\ApiSutra\\Collections\\AbstractTypedCollection, argument)> and '' will always evaluate to false.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Config/ClientConfig.php",
+      "line": 300,
+      "identifier": "deadCode.unreachable",
+      "message": "Unreachable statement - code above always terminates.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Config/ClientConfig.php",
+      "line": 304,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Config/ClientConfig.php",
+      "line": 313,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Config\\CredentialsScopeConfig and Brahmic\\ApiSutra\\Config\\CredentialsScopeConfig will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Config/OriginPolicy.php",
+      "line": 21,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Config/RetryConfig.php",
+      "line": 39,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Enums\\Http\\HttpMethod and Brahmic\\ApiSutra\\Enums\\Http\\HttpMethod will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Continuation/ContinuationService.php",
+      "line": 298,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Core/AbstractClient.php",
+      "line": 475,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Extensions\\ExtensionInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Extensions\\ExtensionInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Core/AbstractRequest.php",
+      "line": 244,
+      "identifier": "method.notFound",
+      "message": "Call to an undefined method Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface::clearCacheForRequest().",
+      "review": "Метод предоставлен штатной реализацией, но не базовым интерфейсом; добавлять обязательный метод сейчас несовместимо."
+    },
+    {
+      "file": "src/DataTransfer/AbstractDto.php",
+      "line": 24,
+      "identifier": "return.type",
+      "message": "Method Brahmic\\ApiSutra\\DataTransfer\\AbstractDto::from() should return static(Brahmic\\ApiSutra\\DataTransfer\\AbstractDto) but returns object.",
+      "review": "Возвращаемый runtime DTO соответствует переданному классу, анализатору недостаёт связи generic/static."
+    },
+    {
+      "file": "src/DataTransfer/AbstractDto.php",
+      "line": 32,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/DataTransfer/AbstractDto.php",
+      "line": 53,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/DataTransfer/AbstractDto.php",
+      "line": 76,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/DataTransfer/AbstractPaginationContainerDto.php",
+      "line": 35,
+      "identifier": "new.static",
+      "message": "Unsafe usage of new static().",
+      "review": "Расширяемые фабрики/коллекции используют конструктор static; изменение наследования требует отдельного контракта."
+    },
+    {
+      "file": "src/Execution/Batch/ParallelBatchStrategy.php",
+      "line": 35,
+      "identifier": "if.alwaysFalse",
+      "message": "If condition is always false.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Execution/Batch/Resolvers/ClassStringRequestResolver.php",
+      "line": 23,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Execution\\Batch\\Resolvers\\ClassStringRequestResolver::resolve() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Execution/BatchExecutor.php",
+      "line": 193,
+      "identifier": "argument.type",
+      "message": "Parameter $request of class Brahmic\\ApiSutra\\Request\\RequestExecution constructor expects Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface given.",
+      "review": "Интерфейс допускает более широкий тип, чем фактический встроенный execution/paginator; расширения вне AbstractRequest требуют отдельной проверки."
+    },
+    {
+      "file": "src/Execution/PoolExecutor.php",
+      "line": 232,
+      "identifier": "argument.type",
+      "message": "Parameter $request of class Brahmic\\ApiSutra\\Request\\RequestExecution constructor expects Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface given.",
+      "review": "Интерфейс допускает более широкий тип, чем фактический встроенный execution/paginator; расширения вне AbstractRequest требуют отдельной проверки."
+    },
+    {
+      "file": "src/Execution/PoolExecutor.php",
+      "line": 251,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Concurrency\\ConcurrencyResolverInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Concurrency\\ConcurrencyResolverInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Extensions/Archive/Response/ArchiveResponse.php",
+      "line": 222,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'name' on array{name: string, index: int, crc: int, size: int, mtime: int, comp_size: int, comp_method: int, encryption_method: int} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Extensions/Archive/Response/ArchiveResponse.php",
+      "line": 223,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'size' on array{name: string, index: int, crc: int, size: int, mtime: int, comp_size: int, comp_method: int, encryption_method: int} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Extensions/Archive/Response/ArchiveResponse.php",
+      "line": 224,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'comp_size' on array{name: string, index: int, crc: int, size: int, mtime: int, comp_size: int, comp_method: int, encryption_method: int} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Extensions/Archive/Response/ArchiveResponse.php",
+      "line": 225,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'name' on array{name: string, index: int, crc: int, size: int, mtime: int, comp_size: int, comp_method: int, encryption_method: int} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Extensions/Archive/Response/ArchiveResponse.php",
+      "line": 226,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'mtime' on array{name: string, index: int, crc: int, size: int, mtime: int, comp_size: int, comp_method: int, encryption_method: int} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Extensions/Archive/Response/ArchiveResponse.php",
+      "line": 255,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function method_exists() with PharFileInfo and 'getCompressedSize' will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Files/BorrowedStream.php",
+      "line": 18,
+      "identifier": "property.onlyRead",
+      "message": "Property Brahmic\\ApiSutra\\Files\\BorrowedStream::$stream is never written, only read.",
+      "review": "Инициализация делегирована StreamDecoratorTrait; поведение проверяют streaming tests."
+    },
+    {
+      "file": "src/Files/StreamCopy.php",
+      "line": 22,
+      "identifier": "booleanNot.alwaysTrue",
+      "message": "Negated boolean expression is always true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Files/TemporaryFileStream.php",
+      "line": 78,
+      "identifier": "isset.initializedProperty",
+      "message": "Property Brahmic\\ApiSutra\\Files\\TemporaryFileStream::$stream in isset() is not nullable nor uninitialized.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Http/Origin.php",
+      "line": 29,
+      "identifier": "greater.alwaysFalse",
+      "message": "Comparison operation \">\" between int<1, 65535> and 65535 is always false.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Laravel/RequestFactory.php",
+      "line": 122,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_object() with Illuminate\\Routing\\Route will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Laravel/RequestFactory.php",
+      "line": 123,
+      "identifier": "class.notFound",
+      "message": "Call to method parameters() on an unknown class Illuminate\\Routing\\Route.",
+      "review": "Опциональный Illuminate Routing отсутствует в root dev graph; реальная Laravel-интеграция проверяется отдельным приложением."
+    },
+    {
+      "file": "src/Laravel/RequestFactory.php",
+      "line": 126,
+      "identifier": "function.impossibleType",
+      "message": "Call to function is_array() with Illuminate\\Routing\\Route will always evaluate to false.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Laravel/RequestFactory.php",
+      "line": 312,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 1 on array{list<string>, list<non-empty-string>} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/OperationInventory/Catalog/Export/ResponseDtoCatalogWriter.php",
+      "line": 83,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/OperationInventory/ResourceNameResolver.php",
+      "line": 44,
+      "identifier": "arrayValues.list",
+      "message": "Parameter #1 $array (non-empty-list<string>) of array_values is already a list, call has no effect.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/OperationInventory/SdkCallPathMethodAnalyzer.php",
+      "line": 297,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'value' on array{0: non-falsy-string, value: string, 1: string} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/OperationInventory/SdkCallPathMethodAnalyzer.php",
+      "line": 299,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/OperationInventory/SdkCallPathMethodAnalyzer.php",
+      "line": 366,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/OperationInventory/SdkCallPathResolver.php",
+      "line": 277,
+      "identifier": "parameterByRef.type",
+      "message": "Parameter &$paths by-ref type of method Brahmic\\ApiSutra\\OperationInventory\\SdkCallPathResolver::appendPath() expects array<class-string, array<int, string>>, array<string, array<int, string>> given.",
+      "review": "Каталог путей проверяет классы во время исполнения, PHPDoc class-string шире локального вывода."
+    },
+    {
+      "file": "src/OperationInventory/SdkCallPathResolver.php",
+      "line": 278,
+      "identifier": "parameterByRef.type",
+      "message": "Parameter &$paths by-ref type of method Brahmic\\ApiSutra\\OperationInventory\\SdkCallPathResolver::appendPath() expects array<class-string, array<int, string>>, array<string, array<int, string>> given.",
+      "review": "Каталог путей проверяет классы во время исполнения, PHPDoc class-string шире локального вывода."
+    },
+    {
+      "file": "src/Pagination/Paginator.php",
+      "line": 385,
+      "identifier": "method.notFound",
+      "message": "Call to an undefined method Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestExecutionInterface::withCursor().",
+      "review": "Метод предоставлен штатной реализацией, но не базовым интерфейсом; добавлять обязательный метод сейчас несовместимо."
+    },
+    {
+      "file": "src/Pipeline/Error/ErrorPolicy.php",
+      "line": 56,
+      "identifier": "method.unused",
+      "message": "Method Brahmic\\ApiSutra\\Pipeline\\Error\\ErrorPolicy::shouldRetryInternal() is unused.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Pipeline/Flow/RequestContractFieldResolver.php",
+      "line": 34,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 0 on non-empty-list<string> on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Pipeline/Flow/RequestContractFieldResolver.php",
+      "line": 148,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Pipeline\\Flow\\RequestContractFieldResolver::resolveObjectAsArray() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Pipeline/Flow/RequestContractValidator.php",
+      "line": 286,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Pipeline/Flow/RequestContractValidator.php",
+      "line": 402,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Pipeline/Hooks/HookRunner.php",
+      "line": 140,
+      "identifier": "match.unhandled",
+      "message": "Match expression does not handle remaining value: Brahmic\\ApiSutra\\Enums\\Hooks\\Hook::BeforeHydrate",
+      "review": "BeforeHydrate отделён вызывающим методом; отдельная ветвь недостижима в текущем потоке."
+    },
+    {
+      "file": "src/Pipeline/Hydration/ResponseHydrator.php",
+      "line": 132,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 1 on array{non-falsy-string, non-empty-string} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Pipeline/Pipeline.php",
+      "line": 106,
+      "identifier": "property.onlyWritten",
+      "message": "Property Brahmic\\ApiSutra\\Pipeline\\Pipeline::$logger is never read, only written.",
+      "review": "Сохранённая зависимость/параметр конструктора; удаление или API cleanup отложены."
+    },
+    {
+      "file": "src/Request/RequestExecution.php",
+      "line": 77,
+      "identifier": "method.notFound",
+      "message": "Call to an undefined method Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface::clearCacheForRequest().",
+      "review": "Метод предоставлен штатной реализацией, но не базовым интерфейсом; добавлять обязательный метод сейчас несовместимо."
+    },
+    {
+      "file": "src/Request/RequestResolver.php",
+      "line": 86,
+      "identifier": "argument.type",
+      "message": "Parameter $request of class Brahmic\\ApiSutra\\Pagination\\Paginator constructor expects Brahmic\\ApiSutra\\Contracts\\Interfaces\\Pagination\\PaginableInterface&Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface given.",
+      "review": "Интерфейс допускает более широкий тип, чем фактический встроенный execution/paginator; расширения вне AbstractRequest требуют отдельной проверки."
+    },
+    {
+      "file": "src/Request/RequestResolver.php",
+      "line": 102,
+      "identifier": "argument.type",
+      "message": "Parameter $request of class Brahmic\\ApiSutra\\Pagination\\Paginator constructor expects Brahmic\\ApiSutra\\Contracts\\Interfaces\\Pagination\\PaginableInterface&Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface&Brahmic\\ApiSutra\\Contracts\\Interfaces\\Pagination\\PaginableInterface given.",
+      "review": "Интерфейс допускает более широкий тип, чем фактический встроенный execution/paginator; расширения вне AbstractRequest требуют отдельной проверки."
+    },
+    {
+      "file": "src/Resolver/ClassMapProvider.php",
+      "line": 70,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 0 on non-empty-list<mixed>&callable(string): void on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Resolver/ClientDiscoveryService.php",
+      "line": 38,
+      "identifier": "nullCoalesce.property",
+      "message": "Property Brahmic\\ApiSutra\\Config\\ClientConfig::$environment (Brahmic\\ApiSutra\\Enums\\Configuration\\Environment) on left side of ?? is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Resolver/ServiceRegistrar.php",
+      "line": 32,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/DtoHydrationProfileResolver.php",
+      "line": 50,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoHydrationProfileInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoHydrationProfileInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/DtoHydrationProfileResolver.php",
+      "line": 105,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with class-string<Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface> will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/DtoSerializationProfileResolver.php",
+      "line": 111,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoSerializationProfileInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoSerializationProfileInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/DtoSerializationProfileResolver.php",
+      "line": 164,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with class-string<Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface> will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/DtoSerializer.php",
+      "line": 34,
+      "identifier": "property.onlyWritten",
+      "message": "Property Brahmic\\ApiSutra\\Serialization\\DtoSerializer::$casts is never read, only written.",
+      "review": "Сохранённая зависимость/параметр конструктора; удаление или API cleanup отложены."
+    },
+    {
+      "file": "src/Serialization/Enrichment/CredentialsEnricher.php",
+      "line": 59,
+      "identifier": "booleanOr.rightAlwaysFalse",
+      "message": "Right side of || is always false.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/Enrichment/CredentialsEnricher.php",
+      "line": 144,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/Enrichment/CredentialsEnricher.php",
+      "line": 178,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/Enrichment/CredentialsEnricher.php",
+      "line": 217,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_string() with string will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/FilePayloadPreparer.php",
+      "line": 120,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'file' on array{name: string, file: Brahmic\\ApiSutra\\VO\\Files\\FileInput} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/FilePayloadPreparer.php",
+      "line": 121,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\VO\\Files\\FileInput and Brahmic\\ApiSutra\\VO\\Files\\FileInput will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/FilePayloadPreparer.php",
+      "line": 160,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 'file' on array{name: string, file: Brahmic\\ApiSutra\\VO\\Files\\FileInput} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/FilePayloadPreparer.php",
+      "line": 161,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\VO\\Files\\FileInput and Brahmic\\ApiSutra\\VO\\Files\\FileInput will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/Hydrator.php",
+      "line": 48,
+      "identifier": "property.onlyWritten",
+      "message": "Property Brahmic\\ApiSutra\\Serialization\\Hydrator::$casts is never read, only written.",
+      "review": "Сохранённая зависимость/параметр конструктора; удаление или API cleanup отложены."
+    },
+    {
+      "file": "src/Serialization/Hydrator.php",
+      "line": 654,
+      "identifier": "identical.alwaysFalse",
+      "message": "Strict comparison using === between (int|string) and null will always evaluate to false.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/RequestUrlBuilder.php",
+      "line": 24,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 1 on array{list<string>, list<non-empty-string>} on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Serialization/Serializer.php",
+      "line": 318,
+      "identifier": "instanceof.alwaysTrue",
+      "message": "Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Support/ContainerProviderRegistry.php",
+      "line": 83,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function is_object() with Illuminate\\Container\\Container will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Traits/ProvidesMultiServiceResponseDtoCatalogTrait.php",
+      "line": 35,
+      "identifier": "trait.unused",
+      "message": "Trait Brahmic\\ApiSutra\\Traits\\ProvidesMultiServiceResponseDtoCatalogTrait is used zero times and is not analysed.",
+      "review": "Публичный trait предназначен для SDK-потребителя; не удалять из-за отсутствия внутреннего использования."
+    },
+    {
+      "file": "src/Transport/ExactTargetCurlFactory.php",
+      "line": 55,
+      "identifier": "function.alreadyNarrowedType",
+      "message": "Call to function method_exists() with 'GuzzleHttp\\\\Utils' and 'isUriInNoProxy' will always evaluate to true.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Transport/MockTransport.php",
+      "line": 244,
+      "identifier": "return.unusedType",
+      "message": "Method Brahmic\\ApiSutra\\Transport\\MockTransport::resolveFixture() never returns null so it can be removed from the return type.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/VO/Validation/Validator.php",
+      "line": 171,
+      "identifier": "nullCoalesce.offset",
+      "message": "Offset 0 on non-empty-list<string> on left side of ?? always exists and is not nullable.",
+      "review": "Существующая защитная проверка/совместимый тип на границе либо избыточная ветвь по PHPDoc; не меняем публичную семантику ради сужения анализа."
+    },
+    {
+      "file": "src/Versioning/VersionedResourceTrait.php",
+      "line": 24,
+      "identifier": "trait.unused",
+      "message": "Trait Brahmic\\ApiSutra\\Versioning\\VersionedResourceTrait is used zero times and is not analysed.",
+      "review": "Публичный trait предназначен для SDK-потребителя; не удалять из-за отсутствия внутреннего использования."
+    }
+  ]
+}

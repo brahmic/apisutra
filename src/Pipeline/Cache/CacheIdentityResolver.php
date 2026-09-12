@@ -14,7 +14,9 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 /** Автоматические границы доступа отделены от пользовательского логического ключа. */
 final readonly class CacheIdentityResolver
 {
-    public function __construct(private ClientConfig $config, private string $provider) {}
+    public function __construct(private ClientConfig $config, private string $provider)
+    {
+    }
 
     public function scope(?AuthenticatorInterface $auth, CacheConfig $cache, string $prefix): ?string
     {

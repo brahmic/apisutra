@@ -15,5 +15,6 @@ readonly class RequestDiscriminator
     public function __construct(
         public string $field,
         public array $map,
-    ) {}
+    ) {
+    }
 }

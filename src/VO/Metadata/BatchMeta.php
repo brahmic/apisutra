@@ -30,5 +30,6 @@ readonly class BatchMeta implements ResultMeta
         public int $successful,
         public int $failed,
         public int $partial = 0,
-    ) {}
+    ) {
+    }
 }

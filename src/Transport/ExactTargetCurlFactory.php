@@ -26,15 +26,13 @@ final readonly class ExactTargetCurlFactory implements CurlFactoryInterface
     {
         $easy = $this->factory->create($request, $options);
         $uri = $request->getUri();
-        $natural = ($uri->getPath() === '' ? '/' : $uri->getPath()) . ($uri->getQuery() === '' ? '' : '?' . $uri->getQuery());
-        $success = curl_setopt($easy->handle, CURLOPT_PATH_AS_IS, true);
-        if ($request->getRequestTarget() !== $natural) {
-            $target = $request->getRequestTarget();
-            if ($this->usesForwardProxy($request, $options)) {
-                $target = $uri->getScheme() . '://' . $uri->getAuthority() . $target;
-            }
-            $success = $success && curl_setopt($easy->handle, CURLOPT_REQUEST_TARGET, $target);
+        // Даже совпадающий с PSR URI target нельзя отдавать на нормализацию libcurl.
+        $target = $request->getRequestTarget();
+        if ($this->usesForwardProxy($request, $options)) {
+            $target = $uri->getScheme() . '://' . $uri->getAuthority() . $target;
         }
+        $success = curl_setopt($easy->handle, CURLOPT_PATH_AS_IS, true)
+            && curl_setopt($easy->handle, CURLOPT_REQUEST_TARGET, $target);
         if (!$success) {
             $this->factory->release($easy);
             throw new ConfigurationException('cURL не поддерживает сохранение request target');

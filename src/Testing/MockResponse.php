@@ -16,7 +16,8 @@ readonly class MockResponse
         public array|string $data = [],
         public int $status = 200,
         public array $headers = [],
-    ) {}
+    ) {
+    }
 
     public static function make(array|string $data = [], int $status = 200, array $headers = []): self
     {

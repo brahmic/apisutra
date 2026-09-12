@@ -21,7 +21,8 @@ final readonly class ClassMapProvider
     public function __construct(
         private ?array $classMapOverride = null,
         private ?array $psr4PrefixesOverride = null,
-    ) {}
+    ) {
+    }
 
     /**
      * Карта классов (FQCN => путь файла), если доступна.

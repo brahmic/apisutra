@@ -11,5 +11,6 @@ readonly class Label
 {
     public function __construct(
         public string $name,
-    ) {}
+    ) {
+    }
 }

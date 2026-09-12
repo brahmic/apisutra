@@ -12,7 +12,8 @@ final readonly class QueryLikeFormatter implements AuthorizationParamsFormatterI
     public function __construct(
         private bool $encode = false,
         private bool $sortKeys = false,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<string, string|int|float|bool|Stringable> $params

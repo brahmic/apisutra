@@ -18,7 +18,8 @@ final readonly class DateTimeFrom
         public ?bool $strictMissingTimezone = null,
         public ?bool $strictFormat = null,
         public ?DateTimeInvalidBehavior $invalidBehavior = null,
-    ) {}
+    ) {
+    }
 
     public function toPolicy(DateTimeHydrationPolicy $base): DateTimeHydrationPolicy
     {

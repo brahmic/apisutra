@@ -20,7 +20,8 @@ final readonly class ClientDiscoveryService
         private ClientRegistry $registry,
         private RequestNamespaceDetector $detector,
         private ClientDiscoveryCache $cache,
-    ) {}
+    ) {
+    }
 
     /**
      * Зарегистрировать клиента на основе auto‑discovery.

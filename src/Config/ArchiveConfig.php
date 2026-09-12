@@ -13,7 +13,8 @@ final readonly class ArchiveConfig
         public ?string $tempDir = null,
         public ?int $maxSize = null,
         public ?TempDirectoryProviderInterface $tempProvider = null,
-    ) {}
+    ) {
+    }
 
     public static function fromClientConfig(ClientConfig $config): self
     {

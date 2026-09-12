@@ -11,7 +11,8 @@ readonly class CacheOverride
     public function __construct(
         public ?CacheMode $mode = null,
         public ?int $ttl = null,
-    ) {}
+    ) {
+    }
 
     public static function empty(): self
     {

@@ -27,7 +27,8 @@ final class ValidationResult implements ValidationResultContract
     public function __construct(
         private bool $passed,
         private array $errors,
-    ) {}
+    ) {
+    }
 
     /**
      * Проверяет, прошла ли валидация успешно.

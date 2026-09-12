@@ -25,7 +25,8 @@ final readonly class RetryDecisionMaker
         private ClientConfig $config,
         private ErrorPolicy $errorPolicy,
         private ?AbstractClient $client = null,
-    ) {}
+    ) {
+    }
 
     public function shouldRetry(
         RequestInterface $request,

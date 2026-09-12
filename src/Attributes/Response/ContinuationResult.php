@@ -30,5 +30,6 @@ final readonly class ContinuationResult
         public ?string $unwrap = null,
         public ?string $pollRequest = null,
         public ?ContinuationMode $defaultMode = null,
-    ) {}
+    ) {
+    }
 }

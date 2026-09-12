@@ -35,7 +35,8 @@ final class ExtensionRegistry
         private readonly CastRegistry $casts,
         private readonly HookRegistry $hooks,
         private readonly AttributeRegistry $attributes,
-    ) {}
+    ) {
+    }
 
     public function register(ExtensionInterface $extension): void
     {

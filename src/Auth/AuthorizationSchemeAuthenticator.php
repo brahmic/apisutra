@@ -28,7 +28,8 @@ final readonly class AuthorizationSchemeAuthenticator implements AuthenticatorIn
         private array $params = [],
         private ?AuthorizationParamsProviderInterface $provider = null,
         private ?AuthorizationParamsFormatterInterface $formatter = null,
-    ) {}
+    ) {
+    }
 
     #[Override]
     public function getCacheIdentity(?PreparedRequest $request = null): ?string

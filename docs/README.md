@@ -1,5 +1,7 @@
 # Документация ApiSutra
 
+Изменения совместимости: [миграция на следующий выпуск](guides/migration.md).
+
 Готовые ссылки и изоляция credentials: [Внешние и подписанные URL](guides/external-urls.md).
 
 ApiSutra — фреймворк для построения API‑клиентов на PHP. Он объединяет
@@ -38,7 +40,7 @@ pagination) работает единообразно для всех клиен
 - unified continuation token DX через pluggable extractor в `resolved()`/`ResultHandle`
 - unified provider async-await DX: `ContinuationMode`, `ContinuationResult`, `await()/awaitByToken()`
 - пагинация и коллекции результатов
-- batch и pool для конкурентного выполнения
+- batch и pool; фактическая конкурентность I/O зависит от транспорта
 - мегаклиент для мультисервисных интеграций
 - тестовые инструменты (fake, record/playback, fixtures)
 - интеграция с Laravel и auto‑detect контейнера
@@ -47,7 +49,7 @@ pagination) работает единообразно для всех клиен
 - транспорт не навязывается: используется `TransportInterface`
 - адаптер `HttpTransport` опирается на PSR‑18 и PSR‑17 при необходимости
 - в Laravel транспорт может быть подставлен автоматически через контейнер
-- контейнер опционален: без него недоступен auto‑resolve клиента и DTO‑валидация
+- контейнер опционален: клиент можно передать явно; для Validate нужна фабрика валидации
 - для внешнего кеша и общего счётчика лимитов можно передать PSR-16 store;
   строгая межпроцессная квота [не гарантируется](guides/client-config/rate-limit.md#ключ-и-store)
 - multipart‑загрузка требует `guzzlehttp/psr7`

@@ -11,5 +11,6 @@ readonly class Idempotent
 {
     public function __construct(
         public ?string $header = null,
-    ) {}
+    ) {
+    }
 }

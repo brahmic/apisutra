@@ -11,5 +11,6 @@ readonly class Put
 {
     public function __construct(
         public string $path,
-    ) {}
+    ) {
+    }
 }

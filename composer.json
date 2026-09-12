@@ -33,7 +33,11 @@
         }
     },
     "scripts": {
-        "test": "pest"
+        "test": "pest",
+        "lint": "phpcs --report=summary",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "check-docs": "python3 tests/Support/check-docs.py",
+        "check-package": "python3 tests/Support/check-package.py"
     },
     "config": {
         "optimize-autoloader": true,
@@ -50,7 +54,9 @@
         "illuminate/http": "^12.0",
         "illuminate/translation": "^12.0",
         "illuminate/validation": "^12.0",
-        "pestphp/pest": "^3.8"
+        "pestphp/pest": "^3.8",
+        "phpstan/phpstan": "^2.1",
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "extra": {
         "laravel": {
@@ -58,5 +64,28 @@
                 "Brahmic\\ApiSutra\\Laravel\\SdkServiceProvider"
             ]
         }
+    },
+    "archive": {
+        "exclude": [
+            "/vendor",
+            "/.laravel-integration",
+            "/.workflow",
+            "/.agents",
+            "/AGENTS.md",
+            "/tests",
+            "/.github",
+            "/.phpunit.cache",
+            "/.phpunit.result.cache",
+            "/.phpstan-cache",
+            "/.idea",
+            "/.temp",
+            "/.gitignore",
+            "/.gitattributes",
+            "/phpunit.xml.dist",
+            "/phpcs.xml",
+            "/phpstan.neon",
+            "/phpstan-baseline.neon",
+            "/phpstan-stubs"
+        ]
     }
 }

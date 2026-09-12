@@ -17,7 +17,8 @@ final class ErrorCollection implements IteratorAggregate
      */
     public function __construct(
         private array $items,
-    ) {}
+    ) {
+    }
 
     public function first(): ?RequestError
     {

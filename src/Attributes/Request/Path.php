@@ -11,5 +11,6 @@ readonly class Path
 {
     public function __construct(
         public ?string $name = null,
-    ) {}
+    ) {
+    }
 }

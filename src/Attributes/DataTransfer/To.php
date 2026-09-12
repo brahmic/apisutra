@@ -11,5 +11,6 @@ readonly class To
 {
     public function __construct(
         public string $name,
-    ) {}
+    ) {
+    }
 }

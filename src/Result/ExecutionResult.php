@@ -130,7 +130,7 @@ readonly class ExecutionResult implements ResultInterface
                 throw $this->exception;
             }
 
-            $message = $this->errors->first()?->message ?? 'Ошибка выполнения запроса';
+            $message = $this->errors->first()->message ?? 'Ошибка выполнения запроса';
             throw new SdkException($message);
         }
 

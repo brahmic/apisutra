@@ -12,5 +12,6 @@ final readonly class ResolvedDtoSerialization
     public function __construct(
         public DtoSerializationPolicy $policy,
         public CastRegistry $casts,
-    ) {}
+    ) {
+    }
 }

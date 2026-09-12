@@ -19,5 +19,6 @@ readonly class RequestOneOf
         public array $variants,
         public array $requiredCommon = [],
         public OneOfMode $mode = OneOfMode::ExactlyOne,
-    ) {}
+    ) {
+    }
 }

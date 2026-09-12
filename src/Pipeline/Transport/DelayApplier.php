@@ -18,7 +18,8 @@ final readonly class DelayApplier
     public function __construct(
         private ClientConfig $config,
         private SleeperInterface $sleeper = new SystemSleeper(),
-    ) {}
+    ) {
+    }
 
     public function apply(RequestInterface $request, ?RequestOptions $options = null, ?ExecutionBudget $budget = null): void
     {

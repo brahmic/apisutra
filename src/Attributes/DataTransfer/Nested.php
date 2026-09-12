@@ -21,5 +21,6 @@ readonly class Nested
         public ?array $map = null,
         public NestedDiscriminatorMode $discriminatorMode = NestedDiscriminatorMode::Value,
         public NestedUnknownVariant $unknownVariant = NestedUnknownVariant::KeepRaw,
-    ) {}
+    ) {
+    }
 }

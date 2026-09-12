@@ -18,7 +18,7 @@ final readonly class ExecutionBudget
 
     public function __construct(ClockInterface $clock, ?int $limitMs = null, ?self $parent = null, ?int $startedMs = null)
     {
-        $this->clock = $parent?->clock ?? $clock;
+        $this->clock = $parent->clock ?? $clock;
         $start = $startedMs ?? $this->clock->monotonicMs();
         if ($limitMs !== null && ($limitMs < 1 || $limitMs > PHP_INT_MAX - $start)) {
             throw new ConfigurationException('Недопустимый общий бюджет выполнения');

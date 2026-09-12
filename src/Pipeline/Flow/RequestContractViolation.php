@@ -17,7 +17,8 @@ final readonly class RequestContractViolation
         public ?string $matchedVariant,
         public array $filledVariants,
         public array $violations,
-    ) {}
+    ) {
+    }
 
     public function message(): string
     {

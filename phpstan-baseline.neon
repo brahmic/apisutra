@@ -1,0 +1,463 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Auth\\ApiKeyAuthenticator\:\:getCacheIdentity\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Auth/ApiKeyAuthenticator.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Auth\\BasicAuthenticator\:\:getCacheIdentity\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Auth/BasicAuthenticator.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Auth\\BearerAuthenticator\:\:getCacheIdentity\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Auth/BearerAuthenticator.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Auth\\HmacAuthenticator\:\:getCacheIdentity\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Auth/HmacAuthenticator.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Auth\\TokenAuthenticator\:\:getCacheIdentity\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Auth/TokenAuthenticator.php
+
+		-
+			message: '#^Call to function is_string\(\) with class\-string\<Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Casts/CastRegistry.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Casts/CastRegistry.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Casts\\DateTimeCast\:\:handleInvalid\(\) never returns DateTimeInterface so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Casts/DateTimeCast.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 13
+			path: src/Collections/AbstractCollection.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between class\-string\<T of object \(class Brahmic\\ApiSutra\\Collections\\AbstractTypedCollection, argument\)\> and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Collections/AbstractTypedCollection.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Config\\CredentialsScopeConfig and Brahmic\\ApiSutra\\Config\\CredentialsScopeConfig will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Config/ClientConfig.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Config/ClientConfig.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Config/ClientConfig.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Config/OriginPolicy.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Enums\\Http\\HttpMethod and Brahmic\\ApiSutra\\Enums\\Http\\HttpMethod will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Config/RetryConfig.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Continuation/ContinuationService.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Extensions\\ExtensionInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Extensions\\ExtensionInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Core/AbstractClient.php
+
+		-
+			message: '#^Call to an undefined method Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface\:\:clearCacheForRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Core/AbstractRequest.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\DataTransfer\\AbstractDto\:\:from\(\) should return static\(Brahmic\\ApiSutra\\DataTransfer\\AbstractDto\) but returns object\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DataTransfer/AbstractDto.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 3
+			path: src/DataTransfer/AbstractDto.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/DataTransfer/AbstractPaginationContainerDto.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Execution/Batch/ParallelBatchStrategy.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Execution\\Batch\\Resolvers\\ClassStringRequestResolver\:\:resolve\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Execution/Batch/Resolvers/ClassStringRequestResolver.php
+
+		-
+			message: '#^Parameter \$request of class Brahmic\\ApiSutra\\Request\\RequestExecution constructor expects Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Execution/BatchExecutor.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Concurrency\\ConcurrencyResolverInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Concurrency\\ConcurrencyResolverInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Execution/PoolExecutor.php
+
+		-
+			message: '#^Parameter \$request of class Brahmic\\ApiSutra\\Request\\RequestExecution constructor expects Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Execution/PoolExecutor.php
+
+		-
+			message: '#^Call to function method_exists\(\) with PharFileInfo and ''getCompressedSize'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Extensions/Archive/Response/ArchiveResponse.php
+
+		-
+			message: '#^Offset ''comp_size'' on array\{name\: string, index\: int, crc\: int, size\: int, mtime\: int, comp_size\: int, comp_method\: int, encryption_method\: int\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Extensions/Archive/Response/ArchiveResponse.php
+
+		-
+			message: '#^Offset ''mtime'' on array\{name\: string, index\: int, crc\: int, size\: int, mtime\: int, comp_size\: int, comp_method\: int, encryption_method\: int\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Extensions/Archive/Response/ArchiveResponse.php
+
+		-
+			message: '#^Offset ''name'' on array\{name\: string, index\: int, crc\: int, size\: int, mtime\: int, comp_size\: int, comp_method\: int, encryption_method\: int\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: src/Extensions/Archive/Response/ArchiveResponse.php
+
+		-
+			message: '#^Offset ''size'' on array\{name\: string, index\: int, crc\: int, size\: int, mtime\: int, comp_size\: int, comp_method\: int, encryption_method\: int\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Extensions/Archive/Response/ArchiveResponse.php
+
+		-
+			message: '#^Property Brahmic\\ApiSutra\\Files\\BorrowedStream\:\:\$stream is never written, only read\.$#'
+			identifier: property.onlyRead
+			count: 1
+			path: src/Files/BorrowedStream.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: src/Files/StreamCopy.php
+
+		-
+			message: '#^Property Brahmic\\ApiSutra\\Files\\TemporaryFileStream\:\:\$stream in isset\(\) is not nullable nor uninitialized\.$#'
+			identifier: isset.initializedProperty
+			count: 1
+			path: src/Files/TemporaryFileStream.php
+
+		-
+			message: '#^Comparison operation "\>" between int\<1, 65535\> and 65535 is always false\.$#'
+			identifier: greater.alwaysFalse
+			count: 1
+			path: src/Http/Origin.php
+
+		-
+			message: '#^Call to function is_array\(\) with Illuminate\\Routing\\Route will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/Laravel/RequestFactory.php
+
+		-
+			message: '#^Call to function is_object\(\) with Illuminate\\Routing\\Route will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Laravel/RequestFactory.php
+
+		-
+			message: '#^Call to method parameters\(\) on an unknown class Illuminate\\Routing\\Route\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Laravel/RequestFactory.php
+
+		-
+			message: '#^Offset 1 on array\{list\<string\>, list\<non\-empty\-string\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Laravel/RequestFactory.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/OperationInventory/Catalog/Export/ResponseDtoCatalogWriter.php
+
+		-
+			message: '#^Parameter \#1 \$array \(non\-empty\-list\<string\>\) of array_values is already a list, call has no effect\.$#'
+			identifier: arrayValues.list
+			count: 1
+			path: src/OperationInventory/ResourceNameResolver.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: src/OperationInventory/SdkCallPathMethodAnalyzer.php
+
+		-
+			message: '#^Offset ''value'' on array\{0\: non\-falsy\-string, value\: string, 1\: string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/OperationInventory/SdkCallPathMethodAnalyzer.php
+
+		-
+			message: '#^Parameter &\$paths by\-ref type of method Brahmic\\ApiSutra\\OperationInventory\\SdkCallPathResolver\:\:appendPath\(\) expects array\<class\-string, array\<int, string\>\>, array\<string, array\<int, string\>\> given\.$#'
+			identifier: parameterByRef.type
+			count: 2
+			path: src/OperationInventory/SdkCallPathResolver.php
+
+		-
+			message: '#^Call to an undefined method Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestExecutionInterface\:\:withCursor\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Pagination/Paginator.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Pipeline\\Error\\ErrorPolicy\:\:shouldRetryInternal\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: src/Pipeline/Error/ErrorPolicy.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Pipeline\\Flow\\RequestContractFieldResolver\:\:resolveObjectAsArray\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Pipeline/Flow/RequestContractFieldResolver.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Pipeline/Flow/RequestContractFieldResolver.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: src/Pipeline/Flow/RequestContractValidator.php
+
+		-
+			message: '#^Match expression does not handle remaining value\: Brahmic\\ApiSutra\\Enums\\Hooks\\Hook\:\:BeforeHydrate$#'
+			identifier: match.unhandled
+			count: 1
+			path: src/Pipeline/Hooks/HookRunner.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Pipeline/Hydration/ResponseHydrator.php
+
+		-
+			message: '#^Property Brahmic\\ApiSutra\\Pipeline\\Pipeline\:\:\$logger is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Pipeline/Pipeline.php
+
+		-
+			message: '#^Call to an undefined method Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface\:\:clearCacheForRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Request/RequestExecution.php
+
+		-
+			message: '#^Parameter \$request of class Brahmic\\ApiSutra\\Pagination\\Paginator constructor expects Brahmic\\ApiSutra\\Contracts\\Interfaces\\Pagination\\PaginableInterface&Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Request/RequestResolver.php
+
+		-
+			message: '#^Parameter \$request of class Brahmic\\ApiSutra\\Pagination\\Paginator constructor expects Brahmic\\ApiSutra\\Contracts\\Interfaces\\Pagination\\PaginableInterface&Brahmic\\ApiSutra\\Core\\AbstractRequest, Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface&Brahmic\\ApiSutra\\Contracts\\Interfaces\\Pagination\\PaginableInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Request/RequestResolver.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<mixed\>&callable\(string\)\: void on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Resolver/ClassMapProvider.php
+
+		-
+			message: '#^Property Brahmic\\ApiSutra\\Config\\ClientConfig\:\:\$environment \(Brahmic\\ApiSutra\\Enums\\Configuration\\Environment\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: src/Resolver/ClientDiscoveryService.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Resolver/ServiceRegistrar.php
+
+		-
+			message: '#^Call to function is_string\(\) with class\-string\<Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Serialization/DtoHydrationProfileResolver.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoHydrationProfileInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoHydrationProfileInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Serialization/DtoHydrationProfileResolver.php
+
+		-
+			message: '#^Call to function is_string\(\) with class\-string\<Brahmic\\ApiSutra\\Contracts\\Interfaces\\Casting\\CastInterface\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Serialization/DtoSerializationProfileResolver.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoSerializationProfileInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoSerializationProfileInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Serialization/DtoSerializationProfileResolver.php
+
+		-
+			message: '#^Property Brahmic\\ApiSutra\\Serialization\\DtoSerializer\:\:\$casts is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Serialization/DtoSerializer.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 3
+			path: src/Serialization/Enrichment/CredentialsEnricher.php
+
+		-
+			message: '#^Right side of \|\| is always false\.$#'
+			identifier: booleanOr.rightAlwaysFalse
+			count: 1
+			path: src/Serialization/Enrichment/CredentialsEnricher.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\VO\\Files\\FileInput and Brahmic\\ApiSutra\\VO\\Files\\FileInput will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 2
+			path: src/Serialization/FilePayloadPreparer.php
+
+		-
+			message: '#^Offset ''file'' on array\{name\: string, file\: Brahmic\\ApiSutra\\VO\\Files\\FileInput\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: src/Serialization/FilePayloadPreparer.php
+
+		-
+			message: '#^Property Brahmic\\ApiSutra\\Serialization\\Hydrator\:\:\$casts is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Serialization/Hydrator.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between \(int\|string\) and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Serialization/Hydrator.php
+
+		-
+			message: '#^Offset 1 on array\{list\<string\>, list\<non\-empty\-string\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Serialization/RequestUrlBuilder.php
+
+		-
+			message: '#^Instanceof between Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface and Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\RequestPartsEnricherInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Serialization/Serializer.php
+
+		-
+			message: '#^Call to function is_object\(\) with Illuminate\\Container\\Container will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Support/ContainerProviderRegistry.php
+
+		-
+			message: '#^Trait Brahmic\\ApiSutra\\Traits\\ProvidesMultiServiceResponseDtoCatalogTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Traits/ProvidesMultiServiceResponseDtoCatalogTrait.php
+
+		-
+			message: '#^Call to function method_exists\(\) with ''GuzzleHttp\\\\Utils'' and ''isUriInNoProxy'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Transport/ExactTargetCurlFactory.php
+
+		-
+			message: '#^Method Brahmic\\ApiSutra\\Transport\\MockTransport\:\:resolveFixture\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Transport/MockTransport.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/VO/Validation/Validator.php
+
+		-
+			message: '#^Trait Brahmic\\ApiSutra\\Versioning\\VersionedResourceTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Versioning/VersionedResourceTrait.php

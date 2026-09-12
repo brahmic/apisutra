@@ -13,5 +13,6 @@ readonly class OperationDescriptor
         public ?string $title = null,
         public ?string $description = null,
         public ?string $note = null,
-    ) {}
+    ) {
+    }
 }

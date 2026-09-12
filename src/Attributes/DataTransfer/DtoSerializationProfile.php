@@ -15,5 +15,6 @@ final readonly class DtoSerializationProfile
      */
     public function __construct(
         public string $class,
-    ) {}
+    ) {
+    }
 }

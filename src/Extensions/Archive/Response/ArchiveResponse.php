@@ -27,7 +27,8 @@ final class ArchiveResponse
         private readonly string $format,
         private readonly ?ClientConfig $config = null,
         private readonly ?TempDirectoryProviderInterface $tempProvider = null,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<ArchiveEntry>

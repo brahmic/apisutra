@@ -25,7 +25,8 @@ readonly class Base64File
      */
     public function __construct(
         private string $base64,
-    ) {}
+    ) {
+    }
 
     /**
      * Декодирует Base64 и возвращает содержимое файла.

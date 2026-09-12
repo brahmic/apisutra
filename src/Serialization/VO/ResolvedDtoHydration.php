@@ -12,5 +12,6 @@ final readonly class ResolvedDtoHydration
     public function __construct(
         public DtoHydrationPolicy $policy,
         public CastRegistry $casts,
-    ) {}
+    ) {
+    }
 }

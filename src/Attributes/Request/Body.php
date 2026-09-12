@@ -11,5 +11,6 @@ readonly class Body
 {
     public function __construct(
         public ?string $nested = null,
-    ) {}
+    ) {
+    }
 }

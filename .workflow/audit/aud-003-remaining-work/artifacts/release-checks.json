@@ -1,0 +1,98 @@
+{
+  "date": "2026-09-12",
+  "implementation_commits": [
+    "f495f9b",
+    "79333b5",
+    "8c347b4"
+  ],
+  "environment": {
+    "os": "macOS arm64",
+    "php_locked": [
+      "8.4.25",
+      "8.5.4"
+    ],
+    "curl": "8.22.0"
+  },
+  "checks": {
+    "php84_locked": {
+      "status": "passed",
+      "output": "Tests:    1525 passed (5530 assertions)\n  Duration: 8.40s"
+    },
+    "php85_locked": {
+      "status": "passed",
+      "output": "Tests:    1525 passed (5530 assertions)\n  Duration: 8.15s"
+    },
+    "php85_random": {
+      "status": "passed",
+      "output": "Tests:    1525 passed (5530 assertions)\n  Duration: 8.13s\n  Random Order Seed: 20260912"
+    },
+    "php84_laravel": {
+      "status": "passed",
+      "output": "Laravel 12: discovery, HTTP, explicit factory, two clients, Artisan, sequential jobs, config:cache — OK.\n"
+    },
+    "php85_laravel": {
+      "status": "passed",
+      "output": "Laravel 12: discovery, HTTP, explicit factory, two clients, Artisan, sequential jobs, config:cache — OK.\n"
+    },
+    "analyse": {
+      "status": "passed",
+      "output": "Note: Using configuration file <checkout>/phpstan.neon.\n\n [OK] No errors                                                                 \n\n"
+    },
+    "lint": {
+      "status": "passed",
+      "output": "\nPHP CODE SNIFFER REPORT SUMMARY\n--------------------------------------------------------------------------------\nFILE                                                            ERRORS  WARNINGS\n--------------------------------------------------------------------------------\n...packages/apisutra/src/Attributes/AttributeMetadataCache.php  0       1\n...v/me/packages/apisutra/src/Attributes/AttributeRegistry.php  0       3\n...v/dev/me/packages/apisutra/src/Auth/ApiKeyAuthenticator.php  0       1\n...v/me/packages/apisutra/src/Auth/CacheCredentialIdentity.php  0       1\n...s/stanisalv/dev/me/packages/apisutra/src/Casts/EnumCast.php  0       1\n...me/packages/apisutra/src/Collections/AbstractCollection.php  0       1\n...nisalv/dev/me/packages/apisutra/src/Config/ClientConfig.php  0       4\n...alv/dev/me/packages/apisutra/src/Config/RateLimitConfig.php  0       1\n...src/Contracts/Interfaces/Core/ContextualClientInterface.php  0       1\n...nisalv/dev/me/packages/apisutra/src/Core/AbstractClient.php  0       4\n...pisutra/src/Exceptions/Serialization/HydrationException.php  0       3\n...lv/dev/me/packages/apisutra/src/Execution/BatchExecutor.php  0       1\n...e/packages/apisutra/src/Execution/ExecutionErrorFactory.php  0       5\n...alv/dev/me/packages/apisutra/src/Execution/PoolExecutor.php  0       3\n...v/me/packages/apisutra/src/Execution/Batch/BatchContext.php  0       1\n...ages/apisutra/src/Execution/Batch/ParallelBatchStrategy.php  0       1\n...v/me/packages/apisutra/src/Extensions/ExtensionRegistry.php  0       2\n...lv/dev/me/packages/apisutra/src/Files/FileTransferGuard.php  0       1\n...stanisalv/dev/me/packages/apisutra/src/Files/StreamCopy.php  0       1\n<checkout>/src/Http/Origin.php   0       1\n...lv/dev/me/packages/apisutra/src/Http/RequestDestination.php  0       1\n...dev/me/packages/apisutra/src/Laravel/SdkServiceProvider.php  0       1\n...isutra/src/OperationInventory/OperationInventoryBuilder.php  0       1\n...isutra/src/OperationInventory/SdkCallPathMethodAnalyzer.php  0       2\n...pisutra/src/OperationInventory/Catalog/ResponseDtoUsage.php  0       2\n...pisutra/src/Pagination/PaginationItemsCollectionBuilder.php  0       1\n...isalv/dev/me/packages/apisutra/src/Pagination/Paginator.php  0       1\n...tanisalv/dev/me/packages/apisutra/src/Pipeline/Pipeline.php  0       3\n...packages/apisutra/src/Pipeline/Auth/AuthBindingResolver.php  0       1\n.../dev/me/packages/apisutra/src/Pipeline/Auth/AuthHandler.php  0       9\n.../me/packages/apisutra/src/Pipeline/Auth/AuthRefreshLock.php  0       1\n...v/me/packages/apisutra/src/Pipeline/Auth/AuthTokenCache.php  0       1\n...ckages/apisutra/src/Pipeline/Auth/LocalAuthLockProvider.php  0       1\n...kages/apisutra/src/Pipeline/Cache/CacheIdentityResolver.php  0       3\n...ev/me/packages/apisutra/src/Pipeline/Cache/CacheManager.php  0       3\n...kages/apisutra/src/Pipeline/Flow/ExecutionResultBuilder.php  0       5\n...ckages/apisutra/src/Pipeline/Hydration/ResponseHydrator.php  0       3\n...kages/apisutra/src/Pipeline/Preparation/TimeoutResolver.php  0       1\n.../me/packages/apisutra/src/Pipeline/Result/ResultFactory.php  0       2\n...e/packages/apisutra/src/Pipeline/Transport/DelayApplier.php  0       1\n...ages/apisutra/src/Pipeline/Transport/RetryDecisionMaker.php  0       1\n...me/packages/apisutra/src/Pipeline/Transport/RetrySender.php  0       8\n...v/dev/me/packages/apisutra/src/RateLimiting/RateLimiter.php  0       2\n...alv/dev/me/packages/apisutra/src/Request/RequestOptions.php  0       4\n...salv/dev/me/packages/apisutra/src/Retry/RetryAfterDelay.php  0       1\n...anisalv/dev/me/packages/apisutra/src/Retry/RetryHandler.php  0       1\n...ev/me/packages/apisutra/src/Serialization/DtoSerializer.php  0       1\n...ages/apisutra/src/Serialization/EnumSerializationHelper.php  0       1\n...packages/apisutra/src/Serialization/FilePayloadPreparer.php  0       1\n...ages/apisutra/src/Serialization/HydrationValueValidator.php  0       2\n...alv/dev/me/packages/apisutra/src/Serialization/Hydrator.php  0       10\n.../dev/me/packages/apisutra/src/Serialization/JsonEncoder.php  0       1\n...e/packages/apisutra/src/Serialization/RequestUrlBuilder.php  0       5\n...v/dev/me/packages/apisutra/src/Serialization/Serializer.php  0       3\n...alv/dev/me/packages/apisutra/src/Timing/ExecutionBudget.php  0       1\n...dev/me/packages/apisutra/src/Transport/GuzzleHttpClient.php  0       4\n...lv/dev/me/packages/apisutra/src/Transport/HttpTransport.php  0       3\n...lv/dev/me/packages/apisutra/src/Transport/MockTransport.php  0       2\n...v/me/packages/apisutra/src/Transport/RecordingTransport.php  0       1\n...v/dev/me/packages/apisutra/src/VO/Http/ProviderResponse.php  0       1\n...lv/dev/me/packages/apisutra/src/VO/Validation/Validator.php  0       2\n--------------------------------------------------------------------------------\nA TOTAL OF 0 ERRORS AND 135 WARNINGS WERE FOUND IN 61 FILES\n--------------------------------------------------------------------------------\n\nTime: 1.03 secs; Memory: 20MB\n"
+    },
+    "validate": {
+      "status": "passed",
+      "output": "./composer.json is valid\n"
+    },
+    "validate_laravel": {
+      "status": "passed",
+      "output": "./composer.json is valid\n"
+    },
+    "autoload": {
+      "status": "passed",
+      "output": "Generating optimized autoload files\nGenerated optimized autoload files containing 4976 classes\n"
+    },
+    "docs": {
+      "status": "passed",
+      "command": "composer check-docs",
+      "markdown_files": 88,
+      "scope": "Пути локальных ссылок; HTTP endpoints и anchors не проверяются автоматически."
+    },
+    "dependencies": {
+      "status": "passed",
+      "artifact": "dependency-matrix.json",
+      "notes": "Все 1525 тестов без падений на lowest/latest PHP 8.4/8.5. Lowest имеет видимые deprecation старых зависимостей."
+    },
+    "package_php84": {
+      "status": "passed",
+      "artifact": "package-check.json"
+    },
+    "package_php85": {
+      "status": "passed",
+      "artifact": "package-check-php85.json"
+    }
+  },
+  "remote_ci": {
+    "status": "not_run",
+    "reason": "В этой задаче разрешены локальные реализации и commit; push/tag/release не выполнялись."
+  },
+  "release": {
+    "published": false,
+    "candidate_after_ci": "v0.2.0-alpha.1"
+  },
+  "reproduce": [
+    "composer install",
+    "composer validate --strict",
+    "composer dump-autoload --optimize --strict-psr",
+    "composer test -- --fail-on-deprecation --fail-on-warning",
+    "vendor/bin/pest --order-by=random --random-order-seed=20260912 --fail-on-deprecation --fail-on-warning",
+    "composer lint",
+    "composer analyse",
+    "composer check-docs",
+    "composer check-package",
+    "composer install --working-dir=tests/Integration/Laravel",
+    "php tests/Integration/Laravel/verify.php"
+  ]
+}

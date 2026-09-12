@@ -38,7 +38,8 @@ final readonly class ContinuationService
 {
     public function __construct(
         private ClientInterface $client,
-    ) {}
+    ) {
+    }
 
     public function awaitFromStartResult(
         ExecutionResult $startResult,
@@ -51,7 +52,7 @@ final readonly class ContinuationService
         $mode = $this->resolveMode($sourceRequest, $continuation);
         $finalType = $finalTypeOverride ?? $continuation?->finalType;
         $unwrap = $continuation?->unwrap;
-        $pollRequestClass = $continuation?->pollRequest ?? $this->client->getConfig()->defaultPollRequest;
+        $pollRequestClass = $continuation->pollRequest ?? $this->client->getConfig()->defaultPollRequest;
         $options ??= new ContinuationAwaitOptions();
 
         if ($mode === ContinuationMode::Sync) {

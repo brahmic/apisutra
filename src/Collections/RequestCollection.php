@@ -17,7 +17,8 @@ final class RequestCollection implements IteratorAggregate
      */
     public function __construct(
         private array $items,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<int, RequestInterface|string|callable> $items

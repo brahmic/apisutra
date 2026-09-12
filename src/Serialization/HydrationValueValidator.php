@@ -15,7 +15,9 @@ use Stringable;
 /** Проверяет невозможные присваивания, сохраняя разрешённые reflection scalar conversions. */
 final readonly class HydrationValueValidator
 {
-    public function __construct(private PropertyTypeInspector $types = new PropertyTypeInspector()) {}
+    public function __construct(private PropertyTypeInspector $types = new PropertyTypeInspector())
+    {
+    }
 
     public function assertValue(mixed $value, ?ReflectionType $type, ReflectionClass $owner, string $path): void
     {

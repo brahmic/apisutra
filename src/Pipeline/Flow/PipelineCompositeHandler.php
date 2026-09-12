@@ -15,7 +15,8 @@ final readonly class PipelineCompositeHandler
 {
     public function __construct(
         private CompositeFlow $compositeFlow,
-    ) {}
+    ) {
+    }
 
     public function handle(
         RequestInterface $request,

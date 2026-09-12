@@ -22,7 +22,8 @@ abstract readonly class AbstractPaginationContainerDto extends AbstractDto imple
 {
     public function __construct(
         public array|object|null $items = null,
-    ) {}
+    ) {
+    }
 
     public function items(): array|object
     {

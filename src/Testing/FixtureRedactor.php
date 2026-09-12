@@ -8,7 +8,9 @@ use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 
 final class FixtureRedactor
 {
-    public function __construct(private readonly RedactionPolicy $policy = new RedactionPolicy()) {}
+    public function __construct(private readonly RedactionPolicy $policy = new RedactionPolicy())
+    {
+    }
 
     /**
      * @param array<string, mixed> $payload

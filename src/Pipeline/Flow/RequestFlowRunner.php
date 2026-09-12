@@ -44,18 +44,19 @@ use Psr\Log\LogLevel;
 final readonly class RequestFlowRunner
 {
     public function __construct(
-        private ClientConfig           $config,
-        private StageProcessor         $stageProcessor,
-        private AuthHandler            $authHandler,
-        private HookRunner             $hookRunner,
-        private CacheManager           $cacheManager,
-        private RetrySender            $retrySender,
-        private ErrorPolicy            $errorPolicy,
-        private ResponseHydrator       $responseHydrator,
-        private ResultFactory          $resultFactory,
-        private AuditLogger            $auditLogger,
+        private ClientConfig $config,
+        private StageProcessor $stageProcessor,
+        private AuthHandler $authHandler,
+        private HookRunner $hookRunner,
+        private CacheManager $cacheManager,
+        private RetrySender $retrySender,
+        private ErrorPolicy $errorPolicy,
+        private ResponseHydrator $responseHydrator,
+        private ResultFactory $resultFactory,
+        private AuditLogger $auditLogger,
         private ExecutionResultBuilder $resultBuilder,
-    ) {}
+    ) {
+    }
 
     public function run(
         RequestInterface $request,

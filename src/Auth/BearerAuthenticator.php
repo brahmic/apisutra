@@ -15,7 +15,8 @@ final readonly class BearerAuthenticator implements AuthenticatorInterface, Cach
 {
     public function __construct(
         private string $token,
-    ) {}
+    ) {
+    }
 
     #[Override]
     public function getCacheIdentity(?PreparedRequest $request = null): ?string

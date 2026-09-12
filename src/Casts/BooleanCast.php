@@ -13,7 +13,9 @@ use Override;
 final class BooleanCast implements CastInterface
 {
     /** Без формата сохраняется исходное приведение в bool, включая DTO. */
-    public function __construct(private readonly ?BooleanFormat $format = null) {}
+    public function __construct(private readonly ?BooleanFormat $format = null)
+    {
+    }
 
     #[Override]
     public function hydrate(mixed $value, ?PipelineContext $context = null): ?bool

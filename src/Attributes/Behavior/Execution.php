@@ -14,5 +14,6 @@ readonly class Execution
     public function __construct(
         public ExecutionMode $mode = ExecutionMode::Sequential,
         public FailStrategy $failStrategy = FailStrategy::FailAll,
-    ) {}
+    ) {
+    }
 }

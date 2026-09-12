@@ -18,8 +18,7 @@ final readonly class HydrationTypeSelector
     public function __construct(
         ?PropertyTypeInspector $propertyTypeInspector = null,
         ?SafeScalarHydrationCaster $safeScalarHydrationCaster = null,
-    )
-    {
+    ) {
         $this->propertyTypeInspector = $propertyTypeInspector ?? new PropertyTypeInspector();
         $this->safeScalarHydrationCaster = $safeScalarHydrationCaster ?? new SafeScalarHydrationCaster();
     }

@@ -112,7 +112,6 @@ describe('ClientDiscoveryService', function () {
         );
 
         $method = new ReflectionMethod(ClientDiscoveryService::class, 'buildCacheKey');
-        $method->setAccessible(true);
 
         $key = $method->invoke($service, DiscoveryClient::class, $options);
         $checksum = resolveComposerChecksumForTest();
@@ -168,7 +167,6 @@ describe('ClientDiscoveryService', function () {
         ContainerProviderRegistry::set($provider);
 
         $method = new ReflectionMethod(ClientDiscoveryService::class, 'resolveBasePath');
-        $method->setAccessible(true);
 
         $path = $method->invoke($service);
 

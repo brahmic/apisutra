@@ -18,5 +18,6 @@ final readonly class CacheConfig
         public CacheMode $mode = CacheMode::Enabled,
         public ?CacheIdentityProviderInterface $identity = null,
         public ?AuthLockProviderInterface $locks = null,
-    ) {}
+    ) {
+    }
 }

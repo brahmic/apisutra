@@ -28,12 +28,18 @@ use GuzzleHttp\Promise\PromiseInterface;
 final class MockTransport implements TimeoutAwareTransportInterface, DestinationAwareInterface, FileStreamingInterface
 {
     /** Fake не добавляет credentials и не выполняет redirects. */
-    public function assertSupportsFileTransfer(FileTransferOptions $options): void {}
+    public function assertSupportsFileTransfer(FileTransferOptions $options): void
+    {
+    }
 
-    public function assertSupportsDestination(RequestDestination $destination): void {}
+    public function assertSupportsDestination(RequestDestination $destination): void
+    {
+    }
 
     /** Fake принимает опции для тестов; реальный HTTP не выполняется. */
-    public function assertSupportsTimeouts(TransportOptions $options): void {}
+    public function assertSupportsTimeouts(TransportOptions $options): void
+    {
+    }
 
     /**
      * @var array<string, mixed>

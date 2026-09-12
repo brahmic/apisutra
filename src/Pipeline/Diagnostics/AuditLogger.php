@@ -30,7 +30,8 @@ final readonly class AuditLogger
 
     public function __construct(
         private ClientConfig $config,
-    ) {}
+    ) {
+    }
 
     public function addAudit(
         array &$audit,

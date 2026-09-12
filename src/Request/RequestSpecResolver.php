@@ -49,7 +49,8 @@ final class RequestSpecResolver
 
     public function __construct(
         private readonly ?AttributeMetadataCache $metadataCache = null,
-    ) {}
+    ) {
+    }
 
     public function resolve(AbstractRequest $request): RequestSpec
     {

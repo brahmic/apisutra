@@ -17,7 +17,8 @@ readonly class ResultSummary
         public int $failed,
         public int $partial,
         public ResultStatus $status,
-    ) {}
+    ) {
+    }
 
     public function isAllSuccess(): bool
     {

@@ -13,7 +13,8 @@ final readonly class ServiceRegistrar
     public function __construct(
         private ClientRegistry $registry,
         private RequestNamespaceDetector $detector,
-    ) {}
+    ) {
+    }
 
     /**
      * Зарегистрировать набор сервис‑клиентов в реестре.

@@ -11,5 +11,6 @@ readonly class Post
 {
     public function __construct(
         public string $path,
-    ) {}
+    ) {
+    }
 }

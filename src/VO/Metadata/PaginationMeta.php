@@ -33,7 +33,8 @@ readonly class PaginationMeta implements ResultMeta
         public int $perPage,
         public bool $hasMore,
         public ?string $nextCursor = null,
-    ) {}
+    ) {
+    }
 
     /**
      * Вычисляет общее количество страниц на основе total и perPage.

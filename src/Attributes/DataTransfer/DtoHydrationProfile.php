@@ -15,5 +15,6 @@ final readonly class DtoHydrationProfile
      */
     public function __construct(
         public string $class,
-    ) {}
+    ) {
+    }
 }

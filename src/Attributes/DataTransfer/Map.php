@@ -11,5 +11,6 @@ readonly class Map
 {
     public function __construct(
         public string $name,
-    ) {}
+    ) {
+    }
 }

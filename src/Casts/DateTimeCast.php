@@ -13,6 +13,7 @@ use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTime;
 use DateTimeZone;
 use Override;
 use Stringable;
@@ -27,7 +28,8 @@ final class DateTimeCast implements CastInterface
         private readonly ?string $timezone = null,
         private readonly ?DateTimeHydrationPolicy $hydratePolicy = null,
         private readonly ?DateTimeSerializationPolicy $serializePolicy = null,
-    ) {}
+    ) {
+    }
 
     public static function fromHydrationPolicy(DateTimeHydrationPolicy $policy): self
     {
@@ -47,7 +49,7 @@ final class DateTimeCast implements CastInterface
         }
 
         $parse = $this->hydratePolicy;
-        $format = $parse?->format ?? $this->format;
+        $format = $parse->format ?? $this->format;
         $timezoneName = $parse !== null ? $parse->defaultTimezone : $this->timezone;
         $timezone = $this->resolveTimezone($timezoneName);
         if (!is_scalar($value) && !$value instanceof Stringable) {
@@ -91,6 +93,7 @@ final class DateTimeCast implements CastInterface
             throw new ConfigurationException('DateTimeCast::serialize ожидает DateTimeInterface');
         }
 
+        /** @var DateTime|DateTimeImmutable $date Реализации DateTimeInterface предоставляются PHP. */
         $date = $value;
 
         if ($this->serializePolicy === null) {
@@ -131,7 +134,10 @@ final class DateTimeCast implements CastInterface
         }
 
         throw HydrationException::invalidValue(
-            'invalid_datetime', 'date: ' . ($config?->format ?? $this->format), get_debug_type($value), previous: $exception,
+            'invalid_datetime',
+            'date: ' . ($config->format ?? $this->format),
+            get_debug_type($value),
+            previous: $exception,
         );
     }
 }

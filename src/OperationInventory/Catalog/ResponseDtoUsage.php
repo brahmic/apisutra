@@ -35,5 +35,6 @@ final readonly class ResponseDtoUsage
         public ?string $pollRequest = null,
         public ?string $unwrap = null,
         public ?string $serviceClass = null,
-    ) {}
+    ) {
+    }
 }

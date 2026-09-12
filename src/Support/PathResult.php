@@ -14,7 +14,8 @@ readonly class PathResult
     public function __construct(
         public ValueState $state,
         public mixed $value,
-    ) {}
+    ) {
+    }
 
     public function isPresent(): bool
     {

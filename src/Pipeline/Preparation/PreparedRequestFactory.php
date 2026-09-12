@@ -14,7 +14,8 @@ final readonly class PreparedRequestFactory
     public function __construct(
         private Serializer $serializer,
         private RequestPreparer $requestPreparer,
-    ) {}
+    ) {
+    }
 
     public function create(RequestInterface $request, PipelineContext $context): PreparedRequest
     {

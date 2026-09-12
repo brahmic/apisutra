@@ -16,5 +16,6 @@ readonly class ClientResponse
         public int $status,
         public array $headers = [],
         public mixed $body = null,
-    ) {}
+    ) {
+    }
 }

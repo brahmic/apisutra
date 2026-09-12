@@ -16,7 +16,8 @@ final readonly class SdkCallPathResolver
 {
     public function __construct(
         private SdkCallPathMethodAnalyzer $methodAnalyzer,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<class-string, array<int, string>>

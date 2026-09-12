@@ -15,5 +15,6 @@ readonly class RateLimit
         public int $period,
         public RateLimitBehavior $behavior = RateLimitBehavior::Wait,
         public ?string $key = null,
-    ) {}
+    ) {
+    }
 }

@@ -16,7 +16,8 @@ readonly class FileInput
         public ?string $mimeType = null,
         public ?int $size = null,
         private ?StreamInterface $ownedStream = null,
-    ) {}
+    ) {
+    }
 
     public static function fromPath(string $path): self
     {
@@ -101,7 +102,3 @@ readonly class FileInput
         );
     }
 }
-
-
-
-

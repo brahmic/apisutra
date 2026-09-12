@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Serialization;
 
+use Psr\Http\Message\StreamInterface;
 use Brahmic\ApiSutra\Attributes\AttributeMetadataCache;
 use Brahmic\ApiSutra\Contracts\Interfaces\Continuation\ContinuationModeApplicatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Serialization\RequestPartsEnricherInterface;
@@ -68,7 +69,7 @@ final class Serializer
         $method = $request->getMethod();
         $endpoint = $request->getEndpoint();
         $baseUrl = $this->resolveBaseUrl($request, $context);
-        $options = $context?->options ?? ($request instanceof AbstractRequest ? $request->getOptions() : null);
+        $options = $context->options ?? ($request instanceof AbstractRequest ? $request->getOptions() : null);
         $fullUrl = $options?->getUrlOverride();
         if ($fullUrl === null && RequestDestination::isAbsolute($endpoint)) {
             $fullUrl = $endpoint;
@@ -218,7 +219,7 @@ final class Serializer
     }
 
     /**
-     * @return array{body: ?string, stream: ?MultipartStream, headers: array<string, string>}
+     * @return array{body: ?string, stream: ?StreamInterface, headers: array<string, string>}
      */
     private function preparePayload(RequestPartsBag $parts, ?PipelineContext $context): array
     {
@@ -300,8 +301,8 @@ final class Serializer
         }
 
         $isolated = $context?->destination?->requiresIsolation() ?? false;
-        $credentials = $context?->options?->getCredentialsEnrichmentEnabledOverride();
-        $custom = $context?->options?->getRequestEnrichersEnabledOverride();
+        $credentials = $context->options?->getCredentialsEnrichmentEnabledOverride();
+        $custom = $context->options?->getRequestEnrichersEnabledOverride();
         if ($isolated && ($credentials === true || $custom === true)) {
             $context->destination->assertCredentialsAllowed($config->originPolicy);
         }

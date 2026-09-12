@@ -9,5 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 readonly class Download
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }

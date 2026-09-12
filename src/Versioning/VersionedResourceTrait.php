@@ -86,4 +86,3 @@ trait VersionedResourceTrait
      */
     abstract protected function recreateWithVersion(string $version): static;
 }
-

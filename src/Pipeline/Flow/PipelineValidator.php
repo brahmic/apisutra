@@ -21,7 +21,8 @@ final readonly class PipelineValidator
 {
     public function __construct(
         private ExecutionResultBuilder $resultBuilder,
-    ) {}
+    ) {
+    }
 
     public function validate(
         RequestInterface $request,

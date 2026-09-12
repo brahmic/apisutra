@@ -9,5 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 readonly class Ignore
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }

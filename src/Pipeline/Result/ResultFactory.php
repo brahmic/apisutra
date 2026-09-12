@@ -19,7 +19,8 @@ final readonly class ResultFactory
 {
     public function __construct(
         private ErrorPolicy $errorPolicy,
-    ) {}
+    ) {
+    }
 
     public function buildFailedResult(RequestInterface $request, PipelineContext $context, array $audit): ExecutionResult
     {
@@ -49,7 +50,7 @@ final readonly class ResultFactory
         return new ExecutionResult(
             redaction: $context->config->redaction,
             debug: $context->config->debug
-                ? new DebugInfo($response?->request ?? $context->preparedRequest, $response)
+                ? new DebugInfo($response->request ?? $context->preparedRequest, $response)
                 : null,
             data: null,
             status: ResultStatus::FAILED,

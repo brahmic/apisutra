@@ -4,6 +4,8 @@
 
 # ApiSutra
 
+Изменения совместимости: [миграция на следующий выпуск](docs/guides/migration.md).
+
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
 [![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](./composer.json)
 [![Packagist Version](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
@@ -30,7 +32,7 @@ ApiSutra — фреймворк для построения SDK‑клиенто
 ## Требования
 - PHP 8.4+
 - PSR‑18/PSR‑17 для `HttpTransport`
-- PSR‑16 для распределённого кеша и rate‑limit
+- PSR‑16 для внешнего кеша и общего счётчика rate-limit (строгая межпроцессная квота не гарантируется)
 
 ## Установка
 ```bash
@@ -94,6 +96,10 @@ Laravel: транспорт может быть подставлен автом�
 ```bash
 composer install
 composer test
+composer lint
+composer analyse
+composer check-docs
+composer check-package
 ```
 
 Для запуска одного файла:

@@ -16,7 +16,8 @@ final readonly class BasicAuthenticator implements AuthenticatorInterface, Cache
     public function __construct(
         private string $username,
         private string $password,
-    ) {}
+    ) {
+    }
 
     #[Override]
     public function getCacheIdentity(?PreparedRequest $request = null): ?string

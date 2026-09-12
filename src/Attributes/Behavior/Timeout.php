@@ -12,5 +12,6 @@ readonly class Timeout
     public function __construct(
         public int $seconds,
         public ?int $connectTimeout = null,
-    ) {}
+    ) {
+    }
 }

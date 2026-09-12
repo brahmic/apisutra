@@ -13,7 +13,8 @@ final readonly class ProviderCatalogMeta implements ProviderCatalogMetaInterface
         private DateTimeImmutable $generatedAt,
         private ?string $source = null,
         private ?string $sourceVersion = null,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function generatedAt(): DateTimeImmutable

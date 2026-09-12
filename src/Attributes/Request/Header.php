@@ -11,5 +11,6 @@ readonly class Header
 {
     public function __construct(
         public string $name,
-    ) {}
+    ) {
+    }
 }

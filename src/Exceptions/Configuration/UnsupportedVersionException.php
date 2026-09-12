@@ -7,4 +7,3 @@ namespace Brahmic\ApiSutra\Exceptions\Configuration;
 final class UnsupportedVersionException extends ConfigurationException
 {
 }
-

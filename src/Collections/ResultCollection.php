@@ -20,7 +20,8 @@ final class ResultCollection implements IteratorAggregate
      */
     public function __construct(
         private array $items,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<int, ExecutionResult> $items

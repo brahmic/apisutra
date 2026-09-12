@@ -12,5 +12,6 @@ readonly class From
     public function __construct(
         public string $name,
         public array $fallback = [],
-    ) {}
+    ) {
+    }
 }

@@ -21,5 +21,6 @@ readonly class Pagination
         public ?string $itemsCollection = null,
         public ?string $itemsCollectionFactory = null,
         public ?int $maxPages = null,
-    ) {}
+    ) {
+    }
 }

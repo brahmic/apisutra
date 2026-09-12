@@ -45,8 +45,10 @@ final readonly class ExecutionErrorFactory
         }
         $source = $request instanceof RequestExecutionInterface ? $request->getRequest() : $request;
         $pipeline = $source instanceof AbstractRequest ? $source->getContext() : null;
-        if ($pipeline?->failureException instanceof AuthDependencyException
-            && $pipeline->failureException->dependencyResult->exception === $exception) {
+        if (
+            $pipeline?->failureException instanceof AuthDependencyException
+            && $pipeline->failureException->dependencyResult->exception === $exception
+        ) {
             return $pipeline->failureException->dependencyResult;
         }
         if ($pipeline?->failureException !== $exception) {
@@ -115,7 +117,7 @@ final readonly class ExecutionErrorFactory
                         $exception instanceof TransportException => ErrorCode::TransportError,
                         $exception instanceof ExtensionException => ErrorCode::ExtensionError,
                         $exception instanceof ValidationException => ErrorCode::ValidationFailed,
-                        default => $pipeline?->failureCode ?? ErrorCode::ExecutionError,
+                        default => $pipeline->failureCode ?? ErrorCode::ExecutionError,
                     },
                     message: $exception->getMessage(),
                     context: $contextData,

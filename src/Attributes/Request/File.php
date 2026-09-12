@@ -13,5 +13,6 @@ readonly class File
     public function __construct(
         public ?string $name = null,
         public FileFormat $format = FileFormat::Multipart,
-    ) {}
+    ) {
+    }
 }

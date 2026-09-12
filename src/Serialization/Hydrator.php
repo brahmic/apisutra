@@ -102,11 +102,11 @@ final class Hydrator
             $default = $propertyMeta['default'];
             $property = $propertyMeta['property'];
 
-            $key = $from?->name
-                ?? $map?->name
+            $key = $from->name
+                ?? $map->name
                 ?? $this->namingStrategyResolver->resolveByStrategy($name, $resolvedHydration->policy->namingStrategy);
-            $primaryPath = $nested?->from ?? $key;
-            $fallbacks = $nested?->fallback ?? [];
+            $primaryPath = $nested->from ?? $key;
+            $fallbacks = $nested->fallback ?? [];
             if ($fallbacks === [] && $from !== null) {
                 $fallbacks = $from->fallback;
             }
@@ -264,7 +264,10 @@ final class Hydrator
             if (array_key_exists($paramName, $values)) {
                 $reflection = $parameter['reflection'];
                 $this->valueValidator->assertValue(
-                    $values[$paramName], $reflection->getType(), $reflection->getDeclaringClass(), $paramName,
+                    $values[$paramName],
+                    $reflection->getType(),
+                    $reflection->getDeclaringClass(),
+                    $paramName,
                 );
                 $args[$paramName] = $values[$paramName];
                 continue;
@@ -274,7 +277,10 @@ final class Hydrator
                 $args[$paramName] = $parameter['default'];
             } elseif (!$parameter['reflection']->isVariadic()) {
                 throw HydrationException::invalidValue(
-                    'required_field_missing', (string) ($parameter['reflection']->getType() ?? 'mixed'), 'missing', $paramName,
+                    'required_field_missing',
+                    (string) ($parameter['reflection']->getType() ?? 'mixed'),
+                    'missing',
+                    $paramName,
                 );
             }
         }
@@ -415,7 +421,7 @@ final class Hydrator
 
             try {
                 $property->setValue($dto, $assignment['value']);
-            } catch (ReflectionException|\Error|\TypeError $exception) {
+            } catch (ReflectionException | \Error | \TypeError $exception) {
                 throw new ConfigurationException(
                     'Не удалось инициализировать DTO property через hydration fallback: '
                     . $dto::class . '::$' . $name . '. ' . $exception->getMessage(),
@@ -585,8 +591,10 @@ final class Hydrator
 
                 if ($nested->unknownVariant === NestedUnknownVariant::Error) {
                     throw HydrationException::invalidValue(
-                        'unknown_nested_variant', 'variant: ' . implode('|', array_keys($nested->map ?? [])),
-                        $discriminator === null ? 'missing' : 'string', '[' . $index . ']',
+                        'unknown_nested_variant',
+                        'variant: ' . implode('|', array_keys($nested->map ?? [])),
+                        $discriminator === null ? 'missing' : 'string',
+                        '[' . $index . ']',
                     );
                 }
 
@@ -849,5 +857,4 @@ final class Hydrator
         $provider = new $default->provider();
         return $provider->resolve($value, $state, $source, $context);
     }
-
 }

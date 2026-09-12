@@ -16,7 +16,6 @@ use Brahmic\ApiSutra\Request\RequestOptions;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
-
 use Throwable;
 
 class PipelineContext
@@ -46,7 +45,8 @@ class PipelineContext
         public ?PreparedRequest $preparedRequest = null,
         public ?ProviderResponse $response = null,
         public ?object $dto = null,
-    ) {}
+    ) {
+    }
 
     /**
      * Создать дочерний контекст (для nested/dependency)

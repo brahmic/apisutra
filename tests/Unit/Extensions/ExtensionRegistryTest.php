@@ -52,7 +52,6 @@ describe('ExtensionRegistry', function () {
         );
 
         $property = new ReflectionProperty(AbstractClient::class, 'extensions');
-        $property->setAccessible(true);
         $registry = $property->getValue($client);
 
         expect(fn () => $registry->resolveResponseHandler($response, $context))

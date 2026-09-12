@@ -30,5 +30,6 @@ readonly class ValidationError
         public string $rule,
         public string $message,
         public mixed $input = null,
-    ) {}
+    ) {
+    }
 }

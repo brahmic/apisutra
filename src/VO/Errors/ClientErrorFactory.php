@@ -13,7 +13,8 @@ final readonly class ClientErrorFactory
 {
     public function __construct(
         private ClientErrorMapperInterface $mapper,
-    ) {}
+    ) {
+    }
 
     public function make(RequestError $error): ClientError
     {

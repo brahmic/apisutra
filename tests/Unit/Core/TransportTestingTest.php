@@ -117,11 +117,9 @@ describe('Transport testing', function () {
             ->toThrow(MissingFixtureException::class);
 
         $reset = new ReflectionProperty(MockConfig::class, 'throwOnMissingFixtures');
-        $reset->setAccessible(true);
         $reset->setValue(null, false);
 
         $fixturePath = new ReflectionProperty(MockConfig::class, 'fixturePath');
-        $fixturePath->setAccessible(true);
         $fixturePath->setValue(null, null);
 
         @rmdir($path);

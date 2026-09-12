@@ -12,5 +12,6 @@ final readonly class DecodedResponse
     public function __construct(
         public mixed $data,
         public ?ResponseHandlerInterface $handler = null,
-    ) {}
+    ) {
+    }
 }

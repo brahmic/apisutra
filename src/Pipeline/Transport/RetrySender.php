@@ -96,7 +96,7 @@ final readonly class RetrySender
     {
         $this->assertDestinationSupported($context);
         $retryConfig = $this->retryConfigResolver->resolve($request, $context->options);
-        $attempts = $retryConfig?->attempts ?? 1;
+        $attempts = $retryConfig->attempts ?? 1;
 
         $attempt = 1;
         $lastException = null;
@@ -192,9 +192,11 @@ final readonly class RetrySender
                     'attempt' => $attempt,
                     'exception' => $exception::class,
                 ]);
-                if ($retryConfig === null || $attempt >= $attempts
+                if (
+                    $retryConfig === null || $attempt >= $attempts
                     || ($exception->maxAttempts !== null && $attempt >= $exception->maxAttempts)
-                    || !$this->prepareRepeat($request, $context, $bodyReplay)) {
+                    || !$this->prepareRepeat($request, $context, $bodyReplay)
+                ) {
                     throw $exception;
                 }
                 $minimumDelayMs = $retryAfterDelay->fromSeconds($exception->retryAfter);
@@ -218,8 +220,12 @@ final readonly class RetrySender
                 }
                 if ($exception instanceof RateLimitException && $exception->response === null) {
                     throw new RateLimitException(
-                        $exception->getMessage(), null, $exception->retryAfter, $exception->getCode(),
-                        $exception, $context->response ?? $context->lastResponse,
+                        $exception->getMessage(),
+                        null,
+                        $exception->retryAfter,
+                        $exception->getCode(),
+                        $exception,
+                        $context->response ?? $context->lastResponse,
                     );
                 }
                 $lastException = $exception;
@@ -250,6 +256,7 @@ final readonly class RetrySender
         throw new ConnectionException('Не удалось выполнить запрос');
     }
 
+    /** @phpstan-impure Перемотка тела зависит от текущего состояния потока. */
     private function prepareRepeat(RequestInterface $request, PipelineContext $context, RequestBodyReplay $body): bool
     {
         $reason = $this->retryDecisionMaker->isSafe($request, $context->preparedRequest->method)
@@ -280,8 +287,13 @@ final readonly class RetrySender
         }
         if ($this->retryHandler instanceof RetryHandler) {
             return $this->retryHandler->sendWithDelay(
-                $context->preparedRequest, $context, $config, $attempt,
-                $minimumDelayMs, $applyBackoff, $this->sleeper,
+                $context->preparedRequest,
+                $context,
+                $config,
+                $attempt,
+                $minimumDelayMs,
+                $applyBackoff,
+                $this->sleeper,
             );
         }
         // Собственный handler сохраняет ответственность за свой backoff.
@@ -290,5 +302,4 @@ final readonly class RetrySender
         }
         return $this->retryHandler->handle($context->preparedRequest, $context, $config, $attempt);
     }
-
 }

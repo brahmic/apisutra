@@ -19,5 +19,6 @@ readonly class Retry
         public bool $jitter = true,
         public array $retryOn = [429, 500, 502, 503, 504],
         public ?bool $safe = null,
-    ) {}
+    ) {
+    }
 }

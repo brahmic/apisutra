@@ -14,7 +14,8 @@ final readonly class LaravelContainerProvider implements ContainerProviderInterf
 {
     public function __construct(
         private object $container,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function bound(string $id): bool

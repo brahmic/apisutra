@@ -17,8 +17,8 @@ final class TimeoutResolver
         $attribute = $request instanceof AbstractRequest ? $request->getTimeoutAttribute() : null;
         $options = $context->options ?? ($request instanceof AbstractRequest ? $request->getOptions() : null);
         return new TransportOptions(
-            self::milliseconds($options?->getTimeoutOverride() ?? $attribute?->seconds ?? $context->config->timeout),
-            self::milliseconds($options?->getConnectTimeoutOverride() ?? $attribute?->connectTimeout ?? $context->config->connectTimeout),
+            self::milliseconds($options?->getTimeoutOverride() ?? $attribute->seconds ?? $context->config->timeout),
+            self::milliseconds($options?->getConnectTimeoutOverride() ?? $attribute->connectTimeout ?? $context->config->connectTimeout),
             $context->budget,
             $context->destination,
             $context->fileTransfer,

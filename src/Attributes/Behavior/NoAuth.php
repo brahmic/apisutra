@@ -9,5 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 readonly class NoAuth
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }

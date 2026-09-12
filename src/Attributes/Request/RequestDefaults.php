@@ -12,5 +12,6 @@ readonly class RequestDefaults
 {
     public function __construct(
         public RequestUnmappedTarget $unmapped = RequestUnmappedTarget::Convention,
-    ) {}
+    ) {
+    }
 }

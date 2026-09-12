@@ -23,5 +23,6 @@ final readonly class CredentialsEnrichmentConfig
         public array $form = [],
         public array $scopes = [],
         public array $secretKeys = [],
-    ) {}
+    ) {
+    }
 }

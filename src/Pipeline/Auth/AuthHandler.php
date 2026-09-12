@@ -321,6 +321,9 @@ final readonly class AuthHandler
                 }
                 return true;
             }
+            if (!isset($result)) {
+                return false;
+            }
             throw new AuthDependencyException($result);
         } catch (Throwable $exception) {
             $failure = $exception;
@@ -393,6 +396,7 @@ final readonly class AuthHandler
         }
     }
 
+    /** @phpstan-impure Чтение общего store может увидеть обновление другого владельца. */
     private function hasUpdatedToken(AuthenticatorInterface $auth, bool $forceRefresh, ?string $previousVersion): bool
     {
         if ($auth instanceof TokenAuthenticator) {
@@ -404,8 +408,8 @@ final readonly class AuthHandler
 
     private function sentTokenVersion(PipelineContext $context): ?string
     {
-        $prepared = $context->response?->request ?? $context->preparedRequest;
-        foreach ($prepared?->headers ?? [] as $name => $value) {
+        $prepared = $context->response->request ?? $context->preparedRequest;
+        foreach ($prepared->headers ?? [] as $name => $value) {
             if (strcasecmp($name, 'Authorization') === 0 && str_starts_with($value, 'Bearer ')) {
                 return hash('sha256', substr($value, 7));
             }

@@ -169,7 +169,7 @@ final class RecordingTransport implements TimeoutAwareTransportInterface, Destin
                 throw new RuntimeException('Fixture записана не полностью');
             }
             $base = $requestClass !== null ? (new ReflectionClass($requestClass))->getShortName() : 'request';
-            for ($index = 1; ; $index++) {
+            for ($index = 1;; $index++) {
                 $candidate = $this->path . '/' . $base . '_' . $index . '.json';
                 try {
                     // link атомарно отказывает, если другой процесс уже занял имя.

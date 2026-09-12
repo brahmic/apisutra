@@ -17,7 +17,8 @@ final class AttributeMetadataCache
 
     public function __construct(
         private readonly bool $enabled = true,
-    ) {}
+    ) {
+    }
 
     public function isEnabled(): bool
     {

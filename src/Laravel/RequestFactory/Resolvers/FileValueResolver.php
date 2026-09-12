@@ -27,7 +27,7 @@ final class FileValueResolver implements ResolverInterface
      */
     public function resolve(ResolveContext $context): FileInput|array|null
     {
-        $fileName = $context->fileAttribute?->name ?? $context->propertyName;
+        $fileName = $context->fileAttribute->name ?? $context->propertyName;
 
         return $this->resolveFileValue($context->payload[PayloadKeys::FILES] ?? [], $fileName);
     }

@@ -14,7 +14,8 @@ final readonly class RequestPreparer
 {
     public function __construct(
         private ClientConfig $config,
-    ) {}
+    ) {
+    }
 
     public function resolveTraceId(
         RequestInterface $request,
@@ -39,8 +40,7 @@ final readonly class RequestPreparer
         RequestInterface $request,
         PreparedRequest $prepared,
         ?RequestOptions $options = null,
-    ): PreparedRequest
-    {
+    ): PreparedRequest {
         if (!$request instanceof AbstractRequest) {
             return $prepared;
         }
@@ -89,8 +89,7 @@ final readonly class RequestPreparer
         AbstractRequest $request,
         array $headers,
         ?RequestOptions $options,
-    ): array
-    {
+    ): array {
         $idempotency = $request->getIdempotentAttribute();
         $idempotencyKey = $options?->getIdempotencyKey() ?? $request->getIdempotencyKey();
         if ($idempotency !== null) {
@@ -116,8 +115,7 @@ final readonly class RequestPreparer
         PreparedRequest $prepared,
         AbstractRequest $request,
         ?RequestOptions $options,
-    ): array
-    {
+    ): array {
         $overrideHeaders = $options?->getHeadersOverride() ?? $request->getHeadersOverride();
 
         return array_merge($prepared->headers, $overrideHeaders);

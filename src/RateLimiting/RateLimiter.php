@@ -36,7 +36,8 @@ final class RateLimiter
     public function __construct(
         private readonly ClockInterface $clock = new SystemClock(),
         private readonly SleeperInterface $sleeper = new SystemSleeper(),
-    ) {}
+    ) {
+    }
 
     /**
      * Получить слот лимита по ключу или применить ожидание/исключение.

@@ -14,7 +14,8 @@ final readonly class RetryConfigResolver
 {
     public function __construct(
         private ClientConfig $config,
-    ) {}
+    ) {
+    }
 
     public function resolve(RequestInterface $request, ?RequestOptions $options = null): ?RetryConfig
     {

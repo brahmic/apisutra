@@ -63,8 +63,7 @@ final readonly class CacheManager
         ?string $traceId,
         ?RequestOptions $options = null,
         ?PaginationOptions $paginationOptions = null,
-    ): void
-    {
+    ): void {
         $state = $this->resolveCacheState($request, $options);
         if ($state === null) {
             return;
@@ -213,11 +212,13 @@ final readonly class CacheManager
             return;
         }
 
-        if (!$state->store->set($state->key, [
+        if (
+            !$state->store->set($state->key, [
             'status' => $response->status,
             'headers' => $response->headers,
             'body' => $response->body,
-        ], $state->ttl)) {
+            ], $state->ttl)
+        ) {
             throw new ConfigurationException('Не удалось сохранить ответ в кеше');
         }
     }
@@ -307,9 +308,9 @@ final readonly class CacheManager
             $attribute = $request->getCacheAttribute();
             if ($attribute !== null) {
                 return new CacheConfig(
-                    store: $cacheConfig?->store ?? $this->config->cache,
-                    ttl: $attribute->ttl ?? $cacheConfig?->ttl ?? 3600,
-                    prefix: $cacheConfig?->prefix ?? '',
+                    store: $cacheConfig->store ?? $this->config->cache,
+                    ttl: $attribute->ttl ?? $cacheConfig->ttl ?? 3600,
+                    prefix: $cacheConfig->prefix ?? '',
                     mode: $attribute->mode,
                     identity: $cacheConfig?->identity,
                     locks: $cacheConfig?->locks,
@@ -325,8 +326,7 @@ final readonly class CacheManager
         ?string $traceId,
         ?RequestOptions $options,
         ?PaginationOptions $paginationOptions,
-    ): PreparedRequest
-    {
+    ): PreparedRequest {
         $resolvedTraceId = $this->requestPreparer->resolveTraceId($request, null, $traceId, $options);
         $context = new PipelineContext(
             request: $request,

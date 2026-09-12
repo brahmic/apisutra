@@ -13,5 +13,6 @@ final readonly class BatchConfig
         public ExecutionMode $mode = ExecutionMode::Sequential,
         public FailStrategy $failStrategy = FailStrategy::FailAll,
         public int $concurrency = 5,
-    ) {}
+    ) {
+    }
 }

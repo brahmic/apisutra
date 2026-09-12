@@ -66,7 +66,8 @@ it('соблюдает разные таймауты перекрывающих�
     $workers = [];
     try {
         foreach ([300, 2000] as $timeout) {
-            $process = proc_open([PHP_BINARY, dirname(__DIR__) . '/Support/timeout-http-worker.php', $server->httpUrl . '/slow?ms=800', (string) $timeout], [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+            // Bootstrap-диагностика зависимостей идёт в stderr, stdout содержит протокол worker.
+            $process = proc_open([PHP_BINARY, '-d', 'display_errors=stderr', dirname(__DIR__) . '/Support/timeout-http-worker.php', $server->httpUrl . '/slow?ms=800', (string) $timeout], [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
             $workers[] = [$process, $pipes];
             stream_set_timeout($pipes[1], 5);
             expect(trim((string) fgets($pipes[1])))->toBe('ready');

@@ -150,7 +150,7 @@ final readonly class RequestPartsCollector
 
             $isPath = $pathAttr !== null || array_key_exists($name, $placeholders);
             if ($isPath) {
-                $paramName = $pathAttr?->name ?? $name;
+                $paramName = $pathAttr->name ?? $name;
                 if ($value !== null) {
                     $value = $this->serializeEnumOnly($value, $requestPartsOutput, $strictMode);
                     $placeholders[$paramName] = $value;
@@ -160,7 +160,7 @@ final readonly class RequestPartsCollector
                 continue;
             }
 
-            $targetName = $queryAttr?->name ?? $this->namingStrategyResolver->resolve($name, $context);
+            $targetName = $queryAttr->name ?? $this->namingStrategyResolver->resolve($name, $context);
 
             if ($bodyAttr !== null) {
                 if ($bodyIsRoot) {
@@ -364,7 +364,7 @@ final readonly class RequestPartsCollector
     private function resolveUnmappedTarget(RequestInterface $request, HttpMethod $method): RequestUnmappedTarget
     {
         $defaults = $this->getRequestDefaults($request);
-        $target = $defaults?->unmapped ?? RequestUnmappedTarget::Convention;
+        $target = $defaults->unmapped ?? RequestUnmappedTarget::Convention;
 
         if ($target !== RequestUnmappedTarget::Convention) {
             return $target;

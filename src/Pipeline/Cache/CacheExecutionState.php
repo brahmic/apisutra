@@ -24,5 +24,6 @@ final class CacheExecutionState
         public readonly int $ttl,
         public readonly string $scopeIdentity,
         public readonly string $tenantIdentity,
-    ) {}
+    ) {
+    }
 }

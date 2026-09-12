@@ -14,5 +14,6 @@ readonly class AfterHydrate
         public string $handler,
         public HookPriority $priority = HookPriority::Normal,
         public ?string $name = null,
-    ) {}
+    ) {
+    }
 }

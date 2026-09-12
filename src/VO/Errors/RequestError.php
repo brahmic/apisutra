@@ -38,6 +38,6 @@ readonly class RequestError
         public array $nested = [],
         public array $context = [],
         public ?string $requestClass = null,
-    ) {}
+    ) {
+    }
 }
-

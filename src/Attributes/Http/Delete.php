@@ -11,5 +11,6 @@ readonly class Delete
 {
     public function __construct(
         public string $path,
-    ) {}
+    ) {
+    }
 }

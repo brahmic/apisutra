@@ -18,7 +18,8 @@ final readonly class ArchiveEntry
         public int $compressedSize,
         public bool $isDirectory,
         public DateTimeInterface $modifiedAt,
-    ) {}
+    ) {
+    }
 
     public function contents(): string
     {

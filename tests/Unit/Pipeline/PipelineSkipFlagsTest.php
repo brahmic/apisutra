@@ -99,7 +99,6 @@ describe('Pipeline skip flags', function () {
 function resolvePipeline(TestClient $client): Pipeline
 {
     $property = new ReflectionProperty(AbstractClient::class, 'pipeline');
-    $property->setAccessible(true);
 
     $pipeline = $property->getValue($client);
     if (!$pipeline instanceof Pipeline) {

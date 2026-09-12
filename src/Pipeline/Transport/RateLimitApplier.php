@@ -17,7 +17,8 @@ final readonly class RateLimitApplier
     public function __construct(
         private ClientConfig $config,
         private RateLimiter $rateLimiter,
-    ) {}
+    ) {
+    }
 
     public function apply(RequestInterface $request, PipelineContext $context): void
     {

@@ -15,5 +15,6 @@ final readonly class DateTimeHydrationPolicy
         public bool $strictMissingTimezone = false,
         public bool $strictFormat = false,
         public DateTimeInvalidBehavior $invalidBehavior = DateTimeInvalidBehavior::Throw,
-    ) {}
+    ) {
+    }
 }

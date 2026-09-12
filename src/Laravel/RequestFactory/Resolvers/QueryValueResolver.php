@@ -30,7 +30,7 @@ final class QueryValueResolver implements ResolverInterface
      */
     public function resolve(ResolveContext $context): mixed
     {
-        $paramName = $context->queryAttribute?->name ?? $context->propertyName;
+        $paramName = $context->queryAttribute->name ?? $context->propertyName;
 
         return $context->payload[PayloadKeys::QUERY][$paramName] ?? null;
     }

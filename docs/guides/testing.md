@@ -241,3 +241,58 @@ Fixture публикуется целиком под свободным имен
 Корректные большие JSON и текст не обрезаются лимитом safe debug/log. Невалидный UTF-8
 вызывает явную ошибку записи вместо пустого файла; нового бинарного формата нет.
 Потоки сохраняют bodyOmitted/size и не читаются ради fixture.
+
+## Проверки самого пакета
+
+Команды выполняются из исходного checkout ApiSutra. Для потребителя пакета эти
+инструменты не нужны; production-установка `composer install --no-dev` их исключает.
+
+```bash
+composer install
+composer validate --strict
+composer dump-autoload --optimize --strict-psr
+composer test -- --fail-on-deprecation --fail-on-warning
+composer lint
+composer analyse
+composer check-docs
+composer check-package
+composer install --working-dir=tests/Integration/Laravel
+php tests/Integration/Laravel/verify.php
+```
+
+`check-docs` и `check-package` требуют Python 3.9+. Первая команда проверяет локальные
+пути Markdown-ссылок. Вторая сравнивает Git archive HEAD и Composer archive рабочей
+копии, затем устанавливает каждый архив без dev-пакетов и запускает внешние smoke, включая PHP-пример быстрого старта из README.
+Для ещё не закоммиченных изменений сначала добавьте предназначенные файлы в index
+и вызовите `composer check-package -- --staged`. Отчёт можно сохранить через `--report`.
+
+PHPStan проверяет весь src на уровне 5 с точным baseline существующих замечаний.
+Новые ошибки и устаревшие записи baseline блокируют проверку. Это не утверждение
+о полном отсутствии долга по типам. PSR-12 проверяется для src: ошибки блокируют
+проверку, предупреждения о рекомендуемой длине строки остаются видимыми.
+
+CI включает PHP 8.4/8.5, locked/lowest/latest зависимости, качество, архивы и
+изолированное Laravel 12 приложение. Lowest определяется Composer с действующими
+ограничениями совместимости и безопасности; это не установка заведомо уязвимых
+исторических версий. Для воспроизведения в отдельном checkout:
+
+```bash
+composer update --prefer-lowest --prefer-stable --no-interaction
+composer test
+# Актуальный совместимый набор:
+composer update --prefer-stable --no-interaction
+composer test
+```
+
+Laravel-проверка использует fake HTTP и не требует БД/Redis. Она проверяет HTTP,
+Artisan, последовательные задания в одном процессе и config:cache; отдельный
+queue worker и Octane в эту проверку не входят. Само наличие CI-конфигурации
+не заменяет успешный прогон на конкретном commit.
+
+На проверенном lowest-наборе старые Guzzle/PSR-7, PSR HTTP Factory, Symfony
+Translation и deep-copy выдают deprecation под PHP 8.4/8.5. Это зафиксированное
+ограничение старых зависимостей: их диагностика остаётся видимой в отдельном CI job.
+Locked/latest проходят с `--fail-on-deprecation`; для lowest сохраняется вывод
+`--display-deprecations`, без глобального подавления E_DEPRECATED. Обновление
+совместимых зависимостей устраняет эти предупреждения. Runtime constraints не
+сужены только ради исключения старых предупреждений из отчёта.

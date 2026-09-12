@@ -23,7 +23,8 @@ final readonly class DtoHydrate
         public ?bool $dateTimeStrictFormat = null,
         public ?DateTimeInvalidBehavior $dateTimeInvalidBehavior = null,
         public ?EmptyStringBehavior $emptyStringBehavior = null,
-    ) {}
+    ) {
+    }
 
     public function toPolicy(DtoHydrationPolicy $base): DtoHydrationPolicy
     {

@@ -37,7 +37,8 @@ readonly class FileResponse
         private ?string $mimeType = null,
         private ?int $size = null,
         private ?ClientConfig $config = null,
-    ) {}
+    ) {
+    }
 
     /**
      * Возвращает PSR-7 поток с содержимым файла.

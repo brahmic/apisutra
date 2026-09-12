@@ -20,7 +20,8 @@ readonly class DiscoveryOptions
         public DiscoveryCacheMode $cacheMode = DiscoveryCacheMode::Auto,
         public ?int $cacheTtl = null,
         public ?string $cacheKeyVersion = null,
-    ) {}
+    ) {
+    }
 
     /**
      * Режим по умолчанию (адаптация под окружение).

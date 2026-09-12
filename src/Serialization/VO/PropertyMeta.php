@@ -29,7 +29,8 @@ final readonly class PropertyMeta
         public ?Header $header,
         public ?File $file,
         public ?CastAttribute $cast,
-    ) {}
+    ) {
+    }
 
     /** Свойство пропускается при сериализации */
     public function shouldSkip(): bool

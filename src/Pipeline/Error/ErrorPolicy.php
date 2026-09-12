@@ -28,7 +28,8 @@ final readonly class ErrorPolicy
 {
     public function __construct(
         private ?AbstractClient $client = null,
-    ) {}
+    ) {
+    }
 
     public function hasRequestFailed(RequestInterface $request, ?ProviderResponse $response): bool
     {

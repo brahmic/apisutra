@@ -16,7 +16,8 @@ final readonly class RequestPreparationStep
     public function __construct(
         private PreparedRequestFactory $preparedRequestFactory,
         private AuditLogger $auditLogger,
-    ) {}
+    ) {
+    }
 
     public function prepare(RequestInterface $request, PipelineContext $context): PreparedRequest
     {

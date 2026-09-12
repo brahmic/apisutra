@@ -134,8 +134,8 @@ final class DtoSerializer
             $dateTimeTo = $meta['dateTimeTo'];
             $valueResolver = new SerializationValueResolver($this->resolveCastRegistry($resolved));
 
-            $name = $to?->name
-                ?? $map?->name
+            $name = $to->name
+                ?? $map->name
                 ?? $this->resolveName($meta['name'], $resolved->policy);
             $value = $valueResolver->resolve(
                 value: $value,
@@ -228,7 +228,6 @@ final class DtoSerializer
     private function readProperty(object $dto, ReflectionProperty $property): mixed
     {
         if (!$property->isPublic()) {
-            $property->setAccessible(true);
         }
 
         if (!$property->isInitialized($dto)) {

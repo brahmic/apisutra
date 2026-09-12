@@ -14,5 +14,6 @@ readonly class Query
         public ?string $name = null,
         public ?QueryArrayFormat $arrayFormat = null,
         public ?bool $nullable = null,
-    ) {}
+    ) {
+    }
 }

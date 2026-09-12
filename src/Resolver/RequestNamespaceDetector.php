@@ -17,7 +17,8 @@ final readonly class RequestNamespaceDetector
 {
     public function __construct(
         private RequestScanner $scanner,
-    ) {}
+    ) {
+    }
 
     /**
      * Обнаружить namespace запросов клиента.

@@ -11,5 +11,6 @@ readonly class Get
 {
     public function __construct(
         public string $path,
-    ) {}
+    ) {
+    }
 }

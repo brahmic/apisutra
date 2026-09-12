@@ -175,5 +175,4 @@ final readonly class ResolvedResult implements ResolvedResultInterface
     {
         return $this->result;
     }
-
 }

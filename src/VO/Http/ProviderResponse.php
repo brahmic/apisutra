@@ -155,5 +155,4 @@ readonly class ProviderResponse
     {
         return $this->headers;
     }
-
 }

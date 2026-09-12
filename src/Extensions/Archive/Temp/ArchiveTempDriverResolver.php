@@ -22,7 +22,7 @@ final readonly class ArchiveTempDriverResolver
             return $config->tempProvider;
         }
 
-        $driver = strtolower($config?->driver ?? 'native');
+        $driver = strtolower($config->driver ?? 'native');
         if ($driver === '') {
             $driver = 'native';
         }

@@ -19,7 +19,8 @@ final readonly class RequestScanner
 {
     public function __construct(
         private ClassMapProvider $classMapProvider,
-    ) {}
+    ) {
+    }
 
     /**
      * Найти классы запросов внутри заданных namespace.

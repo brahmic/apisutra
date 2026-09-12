@@ -23,7 +23,8 @@ final readonly class HookRunner
 {
     public function __construct(
         private HookRegistry $hooks,
-    ) {}
+    ) {
+    }
 
     public function runHookStage(Hook $hook, RequestInterface $request, PipelineContext $context): void
     {

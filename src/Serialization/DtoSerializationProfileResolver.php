@@ -53,7 +53,7 @@ final readonly class DtoSerializationProfileResolver
         $dxPolicy = $this->resolveBasePolicy($profile, $config);
 
         return new ResolvedDtoSerialization(
-            policy: $config?->wireBodySerializationPolicy ?? $this->deriveWirePolicy($dxPolicy, $config),
+            policy: $config->wireBodySerializationPolicy ?? $this->deriveWirePolicy($dxPolicy, $config),
             casts: $this->buildCastRegistry($profile),
         );
     }
@@ -91,7 +91,7 @@ final readonly class DtoSerializationProfileResolver
             strictEnums: false,
             namingStrategy: $dxPolicy->namingStrategy,
             serializeNulls: $dxPolicy->serializeNulls,
-            dateTime: $config?->requestDateTime ?? $dxPolicy->dateTime,
+            dateTime: $config->requestDateTime ?? $dxPolicy->dateTime,
         );
     }
 

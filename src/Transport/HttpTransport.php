@@ -46,7 +46,8 @@ final class HttpTransport implements TimeoutAwareTransportInterface, Destination
         private readonly ClientInterface $httpClient,
         private readonly RequestFactoryInterface $requestFactory,
         private readonly StreamFactoryInterface $streamFactory,
-    ) {}
+    ) {
+    }
 
     /** Штатная сборка без ручного выбора адаптера и фабрик. */
     public static function createDefault(): self
@@ -78,8 +79,11 @@ final class HttpTransport implements TimeoutAwareTransportInterface, Destination
         $sink = $transfer?->download ? DownloadManager::temporary($transfer->target) : null;
         if ($request->destination !== null || $transfer !== null) {
             $options = new TransportOptions(
-                $options?->timeoutMs ?? 0, $options?->connectTimeoutMs ?? 0,
-                $options?->budget, $request->destination, $transfer,
+                $options->timeoutMs ?? 0,
+                $options->connectTimeoutMs ?? 0,
+                $options?->budget,
+                $request->destination,
+                $transfer,
                 $sink === null ? null : new BorrowedStream($sink),
             );
         }

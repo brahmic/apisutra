@@ -13,7 +13,9 @@ use Psr\SimpleCache\CacheInterface;
  */
 final readonly class CacheGenerations
 {
-    public function __construct(private CacheInterface $store) {}
+    public function __construct(private CacheInterface $store)
+    {
+    }
 
     public static function key(string $kind, string $scope, ?string $group = null): string
     {

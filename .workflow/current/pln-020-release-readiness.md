@@ -2,7 +2,7 @@
 
 - Дата создания: 2026-09-12
 - Дата обновления: 2026-09-12
-- Статус: новый
+- Статус: в работе
 
 ## Основание и цель
 
@@ -24,8 +24,7 @@ HEAD тоже включает workflow. Нет проверок состава 
 Готовность к выпуску зависит от завершения [017](../completed/pln-017-auth-recovery-contract.md),
 [018](../completed/pln-018-laravel-integration.md), [019](../completed/pln-019-contract-regressions-diagnostics.md).
 Продуктовые решения по всем четырём планам согласованы 2026-09-12 — О1/О2 в
-[аудите](../audit/aud-003-remaining-work/aud-003-readme.md#ответы); реализация ещё
-не начата. Архивы, Composer metadata и подготовку quality jobs можно делать раньше.
+[аудите](../audit/aud-003-remaining-work/aud-003-readme.md#ответы); реализация начата по поручению владельца. Архивы, Composer metadata и подготовку quality jobs можно делать раньше.
 
 Не включать в обязательную приёмку отложенные async-first и строгие distributed
 лимиты. Их ограничения отражаются в документации; они не становятся скрытым условием
@@ -132,7 +131,7 @@ changes. Создание плана и реализация quality-checks не
 
 Готовность: первые три плана завершены или их исключения явно приняты, таблица issue
 сведена, все согласованные gates прошли на итоговом commit, состав архива и migration
-проверены. Отложенные расширения не выдаются за реализованные. Реализация ещё не начата.
+проверены. Отложенные расширения не выдаются за реализованные. Результат реализации и оставшаяся внешняя приёмка записаны ниже.
 
 
 ## Проверка плана — 2026-09-12
@@ -144,3 +143,71 @@ changes. Создание плана и реализация quality-checks не
 Механические исправления стиля отделять от функциональных; установка архива должна
 проверяться внешним smoke-runner, без зависимости самого пакета от исключённых tests.
 Номер версии и публикация определяются после фактической приёмки, а не сейчас.
+
+
+## Реализация и локальная приёмка — 2026-09-12
+
+Реализованы все изменения плана. 017/018/019 завершены отдельными commit.
+[Итоговая таблица AS-01–AS-14 и F01–F16](../audit/aud-003-remaining-work/artifacts/acceptance-matrix.md)
+различает исправления, принятые ограничения и отложенные расширения.
+
+- Добавлены Composer/git export exclusions, одинаковый состав дистрибутивов,
+  install --no-dev и внешний runner всех standalone smoke + исполняемый README.
+- PSR-12 для src: 247 исходных ошибок исправлены механически; итог — 0 ошибок,
+  135 видимых предупреждений о рекомендуемой длине строки, не обязательном hard limit.
+- PHPStan level 5 для всего src: устранены неточные PHPDoc и избыточный nullsafe перед ??;
+  сохранены необходимые nullable вызовы методов. Полный suite проверен после правок.
+  [99 оставшихся сообщений](../audit/aud-003-remaining-work/artifacts/phpstan-review.json)
+  разобраны, точный baseline не допускает новые/устаревшие исключения. Долг —
+  [021](../backlog/pln-021-static-analysis-contracts.md), без сужения публичного API.
+- Удалены 17 вызовов setAccessible из src/tests без подавления deprecation.
+- Добавлены CI jobs качества/архивов/Laravel и locked/lowest/latest матрица.
+  Lowest сохраняет видимую диагностику старых зависимостей; locked/latest блокируют deprecation.
+- Сведены migration notes; описаны точки расширения, zero-config и границы async/store.
+  Публичные документы не ссылаются на workflow, ссылки на исходники тестов ведут в репозиторий.
+
+### Дополнительная находка при проверке зависимостей
+
+Установленный отдельно PHP 8.4.25 использует libcurl 8.22.0. Локальный тест
+ExternalUrlTransportTest воспроизвёл преобразование `%2f` в `%2F` при совпадающем
+PSR request target. ExactTargetCurlFactory теперь всегда задаёт CURLOPT_REQUEST_TARGET
+и CURLOPT_PATH_AS_IS, сохраняя absolute-form для forward proxy. Это исправление
+согласованного exact URL контракта, без нового продуктового режима. Тесты signed URL
+и обе матрицы зависимостей проходят. Активная PHP 8.5.4 не переключалась.
+
+Lowest сначала выявил вывод deprecation bootstrap в stdout тестового timeout worker.
+Worker теперь направляет display_errors в stderr; ошибки не подавляются и не ломают
+протокол синхронизации. Сам HTTP-контракт и пороги теста не ослаблены.
+
+### Остаток внешней приёмки
+
+Статус плана остаётся «в работе» только из-за требуемого удалённого CI на итоговом
+commit. Локальные проверки не выдаются за удалённые. Push/tag/release пользователь
+не поручал; следующий внешний шаг — отправить commit и проверить все jobs.
+После успешного CI перенести этот план в completed и записать URL результата.
+Кандидат следующей версии — v0.2.0-alpha.1 после v0.1.0-alpha.1: изменения поведения
+не полностью обратно совместимы. Версия не создана и пакет не опубликован.
+
+
+### Фактические результаты
+
+- Lock: PHP 8.4.25 и 8.5.4 — 1525 passed, 5530 assertions, без deprecation/warning.
+  Дополнительно PHP 8.5 random seed 20260912 — тот же результат.
+- Lowest: оба PHP — 1525 тестов без падений, 5530 assertions. Pest помечает
+  8 тестов deprecated под 8.4 и 58 под 8.5 из-за старых зависимостей; bootstrap
+  также сообщает nullable deprecation PSR HTTP Factory/Symfony. Вывод сохранён.
+- Latest: оба PHP — 1525 passed, 5530 assertions, без deprecation/warning.
+  Resolution выполнялся в изолированной копии, основной lock не заменён lowest-набором.
+- Laravel 12 — оба PHP, discovery/HTTP/explicit factory/two clients/Artisan/jobs/config:cache OK.
+- Composer validate --strict обоих проектов и dump-autoload --optimize --strict-psr OK.
+  PHPStan — 0 новых ошибок с baseline, PSR-12 — 0 ошибок, 135 advisory warnings.
+- 88 публичных Markdown-документов: локальные пути ссылок корректны; anchors/внешние
+  endpoints автоматически не проверялись. README PHP-пример исполняется в dist smoke.
+- Два формата архива: по 571 файлу, одинаковые SHA-256 содержимого, 13 standalone
+  smoke на каждый. Git tar — 3952640 B, Composer tar — 3873792 B; различие размеров
+  связано с tar-форматом, содержимое сравнивается отдельно. Проверены оба PHP.
+
+[Команды и результаты](../audit/aud-003-remaining-work/artifacts/release-checks.json),
+[dependency resolution](../audit/aud-003-remaining-work/artifacts/dependency-matrix.json),
+[dist PHP 8.4](../audit/aud-003-remaining-work/artifacts/package-check.json),
+[dist PHP 8.5](../audit/aud-003-remaining-work/artifacts/package-check-php85.json).

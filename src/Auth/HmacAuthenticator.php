@@ -16,7 +16,8 @@ final readonly class HmacAuthenticator implements AuthenticatorInterface, CacheI
     public function __construct(
         private string $apiKey,
         private string $secret,
-    ) {}
+    ) {
+    }
 
     #[Override]
     public function getCacheIdentity(?PreparedRequest $request = null): ?string

@@ -31,5 +31,6 @@ readonly class DebugInfo
         public ?ProviderResponse $response = null,
         public ?float $duration = null,
         public array $nested = [],
-    ) {}
+    ) {
+    }
 }

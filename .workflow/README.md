@@ -102,6 +102,8 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Уточнение типов расширений — до востребования](backlog/pln-021-static-analysis-contracts.md)
+
 - [Анализ четырёх оставшихся направлений](audit/aud-003-remaining-work/aud-003-readme.md)
 - [Auth retry после восстановления авторизации](completed/pln-017-auth-recovery-contract.md)
 - [Предсказуемая Laravel-интеграция](completed/pln-018-laravel-integration.md)

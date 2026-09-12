@@ -16,7 +16,8 @@ final class ExtensionContext
     public function __construct(
         private readonly ExtensionRegistry $registry,
         private readonly string $extensionName,
-    ) {}
+    ) {
+    }
 
     public function registerCast(string $type, CastInterface $cast): void
     {

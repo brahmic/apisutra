@@ -22,7 +22,8 @@ final class ClientDiscoveryCache
     public function __construct(
         private ?CacheInterface $store = null,
         private string $prefix = 'apisutra.discovery.',
-    ) {}
+    ) {
+    }
 
     /**
      * Получить список namespace из кеша.

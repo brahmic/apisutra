@@ -25,7 +25,8 @@ final readonly class RequestPaginationHelper
     public function __construct(
         private ?PipelineContext $context,
         private ?ClientInterface $client,
-    ) {}
+    ) {
+    }
 
     public function paginate(AbstractRequest $request): Paginator
     {
@@ -153,7 +154,6 @@ final readonly class RequestPaginationHelper
             return;
         }
 
-        $reflection->setAccessible(true);
         $reflection->setValue($request, $value);
     }
 

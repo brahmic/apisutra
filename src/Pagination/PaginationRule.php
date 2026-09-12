@@ -19,7 +19,8 @@ final readonly class PaginationRule
         public ?int $from = null,
         public ?int $to = null,
         public FailStrategy $failStrategy = FailStrategy::FailAll,
-    ) {}
+    ) {
+    }
 
     public static function single(): self
     {

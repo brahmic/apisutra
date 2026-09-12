@@ -12,7 +12,8 @@ final readonly class RequestContractFieldResolution
     public function __construct(
         public ?RequestContractFieldValue $field,
         public ?array $violation = null,
-    ) {}
+    ) {
+    }
 
     public function failed(): bool
     {

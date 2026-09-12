@@ -23,5 +23,6 @@ readonly class AttributeContext
         public PipelineContext $context,
         public mixed $data = null,
         public array $classAttributes = [],
-    ) {}
+    ) {
+    }
 }

@@ -11,7 +11,8 @@ final readonly class EmptyStringAsNull
 {
     public function __construct(
         public bool $blank = false,
-    ) {}
+    ) {
+    }
 
     public function matches(string $value): bool
     {

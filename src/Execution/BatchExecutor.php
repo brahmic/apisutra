@@ -314,5 +314,4 @@ final class BatchExecutor
             partial: $summary->partial,
         );
     }
-
 }

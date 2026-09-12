@@ -17,7 +17,8 @@ final class EnumCast implements CastInterface
 {
     public function __construct(
         private readonly ?string $enumClass = null,
-    ) {}
+    ) {
+    }
 
     #[Override]
     public function hydrate(mixed $value, ?PipelineContext $context = null): mixed

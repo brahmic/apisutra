@@ -24,7 +24,8 @@ final readonly class ClientError
         public array $context = [],
         public array $nested = [],
         public ?string $requestClass = null,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<string, mixed>

@@ -60,5 +60,6 @@ final readonly class About
         public ?string $format = null,
         public ?string $nullableReason = null,
         public ?string $note = null,
-    ) {}
+    ) {
+    }
 }

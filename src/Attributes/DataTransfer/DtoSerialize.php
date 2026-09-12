@@ -20,7 +20,8 @@ final readonly class DtoSerialize
         public ?bool $serializeNulls = null,
         public ?string $dateTimeFormat = null,
         public ?string $dateTimeTimezone = null,
-    ) {}
+    ) {
+    }
 
     public function toPolicy(DtoSerializationPolicy $base): DtoSerializationPolicy
     {

@@ -12,7 +12,8 @@ final readonly class RequestContractValidationResult
     public function __construct(
         public ?RequestContractViolation $violation,
         public ?array $oneOfDebug = null,
-    ) {}
+    ) {
+    }
 
     public function failed(): bool
     {

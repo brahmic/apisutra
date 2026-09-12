@@ -91,7 +91,7 @@ final readonly class OperationInventoryBuilder
      */
     private function resolveResponseType(RequestSpec $spec): ?string
     {
-        return $spec->returns?->type ?? $spec->responseType;
+        return $spec->returns->type ?? $spec->responseType;
     }
 
     /**

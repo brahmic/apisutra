@@ -17,7 +17,9 @@ final class BorrowedStream implements StreamInterface
 
     private StreamInterface $stream;
 
-    public function close(): void {}
+    public function close(): void
+    {
+    }
 
     public function detach(): mixed
     {

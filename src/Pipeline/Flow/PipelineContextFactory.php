@@ -35,7 +35,8 @@ final readonly class PipelineContextFactory
         private RequestPreparer $requestPreparer,
         private StageProcessor $stageProcessor,
         private AuditLogger $auditLogger,
-    ) {}
+    ) {
+    }
 
     public function create(
         RequestInterface $request,

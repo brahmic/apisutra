@@ -12,7 +12,8 @@ final readonly class PaginationConfigResolver
 {
     public function __construct(
         private ?ClientConfig $config,
-    ) {}
+    ) {
+    }
 
     public function resolve(AbstractRequest $request): PaginationConfig
     {

@@ -20,7 +20,8 @@ final readonly class MapServiceClassResolver implements ServiceClassResolverInte
      */
     public function __construct(
         private array $map,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function resolve(string $requestClass): ?string

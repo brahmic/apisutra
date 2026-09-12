@@ -19,7 +19,8 @@ final readonly class ClientResolver implements ClientResolverInterface
 {
     public function __construct(
         private ClientRegistry $registry,
-    ) {}
+    ) {
+    }
 
     /**
      * Разрешить клиента для запроса или цепочки исполнения.

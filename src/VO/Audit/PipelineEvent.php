@@ -34,5 +34,6 @@ readonly class PipelineEvent
         public ?string $requestClass,
         public RequestRole $role,
         public mixed $payload,
-    ) {}
+    ) {
+    }
 }

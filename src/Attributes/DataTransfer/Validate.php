@@ -12,5 +12,6 @@ readonly class Validate
     public function __construct(
         public string $rules,
         public ?string $message = null,
-    ) {}
+    ) {
+    }
 }

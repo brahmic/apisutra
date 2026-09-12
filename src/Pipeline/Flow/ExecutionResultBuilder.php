@@ -64,7 +64,8 @@ final readonly class ExecutionResultBuilder
         private ClientConfig $config,
         private AuditLogger $auditLogger,
         private ResponseHydrator $responseHydrator,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<int, ValidationError> $validationErrors
@@ -120,7 +121,7 @@ final readonly class ExecutionResultBuilder
     ): ExecutionResult {
         $duration = (microtime(true) - $startTime) * 1000;
         $debug = $this->config->debug
-            ? new DebugInfo($context->response?->request ?? $context->preparedRequest ?? $prepared, $context->response, $duration)
+            ? new DebugInfo($context->response->request ?? $context->preparedRequest ?? $prepared, $context->response, $duration)
             : null;
 
         $this->auditLogger->addAudit($audit, PipelineStage::Completed, $context, $startTime, $debug);
@@ -229,8 +230,13 @@ final readonly class ExecutionResultBuilder
                 throw $dependency->exception ?? $exception;
             }
             return $this->createFailedResult(
-                $request, $context, $audit, $dependency->errors,
-                $dependency->exception ?? $exception, $dependency->validationErrors, $dependency->response,
+                $request,
+                $context,
+                $audit,
+                $dependency->errors,
+                $dependency->exception ?? $exception,
+                $dependency->validationErrors,
+                $dependency->response,
             );
         }
         $code = $context->failureCode ?? match (true) {
@@ -394,7 +400,7 @@ final readonly class ExecutionResultBuilder
             errors: $errors,
             validationErrors: $validationErrors,
             debug: $this->config->debug
-                ? new DebugInfo($response?->request ?? $context->preparedRequest, $response)
+                ? new DebugInfo($response->request ?? $context->preparedRequest, $response)
                 : null,
             traceId: $context->traceId,
             audit: $audit,

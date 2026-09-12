@@ -14,5 +14,6 @@ readonly class Cache
         public ?int $ttl = null,
         public CacheMode $mode = CacheMode::Enabled,
         public ?string $key = null,
-    ) {}
+    ) {
+    }
 }

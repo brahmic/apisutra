@@ -206,7 +206,7 @@ final class PoolExecutor
 
     private function shouldStopOnFailure(): bool
     {
-        return $this->config?->stopOnFailure ?? false;
+        return $this->config->stopOnFailure ?? false;
     }
 
     private function resolveRequestItem(mixed $request, int $index): RequestInterface

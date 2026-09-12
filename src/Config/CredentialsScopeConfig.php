@@ -18,5 +18,6 @@ final readonly class CredentialsScopeConfig
         public array $query = [],
         public array $form = [],
         public ?CredentialsMergeMode $mergeMode = null,
-    ) {}
+    ) {
+    }
 }

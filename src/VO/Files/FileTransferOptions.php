@@ -10,5 +10,6 @@ final readonly class FileTransferOptions
         public bool $upload = false,
         public bool $download = false,
         public ?DownloadTarget $target = null,
-    ) {}
+    ) {
+    }
 }

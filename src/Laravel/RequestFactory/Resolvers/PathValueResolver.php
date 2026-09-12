@@ -27,7 +27,7 @@ final class PathValueResolver implements ResolverInterface
      */
     public function resolve(ResolveContext $context): mixed
     {
-        $paramName = $context->pathAttribute?->name ?? $context->propertyName;
+        $paramName = $context->pathAttribute->name ?? $context->propertyName;
 
         return $context->payload[PayloadKeys::ROUTE][$paramName] ?? null;
     }

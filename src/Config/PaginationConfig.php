@@ -28,5 +28,6 @@ final readonly class PaginationConfig
         public ?string $itemsCollection = null,
         public PaginationItemsCollectionFactoryInterface|string|null $itemsCollectionFactory = null,
         public ?int $maxPages = 1000,
-    ) {}
+    ) {
+    }
 }

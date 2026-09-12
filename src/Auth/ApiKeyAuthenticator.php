@@ -18,7 +18,8 @@ final readonly class ApiKeyAuthenticator implements AuthenticatorInterface, Cach
         private string $key,
         private ?string $header = 'X-Api-Key',
         private ?string $query = null,
-    ) {}
+    ) {
+    }
 
     #[Override]
     public function getCacheIdentity(?PreparedRequest $request = null): ?string

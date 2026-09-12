@@ -37,5 +37,6 @@ final readonly class RequestSpec
         public bool $hasNoAuth,
         public bool $skipCredentialsEnrichment,
         public bool $hasDownload,
-    ) {}
+    ) {
+    }
 }

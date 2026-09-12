@@ -355,6 +355,3 @@ final readonly class ClientConfig
         }
     }
 }
-
-
-

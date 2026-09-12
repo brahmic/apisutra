@@ -37,7 +37,8 @@ final readonly class ResponseHydrator
         private ClientConfig $config,
         private Hydrator $hydrator,
         private ExtensionRegistry $extensions,
-    ) {}
+    ) {
+    }
 
     public function decodeResponse(RequestInterface $request, PipelineContext $context): DecodedResponse
     {
@@ -59,8 +60,7 @@ final readonly class ResponseHydrator
         PipelineContext $context,
         mixed $data,
         ?DecodedResponse $decoded = null,
-    ): mixed
-    {
+    ): mixed {
         if ($this->isDownloadRequest($request)) {
             return $this->makeFileResponse($context->response);
         }
@@ -281,5 +281,4 @@ final readonly class ResponseHydrator
         $builder = new PaginationItemsCollectionBuilder();
         return $builder->build($items, $pagination);
     }
-
 }

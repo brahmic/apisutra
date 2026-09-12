@@ -26,7 +26,8 @@ final class RequestPartsBag
         public ?FileFormat $fileFormat,
         public array $placeholders,
         public array $enrichment = [],
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{

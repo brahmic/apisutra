@@ -27,7 +27,8 @@ final class DependsOnExecutor
         private readonly ClientInterface $client,
         private readonly RequestCollection $requests,
         private readonly ?PipelineContext $parent = null,
-    ) {}
+    ) {
+    }
 
     public function execute(ExecutionMode $mode, FailStrategy $strategy): ResultCollection
     {

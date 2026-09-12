@@ -11,5 +11,6 @@ final readonly class DownloadTarget
     public function __construct(
         public string|StreamInterface $target,
         public bool $overwrite = false,
-    ) {}
+    ) {
+    }
 }
