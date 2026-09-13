@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-13",
+  "head": "2909e29e85f3f1415515683b8ed67c7e2f4fffc4",
+  "php": "PHP 8.5.4 (cli) (built: Mar 10 2026 23:15:23) (NTS)\nCopyright (c) The PHP Group\nBuilt by Homebrew\nZend Engine v4.5.4, Copyright (c) Zend Technologies\n    with Zend OPcache v8.5.4, Copyright (c), by Zend Technologies\n",
+  "files": {
+    "src/Transport/TransportExceptionNormalizer.php": "f54f6bb9d117ffa9f83a4d349655483230f6470a6fde750ab458e313d69c0bf4",
+    "src/Pipeline/Hydration/ResponseHydrator.php": "8de183e78438f02e8152864493885b4de46470eb6adb5ac3dd4f766bdee0dad6",
+    "src/Timing/ExecutionBudget.php": "1a2ced7967ed4c2b1cf9b80601434cd04fa504e4749ac8507df63b50af498e3f",
+    "src/Pipeline/Transport/RetryDecisionMaker.php": "8b3fa43a67936d9a62af48445958527f01aa4041cd6f15f3ba699c1855a7424b",
+    "src/Pipeline/Transport/RetrySender.php": "cc4d3297044ce90fbb35eda6101f1210d5026cdfdc3414010ac338fbb31bf2ac",
+    "src/Pipeline/Error/ErrorPolicy.php": "f3170d609e7f5864c4cdfad076344e52f674a7a8c3f051e73a1090e46515f975",
+    "src/Retry/RetryAfterDelay.php": "71c8a2c9bfcf58ccfc55347994fa354ae4691e0d1982350c5e79b08a8dd19c3b",
+    "src/Core/AbstractClient.php": "2b7056645d114048e2be5b194f72b0f8aa6c85a180b5d1975e963b90774e4354",
+    "src/Pipeline/Pipeline.php": "134fcbd0e194f978e707ca456eb7c4d7ee3b6d61a0cc8a310fa10a1058465267",
+    "composer.lock": "e969e14ac0bb263c871d8a7144803bf5178617001550da2765e81d2e5033186a"
+  }
+}

@@ -1,0 +1,20 @@
+errno_55: "invalid_request"
+errno_56: "invalid_request"
+errno_52: "connection_failed"
+errno_28: "timeout"
+response_0: [[],"<html>fixture<\/html>",null]
+response_1: [[],"<x>fixture<\/x>",null]
+response_2: [{"ok":true},"{\"ok\":true}",null]
+response_3: [null,"<x>fixture<\/x>","response_decoding_error"]
+response_4: [{"ok":true},"{\"ok\":true}",null]
+response_5: ["fixture","fixture",null]
+independent_send: [[1000,1000],null]
+internal_retry: [[1000,400],"timeout"]
+post_only_429_429: 2
+post_only_429_503: 1
+post_only_429_52: 1
+retry_after_Fri, 15 Jan 2027 08:02:00 GMT: [0,120000]
+retry_after_120: [120,120000]
+retry_after_garbage: [0,0]
+retry_after_-1: [-1,0]
+Все проверки исходного поведения пройдены.

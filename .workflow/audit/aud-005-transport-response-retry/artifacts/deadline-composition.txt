@@ -1,0 +1,2 @@
+existing_budget_composition: timeouts=[1000,600,200], elapsed=1000, stage=http_response
+existing_budget_wait: waits=[], remaining=400, stage=retry_wait
