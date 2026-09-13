@@ -1,0 +1,163 @@
+{
+  "php": "8.5.4",
+  "baseline": "96e8c4071f2cc517cb39dfca36101671259ab317",
+  "mode": "Observations only; exit 0 means probes executed, not that target requirements passed.",
+  "observations": [
+    {
+      "id": "R01",
+      "topic": "Timeout options",
+      "observed": {
+        "requested": [
+          42,
+          7
+        ],
+        "actual": [
+          9,
+          3
+        ]
+      }
+    },
+    {
+      "id": "R02",
+      "topic": "Cache identity isolation",
+      "observed": {
+        "a": "fixture-account-a",
+        "b": "fixture-account-a",
+        "httpCalls": 1
+      }
+    },
+    {
+      "id": "R03",
+      "topic": "Async pipeline dispatch",
+      "observed": {
+        "syncCalls": 1,
+        "asyncCalls": 0
+      }
+    },
+    {
+      "id": "R04",
+      "topic": "PSR network exception retry",
+      "observed": {
+        "httpCalls": 1,
+        "success": false,
+        "error": "connection_failed"
+      }
+    },
+    {
+      "id": "R05",
+      "topic": "Final HTTP error after retries",
+      "observed": {
+        "httpCalls": 2,
+        "responseStatus": 503,
+        "error": "connection_failed",
+        "message": "Не удалось выполнить запрос"
+      }
+    },
+    {
+      "id": "R06",
+      "topic": "Generic retry repeats state-changing request",
+      "observed": {
+        "httpCalls": 2
+      }
+    },
+    {
+      "id": "R07",
+      "topic": "Query boolean representation",
+      "observed": {
+        "url": "https://api.example.test/resources?enabled=&offset=0"
+      }
+    },
+    {
+      "id": "R08",
+      "topic": "Existing URL query plus attributes",
+      "observed": {
+        "url": "https://api.example.test/resources?fixed=1?page=2"
+      }
+    },
+    {
+      "id": "R09",
+      "topic": "Invalid UTF-8 request JSON",
+      "observed": {
+        "httpCalls": 1,
+        "sentBody": "",
+        "success": true
+      }
+    },
+    {
+      "id": "R10",
+      "topic": "Malformed JSON response",
+      "observed": {
+        "success": true,
+        "data": []
+      }
+    },
+    {
+      "id": "R11",
+      "topic": "Clearing auth scope",
+      "observed": {
+        "scope": "secondary",
+        "authorization": "fixture-account-b"
+      }
+    },
+    {
+      "id": "R12",
+      "topic": "Debug URL redaction",
+      "observed": {
+        "url": "https://api.example.test/resources?access_token=fixture-secret",
+        "query": {
+          "access_token": {
+            "value": "***",
+            "format": null
+          }
+        }
+      }
+    },
+    {
+      "id": "R13",
+      "topic": "Recording transport default redaction",
+      "observed": {
+        "recordedAuthorization": "fixture-account-a"
+      }
+    },
+    {
+      "id": "R14",
+      "topic": "Stream payload replay",
+      "observed": {
+        "bodyLengths": [
+          229,
+          0
+        ],
+        "identical": false
+      }
+    },
+    {
+      "id": "R15",
+      "topic": "Global cache on POST",
+      "observed": {
+        "httpCalls": 1
+      }
+    },
+    {
+      "id": "R16",
+      "topic": "Separate query and JSON preserve false and empty list",
+      "observed": {
+        "url": "https://api.example.test/resources?workspace_id=10",
+        "body": {
+          "title": "Example",
+          "enabled": false,
+          "labels": []
+        }
+      }
+    },
+    {
+      "id": "R17",
+      "topic": "Explicit cache scopes isolate identities",
+      "observed": {
+        "a": "fixture-account-a",
+        "b": "fixture-account-b",
+        "httpCalls": 2
+      }
+    }
+  ],
+  "probeErrors": []
+}
