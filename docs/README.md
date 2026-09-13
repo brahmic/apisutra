@@ -1,6 +1,6 @@
 # Документация ApiSutra
 
-Изменения совместимости: [миграция на следующий выпуск](guides/migration.md).
+Изменения совместимости: [миграция на v0.2.0-alpha.1](guides/migration.md).
 
 Готовые ссылки и изоляция credentials: [Внешние и подписанные URL](guides/external-urls.md).
 

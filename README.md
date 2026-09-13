@@ -4,12 +4,14 @@
 
 # ApiSutra
 
-Изменения совместимости: [миграция на следующий выпуск](docs/guides/migration.md).
+Изменения совместимости: [миграция на v0.2.0-alpha.1](docs/guides/migration.md).
 
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
 [![Test count](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbrahmic%2Fapisutra%2Frefs%2Fheads%2Fbadges%2Ftest-count.json&cacheSeconds=300)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
 [![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](./composer.json)
 [![Packagist Version](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
+
+Лицензия: [MIT](LICENSE).
 
 ApiSutra — фреймворк для построения SDK‑клиентов внешних API на PHP.
 Он даёт декларативные запросы и DTO через атрибуты, единый pipeline выполнения
@@ -37,7 +39,7 @@ ApiSutra — фреймворк для построения SDK‑клиенто
 
 ## Установка
 ```bash
-composer require brahmic/apisutra
+composer require "brahmic/apisutra:^0.2@alpha"
 ```
 
 ## Быстрый старт

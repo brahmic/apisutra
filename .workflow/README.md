@@ -118,7 +118,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 - [Auth retry после восстановления авторизации](completed/pln-017-auth-recovery-contract.md)
 - [Предсказуемая Laravel-интеграция](completed/pln-018-laravel-integration.md)
 - [Остаточные контракты и диагностика](completed/pln-019-contract-regressions-diagnostics.md)
-- [Общая приёмка и подготовка выпуска](current/pln-020-release-readiness.md)
+- [Общая приёмка и подготовка выпуска — завершено](completed/pln-020-release-readiness.md)
 
 - [Исправление существующего rate limiter](completed/pln-016-rate-limit-correctness.md)
 - [Общая координация лимитов — до востребования](backlog/pln-015-shared-rate-limit-coordination.md)
