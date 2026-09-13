@@ -59,30 +59,32 @@ jobs:
         if: matrix.dependencies == 'lowest'
         run: composer test -- --display-deprecations --fail-on-warning
 
-      - name: Generate test count badge
+      - name: Record test outcome
         if: >-
           !cancelled() && matrix.php == '8.4' && matrix.dependencies == 'locked'
           && github.ref == 'refs/heads/master'
           && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         env:
           TEST_OUTCOME: ${{ steps.run-tests.outcome }}
-        run: python3 .github/scripts/test-count-badge.py "${{ runner.temp }}/junit.xml" "${{ runner.temp }}/test-count.json" "$TEST_OUTCOME"
+        run: printf '%s\n' "$TEST_OUTCOME" > "${{ runner.temp }}/test-outcome.txt"
 
-      - name: Upload test count badge
+      - name: Upload core test report
         if: >-
           !cancelled() && matrix.php == '8.4' && matrix.dependencies == 'locked'
           && github.ref == 'refs/heads/master'
           && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v7
         with:
-          name: test-count-badge
-          path: ${{ runner.temp }}/test-count.json
+          name: test-count-core
+          path: |
+            ${{ runner.temp }}/junit.xml
+            ${{ runner.temp }}/test-outcome.txt
           if-no-files-found: error
           retention-days: 7
 
   test-count:
     name: Publish test count badge
-    needs: tests
+    needs: [tests, redis]
     if: >-
       !cancelled() && github.ref == 'refs/heads/master'
       && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
@@ -99,11 +101,24 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v8
         with:
-          name: test-count-badge
-          path: ${{ runner.temp }}/test-count-badge
+          name: test-count-core
+          path: ${{ runner.temp }}/test-count-core
+      - uses: actions/download-artifact@v8
+        with:
+          name: test-count-redis
+          path: ${{ runner.temp }}/test-count-redis
+      - name: Generate combined test count badge
+        env:
+          TEST_OUTCOME: ${{ needs.tests.result == 'success' && needs.redis.result == 'success' && 'success' || 'failure' }}
+        run: >-
+          python3 .github/scripts/test-count-badge.py
+          "${{ runner.temp }}/test-count-core/junit.xml"
+          "${{ runner.temp }}/test-count.json"
+          "$TEST_OUTCOME"
+          "${{ runner.temp }}/test-count-redis/junit.xml"
       - uses: actions/github-script@v9
         env:
-          BADGE_PATH: ${{ runner.temp }}/test-count-badge/test-count.json
+          BADGE_PATH: ${{ runner.temp }}/test-count.json
         with:
           script: |
             const publish = require('./.github/scripts/publish-test-count.cjs');
@@ -186,6 +201,29 @@ jobs:
           coverage: none
           tools: composer:v2
       - run: composer install --no-interaction --prefer-dist --no-progress
-      - run: vendor/bin/pest tests/Integration/Redis --fail-on-warning
+      - name: Run Redis tests
+        id: run-tests
+        run: vendor/bin/pest tests/Integration/Redis --fail-on-warning --fail-on-skipped --log-junit "${{ runner.temp }}/junit.xml"
+      - name: Record Redis test outcome
+        if: >-
+          !cancelled() && matrix.php == '8.4'
+          && github.ref == 'refs/heads/master'
+          && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        env:
+          TEST_OUTCOME: ${{ steps.run-tests.outcome }}
+        run: printf '%s\n' "$TEST_OUTCOME" > "${{ runner.temp }}/test-outcome.txt"
+      - name: Upload Redis test report
+        if: >-
+          !cancelled() && matrix.php == '8.4'
+          && github.ref == 'refs/heads/master'
+          && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-count-redis
+          path: |
+            ${{ runner.temp }}/junit.xml
+            ${{ runner.temp }}/test-outcome.txt
+          if-no-files-found: error
+          retention-days: 7
       - run: composer install --working-dir=tests/Integration/Laravel --no-interaction --prefer-dist --no-progress
       - run: php tests/Integration/Laravel/verify.php
