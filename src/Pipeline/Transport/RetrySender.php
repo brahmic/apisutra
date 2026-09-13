@@ -42,6 +42,8 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
 use Brahmic\ApiSutra\Exceptions\Testing\RecordingException;
 use Throwable;
+use Brahmic\ApiSutra\Enums\Http\TransmissionState;
+use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
 
 final readonly class RetrySender
 {
@@ -125,9 +127,14 @@ final readonly class RetrySender
 
                 // Ответ относится к текущей HTTP-попытке; предыдущий не подставляется при сетевом сбое.
                 $context->response = null;
+                $previousTransmission = $context->transmissionState;
                 try {
                     $response = $this->sendAttempt($context, $retryConfig, $attempt, $minimumDelayMs, $applyBackoff);
                 } catch (Throwable $exception) {
+                    $exception = TransportExceptionNormalizer::normalize($exception);
+                    if ($exception instanceof TransportException && $exception->transmissionState === TransmissionState::NotSent) {
+                        $context->transmissionState = $previousTransmission;
+                    }
                     if ($exception instanceof RecordingException) {
                         $context->response = $exception->response;
                         $context->lastResponse = $exception->response;
@@ -169,7 +176,7 @@ final readonly class RetrySender
                     }
                 }
 
-                if ($attempt < $attempts && $this->retryDecisionMaker->shouldRetry($request, $response, $attempt, $retryConfig)) {
+                if ($attempt < $attempts && $this->retryDecisionMaker->shouldRetry($request, $response, $attempt, $retryConfig, $context->budget->clock)) {
                     if (!$this->prepareRepeat($request, $context, $bodyReplay)) {
                         return $response;
                     }
@@ -197,7 +204,7 @@ final readonly class RetrySender
                 if (
                     $retryConfig === null || $attempt >= $attempts
                     || ($exception->maxAttempts !== null && $attempt >= $exception->maxAttempts)
-                    || !$this->prepareRepeat($request, $context, $bodyReplay)
+                    || !$this->prepareRepeat($request, $context, $bodyReplay, $exception)
                 ) {
                     throw $exception;
                 }
@@ -232,7 +239,7 @@ final readonly class RetrySender
                 }
                 $lastException = $exception;
                 if ($context->failureCode !== ErrorCode::HookError && $retryConfig !== null && $this->retryDecisionMaker->isRetryException($exception, $retryConfig) && $attempt < $attempts) {
-                    if (!$this->prepareRepeat($request, $context, $bodyReplay)) {
+                    if (!$this->prepareRepeat($request, $context, $bodyReplay, $exception)) {
                         throw $exception;
                     }
                     $minimumDelayMs = 0;
@@ -259,9 +266,9 @@ final readonly class RetrySender
     }
 
     /** @phpstan-impure Перемотка тела зависит от текущего состояния потока. */
-    private function prepareRepeat(RequestInterface $request, PipelineContext $context, RequestBodyReplay $body): bool
+    private function prepareRepeat(RequestInterface $request, PipelineContext $context, RequestBodyReplay $body, ?Throwable $exception = null): bool
     {
-        $reason = $this->retryDecisionMaker->isSafe($request, $context->preparedRequest->method)
+        $reason = $this->retryDecisionMaker->isSafe($request, $context->preparedRequest->method, $context->response, $exception)
             ? $body->restore($context->preparedRequest)
             : 'operation_not_safe';
         if ($reason === null) {
@@ -285,6 +292,7 @@ final readonly class RetrySender
     ): ProviderResponse {
         RequestBodyGuard::check($context->preparedRequest);
         if ($config === null) {
+            $context->transmissionState = TransmissionState::Unknown;
             return $this->transport->send($context->preparedRequest);
         }
         if ($this->retryHandler instanceof RetryHandler) {
@@ -302,6 +310,7 @@ final readonly class RetrySender
         if ($minimumDelayMs > 0) {
             $context->budget->wait($minimumDelayMs, $this->sleeper, 'retry_wait');
         }
+        $context->transmissionState = TransmissionState::Unknown;
         return $this->retryHandler->handle($context->preparedRequest, $context, $config, $attempt);
     }
 }

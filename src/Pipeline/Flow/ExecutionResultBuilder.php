@@ -45,6 +45,7 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
 use Brahmic\ApiSutra\Exceptions\Testing\RecordingException;
 use Throwable;
+use Brahmic\ApiSutra\Exceptions\Retry\RetrySafetyException;
 
 /**
  * Строитель ExecutionResult для всех веток пайплайна.
@@ -298,6 +299,8 @@ final readonly class ExecutionResultBuilder
                     'reason' => 'auth_refresh_lock_timeout', 'stage' => 'auth_lock_wait',
                 ],
                 $exception instanceof AuthLockBackendException => ['reason' => 'auth_lock_backend_error'],
+                $exception instanceof RetrySafetyException => ['reason' => 'retry_safety_check_failed'],
+                $exception instanceof ResponseDecodingException && $exception->reason !== null => ['reason' => $exception->reason],
                 $exception instanceof HydrationException => $exception->context(),
                 default => [],
             },
@@ -345,6 +348,7 @@ final readonly class ExecutionResultBuilder
         );
 
         $contextData = array_merge($systemContext, $overrideContext);
+        $contextData['transmissionState'] = $context->transmissionState->value;
         if ($context->retryRefusalReason !== null) {
             $contextData['retryRefusalReason'] = $context->retryRefusalReason;
         }

@@ -24,22 +24,29 @@ final readonly class RetryAfterDelay
         if (!in_array($response->status, [429, 503], true)) {
             return 0;
         }
-        $value = trim($response->header('Retry-After') ?? '');
+        return $this->fromSeconds($this->seconds($response->header('Retry-After')));
+    }
+
+    /** Неизвестное значение отличается от корректного нуля. */
+    public function seconds(?string $header, ?int $now = null): ?int
+    {
+        $value = trim($header ?? '');
         if (preg_match('/^[0-9]+$/D', $value)) {
             $digits = ltrim($value, '0');
             $maximum = (string) intdiv(PHP_INT_MAX, 1_000_000);
             if (strlen($digits) > strlen($maximum) || (strlen($digits) === strlen($maximum) && strcmp($digits, $maximum) > 0)) {
-                return 0;
+                return null;
             }
-            return $this->fromSeconds((int) $digits);
+            return (int) $digits;
         }
         foreach (['D, d M Y H:i:s \G\M\T', 'l, d-M-y H:i:s \G\M\T', 'D M j H:i:s Y'] as $format) {
             $date = DateTimeImmutable::createFromFormat('!' . $format, $value, new DateTimeZone('GMT'));
             if ($date !== false && DateTimeImmutable::getLastErrors() === false) {
-                return $this->fromSeconds(max(0, $date->getTimestamp() - ($this->now)()));
+                $seconds = max(0, $date->getTimestamp() - ($now ?? ($this->now)()));
+                return $seconds <= intdiv(PHP_INT_MAX, 1_000_000) ? $seconds : null;
             }
         }
-        return 0;
+        return null;
     }
 
     public function fromSeconds(?int $seconds): int

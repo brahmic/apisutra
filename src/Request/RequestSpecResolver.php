@@ -24,6 +24,7 @@ use Brahmic\ApiSutra\Attributes\Request\SkipCredentialsEnrichment;
 use Brahmic\ApiSutra\Attributes\Response\ContinuationResult;
 use Brahmic\ApiSutra\Attributes\Response\Download;
 use Brahmic\ApiSutra\Attributes\Response\Returns;
+use Brahmic\ApiSutra\Attributes\Response\RawResponse;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use ReflectionAttribute;
@@ -103,6 +104,7 @@ final class RequestSpecResolver
             hasNoAuth: $this->hasAttribute($attributes, NoAuth::class),
             skipCredentialsEnrichment: $this->hasAttribute($attributes, SkipCredentialsEnrichment::class),
             hasDownload: $this->hasAttribute($attributes, Download::class),
+            hasRawResponse: $this->hasAttribute($attributes, RawResponse::class),
         );
 
         if ($this->canUseCache()) {

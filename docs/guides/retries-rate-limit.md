@@ -68,8 +68,57 @@ Runtime‑override: `withRetry()` и `withoutRetry()`.
 Включайте retry, когда контракт API подтверждает безопасность повтора: операция
 идемпотентна или провайдер поддерживает ключ идемпотентности для неё.
 SDK не проверяет гарантии внешнего API автоматически. `#[Idempotent]` и наличие
-заголовка Idempotency-Key не являются разрешением повтора; безопасность явно
-объявляется через `safe` запроса или `safeMethods` клиента.
+заголовка Idempotency-Key не являются разрешением повтора; безопасность объявляется
+через `safe`, условную политику запроса или `safeMethods` клиента.
+
+### Условная безопасность запроса
+
+Необязательный RetrySafetyPolicyInterface позволяет разрешить POST только после
+определённого ответа, сохраняя настроенный сетевой retry GET на том же клиенте:
+
+```php
+use Brahmic\ApiSutra\Attributes\Behavior\Retry;
+use Brahmic\ApiSutra\Attributes\Http\Post;
+use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetrySafetyPolicyInterface;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Enums\Http\HttpMethod;
+use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Throwable;
+
+#[Post('/messages')]
+#[Retry(attempts: 3)]
+final class SendMessageRequest extends AbstractRequest implements RetrySafetyPolicyInterface
+{
+    public function isRetrySafe(HttpMethod $method, ?ProviderResponse $response, ?Throwable $exception): ?bool
+    {
+        return $exception === null && $response?->status === 429;
+    }
+}
+```
+
+Применяйте такую политику, только если контракт провайдера подтверждает безопасность
+повтора после 429. Для иных случаев метод может проверить бизнес-код ответа.
+При сетевом сбое передаётся exception и response=null, предыдущий ответ не подставляется.
+После исключения hook, получившего ответ, могут присутствовать оба значения.
+
+Приоритет: явный `#[Retry(safe: true/false)]` → результат `isRetrySafe()` →
+`RetryConfig::safeMethods`. `null` из политики означает fallback. Поэтому в примере
+нет `safe: true`: он перекрыл бы условную проверку. Без интерфейса поведение прежнее;
+не нужно менять ClientConfig или обязательный RequestInterface. Общую политику
+SDK провайдера можно реализовать в его базовом классе запросов.
+
+Метод вычисляет safety без I/O и может вызываться повторно при подготовке auth retry.
+Он не инициирует retry: сначала нужна причина повторить запрос, затем учитываются
+safety, attempts, body replay и budget. `true` не обходит остальные ограничения.
+Проверка распространяется и на auth retry. Исключение из политики завершает вызов
+с `execution_error`, reason `retry_safety_check_failed`; исходное исключение
+сохраняется в previous, его сообщение не подставляется в публичное сообщение ошибки.
+
+`Retry-After` разбирается одинаково для встроенного ожидания и HTTP
+`RateLimitException::retryAfter`: поддерживаются секунды и HTTP-date. В исключении
+значение выражено в секундах; отсутствующее/невалидное/отрицательное/слишком большое
+значение даёт null, корректный ноль или прошедшая дата — 0. Встроенное ожидание
+использует ms для прежних статусов 429/503 и учитывает общий бюджет.
 
 `attempts` включает первую основную HTTP-попытку. `#[Retry(enabled: false)]` и
 `withoutRetry()` отключают общие повторы; runtime имеет приоритет над атрибутом.

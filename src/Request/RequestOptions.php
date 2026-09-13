@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Request;
 
+use Brahmic\ApiSutra\Timing\ExecutionDeadline;
 use Brahmic\ApiSutra\Config\RateLimitConfig;
 use Brahmic\ApiSutra\Enums\Auth\AuthOverride;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
@@ -67,6 +68,8 @@ final readonly class RequestOptions
         private ?string $urlOverride = null,
         private ?bool $requestEnrichersEnabledOverride = null,
         private ?DownloadTarget $downloadTarget = null,
+        private ?ExecutionDeadline $deadline = null,
+        private ?bool $rawResponseOverride = null,
     ) {
         if ($cacheScopeOverride !== null && trim($cacheScopeOverride) === '') {
             throw new ConfigurationException('Пространство кеша не должно быть пустым');
@@ -139,7 +142,36 @@ final readonly class RequestOptions
             urlOverride: array_key_exists('urlOverride', $overrides) ? $overrides['urlOverride'] : $this->urlOverride,
             requestEnrichersEnabledOverride: $overrides['requestEnrichersEnabledOverride'] ?? $this->requestEnrichersEnabledOverride,
             downloadTarget: array_key_exists('downloadTarget', $overrides) ? $overrides['downloadTarget'] : $this->downloadTarget,
+            deadline: array_key_exists('deadline', $overrides) ? $overrides['deadline'] : $this->deadline,
+            rawResponseOverride: array_key_exists('rawResponseOverride', $overrides)
+                ? $overrides['rawResponseOverride'] : $this->rawResponseOverride,
         );
+    }
+
+    public function withDeadline(ExecutionDeadline $deadline): self
+    {
+        return $this->with(['deadline' => $deadline]);
+    }
+
+    public function withoutDeadline(): self
+    {
+        return $this->with(['deadline' => null]);
+    }
+
+    public function getDeadline(): ?ExecutionDeadline
+    {
+        return $this->deadline;
+    }
+
+    /** Null возвращает наследование атрибута, false явно выбирает Auto. */
+    public function withRawResponse(?bool $enabled = true): self
+    {
+        return $this->with(['rawResponseOverride' => $enabled]);
+    }
+
+    public function getRawResponseOverride(): ?bool
+    {
+        return $this->rawResponseOverride;
     }
 
     /**

@@ -5,6 +5,7 @@
 ## Когда использовать
 - **Returns** — когда нужен DTO‑ответ или unwrap вложенных данных.
 - **Download** — когда ответом является файл.
+- **RawResponse** — когда нужна строка тела без декодирования.
 
 ## Returns
 **Target:** class  
@@ -68,6 +69,47 @@ final class GetActiveOrder extends AbstractRequest {}
 уберите unwrap для корневого DTO или явно нормализуйте варианты ответа через
 `BeforeHydrate`/ResponseHandler. У `ContinuationResult::unwrap` и pagination itemsPath
 отдельные правила; строгий контракт здесь относится к `Returns`.
+
+## RawResponse
+
+**Target:** class. Параметров нет. Опционален; настройки ClientConfig не нужны.
+
+```php
+use Brahmic\ApiSutra\Attributes\Http\Get;
+use Brahmic\ApiSutra\Attributes\Response\RawResponse;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+
+#[Get('/export')]
+#[RawResponse]
+final class ExportRequest extends AbstractRequest
+{
+}
+
+$result = $client->send(new ExportRequest())->raw();
+$text = $result->data;
+```
+
+Для одного исполнения: `$request->withRawResponse()->send()`. Приоритет:
+runtime → атрибут → стандартный Auto. `withRawResponse(false)` выбирает Auto,
+`withRawResponse(null)` снимает override и возвращает наследование атрибута.
+Цепочка не меняет исходный запрос.
+
+Raw возвращает body, предоставленное транспортом, без JSON и response format handlers:
+`'null'` остаётся строкой, пустое тело и 204 дают `''`. Режим полезен при ошибочном
+Content-Type или намеренном чтении JSON как строки. В Auto неизвестный явно указанный
+не-JSON формат без DTO и так возвращается строкой; подробности —
+[контракт ответа](../client-config/responses-errors.md#успешный-ответ-без-dto).
+
+Raw несовместим с Returns/response DTO, пагинацией и download: итоговое сочетание
+отклоняется как `configuration_error` до HTTP. Для файлов используйте Download.
+BeforeHydrate для строки пропускается; остальные hooks сохраняются. HTTP-ошибка
+не становится успехом: например, 429 остаётся ошибкой независимо от Raw.
+
+Для ручной диагностики исходное тело уже есть в `$result->response?->body`, даже
+при ошибке декодирования в result-first режиме. `send()->raw()` получает весь
+ExecutionResult, а не включает RawResponse. При `throwOnErrors` исключение может
+прервать получение результата. HTTP cache хранит исходный response: Auto и Raw
+используют один ключ и не требуют префиксов или другого кеша.
 
 ## Download
 **Target:** class  

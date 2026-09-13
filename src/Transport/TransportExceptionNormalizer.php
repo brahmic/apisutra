@@ -9,6 +9,7 @@ use Brahmic\ApiSutra\Exceptions\Transport\InvalidRequestException;
 use Brahmic\ApiSutra\Exceptions\Transport\TimeoutException;
 use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Client\RequestExceptionInterface;
@@ -19,11 +20,20 @@ final class TransportExceptionNormalizer
 {
     public static function normalize(Throwable $exception): Throwable
     {
-        if ($exception instanceof NetworkExceptionInterface) {
-            // Guzzle опционален. Только подтверждённый код cURL, без анализа текста.
-            if ($exception instanceof ConnectException && ($exception->getHandlerContext()['errno'] ?? null) === 28) {
+        if ($exception instanceof TransportException) {
+            return $exception;
+        }
+        // Guzzle может представить сетевую ошибку отправки/чтения как PSR request exception.
+        if ($exception instanceof RequestException || $exception instanceof ConnectException) {
+            $errno = $exception->getHandlerContext()['errno'] ?? null;
+            if ($errno === 28) {
                 return new TimeoutException($exception->getMessage(), (int) $exception->getCode(), $exception);
             }
+            if (in_array($errno, [52, 55, 56], true)) {
+                return new ConnectionException($exception->getMessage(), (int) $exception->getCode(), $exception);
+            }
+        }
+        if ($exception instanceof NetworkExceptionInterface) {
             return new ConnectionException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
         if ($exception instanceof RequestExceptionInterface) {

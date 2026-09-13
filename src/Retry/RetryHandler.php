@@ -24,6 +24,7 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Closure;
+use Brahmic\ApiSutra\Enums\Http\TransmissionState;
 use Override;
 
 final class RetryHandler implements RetryHandlerInterface, DestinationAwareInterface, FileStreamingInterface
@@ -88,6 +89,7 @@ final class RetryHandler implements RetryHandlerInterface, DestinationAwareInter
             $context->preparedRequest = $request;
             TransportCapabilities::check($this->transport, $request->transportOptions);
         }
+        $context->transmissionState = TransmissionState::Unknown;
         return $this->transport->send($request);
     }
 

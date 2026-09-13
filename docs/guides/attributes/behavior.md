@@ -43,7 +43,7 @@ final class CachedRequest extends AbstractRequest {}
 - `backoff: BackoffStrategy = Exponential`  
 - `jitter: bool = true`  
 - `retryOn: array = [429, 500, 502, 503, 504]`  
-- `safe: ?bool = null` — разрешение безопасности операции; null наследует конфиг клиента
+- `safe: ?bool = null` — разрешение безопасности операции; null оставляет решение условной политике запроса, затем конфигу клиента
 
 Пример:
 ```php
@@ -55,7 +55,8 @@ final class RetryRequest extends AbstractRequest {}
 ```
 
 `safe` необязателен: его отсутствие и явный null равнозначны. true/false перекрывают
-safeMethods клиента; true не обходит enabled=false, лимит попыток или неповторяемое тело.
+RetrySafetyPolicyInterface запроса и safeMethods клиента; true не обходит enabled=false,
+лимит попыток или неповторяемое тело. Без интерфейса null наследует конфиг клиента.
 `enabled: false` отключает общие повторы, runtime-настройка имеет приоритет.
 Подробнее: [политика безопасности](../retries-rate-limit.md#безопасность-повторов-без-обязательной-настройки).
 

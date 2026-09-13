@@ -112,7 +112,7 @@ final class Pipeline implements PipelineExecutorInterface
         $this->requestPreparer = new RequestPreparer($this->config);
         $this->stageProcessor = new StageProcessor($this->attributes);
         $this->hookRunner = new HookRunner($this->hooks);
-        $this->errorPolicy = new ErrorPolicy($this->client);
+        $this->errorPolicy = new ErrorPolicy($this->client, $this->clock);
         $this->responseHydrator = new ResponseHydrator($this->config, $this->hydrator, $this->extensions);
         $this->resultFactory = new ResultFactory($this->errorPolicy);
         $this->auditLogger = new AuditLogger($this->config);
@@ -217,8 +217,9 @@ final class Pipeline implements PipelineExecutorInterface
                 options: $options,
                 paginationOptions: $paginationOptions,
             );
-            $context->budget = new ExecutionBudget($clock, $this->config->retry?->totalTimeoutMs, $parent?->budget, $startedMs);
+            $context->budget = new ExecutionBudget($clock, $this->config->retry?->totalTimeoutMs, $parent?->budget, $startedMs, $options?->getDeadline());
             $context->budget->check('started');
+            $this->responseHydrator->assertResponseModeSupported($request, $context);
             $startTime = $this->contextFactory->start($request, $context, $audit);
             $context->budget->check('started');
 
@@ -231,11 +232,15 @@ final class Pipeline implements PipelineExecutorInterface
             if (!$exception instanceof ExecutionDeadlineException && $context?->budget?->remainingMs() === 0) {
                 $exception = new ExecutionDeadlineException('execution', $exception);
             }
-            if ($exception instanceof ExecutionDeadlineException && $exception->response === null) {
-                $response = $context->response ?? $context?->lastResponse;
-                if ($response !== null) {
-                    $exception = new ExecutionDeadlineException($exception->stage, $exception->getPrevious(), $response);
-                }
+            if ($exception instanceof ExecutionDeadlineException) {
+                $exception = new ExecutionDeadlineException(
+                    $exception->stage,
+                    $exception->getPrevious(),
+                    $exception->response ?? $context->response ?? $context?->lastResponse,
+                    $exception->bytesWritten,
+                    $exception->partial,
+                    $context->transmissionState ?? $exception->transmissionState,
+                );
             }
             if ($context !== null) {
                 $context->failureException = $exception;

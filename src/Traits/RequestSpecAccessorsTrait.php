@@ -126,6 +126,11 @@ trait RequestSpecAccessorsTrait
         return $this->spec()->timeout;
     }
 
+    public function hasRawResponse(): bool
+    {
+        return $this->spec()->hasRawResponse;
+    }
+
     public function getIdempotentAttribute(): ?Idempotent
     {
         return $this->spec()->idempotent;

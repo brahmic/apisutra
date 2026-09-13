@@ -16,16 +16,24 @@ final readonly class ExecutionBudget
     public ?int $deadlineMs;
     public ClockInterface $clock;
 
-    public function __construct(ClockInterface $clock, ?int $limitMs = null, ?self $parent = null, ?int $startedMs = null)
-    {
+    public function __construct(
+        ClockInterface $clock,
+        ?int $limitMs = null,
+        ?self $parent = null,
+        ?int $startedMs = null,
+        ?ExecutionDeadline $deadline = null,
+    ) {
         $this->clock = $parent->clock ?? $clock;
+        $deadline?->assertCompatible($this->clock);
         $start = $startedMs ?? $this->clock->monotonicMs();
         if ($limitMs !== null && ($limitMs < 1 || $limitMs > PHP_INT_MAX - $start)) {
             throw new ConfigurationException('Недопустимый общий бюджет выполнения');
         }
         $own = $limitMs === null ? null : $start + $limitMs;
-        $this->deadlineMs = $parent?->deadlineMs === null ? $own
+        $effective = $parent?->deadlineMs === null ? $own
             : ($own === null ? $parent->deadlineMs : min($own, $parent->deadlineMs));
+        $this->deadlineMs = $deadline === null ? $effective
+            : ($effective === null ? $deadline->deadlineMs : min($effective, $deadline->deadlineMs));
     }
 
     public function remainingMs(): ?int

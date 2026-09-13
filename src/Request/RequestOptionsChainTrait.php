@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Request;
 
+use Brahmic\ApiSutra\Timing\ExecutionDeadline;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestExecutionInterface;
 use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
@@ -46,6 +47,21 @@ trait RequestOptionsChainTrait
     public function withOptions(RequestOptions $options): RequestExecutionInterface
     {
         return $this->executionFromOptions($options);
+    }
+
+    public function withDeadline(ExecutionDeadline $deadline): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withDeadline($deadline));
+    }
+
+    public function withoutDeadline(): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withoutDeadline());
+    }
+
+    public function withRawResponse(?bool $enabled = true): RequestExecutionInterface
+    {
+        return $this->executionFromOptions($this->currentOptions()->withRawResponse($enabled));
     }
 
     /**

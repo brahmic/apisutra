@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Pipeline\Transport;
 
 use Brahmic\ApiSutra\Config\ClientConfig;
+use Brahmic\ApiSutra\Contracts\Interfaces\Concurrency\RetrySafetyPolicyInterface;
+use Brahmic\ApiSutra\Exceptions\Retry\RetrySafetyException;
 use Brahmic\ApiSutra\Config\RetryConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Core\AbstractClient;
@@ -18,6 +20,7 @@ use Brahmic\ApiSutra\Exceptions\Transport\TransportException;
 use Brahmic\ApiSutra\Pipeline\Error\ErrorPolicy;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Throwable;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
 
 final readonly class RetryDecisionMaker
 {
@@ -33,6 +36,7 @@ final readonly class RetryDecisionMaker
         ProviderResponse $response,
         int $attempt,
         ?RetryConfig $retryConfig,
+        ?ClockInterface $clock = null,
     ): bool {
         if ($retryConfig === null) {
             return false;
@@ -46,7 +50,7 @@ final readonly class RetryDecisionMaker
             return true;
         }
 
-        $exception = $this->errorPolicy->getRequestExceptionInternal($request, $response);
+        $exception = $this->errorPolicy->getRequestExceptionInternal($request, $response, $clock);
         if ($exception instanceof RetryableException) {
             return true;
         }
@@ -54,14 +58,31 @@ final readonly class RetryDecisionMaker
         return in_array($response->status, $retryConfig->retryOn, true);
     }
 
-    public function isSafe(RequestInterface $request, HttpMethod $method): bool
-    {
+    public function isSafe(
+        RequestInterface $request,
+        HttpMethod $method,
+        ?ProviderResponse $response = null,
+        ?Throwable $exception = null,
+    ): bool {
         $safe = $request instanceof AbstractRequest ? $request->getRetryAttribute()?->safe : null;
+        if ($safe !== null) {
+            return $safe;
+        }
+        if ($request instanceof RetrySafetyPolicyInterface) {
+            try {
+                $safe = $request->isRetrySafe($method, $response, $exception);
+            } catch (Throwable $failure) {
+                throw new RetrySafetyException($failure);
+            }
+        }
         return $safe ?? in_array($method, ($this->config->retry ?? new RetryConfig())->safeMethods, true);
     }
 
     public function isRetryException(Throwable $exception, RetryConfig $retryConfig): bool
     {
+        if ($exception instanceof RetrySafetyException) {
+            return false;
+        }
         if ($exception instanceof FileTransferException || $exception instanceof AuthLockBackendException || $exception instanceof AuthRefreshLockTimeoutException) {
             return false;
         }

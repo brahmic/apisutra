@@ -23,12 +23,19 @@ use Brahmic\ApiSutra\Exceptions\Request\UnauthorizedException;
 use Brahmic\ApiSutra\Exceptions\Request\UnprocessableEntityException;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Throwable;
+use Brahmic\ApiSutra\Contracts\Interfaces\Timing\ClockInterface;
+use Brahmic\ApiSutra\Timing\SystemClock;
+use Brahmic\ApiSutra\Retry\RetryAfterDelay;
 
 final readonly class ErrorPolicy
 {
+    private RetryAfterDelay $retryAfterDelay;
+
     public function __construct(
         private ?AbstractClient $client = null,
+        ClockInterface $clock = new SystemClock(),
     ) {
+        $this->retryAfterDelay = new RetryAfterDelay($clock->unixTime(...));
     }
 
     public function hasRequestFailed(RequestInterface $request, ?ProviderResponse $response): bool
@@ -58,7 +65,7 @@ final readonly class ErrorPolicy
         return false;
     }
 
-    public function getRequestExceptionInternal(RequestInterface $request, ProviderResponse $response): ?Throwable
+    public function getRequestExceptionInternal(RequestInterface $request, ProviderResponse $response, ?ClockInterface $clock = null): ?Throwable
     {
         if ($request instanceof AbstractRequest) {
             $custom = $request->getRequestExceptionInternal($response);
@@ -74,10 +81,10 @@ final readonly class ErrorPolicy
             }
         }
 
-        return $this->mapException($response);
+        return $this->mapException($response, $clock);
     }
 
-    private function mapException(ProviderResponse $response): ?RequestException
+    private function mapException(ProviderResponse $response, ?ClockInterface $clock): ?RequestException
     {
         $message = $response->errorMessage();
 
@@ -91,7 +98,7 @@ final readonly class ErrorPolicy
             $response->status === 429 => new RateLimitException(
                 $message,
                 $response,
-                $this->retryAfter($response),
+                $this->retryAfterDelay->seconds($response->header('Retry-After'), $clock?->unixTime()),
             ),
             $response->status === 500 => new InternalServerException($message, $response),
             $response->status === 502 => new BadGatewayException($message, $response),
@@ -101,11 +108,5 @@ final readonly class ErrorPolicy
             $response->status >= 500 => new ServerException($message, $response),
             default => null,
         };
-    }
-
-    private function retryAfter(ProviderResponse $response): ?int
-    {
-        $header = $response->header('Retry-After');
-        return $header !== null ? (int) $header : null;
     }
 }

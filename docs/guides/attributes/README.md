@@ -8,7 +8,7 @@
 - [Behavior](./behavior.md) — когда требуется изменить cache/retry/timeout/rate‑limit.
 - [Data Transfer](./data-transfer.md) — когда нужно замаппить и провалидировать DTO, задать `Map`/`From`/`To`, `DefaultValue` и использовать built-in auto-cast.
 - [Hooks](./hooks.md) — когда нужно вмешаться в жизненный цикл запроса.
-- [Response](./response.md) — когда нужно задать тип ответа или режим download.
+- [Response](./response.md) — когда нужно задать DTO, строку RawResponse или режим download.
 
 ## Правила
 - Полный перечень атрибутов находится здесь.

@@ -103,7 +103,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 ## Текущие материалы
 
 - [Транспорт, формат ответа, бюджет и retry — аудит пяти замечаний](audit/aud-005-transport-response-retry/aud-005-readme.md)
-- [Исправления транспорта, raw и условный retry — план на согласовании](current/pln-026-transport-response-retry/pln-026-readme.md)
+- [Транспорт, raw, внешний дедлайн и условный retry — завершено](completed/pln-026-transport-response-retry/pln-026-readme.md)
 - [Совместные квоты и атомарный Redis/phpredis backend — завершено](completed/pln-025-joint-rate-limit-quotas/pln-025-readme.md)
 - [Настройки, допуск и сборка: проверка, проекты и вопросы](audit/aud-004-policies-admission-assembly/aud-004-readme.md)
 - [Внутренняя сборка клиента — отложено до востребования пользователем](backlog/pln-022-client-assembly.md)

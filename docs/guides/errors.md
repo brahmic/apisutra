@@ -196,6 +196,34 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 | Конфигурация | `configuration_error` |
 | Неизвестное исключение исполнения | `execution_error` |
 
+Подтверждённые Guzzle/cURL ошибки отправки/чтения 55/56 и пустого ответа 52
+классифицируются как `connection_failed`, код 28 — как `timeout`.
+Сохраняется original exception в previous; текст ошибки не используется для
+угадывания сетевого кода. PSR-18 путь не требует Guzzle Client.
+
+### Состояние отправки
+
+`TransportException::transmissionState` — enum `TransmissionState` из
+`Enums\Http`, относящийся к попытке. По умолчанию значение `Unknown` (`unknown`):
+исход отправки неизвестен. `NotSent` (`not_sent`) допустим только при доказательстве,
+что запрос не был отправлен. Собственный транспорт отвечает за это утверждение.
+Timeout, пустой ответ и обрыв чтения/записи не доказывают отсутствие отправки.
+Generic PSR network failure и один DNS errno также не дают такой гарантии.
+
+Для транспортного сбоя или локального deadline смотрите
+`$result->errors->first()?->context['transmissionState']`:
+здесь состояние накоплено по всем попыткам текущего запроса. Неопределённая ранняя
+попытка не исчезает после более позднего not_sent. Deadline до первой отправки
+даёт not_sent; после возможной отправки — unknown. Auth и дочерние запросы имеют
+свои состояния, это не статус всей бизнес-операции приложения. В исключении
+ExecutionDeadlineException pipeline сохраняет накопленное состояние текущего запроса.
+
+Диагностика не разрешает автоматический POST retry и не доказывает, выполнил ли
+сервер операцию. После потери ответа приложение может использовать предусмотренную
+провайдером проверку результата или ключ идемпотентности.
+
+### Декодирование ответа
+
 `SerializationException`, `ResponseDecodingException` и `HydrationException` находятся
 в `Exceptions\Serialization`. Ошибки стандартного JSON-кодека сохраняют
 `JsonException` в `previous`; HTTP-ответ ошибки разбора остаётся в `ExecutionResult::response`.
@@ -208,7 +236,8 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 для пользовательских обработчиков HTTP-ошибок обычных строковых ответов.
 Потоковый download требует явного чтения `ProviderResponse.stream`: его `json()`
 и `jsonStrict()` дают `configuration_error`. Обработка расширений вне download
-сохраняется. Подробнее — [файловые ответы](files.md).
+сохраняется в Auto; явный [RawResponse](attributes/response.md#rawresponse)
+обходит обработчики формата и JSON. Подробнее — [файловые ответы](files.md).
 
 ### Ошибки структуры и диапазона чисел
 

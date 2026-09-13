@@ -45,7 +45,7 @@ final readonly class ResultFactory
             requestClass: $request::class,
         );
 
-        $exception = $response ? $this->errorPolicy->getRequestExceptionInternal($request, $response) : null;
+        $exception = $response ? $this->errorPolicy->getRequestExceptionInternal($request, $response, $context->budget?->clock) : null;
 
         return new ExecutionResult(
             redaction: $context->config->redaction,

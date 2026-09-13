@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Exceptions\Transport;
 
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
+use Brahmic\ApiSutra\Enums\Http\TransmissionState;
 use Throwable;
 
 final class ExecutionDeadlineException extends TimeoutException
@@ -15,7 +16,8 @@ final class ExecutionDeadlineException extends TimeoutException
         public readonly ?ProviderResponse $response = null,
         public readonly ?int $bytesWritten = null,
         public readonly bool $partial = false,
+        TransmissionState $transmissionState = TransmissionState::Unknown,
     ) {
-        parent::__construct('Исчерпан общий бюджет выполнения: ' . $stage, 0, $previous);
+        parent::__construct('Исчерпан общий бюджет выполнения: ' . $stage, 0, $previous, $transmissionState);
     }
 }

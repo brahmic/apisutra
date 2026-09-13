@@ -42,8 +42,10 @@ $config = new ClientConfig(
 ## Переопределение на запросе
 Используйте `#[Retry]` или runtime‑опции (`withRetry()`/`withoutRetry()`).
 
-`#[Retry(safe: true/false)]` переопределяет безопасность операции относительно
-safeMethods клиента. Отсутствующий safe и safe: null наследуют конфиг. Runtime
+`#[Retry(safe: true/false)]` переопределяет условную политику запроса и
+safeMethods клиента. Отсутствующий safe и safe: null обращаются к необязательному
+[RetrySafetyPolicyInterface](../retries-rate-limit.md#условная-безопасность-запроса),
+затем наследуют конфиг. Runtime
 withRetry меняет число попыток, сохраняя остальные настройки; безопасность POST/PATCH
 его вызовом не подтверждается. `#[Retry(enabled: false)]` отключает общие повторы,
 runtime может явно переопределить это значение.

@@ -1,0 +1,79 @@
+Redis test project: apisutra-redis-1789299219-78430
+ Network apisutra-redis-1789299219-78430_default Creating
+ Network apisutra-redis-1789299219-78430_default Created
+ Container apisutra-redis-1789299219-78430-redis-1 Creating
+ Container apisutra-redis-1789299219-78430-redis-1 Created
+ Container apisutra-redis-1789299219-78430-redis-1 Starting
+ Container apisutra-redis-1789299219-78430-redis-1 Started
+ Image apisutra-redis-tests:php84 Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 615B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 511B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/php:8.4-cli
+#3 DONE 2.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [1/3] FROM docker.io/library/php:8.4-cli@sha256:a545b9041fb0e378cb597b4d0509f77c6a4d996dd485763af92e5b7e59c469cc
+#5 resolve docker.io/library/php:8.4-cli@sha256:a545b9041fb0e378cb597b4d0509f77c6a4d996dd485763af92e5b7e59c469cc done
+#5 DONE 0.0s
+
+#6 [2/3] RUN apt-get update && apt-get install -y --no-install-recommends libonig-dev libxml2-dev     && for extension in mbstring dom xml xmlwriter; do         php -r "exit(extension_loaded('$extension') ? 0 : 1);" || docker-php-ext-install "$extension";     done     && pecl install redis-6.2.0     && docker-php-ext-enable redis     && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [3/3] WORKDIR /app
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:c59fc573a4f6aba60fbd7e17c422d8625baa6d01b1706feebbedfcaffc48d79e done
+#8 exporting config sha256:afdf6784a9b9a948b96e6a539128cec2f0635371caf58145ce5cd27064feb411 done
+#8 exporting attestation manifest sha256:8e60527e9dd7b3e8a69d95d88333dd1ea74b99e16c7aadab7c9425db3d018191 done
+#8 exporting manifest list sha256:c0b1a1fe69b4db3d626a6766995f9f6580362167b38edc2c91afa1dc6cdc91fa done
+#8 naming to docker.io/library/apisutra-redis-tests:php84 done
+#8 unpacking to docker.io/library/apisutra-redis-tests:php84 done
+#8 DONE 0.1s
+
+#9 resolving provenance for metadata file
+#9 DONE 0.0s
+ Image apisutra-redis-tests:php84 Built
+ Container apisutra-redis-1789299219-78430-redis-1 Waiting
+ Container apisutra-redis-1789299219-78430-redis-1 Healthy
+ Container apisutra-redis-1789299219-78430-tests-run-7d61ef715ff3 Creating
+ Container apisutra-redis-1789299219-78430-tests-run-7d61ef715ff3 Created
+
+   PASS  Tests\Integration\Redis\RedisRateLimitTest
+  ✓ it выдаёт ровно один общий слот восьми отдельным workers             0.05s
+  ✓ it операции одновременно соблюдают общий и собственные пределы       0.05s
+  ✓ it не расходует свободную квоту при deny, дедуплицирует ID и разделяет scope
+  ✓ it новое окно после истечения снова общее для workers                0.07s
+  ✓ it восстанавливает NOSCRIPT и не выдаёт двойного разрешения
+  ✓ it сохраняет точные большие числа без потери JSON precision
+  ✓ it не сбрасывает конфликтующее определение и не пишет вторую квоту
+  ✓ it некорректное состояние и wrong type не превращаются в новое окно with ('broken')
+  ✓ it некорректное состояние и wrong type не превращаются в новое окно with ('list')
+  ✓ it некорректное состояние и wrong type не превращаются в новое окно with ('v1|1|60000|NaN|1')
+  ✓ it проверяет ошибку до MSET и после MSET настоящими ACL with ('mset', false)
+  ✓ it проверяет ошибку до MSET и после MSET настоящими ACL with ('pexpireat', true)
+  ✓ it OOM не допускает allow или fallback
+  ✓ it потеря ответа после записи не повторяет acquire и не отправляет…  0.04s
+  ✓ it поддерживает prefix, отключает retry и восстанавливает read timeout
+  ✓ it отклоняет serializer и закрытое соединение не заменяет памятью
+  ✓ it применяет сетевой timeout и общий deadline до HTTP                0.28s
+
+  Tests:    17 passed (92 assertions)
+  Duration: 0.62s
+
+ Container apisutra-redis-1789299219-78430-redis-1 Stopping
+ Container apisutra-redis-1789299219-78430-redis-1 Stopped
+ Container apisutra-redis-1789299219-78430-redis-1 Removing
+ Container apisutra-redis-1789299219-78430-redis-1 Removed
+ Network apisutra-redis-1789299219-78430_default Removing
+ Network apisutra-redis-1789299219-78430_default Removed

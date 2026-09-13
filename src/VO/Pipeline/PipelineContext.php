@@ -9,6 +9,7 @@ use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
+use Brahmic\ApiSutra\Enums\Http\TransmissionState;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Pipeline\Cache\CacheExecutionState;
 use Brahmic\ApiSutra\Request\PaginationOptions;
@@ -29,6 +30,8 @@ class PipelineContext
     public ?string $retryRefusalReason = null;
     public ?ExecutionBudget $budget = null;
     public ?ProviderResponse $lastResponse = null;
+    /** Накопленный исход всех отправок этого запроса, без auth и дочерних запросов. */
+    public TransmissionState $transmissionState = TransmissionState::NotSent;
 
     public function __construct(
         public readonly RequestInterface $request,

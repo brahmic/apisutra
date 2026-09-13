@@ -214,9 +214,15 @@ $result = $request
 ```
 Ещё примеры: `withRetry()`, `withoutCache()`, `withRateLimit()`, `withDelay()`, `withTraceId()`.
 
+`withDeadline($deadline)` / `withoutDeadline()` применяют или снимают
+[общий внешний срок](client-config/timeouts-delay.md#общий-дедлайн-нескольких-вызовов).
+`withRawResponse()` выбирает [строку ответа без декодирования](attributes/response.md#rawresponse).
+Все эти опции относятся к новому исполнению, не мутируя исходный request.
+
 `withRetry(attempts)` сохраняет остальные параметры повторов и не подтверждает
 безопасность POST/PATCH. Она определяется конфигом клиента и необязательным
-`#[Retry(safe: true/false)]`; неуказанный safe и null равнозначны. Подробнее:
+`#[Retry(safe: true/false)]` и опциональным RetrySafetyPolicyInterface;
+неуказанный safe и null равнозначны. Подробнее:
 [безопасность повторов](retries-rate-limit.md#безопасность-повторов-без-обязательной-настройки).
 Для credentials enrichment см. блок выше.
 

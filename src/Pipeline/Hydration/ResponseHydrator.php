@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Pipeline\Hydration;
 
+use Brahmic\ApiSutra\Exceptions\Serialization\ResponseDecodingException;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\PaginationConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
@@ -42,6 +43,12 @@ final readonly class ResponseHydrator
 
     public function decodeResponse(RequestInterface $request, PipelineContext $context): DecodedResponse
     {
+        if ($this->isRawResponse($request, $context)) {
+            if ($context->response?->stream !== null) {
+                throw new ConfigurationException('RawResponse не поддерживает потоковые ответы');
+            }
+            return new DecodedResponse($context->response->body ?? '');
+        }
         if ($this->isDownloadRequest($request)) {
             return new DecodedResponse([]);
         }
@@ -61,6 +68,9 @@ final readonly class ResponseHydrator
         mixed $data,
         ?DecodedResponse $decoded = null,
     ): mixed {
+        if ($this->isRawResponse($request, $context)) {
+            return $data;
+        }
         if ($this->isDownloadRequest($request)) {
             return $this->makeFileResponse($context->response);
         }
@@ -146,6 +156,27 @@ final readonly class ResponseHydrator
         return $request instanceof AbstractRequest && $request->hasDownload();
     }
 
+    public function assertResponseModeSupported(RequestInterface $request, PipelineContext $context): void
+    {
+        if (
+            $this->isRawResponse($request, $context) && (
+            $request->getResponseType() !== null
+            || $request instanceof PaginableInterface
+            || $this->isDownloadRequest($request)
+            || $context->options?->getDownloadTarget() !== null
+            || ($request instanceof AbstractRequest && $request->getReturnsAttribute() !== null)
+            )
+        ) {
+            throw new ConfigurationException('RawResponse несовместим с DTO, пагинацией и download');
+        }
+    }
+
+    private function isRawResponse(RequestInterface $request, PipelineContext $context): bool
+    {
+        return $context->options?->getRawResponseOverride()
+            ?? ($request instanceof AbstractRequest && $request->hasRawResponse());
+    }
+
     private function decodeStandardResponse(RequestInterface $request, ?ProviderResponse $response): mixed
     {
         $requiresArray = $this->resolveDtoClass($request) !== null || $request instanceof PaginableInterface;
@@ -159,12 +190,14 @@ final readonly class ResponseHydrator
             return $requiresArray && $data === null ? [] : $data;
         }
 
-        if (!$requiresArray && $contentType === 'text/plain') {
+        if (!$requiresArray) {
             return $response->body;
         }
 
-        // Остальные форматы сохраняют прежнее поведение и могут обрабатываться расширениями.
-        return $response->json() ?? [];
+        throw new ResponseDecodingException(
+            'Формат ответа не поддерживает гидрацию DTO или пагинации',
+            reason: 'unsupported_response_content_type',
+        );
     }
 
     private function resolveDtoClass(RequestInterface $request): ?string
