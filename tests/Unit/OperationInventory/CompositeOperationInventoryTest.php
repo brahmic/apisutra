@@ -6,7 +6,7 @@ use Brahmic\ApiSutra\OperationInventory\CompositeOperationInventory;
 use Brahmic\ApiSutra\OperationInventory\OperationInventory;
 use Brahmic\ApiSutra\OperationInventory\OperationDescriptorView;
 
-function ihpohMakeView(string $requestClass, ?string $endpoint = null): OperationDescriptorView
+function apisutraMakeView(string $requestClass, ?string $endpoint = null): OperationDescriptorView
 {
     return new OperationDescriptorView(
         requestClass: $requestClass,
@@ -23,11 +23,11 @@ function ihpohMakeView(string $requestClass, ?string $endpoint = null): Operatio
 describe('CompositeOperationInventory', function () {
     it('all() конкатенирует элементы в порядке передачи без пересортировки', function () {
         $first = new OperationInventory([
-            ihpohMakeView('Z\\First'),
-            ihpohMakeView('A\\Second'),
+            apisutraMakeView('Z\\First'),
+            apisutraMakeView('A\\Second'),
         ]);
         $second = new OperationInventory([
-            ihpohMakeView('M\\Third'),
+            apisutraMakeView('M\\Third'),
         ]);
 
         $composite = new CompositeOperationInventory([$first, $second]);
@@ -37,8 +37,8 @@ describe('CompositeOperationInventory', function () {
     });
 
     it('forRequest() возвращает первое совпадение по порядку', function () {
-        $first = new OperationInventory([ihpohMakeView('Same\\Request', '/from-first')]);
-        $second = new OperationInventory([ihpohMakeView('Same\\Request', '/from-second')]);
+        $first = new OperationInventory([apisutraMakeView('Same\\Request', '/from-first')]);
+        $second = new OperationInventory([apisutraMakeView('Same\\Request', '/from-second')]);
 
         $composite = new CompositeOperationInventory([$first, $second]);
 
@@ -46,8 +46,8 @@ describe('CompositeOperationInventory', function () {
     });
 
     it('forRequest() возвращает null когда ни в одном inventory нет request', function () {
-        $first = new OperationInventory([ihpohMakeView('A')]);
-        $second = new OperationInventory([ihpohMakeView('B')]);
+        $first = new OperationInventory([apisutraMakeView('A')]);
+        $second = new OperationInventory([apisutraMakeView('B')]);
 
         $composite = new CompositeOperationInventory([$first, $second]);
 
@@ -56,11 +56,11 @@ describe('CompositeOperationInventory', function () {
 
     it('forEndpoint() конкатенирует совпадения из всех inventories', function () {
         $first = new OperationInventory([
-            ihpohMakeView('A', '/shared'),
-            ihpohMakeView('B', '/other'),
+            apisutraMakeView('A', '/shared'),
+            apisutraMakeView('B', '/other'),
         ]);
         $second = new OperationInventory([
-            ihpohMakeView('C', '/shared'),
+            apisutraMakeView('C', '/shared'),
         ]);
 
         $composite = new CompositeOperationInventory([$first, $second]);
@@ -81,8 +81,8 @@ describe('CompositeOperationInventory', function () {
     });
 
     it('inventories() отдаёт исходные per-service inventory', function () {
-        $first = new OperationInventory([ihpohMakeView('A')]);
-        $second = new OperationInventory([ihpohMakeView('B')]);
+        $first = new OperationInventory([apisutraMakeView('A')]);
+        $second = new OperationInventory([apisutraMakeView('B')]);
 
         $composite = new CompositeOperationInventory([$first, $second]);
 

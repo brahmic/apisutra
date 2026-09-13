@@ -12,7 +12,7 @@ use Brahmic\ApiSutra\Request\RequestSpecResolver;
 use Brahmic\ApiSutra\Resolver\ClassMapProvider;
 use Brahmic\ApiSutra\Resolver\RequestScanner;
 
-function ihpohBuildCatalogForWriterTest(): ResponseDtoCatalog
+function apisutraBuildCatalogForWriterTest(): ResponseDtoCatalog
 {
     $builder = new OperationInventoryBuilder(
         new RequestScanner(new ClassMapProvider()),
@@ -26,7 +26,7 @@ function ihpohBuildCatalogForWriterTest(): ResponseDtoCatalog
 describe('ResponseDtoCatalogWriter', function () {
     it('рендерит markdown через built-in exporter', function () {
         $writer = new ResponseDtoCatalogWriter([new MarkdownResponseDtoCatalogExporter()]);
-        $markdown = $writer->render(ihpohBuildCatalogForWriterTest(), 'md');
+        $markdown = $writer->render(apisutraBuildCatalogForWriterTest(), 'md');
 
         expect($markdown)->toContain('# Каталог response DTO')
             ->and($markdown)->toContain('Sync')
@@ -40,7 +40,7 @@ describe('ResponseDtoCatalogWriter', function () {
 
         $tmp = tempnam(sys_get_temp_dir(), 'apisutra-catalog-') . '.md';
         try {
-            $writer->writeTo($tmp, ihpohBuildCatalogForWriterTest());
+            $writer->writeTo($tmp, apisutraBuildCatalogForWriterTest());
 
             expect(file_exists($tmp))->toBeTrue();
             $content = (string) file_get_contents($tmp);
@@ -53,7 +53,7 @@ describe('ResponseDtoCatalogWriter', function () {
     it('бросает ConfigurationException когда format неизвестен', function () {
         $writer = new ResponseDtoCatalogWriter([new MarkdownResponseDtoCatalogExporter()]);
 
-        $writer->render(ihpohBuildCatalogForWriterTest(), 'json');
+        $writer->render(apisutraBuildCatalogForWriterTest(), 'json');
     })->throws(ConfigurationException::class);
 
     it('бросает ConfigurationException когда нет ни format, ни extension', function () {
@@ -61,7 +61,7 @@ describe('ResponseDtoCatalogWriter', function () {
 
         $tmp = tempnam(sys_get_temp_dir(), 'apisutra-catalog-noext-');
         try {
-            $writer->writeTo($tmp, ihpohBuildCatalogForWriterTest());
+            $writer->writeTo($tmp, apisutraBuildCatalogForWriterTest());
         } finally {
             @unlink($tmp);
         }
@@ -96,7 +96,7 @@ describe('ResponseDtoCatalogWriter', function () {
             $jsonExporter,
         ]);
 
-        $catalog = ihpohBuildCatalogForWriterTest();
+        $catalog = apisutraBuildCatalogForWriterTest();
         $json = $writer->render($catalog, 'json');
         $md = $writer->render($catalog, 'md');
 

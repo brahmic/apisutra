@@ -16,7 +16,7 @@ use Brahmic\ApiSutra\Tests\Stubs\CatalogMega\ServiceA\MegaServiceAClient;
 use Brahmic\ApiSutra\Tests\Stubs\CatalogMega\ServiceB\MegaServiceBClient;
 use Brahmic\ApiSutra\Transport\MockTransport;
 
-function ihpohMakeMultiServiceCatalog(): ResponseDtoCatalog
+function apisutraMakeMultiServiceCatalog(): ResponseDtoCatalog
 {
     $builder = new OperationInventoryBuilder(
         new RequestScanner(new ClassMapProvider()),
@@ -39,7 +39,7 @@ function ihpohMakeMultiServiceCatalog(): ResponseDtoCatalog
     return (new MultiServiceResponseDtoCatalogFactory())->fromMultiService($mega);
 }
 
-function ihpohMakeSingleServiceCatalog(): ResponseDtoCatalog
+function apisutraMakeSingleServiceCatalog(): ResponseDtoCatalog
 {
     $builder = new OperationInventoryBuilder(
         new RequestScanner(new ClassMapProvider()),
@@ -53,7 +53,7 @@ function ihpohMakeSingleServiceCatalog(): ResponseDtoCatalog
 describe('MarkdownResponseDtoCatalogExporter в multi-service режиме', function () {
     it('добавляет секцию "## Сервисы" со счётчиками по сервисам', function () {
         $exporter = new MarkdownResponseDtoCatalogExporter();
-        $markdown = $exporter->export(ihpohMakeMultiServiceCatalog());
+        $markdown = $exporter->export(apisutraMakeMultiServiceCatalog());
 
         expect($markdown)->toContain('## Сервисы')
             ->and($markdown)->toContain('| Service | Sync | AsyncFinal | Download |')
@@ -63,21 +63,21 @@ describe('MarkdownResponseDtoCatalogExporter в multi-service режиме', fun
 
     it('добавляет колонку Service в by-resource секции', function () {
         $exporter = new MarkdownResponseDtoCatalogExporter();
-        $markdown = $exporter->export(ihpohMakeMultiServiceCatalog());
+        $markdown = $exporter->export(apisutraMakeMultiServiceCatalog());
 
         expect($markdown)->toContain('| Service | Request | HTTP | Endpoint | Kind | Response | Title |');
     });
 
     it('добавляет колонку Service в by-DTO секции', function () {
         $exporter = new MarkdownResponseDtoCatalogExporter();
-        $markdown = $exporter->export(ihpohMakeMultiServiceCatalog());
+        $markdown = $exporter->export(apisutraMakeMultiServiceCatalog());
 
         expect($markdown)->toContain('| Service | Request | Kind | Poll request | Unwrap |');
     });
 
     it('добавляет колонку Service в Download секции', function () {
         $exporter = new MarkdownResponseDtoCatalogExporter();
-        $markdown = $exporter->export(ihpohMakeMultiServiceCatalog());
+        $markdown = $exporter->export(apisutraMakeMultiServiceCatalog());
 
         expect($markdown)->toContain('| Service | Request | HTTP | Endpoint | Response | Resource |');
     });
@@ -99,7 +99,7 @@ describe('MarkdownResponseDtoCatalogExporter в multi-service режиме', fun
         };
 
         $exporter = new MarkdownResponseDtoCatalogExporter($resolver);
-        $markdown = $exporter->export(ihpohMakeMultiServiceCatalog());
+        $markdown = $exporter->export(apisutraMakeMultiServiceCatalog());
 
         expect($markdown)->toContain('| A |')
             ->and($markdown)->toContain('| B |');
@@ -107,7 +107,7 @@ describe('MarkdownResponseDtoCatalogExporter в multi-service режиме', fun
 
     it('single-service catalog НЕ содержит секцию "## Сервисы" и НЕ имеет колонки Service', function () {
         $exporter = new MarkdownResponseDtoCatalogExporter();
-        $markdown = $exporter->export(ihpohMakeSingleServiceCatalog());
+        $markdown = $exporter->export(apisutraMakeSingleServiceCatalog());
 
         expect($markdown)->not->toContain('## Сервисы')
             ->and($markdown)->not->toContain('| Service | Request')

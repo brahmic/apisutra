@@ -23,7 +23,7 @@ use Brahmic\ApiSutra\Tests\Stubs\CatalogMega\ServiceB\Resources\Tax\Requests\Pol
 use Brahmic\ApiSutra\Transport\MockTransport;
 use Brahmic\ApiSutra\VO\Files\FileResponse;
 
-function ihpohMakeMegaClient(): CatalogMegaClient
+function apisutraMakeMegaClient(): CatalogMegaClient
 {
     $builder = new OperationInventoryBuilder(
         new RequestScanner(new ClassMapProvider()),
@@ -48,7 +48,7 @@ function ihpohMakeMegaClient(): CatalogMegaClient
 
 describe('MultiServiceResponseDtoCatalogFactory', function () {
     it('собирает каталог по всему мегаклиенту через services()', function () {
-        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(ihpohMakeMegaClient());
+        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(apisutraMakeMegaClient());
 
         $sync = $catalog->listSyncDtoClasses();
         $async = $catalog->listAsyncFinalDtoClasses();
@@ -59,7 +59,7 @@ describe('MultiServiceResponseDtoCatalogFactory', function () {
     });
 
     it('проставляет serviceClass на usage для каждого сервиса', function () {
-        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(ihpohMakeMegaClient());
+        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(apisutraMakeMegaClient());
 
         $realtyUsage = $catalog->usagesFor(MegaRealtyObjectDto::class)[0];
         $taxFinalUsage = $catalog->usagesFor(MegaTaxInfoFinalDto::class)[0];
@@ -70,7 +70,7 @@ describe('MultiServiceResponseDtoCatalogFactory', function () {
     });
 
     it('download usage помечается serviceClass и FileResponse', function () {
-        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(ihpohMakeMegaClient());
+        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(apisutraMakeMegaClient());
 
         $usages = $catalog->usagesFor(FileResponse::class);
         expect($usages)->toHaveCount(1);
@@ -82,7 +82,7 @@ describe('MultiServiceResponseDtoCatalogFactory', function () {
     });
 
     it('каталог объединяет сервисы в один listAllDtoClasses', function () {
-        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(ihpohMakeMegaClient());
+        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(apisutraMakeMegaClient());
 
         $all = $catalog->listAllDtoClasses();
 
@@ -101,7 +101,7 @@ describe('MultiServiceResponseDtoCatalogFactory', function () {
     });
 
     it('start request у async имеет sync usage с serviceClass из своего сервиса', function () {
-        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(ihpohMakeMegaClient());
+        $catalog = (new MultiServiceResponseDtoCatalogFactory())->fromMultiService(apisutraMakeMegaClient());
 
         $startUsages = $catalog->usagesFor(MegaTaxInfoStartDto::class);
         expect($startUsages)->toHaveCount(1);
@@ -114,7 +114,7 @@ describe('MultiServiceResponseDtoCatalogFactory', function () {
     });
 
     it('trait responseDtoCatalog кеширует каталог на инстансе', function () {
-        $mega = ihpohMakeMegaClient();
+        $mega = apisutraMakeMegaClient();
 
         $first = $mega->responseDtoCatalog();
         $second = $mega->responseDtoCatalog();

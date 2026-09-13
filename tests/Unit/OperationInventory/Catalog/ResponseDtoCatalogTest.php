@@ -20,7 +20,7 @@ use Brahmic\ApiSutra\Tests\Stubs\Catalog\Resources\Users\Requests\ListUsers\Cata
 use Brahmic\ApiSutra\Tests\Stubs\Catalog\Standalone\CatalogStandaloneRequest;
 use Brahmic\ApiSutra\VO\Files\FileResponse;
 
-function ihpohBuildCatalog(): ResponseDtoCatalog
+function apisutraBuildCatalog(): ResponseDtoCatalog
 {
     $builder = new OperationInventoryBuilder(
         new RequestScanner(new ClassMapProvider()),
@@ -34,21 +34,21 @@ function ihpohBuildCatalog(): ResponseDtoCatalog
 
 describe('ResponseDtoCatalog', function () {
     it('собирает sync DTO из Returns', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
 
         expect($catalog->listSyncDtoClasses())->toContain(CatalogUserDto::class)
             ->and($catalog->listSyncDtoClasses())->toContain(CatalogCreateByFioStartDto::class);
     });
 
     it('собирает async-final DTO из ContinuationResult', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
 
         expect($catalog->listAsyncFinalDtoClasses())->toContain(CatalogCreateByFioFinalDto::class)
             ->and($catalog->listAsyncFinalDtoClasses())->not->toContain(CatalogCreateByFioStartDto::class);
     });
 
     it('listAllDtoClasses обьединяет sync + async без download', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $all = $catalog->listAllDtoClasses();
 
         expect($all)->toContain(CatalogUserDto::class)
@@ -58,20 +58,20 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('includeDownload=true добавляет FileResponse', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $all = $catalog->listAllDtoClasses(includeDownload: true);
 
         expect($all)->toContain(FileResponse::class);
     });
 
     it('listDownloadResponseClasses возвращает только FileResponse', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
 
         expect($catalog->listDownloadResponseClasses())->toBe([FileResponse::class]);
     });
 
     it('дедуплицирует DTO которые возвращаются разными request-ами', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $sync = $catalog->listSyncDtoClasses();
 
         expect(count(array_keys($sync, CatalogUserDto::class, true)))->toBe(1);
@@ -84,7 +84,7 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('async usage заполняет pollRequest и unwrap', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $usages = $catalog->usagesFor(CatalogCreateByFioFinalDto::class);
 
         expect($usages)->toHaveCount(1);
@@ -97,7 +97,7 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('sync usage у того же async-стартового запроса заполняет returnsUnwrap', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $usages = $catalog->usagesFor(CatalogCreateByFioStartDto::class);
 
         $startUsage = array_values(array_filter(
@@ -111,7 +111,7 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('заполняет resourcePath/resourceLabel для usage', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $usages = $catalog->usagesFor(CatalogCreateByFioFinalDto::class);
         $usage = $usages[0];
 
@@ -120,7 +120,7 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('заполняет title/description/httpMethod/endpoint из view', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $usage = $catalog->usagesFor(CatalogUserDto::class)[0];
 
         $allUserUsages = $catalog->usagesFor(CatalogUserDto::class);
@@ -135,7 +135,7 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('download usage помечается ResponseDtoKind::Download и FileResponse', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $usages = $catalog->usagesFor(FileResponse::class);
 
         expect($usages)->toHaveCount(1);
@@ -148,7 +148,7 @@ describe('ResponseDtoCatalog', function () {
     });
 
     it('игнорирует request без response/continuation/download', function () {
-        $catalog = ihpohBuildCatalog();
+        $catalog = apisutraBuildCatalog();
         $allWithDownload = $catalog->listAllDtoClasses(includeDownload: true);
 
         $standalonePresent = array_any(

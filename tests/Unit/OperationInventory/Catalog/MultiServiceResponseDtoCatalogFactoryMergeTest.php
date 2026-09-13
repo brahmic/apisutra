@@ -19,7 +19,7 @@ use Brahmic\ApiSutra\Tests\Stubs\CatalogMega\ServiceB\Resources\Tax\Requests\Get
 use Brahmic\ApiSutra\Tests\Stubs\CatalogMega\ServiceB\Resources\Tax\Requests\GetTaxInfo\Dto\MegaTaxInfoStartDto;
 use Brahmic\ApiSutra\Transport\MockTransport;
 
-function ihpohMakeProviders(): array
+function apisutraMakeProviders(): array
 {
     $builder = new OperationInventoryBuilder(
         new RequestScanner(new ClassMapProvider()),
@@ -47,7 +47,7 @@ function ihpohMakeProviders(): array
 
 describe('MultiServiceResponseDtoCatalogFactory::merge', function () {
     it('объединяет одиночный клиент и мегаклиент в один каталог', function () {
-        ['standalone' => $standalone, 'mega' => $mega] = ihpohMakeProviders();
+        ['standalone' => $standalone, 'mega' => $mega] = apisutraMakeProviders();
 
         $catalog = (new MultiServiceResponseDtoCatalogFactory())->merge($standalone, $mega);
 
@@ -60,7 +60,7 @@ describe('MultiServiceResponseDtoCatalogFactory::merge', function () {
     });
 
     it('serviceClass для одиночного клиента = FQCN самого клиента', function () {
-        ['standalone' => $standalone, 'mega' => $mega] = ihpohMakeProviders();
+        ['standalone' => $standalone, 'mega' => $mega] = apisutraMakeProviders();
 
         $catalog = (new MultiServiceResponseDtoCatalogFactory())->merge($standalone, $mega);
         $usage = $catalog->usagesFor(MegaRealtyObjectDto::class)[0];
@@ -69,7 +69,7 @@ describe('MultiServiceResponseDtoCatalogFactory::merge', function () {
     });
 
     it('serviceClass для services() мегаклиента = FQCN сервиса', function () {
-        ['standalone' => $standalone, 'mega' => $mega] = ihpohMakeProviders();
+        ['standalone' => $standalone, 'mega' => $mega] = apisutraMakeProviders();
 
         $catalog = (new MultiServiceResponseDtoCatalogFactory())->merge($standalone, $mega);
         $usage = $catalog->usagesFor(MegaTaxInfoFinalDto::class)[0];
@@ -110,7 +110,7 @@ describe('MultiServiceResponseDtoCatalogFactory::merge', function () {
     });
 
     it('каталог содержит usage из обоих провайдеров', function () {
-        ['standalone' => $standalone, 'mega' => $mega] = ihpohMakeProviders();
+        ['standalone' => $standalone, 'mega' => $mega] = apisutraMakeProviders();
 
         $catalog = (new MultiServiceResponseDtoCatalogFactory())->merge($standalone, $mega);
         $allUsages = [];
@@ -133,7 +133,7 @@ describe('MultiServiceResponseDtoCatalogFactory::merge', function () {
     });
 
     it('download usage из одиночного клиента сохраняет kind и serviceClass', function () {
-        ['standalone' => $standalone, 'mega' => $mega] = ihpohMakeProviders();
+        ['standalone' => $standalone, 'mega' => $mega] = apisutraMakeProviders();
 
         $catalog = (new MultiServiceResponseDtoCatalogFactory())->merge($standalone, $mega);
         $downloads = $catalog->listDownloadResponseClasses();
