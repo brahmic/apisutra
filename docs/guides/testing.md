@@ -296,3 +296,50 @@ Locked/latest проходят с `--fail-on-deprecation`; для lowest сох�
 `--display-deprecations`, без глобального подавления E_DEPRECATED. Обновление
 совместимых зависимостей устраняет эти предупреждения. Runtime constraints не
 сужены только ради исключения старых предупреждений из отчёта.
+
+## Redis rate-limit
+
+Из корня исходного репозитория после `composer install`:
+
+```bash
+composer test:redis
+```
+
+Нужен работающий Docker с Compose (например, Docker Desktop; на Windows запускать
+из WSL). Команда сама собирает PHP с phpredis, поднимает отдельный Redis, дожидается
+healthcheck и запускает Redis-тесты. Локальный PHP не требует расширения redis.
+При первом запуске загрузка образов и сборка могут занять несколько минут;
+следующие запуски используют кеш сборки.
+
+После успеха, ошибки или обычного прерывания Ctrl+C скрипт удаляет контейнеры,
+тома и сеть своего запуска. Образ остаётся для повторного использования.
+Каждый запуск получает отдельный Compose project; порты Redis не публикуются
+на хост. Исходники подключены только для чтения. Код завершения тестов сохраняется;
+ошибка очистки также завершает команду неуспешно.
+
+Можно передавать параметры Pest:
+
+```bash
+composer test:redis -- --filter=NOSCRIPT
+```
+
+`composer test` сохраняет обычный запуск без Docker: Redis-сценарии пропускаются.
+Локальный стенд использует PHP 8.4 / phpredis 6.2 / Redis 7.0; CI дополнительно
+проверяет PHP 8.5 / phpredis 6.3 / Redis 8.2. В обязательном Redis job отсутствие
+расширения или сервера вызывает ошибку, а не пропуск тестов.
+
+Для ручного запуска при уже установленном phpredis и выделенном тестовом сервере:
+
+```bash
+APISUTRA_TEST_REDIS=1 APISUTRA_REDIS_HOST=127.0.0.1 APISUTRA_REDIS_PORT=6379 vendor/bin/pest tests/Integration/Redis
+APISUTRA_TEST_REDIS=1 APISUTRA_REDIS_HOST=127.0.0.1 APISUTRA_REDIS_PORT=6379 php tests/Integration/Laravel/verify.php
+```
+
+**Не направляйте ручные проверки на Redis приложения:** тесты меняют ACL/maxmemory
+и очищают script cache. Команда `composer test:redis` создаёт собственный сервер
+и не использует адрес Redis из окружения приложения.
+
+Стенд находится в `tests/Integration/Redis/compose.yaml`, запуск и очистка — в
+`tests/Support/test-redis.sh`. Проверяются отдельные workers с барьером, общая квота,
+TTL, NOSCRIPT, ACL/OOM и потеря ответа после исполнения команды. Узкий тестовый
+прокси нужен только для проверки неизвестного исхода; в SDK он не поставляется.

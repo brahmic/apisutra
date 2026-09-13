@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-13",
+  "head": "f92e7c9338a72b8bf65681be432b53a18dfc11f1",
+  "php": "8.5.4",
+  "command": "vendor/bin/pest tests/Unit/RateLimit tests/Unit/Timing/ExecutionBudgetTest.php tests/Unit/Timing/TimeoutContractTest.php --compact",
+  "observed_result": {
+    "passed": 133,
+    "assertions": 798,
+    "exit_code": 0,
+    "duration_seconds": 0.33
+  },
+  "redis_extension_present": false,
+  "redis_integration_executed": false,
+  "scope": "Existing behavior only; new multi-quota and Redis contracts are planned, not implemented",
+  "sha256": {
+    "src/Attributes/Behavior/RateLimit.php": "b1a53fe57c18d6e31207ee5e9b55fc7b21b661973dbf29e2f68baba9a9dbe8d1",
+    "src/Config/ClientConfig.php": "2f9f7f01087a0be76dbf4a3bd7c801942e6a53e68bbe4eec1bad1f45c2da3596",
+    "src/Config/RateLimitConfig.php": "6dce9f6f9d7daec275fc802b8b50088d3d86815a8d1d20286f58bd0fde4e7e73",
+    "src/RateLimiting/RateLimiter.php": "545da302d291319bbc4df4a4804065fc918df0a309ca9fbdfdca6f19475289b8",
+    "src/Pipeline/Transport/RateLimitApplier.php": "33cbffa24705880972b79e513a75eef3223d7e98ec2f1007e87bdef13c347bf0",
+    "src/Pipeline/Transport/RetrySender.php": "429c723e736d2ba4ab35746c6d78041eff9f3e264792022737c319bd214e9587",
+    "src/Pipeline/Flow/ExecutionResultBuilder.php": "681117e39f38113789291e44ac42baf2e5ea8dfb52c870742a81d8c758efcd62",
+    "src/Timing/ExecutionBudget.php": "1a2ced7967ed4c2b1cf9b80601434cd04fa504e4749ac8507df63b50af498e3f",
+    "src/Core/AbstractClient.php": "fe0fd131119037ab610d744197d3ca7ad4e19fac98707b846786af976e56f6dd",
+    "src/Request/RequestOptions.php": "d3dd8311bdc14e6331c485630072bbd4582fd909aa4bae8eb59220c234fca060",
+    "src/Traits/RequestSpecAccessorsTrait.php": "eb173a4170072670bcdc76607307062a254775d98e1e2feabe47230c6e347fc9",
+    "src/Contracts/Interfaces/Auth/AuthLockProviderInterface.php": "bc125b29d105d4e42366a796af6ee3ef45d52849e32cd4c2a43b1e82df41d849",
+    "src/Pipeline/Auth/LocalAuthLockProvider.php": "9bd803d7907438e6b0fa988b849efb012b73ff9f7f24543827514270f6df7ebc",
+    "composer.json": "3154ad959bd7a184c860d4f60ac39ae75213605c262782cd603842cb18d8ba4f",
+    ".github/workflows/tests.yml": "fd9a09c205bb0b6871b46f3f4a359997073a3d6cd9a4e35c128e9cd326edf363",
+    "tests/Unit/RateLimit/RateLimitApplierTest.php": "988535a9ac99a9feaef83badeb9e8ce69110c036cbfffb2cf1045d761e4485ce",
+    "tests/Unit/RateLimit/RateLimitExecutionTest.php": "fffeda81c2f6d3b545dc27b38dd5df28dd4b1c3986c4ee421373bf51a6f6469e",
+    "tests/Unit/RateLimit/RateLimitKeyTest.php": "baea2f2fc3c18fd9005f6edf7d591a470a041124cdc63e03152c2597c4fb8b4a",
+    "tests/Unit/RateLimit/RateLimitStateTest.php": "740a9f8d253f125583cf6b36f681fd46096f6740673447162bdb302f8e3d969f",
+    "tests/Unit/RateLimit/RateLimiterTest.php": "41607e55d61a89b356ca114916be55c0f809b6d2b98ebced4dea56b8084de077",
+    "tests/Unit/Timing/ExecutionBudgetTest.php": "22b18e74cf1dff75c0908c45299e5906678f1cf92c5db092a8a0ddf460de06fb",
+    "tests/Unit/Timing/TimeoutContractTest.php": "706703b5c321af5b7c12e61143a1f802ec56357d2eb44d7eab92321663295f56"
+  }
+}

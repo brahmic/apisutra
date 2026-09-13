@@ -115,7 +115,7 @@ abstract class AbstractClient implements ContextualClientInterface, AttributeMet
         $this->applyGlobalMockTransport();
         $this->hydrator = new Hydrator($this->casts, $this->metadataCache);
         $this->serializer = new Serializer($this->casts, $this->metadataCache);
-        $this->rateLimiter = new RateLimiter(clock: $this->clock, sleeper: $this->sleeper);
+        $this->rateLimiter = new RateLimiter(clock: $this->clock, sleeper: $this->sleeper, backend: $config->rateLimitBackend);
         $this->pipeline = $this->buildPipeline();
 
         $this->resolvedResultFactory = $config->resolvedResultFactory

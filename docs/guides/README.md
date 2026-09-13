@@ -92,3 +92,5 @@
 - [Troubleshooting](./troubleshooting.md)
 - [Attributes](./attributes/README.md)
 - [Glossary](../glossary/README.md)
+
+- [Совместные квоты между workers: Redis](redis-rate-limit.md).

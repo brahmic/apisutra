@@ -78,23 +78,30 @@ final class TimeoutRequest extends AbstractRequest {}
 
 ## RateLimit
 
-`limit` и `period` должны быть положительными; ошибки параметров останавливают
-отправку. [Полный контракт и defaults](../client-config/rate-limit.md).
+Собственная квота операции действует совместно с `ClientConfig::rateLimit`.
+[Полный контракт и defaults](../client-config/rate-limit.md).
 
-**Параметры:**  
-- `limit: int`  
-- `period: int`  
-- `behavior: RateLimitBehavior = Wait`  
-- `key?: string`  
+Параметры:
 
-Пример:
+- `limit: ?int = null`, `period: ?int = null` — положительная пара, период в секундах;
+- `behavior: RateLimitBehavior = Wait`;
+- `key: ?string = null` — явная группа операций;
+- `includeClientQuota: ?bool = null` — наследует клиентский флаг (по умолчанию true).
+
 ```php
 use Brahmic\ApiSutra\Attributes\Behavior\RateLimit;
-use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
+use Brahmic\ApiSutra\Core\AbstractRequest;
 
-#[RateLimit(limit: 10, period: 60, behavior: RateLimitBehavior::Wait)]
+#[RateLimit(limit: 10, period: 60)]
 final class RateLimitedRequest extends AbstractRequest {}
+
+#[RateLimit(includeClientQuota: false)]
+final class IndependentRequest extends AbstractRequest {}
 ```
+
+Без пары собственная квота не создаётся. Пустой атрибут разрешён; key или Throw
+без пары — ошибка конфигурации. Проверка значений выполняется при применении перед
+отправкой; чтение метаданных само по себе её не запускает.
 
 ## Execution
 **Параметры:**  

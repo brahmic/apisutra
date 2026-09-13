@@ -19,3 +19,11 @@
 ## Где подробности
 - Конфигурация: `docs/guides/client-config/README.md`
 - Исполнение: `docs/technical/execution.md`
+
+## Совместный учёт квот
+
+Общая квота клиента и собственная квота операции разрешаются одним набором перед
+каждой HTTP-попыткой. RateLimiter организует Wait/Throw и общий budget; backend
+только атомарно принимает или отклоняет набор. По умолчанию состояние локальное
+и окна измеряются monotonic clock. PSR-16 сохранён только для одной квоты.
+[Контракт](../guides/client-config/rate-limit.md), [Redis](../guides/redis-rate-limit.md).

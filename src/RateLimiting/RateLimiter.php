@@ -11,6 +11,8 @@ use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
 use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
+use Brahmic\ApiSutra\Exceptions\Transport\ExecutionDeadlineException;
+use Brahmic\ApiSutra\RateLimiting\Backends\LocalRateLimitBackend;
 use Brahmic\ApiSutra\Timing\ExecutionBudget;
 use Brahmic\ApiSutra\Timing\SystemClock;
 use Brahmic\ApiSutra\Timing\SystemSleeper;
@@ -36,7 +38,68 @@ final class RateLimiter
     public function __construct(
         private readonly ClockInterface $clock = new SystemClock(),
         private readonly SleeperInterface $sleeper = new SystemSleeper(),
+        private ?RateLimitBackendInterface $backend = null,
     ) {
+    }
+
+    /**
+     * Один цикл ожидания для всех атомарных backend.
+     *
+     * @internal Используется pipeline после разрешения конфигурации квот.
+     * @param list<RateLimitQuota> $quotas
+     * @param array<string, RateLimitBehavior> $behaviors
+     */
+    public function acquireAll(array $quotas, array $behaviors, ?ExecutionBudget $budget = null): void
+    {
+        $quotas = RateLimitQuota::normalize($quotas);
+        if ($quotas === []) {
+            return;
+        }
+        $budget ??= new ExecutionBudget($this->clock);
+        $known = [];
+        foreach ($quotas as $quota) {
+            if (!isset($behaviors[$quota->key])) {
+                throw new ConfigurationException('Не задано поведение квоты');
+            }
+            $known[$quota->key] = true;
+        }
+        $backend = $this->backend ??= new LocalRateLimitBackend($this->clock);
+        while (true) {
+            $budget->check('rate_limit');
+            try {
+                $decision = $backend->tryAcquire($quotas, $budget->remainingMs());
+            } catch (Throwable $exception) {
+                $budget->check('rate_limit_store', $exception);
+                if ($exception instanceof ConfigurationException || $exception instanceof ExecutionDeadlineException) {
+                    throw $exception;
+                }
+                throw $exception instanceof RateLimitBackendException
+                    ? $exception
+                    : new RateLimitBackendException($exception);
+            }
+            $budget->check('rate_limit_store');
+            if ($decision->granted) {
+                return;
+            }
+            $throw = false;
+            foreach ($decision->blockedIds as $id) {
+                if (!isset($known[$id])) {
+                    throw new RateLimitBackendException();
+                }
+                $throw = $throw || $behaviors[$id] === RateLimitBehavior::Throw;
+            }
+            if ($decision->retryAfterMs > intdiv(PHP_INT_MAX, 1000)) {
+                throw new RateLimitBackendException();
+            }
+            if ($throw) {
+                throw new RateLimitException(
+                    'Превышен лимит запросов',
+                    null,
+                    intdiv($decision->retryAfterMs, 1000) + ($decision->retryAfterMs % 1000 === 0 ? 0 : 1),
+                );
+            }
+            $budget->wait($decision->retryAfterMs, $this->sleeper, 'rate_limit_wait');
+        }
     }
 
     /**

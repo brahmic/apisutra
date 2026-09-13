@@ -116,10 +116,12 @@ final readonly class RetrySender
 
             try {
                 $this->delayApplier->apply($request, $context->options, $context->budget);
+                $transportOptions = TimeoutResolver::resolve($context);
+                TransportCapabilities::check($this->transport, $transportOptions->effective());
                 $this->rateLimitApplier->apply($request, $context);
                 $context->budget->check('before_http');
-                $context->preparedRequest = $context->preparedRequest->with(transportOptions: TimeoutResolver::resolve($context));
-                TransportCapabilities::check($this->transport, $context->preparedRequest->transportOptions->effective());
+                TransportCapabilities::check($this->transport, $transportOptions->effective());
+                $context->preparedRequest = $context->preparedRequest->with(transportOptions: $transportOptions);
 
                 // Ответ относится к текущей HTTP-попытке; предыдущий не подставляется при сетевом сбое.
                 $context->response = null;

@@ -7,6 +7,8 @@ namespace Integration;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Resolver\ClientRegistry;
+use Brahmic\ApiSutra\RateLimiting\Backends\PhpRedisRateLimitBackend;
+use Illuminate\Support\Facades\Redis;
 use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Transport\MockTransport;
 use Illuminate\Contracts\Foundation\Application;
@@ -18,6 +20,10 @@ final class ApplicationProvider extends ServiceProvider
 {
     public function register(): void
     {
+        // Явная регистрация приложения; соединение создаётся только при разрешении binding.
+        $this->app->singleton(PhpRedisRateLimitBackend::class, static fn (): PhpRedisRateLimitBackend => new PhpRedisRateLimitBackend(
+            redis: Redis::connection('apisutra')->client(), scope: 'laravel-integration-fixture',
+        ));
         $this->app->singleton(TransportInterface::class, static function (): MockTransport {
             $transport = new MockTransport();
             $transport->fake(['*' => MockResponse::success(['ok' => true])]);

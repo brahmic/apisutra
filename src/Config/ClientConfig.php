@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Config;
 
+use Brahmic\ApiSutra\RateLimiting\RateLimitBackendInterface;
 use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthPolicyInterface;
@@ -123,6 +124,8 @@ final readonly class ClientConfig
         public RedactionPolicy $redaction = new RedactionPolicy(),
         public BooleanFormat $textBooleanFormat = BooleanFormat::Numeric,
         public OriginPolicy $originPolicy = new OriginPolicy(),
+        public bool $includeClientQuota = true,
+        public ?RateLimitBackendInterface $rateLimitBackend = null,
     ) {
         if ($cache instanceof CacheConfig) {
             $this->cacheConfig = $cache;
@@ -175,6 +178,8 @@ final readonly class ClientConfig
             'connectTimeout' => $this->connectTimeout,
             'retry' => $this->retry,
             'rateLimit' => $this->rateLimit,
+            'includeClientQuota' => $this->includeClientQuota,
+            'rateLimitBackend' => $this->rateLimitBackend,
             'pool' => $this->pool,
             'queryArrayFormat' => $this->queryArrayFormat,
             'serializeNulls' => $this->serializeNulls,
@@ -256,6 +261,11 @@ final readonly class ClientConfig
      */
     private function validate(): void
     {
+        if ($this->rateLimitBackend !== null && $this->rateLimit?->store !== null) {
+            throw new ConfigurationException(
+                'Общий rateLimit.store несовместим с rateLimitBackend; перенесите учёт квот в единый backend',
+            );
+        }
         if (trim($this->baseUrl) === '') {
             throw new ConfigurationException('ClientConfig.baseUrl не должен быть пустым');
         }

@@ -41,10 +41,9 @@ describe('RateLimitApplier', function () {
     });
 
     it('использует атрибут и ограничивает запросы', function () {
-        $cache = new SpyCache();
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            rateLimit: new RateLimitConfig(limit: 100, period: 60, behavior: RateLimitBehavior::Throw, store: $cache),
+            rateLimit: new RateLimitConfig(limit: 100, period: 60, behavior: RateLimitBehavior::Throw),
             environment: Environment::Testing,
         );
 

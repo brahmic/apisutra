@@ -95,6 +95,7 @@ describe('Rate limit key', function () {
             baseUrl: 'https://provider.test',
             rateLimit: new RateLimitConfig(limit: 2, period: 60, store: $cache),
             environment: Environment::Testing,
+            includeClientQuota: false,
         );
 
         $request = new SimpleGetRequest('q');
@@ -119,6 +120,7 @@ describe('Rate limit key', function () {
             baseUrl: 'https://provider.test',
             rateLimit: new RateLimitConfig(limit: 2, period: 60, store: $cache),
             environment: Environment::Testing,
+            includeClientQuota: false,
         );
 
         $request = new RateLimitKeyRequest();
@@ -142,6 +144,7 @@ describe('Rate limit key', function () {
             baseUrl: 'https://provider.test',
             rateLimit: new RateLimitConfig(limit: 2, period: 60, store: $cache),
             environment: Environment::Testing,
+            includeClientQuota: false,
         );
 
         $request = new RateLimitKeyRequest();

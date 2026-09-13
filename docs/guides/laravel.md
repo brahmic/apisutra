@@ -168,3 +168,9 @@ Laravel 13, Octane или автоматическую изоляцию tenant-�
 
 Для fake HTTP передавайте SDK `TransportInterface` (например, `MockTransport`).
 `Laravel Http::fake()` не перехватывает прямой Guzzle/PSR-18 транспорт автоматически.
+
+## Общие квоты между workers
+
+Для атомарного учёта используйте выделенное именованное phpredis-соединение и
+собирайте backend в ServiceProvider. [Готовый рецепт](redis-rate-limit.md#laravel).
+Наличие Laravel и Redis не включает его автоматически.

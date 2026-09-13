@@ -11,10 +11,11 @@ use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 readonly class RateLimit
 {
     public function __construct(
-        public int $limit,
-        public int $period,
+        public ?int $limit = null,
+        public ?int $period = null,
         public RateLimitBehavior $behavior = RateLimitBehavior::Wait,
         public ?string $key = null,
+        public ?bool $includeClientQuota = null,
     ) {
     }
 }

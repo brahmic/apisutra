@@ -34,6 +34,10 @@
     },
     "scripts": {
         "test": "pest",
+        "test:redis": [
+            "Composer\\Config::disableProcessTimeout",
+            "sh tests/Support/test-redis.sh"
+        ],
         "lint": "phpcs --report=summary",
         "analyse": "phpstan analyse --no-progress --memory-limit=1G",
         "check-docs": "python3 tests/Support/check-docs.py",
@@ -87,5 +91,8 @@
             "/phpstan-baseline.neon",
             "/phpstan-stubs"
         ]
+    },
+    "suggest": {
+        "ext-redis": "Optional atomic shared rate limits (phpredis >=6.2 with Redis >=7.0)"
     }
 }

@@ -8,7 +8,10 @@ use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Config\RateLimitConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
+use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\RateLimiting\RateLimiter;
+use Brahmic\ApiSutra\RateLimiting\RateLimitQuota;
 use Brahmic\ApiSutra\Request\RequestOptions;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 
@@ -22,70 +25,89 @@ final readonly class RateLimitApplier
 
     public function apply(RequestInterface $request, PipelineContext $context): void
     {
-        $config = $this->resolveRateLimitConfig($request, $context->options);
-        if ($config === null) {
+        $options = $context->options;
+        if ($request instanceof AbstractRequest && $this->disabled($request, $options)) {
+            return;
+        }
+        $attribute = $request instanceof AbstractRequest ? $request->getRateLimitAttribute() : null;
+        $includeClient = $attribute->includeClientQuota ?? $this->config->includeClientQuota;
+        $rules = [];
+        if ($includeClient && $this->config->rateLimit !== null) {
+            $rules['client'] = $this->config->rateLimit;
+        }
+        $own = $request instanceof AbstractRequest ? $this->ownLimit($request, $options) : null;
+        if ($own !== null) {
+            $rules['operation'] = $own;
+        }
+        if ($rules === []) {
             return;
         }
 
-        $key = $this->buildRateLimitKey($config, $context);
-        $this->rateLimiter->acquire($config, $key, $context->budget);
+        // Наследование store относится только к одиночному старому storage-пути.
+        if (count($rules) === 1 && $this->config->rateLimitBackend === null) {
+            $rule = reset($rules);
+            $store = $rule->store ?? $this->config->rateLimit?->store;
+            if ($store !== null) {
+                $legacy = new RateLimitConfig($rule->limit, $rule->period, $rule->behavior, $store, $rule->key);
+                $key = hash('sha256', 'apisutra.rate-limit.v2:' . ($rule->key ?? $context->config->baseUrl));
+                $this->rateLimiter->acquire($legacy, $key, $context->budget);
+                $context->budget?->check('rate_limit');
+                return;
+            }
+        }
+
+        $quotas = [];
+        $behaviors = [];
+        foreach ($rules as $kind => $rule) {
+            if ($rule->store !== null) {
+                throw new ConfigurationException(
+                    'Rate-limit store несовместим с совместными квотами или явным backend; используйте rateLimitBackend',
+                );
+            }
+            $rawKey = $rule->key ?? ($kind === 'client' ? 'client' : $request::class);
+            $key = hash('sha256', 'apisutra.rate-limit.v3:' . $kind . ':' . $rawKey);
+            $quotas[] = new RateLimitQuota($key, $rule->limit, $rule->period * 1000);
+            $behaviors[$key] = $rule->behavior;
+        }
+        $this->rateLimiter->acquireAll($quotas, $behaviors, $context->budget);
         $context->budget?->check('rate_limit');
     }
 
-    private function resolveRateLimitConfig(RequestInterface $request, ?RequestOptions $options): ?RateLimitConfig
+    private function disabled(AbstractRequest $request, ?RequestOptions $options): bool
     {
-        if (!$request instanceof AbstractRequest) {
-            return $this->config->rateLimit;
-        }
-
         if ($options?->getRateLimitDisabledOverride() === true) {
-            return null;
+            return true;
         }
-
         if ($options?->getRateLimitOverride() !== null) {
-            $override = $options->getRateLimitOverride();
-            return new RateLimitConfig(
-                limit: $override->limit,
-                period: $override->period,
-                behavior: $override->behavior,
-                store: $override->store ?? $this->config->rateLimit?->store,
-                key: $override->key,
-            );
+            return false;
         }
-
-        if ($request->getRateLimitDisabledOverride() === true) {
-            return null;
-        }
-
-        if ($request->getRateLimitOverride() !== null) {
-            $override = $request->getRateLimitOverride();
-            return new RateLimitConfig(
-                limit: $override->limit,
-                period: $override->period,
-                behavior: $override->behavior,
-                store: $override->store ?? $this->config->rateLimit?->store,
-                key: $override->key,
-            );
-        }
-
-        $attribute = $request->getRateLimitAttribute();
-        if ($attribute !== null) {
-            return new RateLimitConfig(
-                limit: $attribute->limit,
-                period: $attribute->period,
-                behavior: $attribute->behavior,
-                store: $this->config->rateLimit?->store,
-                key: $attribute->key,
-            );
-        }
-
-        return $this->config->rateLimit;
+        return $request->getRateLimitDisabledOverride() === true;
     }
 
-    private function buildRateLimitKey(RateLimitConfig $config, PipelineContext $context): string
+    private function ownLimit(AbstractRequest $request, ?RequestOptions $options): ?RateLimitConfig
     {
-        // Ключ задаётся по приоритету: override → атрибут → baseUrl (default).
-        $rawKey = $config->key ?? $context->config->baseUrl;
-        return hash('sha256', 'apisutra.rate-limit.v2:' . $rawKey);
+        $override = $options?->getRateLimitOverride() ?? $request->getRateLimitOverride();
+        if ($override !== null) {
+            return $override;
+        }
+        $attribute = $request->getRateLimitAttribute();
+        if ($attribute === null) {
+            return null;
+        }
+        if ($attribute->limit === null && $attribute->period === null) {
+            if ($attribute->key !== null || $attribute->behavior !== RateLimitBehavior::Wait) {
+                throw new ConfigurationException('Ключ и поведение собственной квоты требуют пары limit/period');
+            }
+            return null;
+        }
+        if ($attribute->limit === null || $attribute->period === null) {
+            throw new ConfigurationException('Атрибут RateLimit требует оба limit/period либо отсутствие обоих');
+        }
+        return new RateLimitConfig(
+            limit: $attribute->limit,
+            period: $attribute->period,
+            behavior: $attribute->behavior,
+            key: $attribute->key,
+        );
     }
 }

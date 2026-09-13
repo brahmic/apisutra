@@ -1,0 +1,27 @@
+{
+  "command": "composer test:redis",
+  "compose": "5.0.2",
+  "success": {
+    "exit_code": 0,
+    "tests": "17 passed (92 assertions)",
+    "warnings": false
+  },
+  "intentional_assertion_failure": {
+    "exit_code": 1,
+    "temporary_fixture_removed": true
+  },
+  "sigint": {
+    "exit_code": 130
+  },
+  "cleanup_verified": [
+    "apisutra-redis-1789287803-38441",
+    "apisutra-redis-1789287888-46065",
+    "apisutra-redis-1789287841-45917"
+  ],
+  "configuration": "docker compose config --quiet; sh -n; composer validate --strict",
+  "files": {
+    "tests/Support/test-redis.sh": "09a0bfb606b49e3abc65858dc4ff875fa01872c347c07ed96220168696cf8322",
+    "tests/Integration/Redis/compose.yaml": "4d9dbbd04b2c6b1b19ea9f7b9b1ded4c1ce5e3b4892f1db6211781eab432ce96",
+    "composer.json": "81713ee77ec815591f9619919775cbbc7e176f7c08b5fb458fc19e1d4bbd0766"
+  }
+}

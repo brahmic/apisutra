@@ -1,0 +1,4 @@
+✓ VersionedResourceTrait → it бросает UnsupportedVersionException для неподдержанной версии
+
+  Tests:    17 skipped, 1571 passed (5783 assertions)
+  Duration: 8.19s

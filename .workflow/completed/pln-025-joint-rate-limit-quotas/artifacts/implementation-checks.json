@@ -1,0 +1,93 @@
+{
+  "date": "2026-09-13",
+  "base_commit": "f92e7c9338a72b8bf65681be432b53a18dfc11f1",
+  "remote_ci": "not_run; workflow added",
+  "checks": {
+    "php84": {
+      "status": "passed",
+      "log": "php84.log",
+      "summary": "Tests:    17 skipped, 1571 passed (5783 assertions)"
+    },
+    "php85": {
+      "status": "passed",
+      "log": "php85.log",
+      "summary": "Tests:    17 skipped, 1571 passed (5783 assertions)"
+    },
+    "redis84": {
+      "status": "passed",
+      "log": "redis84.log",
+      "summary": "Tests:    17 passed (92 assertions)"
+    },
+    "redis85": {
+      "status": "passed",
+      "log": "redis85.log",
+      "summary": "Tests:    17 passed (92 assertions)"
+    },
+    "lint": {
+      "status": "passed",
+      "log": "lint.log"
+    },
+    "analyse": {
+      "status": "passed",
+      "log": "analyse.log"
+    },
+    "docs": {
+      "status": "passed",
+      "log": "docs.log"
+    },
+    "autoload": {
+      "status": "passed",
+      "log": "autoload.log"
+    },
+    "distribution": {
+      "status": "passed",
+      "log": "distribution.log"
+    },
+    "ci_yaml": {
+      "status": "passed",
+      "method": "Ruby YAML parser; two Redis matrix entries"
+    }
+  },
+  "source_hashes": {
+    "src/Attributes/Behavior/RateLimit.php": "ef70049eb97ce2f20d511ad845b6e4c93bd718d38dfea632d522dcd7fd284575",
+    "src/Config/ClientConfig.php": "5f6561cb6ef6298b0678f7713147709b26740e0d76530758ace06974b6a2c9ca",
+    "src/Core/AbstractClient.php": "2b7056645d114048e2be5b194f72b0f8aa6c85a180b5d1975e963b90774e4354",
+    "src/Pipeline/Transport/RateLimitApplier.php": "c9a4fe260dde743bbdb96b1a9e5e05802c7a14b693f8c97ede40a5144794260b",
+    "src/Pipeline/Transport/RetrySender.php": "cc4d3297044ce90fbb35eda6101f1210d5026cdfdc3414010ac338fbb31bf2ac",
+    "src/RateLimiting/Backends/LocalRateLimitBackend.php": "b886287498cb2773fd0ce79f5b46ef33d086b912fa456be0e6ff1714eee9506a",
+    "src/RateLimiting/Backends/PhpRedisRateLimitBackend.php": "09f8ae0ed5ce88a8a7280e4b7aa87b8fc72653b27f55c0a8c6bcc10405366060",
+    "src/RateLimiting/RateLimitBackendInterface.php": "0c2590c9819837f0a491c430609d213103d2667f630f4a99fedb442f9d81275c",
+    "src/RateLimiting/RateLimitDecision.php": "d616a4afdeb9ea06da8a801db972b6b34766e4766d7823674e39fdf53591c09a",
+    "src/RateLimiting/RateLimitQuota.php": "42e1c729c62133338f3d39f1d743563f98792427d65078cf7a7765d24d352bde",
+    "src/RateLimiting/RateLimiter.php": "781445ad4452ff73b620f7794210db1e0e795f93a1acfd7901c696039a6c772b",
+    "src/RateLimiting/Resources/acquire.lua": "f3594ca553aeb6e5a2febf4c8769263574db2c114f0363d24803bd0e2df65c64"
+  },
+  "versions": {
+    "php84": "8.4.25",
+    "php85": "8.5.4",
+    "redis_min": {
+      "php": "8.4.25",
+      "redis": "7.0.15",
+      "phpredis": "6.2.0"
+    },
+    "redis_current": {
+      "php": "8.5.10",
+      "redis": "8.2.9",
+      "phpredis": "6.3.0"
+    }
+  },
+  "laravel": {
+    "framework": "12",
+    "config_cache": [
+      false,
+      true
+    ],
+    "profiles": [
+      "php84/phpredis6.2/redis7.0",
+      "php85/phpredis6.3/redis8.2",
+      "native php85 without redis"
+    ],
+    "status": "passed"
+  },
+  "log_format": "ANSI removed, trailing whitespace trimmed; full-suite logs contain summary only"
+}

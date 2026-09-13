@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-13",
+  "head": "f92e7c9338a72b8bf65681be432b53a18dfc11f1",
+  "describe": "v0.1.0-alpha.1-27-gf92e7c9",
+  "baseline_files_compared": 22,
+  "baseline_mismatches": [],
+  "rerun_command": "vendor/bin/pest tests/Unit/RateLimit tests/Unit/Timing/ExecutionBudgetTest.php tests/Unit/Timing/TimeoutContractTest.php --compact",
+  "observed_result": {
+    "passed": 133,
+    "assertions": 798,
+    "exit_code": 0,
+    "duration_seconds": 0.33
+  },
+  "redis_integration_executed": false,
+  "scope": "Peer review and workflow documentation only; Redis reasoning verified against official documentation and Redis 7.0 source, not a live adapter"
+}

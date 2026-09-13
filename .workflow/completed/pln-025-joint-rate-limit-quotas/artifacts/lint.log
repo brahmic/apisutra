@@ -1,0 +1,71 @@
+PHP CODE SNIFFER REPORT SUMMARY
+--------------------------------------------------------------------------------
+FILE                                                            ERRORS  WARNINGS
+--------------------------------------------------------------------------------
+...packages/apisutra/src/Attributes/AttributeMetadataCache.php  0       1
+...v/me/packages/apisutra/src/Attributes/AttributeRegistry.php  0       3
+...v/dev/me/packages/apisutra/src/Auth/ApiKeyAuthenticator.php  0       1
+...v/me/packages/apisutra/src/Auth/CacheCredentialIdentity.php  0       1
+...s/stanisalv/dev/me/packages/apisutra/src/Casts/EnumCast.php  0       1
+...me/packages/apisutra/src/Collections/AbstractCollection.php  0       1
+...nisalv/dev/me/packages/apisutra/src/Config/ClientConfig.php  0       4
+...alv/dev/me/packages/apisutra/src/Config/RateLimitConfig.php  0       1
+...src/Contracts/Interfaces/Core/ContextualClientInterface.php  0       1
+...nisalv/dev/me/packages/apisutra/src/Core/AbstractClient.php  0       5
+...pisutra/src/Exceptions/Serialization/HydrationException.php  0       3
+...lv/dev/me/packages/apisutra/src/Execution/BatchExecutor.php  0       1
+...e/packages/apisutra/src/Execution/ExecutionErrorFactory.php  0       5
+...alv/dev/me/packages/apisutra/src/Execution/PoolExecutor.php  0       3
+...v/me/packages/apisutra/src/Execution/Batch/BatchContext.php  0       1
+...ages/apisutra/src/Execution/Batch/ParallelBatchStrategy.php  0       1
+...v/me/packages/apisutra/src/Extensions/ExtensionRegistry.php  0       2
+...lv/dev/me/packages/apisutra/src/Files/FileTransferGuard.php  0       1
+...stanisalv/dev/me/packages/apisutra/src/Files/StreamCopy.php  0       1
+/Users/stanisalv/dev/me/packages/apisutra/src/Http/Origin.php   0       1
+...lv/dev/me/packages/apisutra/src/Http/RequestDestination.php  0       1
+...dev/me/packages/apisutra/src/Laravel/SdkServiceProvider.php  0       1
+...isutra/src/OperationInventory/OperationInventoryBuilder.php  0       1
+...isutra/src/OperationInventory/SdkCallPathMethodAnalyzer.php  0       2
+...pisutra/src/OperationInventory/Catalog/ResponseDtoUsage.php  0       2
+...pisutra/src/Pagination/PaginationItemsCollectionBuilder.php  0       1
+...isalv/dev/me/packages/apisutra/src/Pagination/Paginator.php  0       1
+...tanisalv/dev/me/packages/apisutra/src/Pipeline/Pipeline.php  0       3
+...packages/apisutra/src/Pipeline/Auth/AuthBindingResolver.php  0       1
+.../dev/me/packages/apisutra/src/Pipeline/Auth/AuthHandler.php  0       9
+.../me/packages/apisutra/src/Pipeline/Auth/AuthRefreshLock.php  0       1
+...v/me/packages/apisutra/src/Pipeline/Auth/AuthTokenCache.php  0       1
+...ckages/apisutra/src/Pipeline/Auth/LocalAuthLockProvider.php  0       1
+...kages/apisutra/src/Pipeline/Cache/CacheIdentityResolver.php  0       3
+...ev/me/packages/apisutra/src/Pipeline/Cache/CacheManager.php  0       3
+...kages/apisutra/src/Pipeline/Flow/ExecutionResultBuilder.php  0       5
+...ckages/apisutra/src/Pipeline/Hydration/ResponseHydrator.php  0       3
+...kages/apisutra/src/Pipeline/Preparation/TimeoutResolver.php  0       1
+.../me/packages/apisutra/src/Pipeline/Result/ResultFactory.php  0       2
+...e/packages/apisutra/src/Pipeline/Transport/DelayApplier.php  0       1
+...ckages/apisutra/src/Pipeline/Transport/RateLimitApplier.php  0       1
+...ages/apisutra/src/Pipeline/Transport/RetryDecisionMaker.php  0       1
+...me/packages/apisutra/src/Pipeline/Transport/RetrySender.php  0       6
+...v/dev/me/packages/apisutra/src/RateLimiting/RateLimiter.php  0       2
+...alv/dev/me/packages/apisutra/src/Request/RequestOptions.php  0       4
+...salv/dev/me/packages/apisutra/src/Retry/RetryAfterDelay.php  0       1
+...anisalv/dev/me/packages/apisutra/src/Retry/RetryHandler.php  0       1
+...ev/me/packages/apisutra/src/Serialization/DtoSerializer.php  0       1
+...ages/apisutra/src/Serialization/EnumSerializationHelper.php  0       1
+...packages/apisutra/src/Serialization/FilePayloadPreparer.php  0       1
+...ages/apisutra/src/Serialization/HydrationValueValidator.php  0       2
+...alv/dev/me/packages/apisutra/src/Serialization/Hydrator.php  0       10
+.../dev/me/packages/apisutra/src/Serialization/JsonEncoder.php  0       1
+...e/packages/apisutra/src/Serialization/RequestUrlBuilder.php  0       5
+...v/dev/me/packages/apisutra/src/Serialization/Serializer.php  0       3
+...alv/dev/me/packages/apisutra/src/Timing/ExecutionBudget.php  0       1
+...dev/me/packages/apisutra/src/Transport/GuzzleHttpClient.php  0       4
+...lv/dev/me/packages/apisutra/src/Transport/HttpTransport.php  0       3
+...lv/dev/me/packages/apisutra/src/Transport/MockTransport.php  0       2
+...v/me/packages/apisutra/src/Transport/RecordingTransport.php  0       1
+...v/dev/me/packages/apisutra/src/VO/Http/ProviderResponse.php  0       1
+...lv/dev/me/packages/apisutra/src/VO/Validation/Validator.php  0       2
+--------------------------------------------------------------------------------
+A TOTAL OF 0 ERRORS AND 135 WARNINGS WERE FOUND IN 62 FILES
+--------------------------------------------------------------------------------
+
+Time: 1.67 secs; Memory: 20MB

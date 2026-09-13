@@ -25,7 +25,7 @@ def run(command, cwd=ROOT):
 
 ref = run(['git', 'write-tree']) if args.staged else run(['git', 'rev-parse', 'HEAD'])
 excluded = json.loads((ROOT / 'composer.json').read_text())['archive']['exclude']
-required = ['composer.json', 'README.md', 'CHANEGLOG.md', 'src/Core/AbstractClient.php', 'docs/README.md']
+required = ['composer.json', 'README.md', 'CHANEGLOG.md', 'src/Core/AbstractClient.php', 'docs/README.md', 'src/RateLimiting/Resources/acquire.lua']
 smokes = sorted((ROOT / 'tests/Support').glob('standalone-*.php'))
 report = {'git_reference': ref, 'php': run([PHP, '-r', 'echo PHP_VERSION;']), 'archives': {}}
 with tempfile.TemporaryDirectory(prefix='apisutra-dist-') as temporary:

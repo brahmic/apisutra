@@ -12,6 +12,7 @@ use Brahmic\ApiSutra\Exceptions\RateLimiting\RateLimitBackendException;
 use Brahmic\ApiSutra\Exceptions\Request\RateLimitException;
 use Brahmic\ApiSutra\Tests\Stubs\Core\SequenceHttpClient;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\RetryPolicyRequest;
+use Brahmic\ApiSutra\Tests\Stubs\Requests\JointQuotaRequest;
 use Brahmic\ApiSutra\Tests\Stubs\TestClient;
 use Brahmic\ApiSutra\Tests\Support\StrictCache;
 use Brahmic\ApiSutra\Tests\Support\VirtualClock;
@@ -59,3 +60,19 @@ if (!$result->exception instanceof RateLimitBackendException || $result->respons
     throw new RuntimeException('Сбой store должен остановить отправку без retry');
 }
 echo "Standalone rate-limit: строгий PSR-16 store, локальный отказ и ошибка записи работают без Laravel/Guzzle HTTP Client.\n";
+
+$lua = $checkout . '/src/RateLimiting/Resources/acquire.lua';
+if (!is_file($lua) || !str_contains(file_get_contents($lua), 'MSET')) {
+    throw new RuntimeException('В установленном пакете отсутствует Lua resource');
+}
+require __DIR__ . '/../Stubs/Requests/JointQuotaRequest.php';
+$http = new SequenceHttpClient([new Response(200, [], '{}')]);
+$client = new TestClient(new ClientConfig(
+    baseUrl: 'https://fixture.test', rateLimit: new RateLimitConfig(1, 60, RateLimitBehavior::Throw),
+), new HttpTransport($http, $factory, $factory), $clock, $clock);
+if (!$client->send(new JointQuotaRequest())->raw()->isSuccess()
+    || $client->send(new JointQuotaRequest())->raw()->errors->first()?->code !== ErrorCode::RateLimited
+    || $http->calls !== 1) {
+    throw new RuntimeException('Совместные квоты не работают в установленном пакете');
+}
+echo "Standalone joint quotas и Lua resource — OK.\n";

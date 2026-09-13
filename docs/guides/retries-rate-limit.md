@@ -141,18 +141,16 @@ use Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior;
 final class Search extends AbstractRequest {}
 ```
 
-Runtime‑override: `withRateLimit()` и `withoutRateLimit()`.  
-Необязательный `RateLimitConfig::store` позволяет обмениваться счётчиком через PSR-16,
-но не гарантирует строгую квоту между конкурентными процессами. Без store счётчик
-принадлежит экземпляру клиента. Defaults, локальные отказы и миграция описаны
-в [контракте rate-limit](client-config/rate-limit.md).
+`ClientConfig::rateLimit` задаёт общую квоту; атрибут и `withRateLimit()` задают
+дополнительную квоту операции. Перед каждой HTTP-попыткой разрешение нужно по обеим.
+`includeClientQuota: false` исключает общую квоту, `withoutRateLimit()` отключает все.
+Без настройки backend учёт локальный, в экземпляре клиента. Общая квота имеет одну группу client, собственная — по классу запроса; custom key объединяет
+операции. Пространства общей и собственной квот различаются.
 
-### Ключ лимита
-По умолчанию ключ строится из `baseUrl`. Можно переопределить через `RateLimitConfig::key`
-или атрибут `#[RateLimit(key: ...)]`.
-
-Переопределяйте ключ, если один и тот же `baseUrl` используется для разных
-тенантов/пользователей или нужно разделить лимиты по операциям.
+PSR-16 store сохранён только для одной применимой квоты и не гарантирует атомарности
+между процессами. Для нескольких workers есть необязательный
+[Redis backend](redis-rate-limit.md). Defaults, ожидание, ключи и изменения совместимости:
+[полный контракт rate-limit](client-config/rate-limit.md).
 
 ## Идемпотентность
 ```php

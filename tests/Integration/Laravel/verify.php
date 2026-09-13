@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Factory\RequestFactoryInterface;
 use Brahmic\ApiSutra\Laravel\SdkServiceProvider;
+use Brahmic\ApiSutra\RateLimiting\Backends\PhpRedisRateLimitBackend;
+use Brahmic\ApiSutra\RateLimiting\RateLimitQuota;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
@@ -30,6 +32,13 @@ foreach ([false, true] as $cached) {
     $console->bootstrap();
     check($app->getProvider(SdkServiceProvider::class) !== null, 'Package discovery не подключил SDK');
     check($app->configurationIsCached() === $cached, 'Неверный режим config cache');
+    if (getenv('APISUTRA_TEST_REDIS') === '1') {
+        $backend = $app->make(PhpRedisRateLimitBackend::class);
+        $quota = new RateLimitQuota('laravel-' . bin2hex(random_bytes(8)), 1, 1000);
+        check($backend->tryAcquire([$quota])->granted, 'Laravel Redis не выдал разрешение');
+        check(!$backend->tryAcquire([$quota])->granted, 'Laravel Redis не сохранил общий счётчик');
+        check($app->make(PhpRedisRateLimitBackend::class) === $backend, 'Backend пересоздан');
+    }
     $client = $app->make(Client::class);
     $request = $app->make(ItemsRequest::class);
     check($request->limit === '20' && $request->getClient() === $client, 'DI изменил значения или клиента');

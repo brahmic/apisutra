@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Совместные квоты и атомарный Redis/phpredis backend — завершено](completed/pln-025-joint-rate-limit-quotas/pln-025-readme.md)
 - [Настройки, допуск и сборка: проверка, проекты и вопросы](audit/aud-004-policies-admission-assembly/aud-004-readme.md)
 - [Внутренняя сборка клиента — отложено до востребования пользователем](backlog/pln-022-client-assembly.md)
 - [Необязательный допуск — отложено до востребования пользователем](backlog/pln-023-execution-admission.md)
