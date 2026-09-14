@@ -228,8 +228,8 @@ status/headers/body в HTTP-кеше, два применения context() в E
 
 ## Состояние после перепроверки
 
-В [плане 028](../../current/pln-028-declarative-dto/pln-028-readme.md),
-[readiness](../../current/pln-028-declarative-dto/readiness.md), основной дискуссии
+В [плане 028](../../completed/pln-028-declarative-dto/pln-028-readme.md),
+[readiness](../../completed/pln-028-declarative-dto/readiness.md), основной дискуссии
 и юзкейсах отражены найденные пробелы и границы. Новая реализация не начата,
 решения В01–В17 не закрыты. Следующий необходимый результат — выбранные контракты
 и матрица приёмки, включая новые сценарии; readiness остаётся готовностью к этапу 1.

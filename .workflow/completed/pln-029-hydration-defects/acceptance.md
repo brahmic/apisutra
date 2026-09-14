@@ -24,7 +24,7 @@ PHP 8.4.15, с зависимостями из существующего `compo
 ConfigurationException. Пустые JSON `{}`/`[]` после assoc decode не различаются.
 
 Новые external rules, sourcePath, extras и строгие scalar-списки не реализованы:
-они остаются в [pln-028](../../current/pln-028-declarative-dto/pln-028-readme.md).
+они остаются в [pln-028](../pln-028-declarative-dto/pln-028-readme.md).
 Перестройка документации pln-027 не входила в работу.
 
 ## Проверки

@@ -1,9 +1,12 @@
 # Приёмка внешних правил гидратации DTO
 
 - Дата создания: 2026-09-14
-- Дата обновления: 2026-09-14
+- Дата обновления: 2026-09-15
 
-Контракт — [contracts.md](contracts.md). Сейчас ни одна строка не выполнена.
+Контракт — [contracts.md](contracts.md). **A01–A37, B01–B23, C01–C09 выполнены**
+в `9e84782`. [Связь строк с тестами и результаты](implementation.md#связь-строк-приёмки-с-проверками).
+Матрица ниже сохраняет проверяемый контракт; итог — 237 новых регрессий,
+полный набор 2027 тестов / 7308 assertions.
 Исходное состояние — [readiness](readiness.md) на `eeb0b6a`; сохранённые probes
 aud-006 и dsc-005 описывают старое поведение и не переписываются.
 
@@ -70,7 +73,7 @@ sourcePath, число вызовов конструктора и отсутст
 | B09 | В11 | Static/virtual/non-public/неверный тип/конструктор без параметра/атрибут или `FieldRule` на receiver | `ConfigurationException` |
 | B10 | В10 | Исходный массив после гидратации | Не изменён |
 | B11 | AS-2.5 | Отсутствие receiver | Прежнее поведение |
-| B12 | AS-2.5, В12 | Клиент с набором: `DtoInterface` и plain DTO с receiver как BodyRoot, свойство Body, multipart-body и query; вложенный DTO; список DTO | Receiver отсутствует, не развёрнут в корень; остальные поля без изменений; header, path и file ведут себя как до 028 |
+| B12 | AS-2.5, В12 | Клиент с набором: `DtoInterface` и plain DTO с receiver как BodyRoot, свойство Body, multipart-body и query; вложенный DTO; список DTO | Receiver отсутствует, не развёрнут в корень; остальные поля без изменений; в query проверяется промежуточное представление без receiver и прежний отказ URL builder для структур до HTTP; header, path и file ведут себя как до 028 |
 | B13 | В12 | Тот же DTO через `toArray()` и DtoSerializer без набора | `extra` под своим именем |
 | B14 | В12 | Клиент без набора; набор без `extras()` для класса | Прежняя сериализация свойства |
 | B15 | В12 | Вручную созданный DTO с заполненным receiver в запросе клиента с набором | Receiver исключён так же, как у гидратированного |
@@ -80,7 +83,7 @@ sourcePath, число вызовов конструктора и отсутст
 | B19 | В12 | Класс, у которого после исключения receiver не осталось свойств | Пустой JSON-объект |
 | B20 | В12 | Массив и plain-обёртка без receiver, содержащие DTO с receiver; DTO с receiver на третьем уровне | Заменены только контейнеры на пути; receiver исключён на всех уровнях |
 | B21 | В12 | `#[Cast(JsonCast::class)]` на BodyRoot, Body и query-свойстве с DTO с receiver; cast по типу из `ClientConfig::casts` для класса с receiver | `SerializationException` до вызова cast; HTTP-запрос не отправлен; `serialization_error` в результате |
-| B22 | В12 | Класс с `extras()` реализует `JsonSerializable` или `Stringable` либо имеет `toArray()` без `DtoInterface` | `ConfigurationException` при компиляции набора |
+| B22 | В12 | Класс с `extras()` реализует `DateTimeInterface`, `JsonSerializable` или `Stringable` либо имеет `toArray()` без `DtoInterface` | `ConfigurationException` при компиляции набора |
 | B23 | В12 | Исходный DTO после сериализации; счётчик конструктора; набор без receiver | Объект не изменён, конструктор не вызван; без receiver в наборе обхода нет и представление прежнее |
 
 ## Порция C: происхождение и безопасный лог

@@ -90,7 +90,7 @@ metadata cache удерживает объекты из constructor defaults и 
 - передача гидратора клиента в ContinuationService и перенос гидратации cached awaitAs;
 - регрессии и документация continuation/await и ошибок.
 
-В [028](../../current/pln-028-declarative-dto/pln-028-readme.md) остаются HydrationRules, strict,
+В [028](../pln-028-declarative-dto/pln-028-readme.md) остаются HydrationRules, strict,
 extras, sourcePath и подключение правил к одному гидратору клиента. Continuation
 получает этот экземпляр уже в 030; повторно менять конструкторы в 028 не требуется.
 030 не вводит внешние правила и не меняет scalar-политики.

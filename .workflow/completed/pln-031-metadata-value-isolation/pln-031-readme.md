@@ -78,7 +78,7 @@ policy/profile резолверы, RequestDefaults и собственный к�
 [030](../pln-030-continuation-errors/pln-030-readme.md) сохраняет Pending/Ready,
 ошибки и передачу гидратора; его подключение кеширующего гидратора и завершение
 ждут реализации 031. Контракты 030 можно выбирать раньше. В
-[028](../../current/pln-028-declarative-dto/pln-028-readme.md) общий metadata cache опирается
+[028](../pln-028-declarative-dto/pln-028-readme.md) общий metadata cache опирается
 на исправление 031, await-интеграция — на завершённый 030. План 027 отложен отдельно.
 
 ## Готовность к реализации

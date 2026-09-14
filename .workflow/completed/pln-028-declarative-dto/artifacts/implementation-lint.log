@@ -1,0 +1,77 @@
+PHP CODE SNIFFER REPORT SUMMARY
+--------------------------------------------------------------------------------
+FILE                                                            ERRORS  WARNINGS
+--------------------------------------------------------------------------------
+.../brahmic/apisutra/src/Attributes/AttributeMetadataCache.php  0       1
+...kages/brahmic/apisutra/src/Attributes/AttributeRegistry.php  0       3
+.../packages/brahmic/apisutra/src/Auth/ApiKeyAuthenticator.php  0       1
+...kages/brahmic/apisutra/src/Auth/CacheCredentialIdentity.php  0       1
+/home/dev/www/packages/brahmic/apisutra/src/Casts/EnumCast.php  0       1
+...ges/brahmic/apisutra/src/Collections/AbstractCollection.php  0       1
+...v/www/packages/brahmic/apisutra/src/Config/ClientConfig.php  0       4
+...ww/packages/brahmic/apisutra/src/Config/RateLimitConfig.php  0       1
+...src/Contracts/Interfaces/Core/ContextualClientInterface.php  0       1
+...v/www/packages/brahmic/apisutra/src/Core/AbstractClient.php  0       5
+...pisutra/src/Exceptions/Serialization/HydrationException.php  0       4
+...w/packages/brahmic/apisutra/src/Execution/BatchExecutor.php  0       1
+...es/brahmic/apisutra/src/Execution/ExecutionErrorFactory.php  0       5
+...ww/packages/brahmic/apisutra/src/Execution/PoolExecutor.php  0       3
+...kages/brahmic/apisutra/src/Execution/Batch/BatchContext.php  0       1
+...hmic/apisutra/src/Execution/Batch/ParallelBatchStrategy.php  0       1
+...kages/brahmic/apisutra/src/Extensions/ExtensionRegistry.php  0       2
+...w/packages/brahmic/apisutra/src/Files/FileTransferGuard.php  0       1
+.../dev/www/packages/brahmic/apisutra/src/Files/StreamCopy.php  0       1
+/home/dev/www/packages/brahmic/apisutra/src/Http/Origin.php     0       1
+...w/packages/brahmic/apisutra/src/Http/RequestDestination.php  0       1
+...ackages/brahmic/apisutra/src/Laravel/SdkServiceProvider.php  0       1
+...isutra/src/OperationInventory/OperationInventoryBuilder.php  0       1
+...isutra/src/OperationInventory/SdkCallPathMethodAnalyzer.php  0       2
+...pisutra/src/OperationInventory/Catalog/ResponseDtoUsage.php  0       2
+...pisutra/src/Pagination/PaginationItemsCollectionBuilder.php  0       1
+.../www/packages/brahmic/apisutra/src/Pagination/Paginator.php  0       1
+...dev/www/packages/brahmic/apisutra/src/Pipeline/Pipeline.php  0       2
+.../brahmic/apisutra/src/Pipeline/Auth/AuthBindingResolver.php  0       1
+...packages/brahmic/apisutra/src/Pipeline/Auth/AuthHandler.php  0       9
+...ages/brahmic/apisutra/src/Pipeline/Auth/AuthRefreshLock.php  0       1
+...kages/brahmic/apisutra/src/Pipeline/Auth/AuthTokenCache.php  0       1
+...rahmic/apisutra/src/Pipeline/Auth/LocalAuthLockProvider.php  0       1
+...ahmic/apisutra/src/Pipeline/Cache/CacheIdentityResolver.php  0       3
+...ckages/brahmic/apisutra/src/Pipeline/Cache/CacheManager.php  0       3
+...ackages/brahmic/apisutra/src/Pipeline/Error/ErrorPolicy.php  0       1
+...ahmic/apisutra/src/Pipeline/Flow/ExecutionResultBuilder.php  0       6
+...rahmic/apisutra/src/Pipeline/Hydration/ResponseHydrator.php  0       4
+...ahmic/apisutra/src/Pipeline/Preparation/TimeoutResolver.php  0       1
+...ages/brahmic/apisutra/src/Pipeline/Result/ResultFactory.php  0       3
+...es/brahmic/apisutra/src/Pipeline/Transport/DelayApplier.php  0       1
+...rahmic/apisutra/src/Pipeline/Transport/RateLimitApplier.php  0       1
+...hmic/apisutra/src/Pipeline/Transport/RetryDecisionMaker.php  0       1
+...ges/brahmic/apisutra/src/Pipeline/Transport/RetrySender.php  0       9
+.../packages/brahmic/apisutra/src/RateLimiting/RateLimiter.php  0       2
+...ww/packages/brahmic/apisutra/src/Request/RequestOptions.php  0       4
+...www/packages/brahmic/apisutra/src/Retry/RetryAfterDelay.php  0       1
+...ev/www/packages/brahmic/apisutra/src/Retry/RetryHandler.php  0       1
+...ckages/brahmic/apisutra/src/Serialization/DtoSerializer.php  0       1
+...hmic/apisutra/src/Serialization/EnumSerializationHelper.php  0       1
+.../brahmic/apisutra/src/Serialization/FilePayloadPreparer.php  0       1
+...hmic/apisutra/src/Serialization/HydrationValueValidator.php  0       2
+...ww/packages/brahmic/apisutra/src/Serialization/Hydrator.php  0       17
+...packages/brahmic/apisutra/src/Serialization/JsonEncoder.php  0       1
+...es/brahmic/apisutra/src/Serialization/RequestUrlBuilder.php  0       5
+...c/apisutra/src/Serialization/SerializationValueResolver.php  0       1
+.../packages/brahmic/apisutra/src/Serialization/Serializer.php  0       3
+...brahmic/apisutra/src/Serialization/Rules/HydrationScope.php  0       3
+...c/apisutra/src/Serialization/Rules/NestedValueProcessor.php  0       3
+...rahmic/apisutra/src/Serialization/Rules/RuleSetCompiler.php  0       6
+...mic/apisutra/src/Serialization/Rules/RuleValueProcessor.php  0       4
+...s/brahmic/apisutra/src/Serialization/Rules/ScalarValues.php  0       3
+...ackages/brahmic/apisutra/src/Transport/GuzzleHttpClient.php  0       4
+...w/packages/brahmic/apisutra/src/Transport/HttpTransport.php  0       3
+...w/packages/brahmic/apisutra/src/Transport/MockTransport.php  0       2
+...kages/brahmic/apisutra/src/Transport/RecordingTransport.php  0       1
+.../packages/brahmic/apisutra/src/VO/Http/ProviderResponse.php  0       1
+...w/packages/brahmic/apisutra/src/VO/Validation/Validator.php  0       2
+--------------------------------------------------------------------------------
+A TOTAL OF 0 ERRORS AND 168 WARNINGS WERE FOUND IN 68 FILES
+--------------------------------------------------------------------------------
+
+Time: 1.23 secs; Memory: 26MB

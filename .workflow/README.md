@@ -108,7 +108,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 - [Одиночный Nested, пути provider и контракт casts — завершено](completed/pln-029-hydration-defects/pln-029-readme.md)
 - [Готовность continuation-результата и сохранение ошибок await — завершено](completed/pln-030-continuation-errors/pln-030-readme.md)
 - [Изоляция значений в metadata cache гидратора и сериализаторов — завершено](completed/pln-031-metadata-value-isolation/pln-031-readme.md)
-- [Внешние правила, дополнительные поля и строгие политики DTO — новый план](current/pln-028-declarative-dto/pln-028-readme.md)
+- [Внешние правила, дополнительные поля и строгие политики DTO — завершено](completed/pln-028-declarative-dto/pln-028-readme.md)
 - [Контракты внешних правил DTO — решения В01–В17 приняты](discussion/dsc-005-declarative-dto-contracts/dsc-005-readme.md)
 - [ADR-001: явный критерий готовности continuation](adr/adr-001-continuation-readiness.md)
 - [ADR-002: внешний набор правил гидратации DTO](adr/adr-002-external-hydration-rules.md)

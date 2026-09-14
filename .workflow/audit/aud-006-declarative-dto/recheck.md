@@ -123,6 +123,6 @@ provider требуют доработки. F7 о registry-casts остаётс�
 документации и проверенной реализации.
 
 [Основной аудит](aud-006-readme.md), [матрица](criteria.md) и
-[план pln-028](../../current/pln-028-declarative-dto/pln-028-readme.md) уточнены.
+[план pln-028](../../completed/pln-028-declarative-dto/pln-028-readme.md) уточнены.
 План не добавляет повторную реализацию Returns, known-discriminator, вложенных
 списков, квот, boolean-форматов или провайдерских raw-моделей. Его статус — новый.

@@ -63,7 +63,7 @@ ContinuationConfigurationException. Первые probes отдельно вос�
 
 Поэтому [030](../../completed/pln-030-continuation-errors/pln-030-readme.md) получает
 готовность, доставку ошибок, последний ответ и переход старого поведения.
-[028](../../current/pln-028-declarative-dto/pln-028-readme.md) получает принятую базу
+[028](../../completed/pln-028-declarative-dto/pln-028-readme.md) получает принятую базу
 после 030 и подключает к ней свой набор. Инвариант 028 снова простой:
 без подключения новых правил поведение базовой версии не меняется.
 

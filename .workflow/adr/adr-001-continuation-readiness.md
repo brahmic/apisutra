@@ -36,7 +36,7 @@
   `ContinuationConfigurationException`, типы runtime-ошибок ожидания меняются,
   конструктор `ContinuationService` требует гидратор.
 - Ядро не знает протоколов провайдеров: терминальные состояния задаёт resolver SDK.
-- Правила гидратации [028](../current/pln-028-declarative-dto/pln-028-readme.md)
+- Правила гидратации [028](../completed/pln-028-declarative-dto/pln-028-readme.md)
   подключаются без специального режима: strict-ошибка готового финала не может стать pending.
 - Изоляция значений гидратора клиента — предпосылка передачи, выполняется в
   [031](../completed/pln-031-metadata-value-isolation/pln-031-readme.md).

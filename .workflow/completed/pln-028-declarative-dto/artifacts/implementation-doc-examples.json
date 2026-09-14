@@ -1,0 +1,38 @@
+{
+    "graph": [
+        7,
+        {
+            "future": false
+        },
+        8,
+        [
+            1,
+            2
+        ],
+        null
+    ],
+    "extras": {
+        "rows": [
+            {
+                "sourceKey": 0,
+                "remainder": {
+                    "meta": {
+                        "revision": 2
+                    }
+                }
+            }
+        ],
+        "next_feature": null
+    },
+    "strict": [
+        "invalid_field_type",
+        "items[1].id",
+        "\/rows\/1\/value\/record_id"
+    ],
+    "http": 9,
+    "wire": {
+        "id": 7
+    },
+    "scope": 11,
+    "illuminate": []
+}
