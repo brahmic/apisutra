@@ -17,7 +17,8 @@ final class CastRegistry
     private array $casts = [];
 
     /**
-     * Глобальный registry — для Dto::from() без context
+     * Общий registry для явного использования. Регистрация здесь не меняет DTO::from():
+     * гидратация использует отдельный registry профиля DTO и атрибуты свойств.
      */
     public static function global(): self
     {

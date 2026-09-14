@@ -248,7 +248,7 @@ ExecutionDeadlineException pipeline сохраняет накопленное с
 | reason | Смысл |
 | --- | --- |
 | `unwrap_path_missing` | Указанный путь отсутствует; actual — `missing`. |
-| `unexpected_response_shape` | По пути найден null/scalar вместо данных объявленного DTO. |
+| `unexpected_response_shape` | По пути найден null/scalar вместо данных объявленного DTO либо непустой list вместо одиночного Nested. |
 | `integer_out_of_range` | Число не помещается в int; actual — тип исходного значения. |
 | `required_field_missing` | Обязательное поле отсутствует. |
 | `null_not_allowed` | Итоговое значение null не допускается объявленным типом. |
@@ -261,6 +261,10 @@ ExecutionDeadlineException pipeline сохраняет накопленное с
 переполнением. Для вложенных DTO используются имена свойств, для коллекций —
 порядковый индекс (`items[1].id`), без включения внешних ключей и значений в диагностику.
 Это сведения о новых проверках; у остальных HydrationException эти свойства могут быть null.
+
+Структурированные ошибки `DefaultValue` provider также получают имя текущего поля:
+например, `data.child.count`. Правила и изменение прежнего неполного пути —
+в [контракте provider](attributes/data-transfer.md#provider-для-найденного-значения).
 
 Исходный HTTP-ответ остаётся в результате. Ошибка гидратации не запускает новый HTTP
 retry. `raw()`/`resolved()` сообщают ошибку, `dataOrFail()` и `throwOnErrors` выбрасывают

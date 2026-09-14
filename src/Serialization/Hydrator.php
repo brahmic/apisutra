@@ -43,7 +43,11 @@ final class Hydrator
     private readonly NamingStrategyResolver $namingStrategyResolver;
     private readonly BuiltinHydrationCaster $builtinHydrationCaster;
     private readonly HydrationValueValidator $valueValidator;
+    private readonly NestedObjectTypeResolver $nestedObjectTypeResolver;
 
+    /**
+     * $casts сохранён для совместимости; гидратация использует casts профиля DTO и свойства.
+     */
     public function __construct(
         private readonly CastRegistry $casts,
         private readonly ?AttributeMetadataCache $cache = null,
@@ -51,6 +55,7 @@ final class Hydrator
     ) {
         $this->namingStrategyResolver = new NamingStrategyResolver();
         $this->valueValidator = new HydrationValueValidator();
+        $this->nestedObjectTypeResolver = new NestedObjectTypeResolver();
         $this->builtinHydrationCaster = new BuiltinHydrationCaster(
             typeSelector: new HydrationTypeSelector(),
             dtoHydrator: fn (mixed $nestedValue, string $dtoClass, ?PipelineContext $nestedContext): object => $this->hydrate($nestedValue, $dtoClass, $nestedContext),
@@ -58,8 +63,8 @@ final class Hydrator
     }
 
     /**
-     * Синглтон для DTO::from() без явного контекста
-     * Использует CastRegistry::global()
+     * Синглтон для DTO::from() без явного контекста.
+     * Переданный глобальный registry не участвует в гидратации DTO.
      */
     public static function default(): self
     {
@@ -125,7 +130,11 @@ final class Hydrator
             );
 
             if ($default !== null && $this->shouldApplyDefault($default, $state)) {
-                $value = $this->resolveDefaultValue($default, $value, $state, $array, $context);
+                try {
+                    $value = $this->resolveDefaultValue($default, $value, $state, $array, $context);
+                } catch (HydrationException $exception) {
+                    throw $exception->prependPath($name);
+                }
                 $state = $value === null ? ValueState::Null : ValueState::Present;
             }
 
@@ -441,6 +450,22 @@ final class Hydrator
             return null;
         }
 
+        $objectType = $this->nestedObjectTypeResolver->resolve($nested, $property);
+        if ($objectType !== null) {
+            if (
+                (!is_array($value) && !is_object($value))
+                || (is_array($value) && $value !== [] && array_is_list($value))
+            ) {
+                throw HydrationException::invalidValue(
+                    'unexpected_response_shape',
+                    $objectType,
+                    get_debug_type($value),
+                );
+            }
+
+            return $this->hydrate($value, $objectType, $context);
+        }
+
         if ($nested->each !== null && is_array($value)) {
             $value = array_map(
                 fn (mixed $item) => ArrayPath::getByPath($item, $nested->each),
@@ -454,10 +479,6 @@ final class Hydrator
 
         $propertyType = $this->getPrimaryType($property);
         $targetType = $nested->type ?? $propertyType;
-
-        if ($nested->type !== null && (!class_exists($nested->type) || !(new ReflectionClass($nested->type))->isInstantiable())) {
-            throw new ConfigurationException('Неверный класс Nested.type: ' . $nested->type);
-        }
 
         if (is_array($value) && $this->isDiscriminatedNested($nested)) {
             return $this->hydrateDiscriminatedNested(

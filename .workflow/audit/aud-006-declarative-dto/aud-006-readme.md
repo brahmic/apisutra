@@ -173,7 +173,7 @@ JSON-пути с assoc-массивами, а не всех входных пр�
 Для plain-child работает короткий [ReviewChildCast](artifacts/Stubs/ReviewChildCast.php)
 через property Cast, включая путь `child.count` (`C07–C08`). Это обход, требующий
 атрибута на родителе, а не исправление Nested. Дефект и его регрессии выделены в
-[pln-029](../../current/pln-029-hydration-defects/pln-029-readme.md); pln-028 должен
+[pln-029](../../completed/pln-029-hydration-defects/pln-029-readme.md); pln-028 должен
 переиспользовать исправленный механизм, а не считать одиночный Nested уже рабочим.
 
 ### Где заканчиваются расширения
@@ -336,6 +336,6 @@ registry. Следует развести проверки источников 
 План устранения подтверждённых пробелов:
 [pln-028 — декларативные правила и диагностика DTO](../../current/pln-028-declarative-dto/pln-028-readme.md).
 Дефекты F8/F5, расхождение F7 и закрепление проверенной композиции F6 выделены в
-[pln-029 — исправления текущей гидратации](../../current/pln-029-hydration-defects/pln-029-readme.md).
+[pln-029 — исправления текущей гидратации](../../completed/pln-029-hydration-defects/pln-029-readme.md).
 Это план реализации; настоящий аудит не меняет PHP API и не объявляет старые
 разрешённые scalar conversions, unknown-field handling или collection defaults ошибками.

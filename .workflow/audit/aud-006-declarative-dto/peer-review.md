@@ -95,7 +95,7 @@ JSON действительно кодируется и декодируется
 
 ## Что изменено в планах
 
-[pln-029](../../current/pln-029-hydration-defects/pln-029-readme.md) отдельно устраняет
+[pln-029](../../completed/pln-029-hydration-defects/pln-029-readme.md) отдельно устраняет
 F8, F5, расхождение F7 и закрепляет Present-provider тестом/документацией. Он не требует
 введения новых правил AS-1–AS-4.
 

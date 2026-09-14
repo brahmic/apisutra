@@ -10,7 +10,8 @@ Extensions — это единый механизм расширения SDK: к
 4) `isEnabled()` — проверяется при использовании
 
 ## Что можно регистрировать
-- касты (`registerCast`)
+- касты сериализации запросов (`registerCast`); участие источников в гидратации
+  описано в [справке casts](casts.md#регистрация-кастов)
 - хуки (`registerHook`)
 - обработчики ответов (`registerResponseHandler`)
 - обработчики атрибутов (`registerAttributeHandler`)

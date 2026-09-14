@@ -105,7 +105,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 ## Текущие материалы
 
 - [Декларативное преобразование DTO: проверка фидбека AS-1–AS-4](audit/aud-006-declarative-dto/aud-006-readme.md)
-- [Одиночный Nested, пути provider и контракт casts — новый план исправлений](current/pln-029-hydration-defects/pln-029-readme.md)
+- [Одиночный Nested, пути provider и контракт casts — завершено](completed/pln-029-hydration-defects/pln-029-readme.md)
 - [Внешние правила, дополнительные поля и строгие политики DTO — новый план](current/pln-028-declarative-dto/pln-028-readme.md)
 - [Документация: актуализация, единые контракты и точки входа — новый план](current/pln-027-documentation-restructure/pln-027-readme.md)
 - [Транспорт, формат ответа, бюджет и retry — аудит пяти замечаний](audit/aud-005-transport-response-retry/aud-005-readme.md)

@@ -162,22 +162,40 @@ public int $id;
 
 ## Вложенные DTO
 Когда ответ содержит вложенные объекты или списки объектов (например, `user.address`, `order.items[]`).
-```php
-use Brahmic\ApiSutra\Attributes\DataTransfer\Nested;
 
-#[Nested(type: AddressDto::class)]
-public AddressDto $address;
+Одиночный объект может быть plain DTO без базового класса ApiSutra:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Brahmic\ApiSutra\Attributes\DataTransfer\Nested;
+use Brahmic\ApiSutra\Serialization\Hydrator;
+
+final readonly class AddressDto
+{
+    public function __construct(public string $city)
+    {
+    }
+}
+
+final readonly class UserDto
+{
+    #[Nested(type: AddressDto::class)]
+    public AddressDto $address;
+}
+
+$payload = json_decode('{"address":{"city":"Sample"}}', true, flags: JSON_THROW_ON_ERROR);
+$user = Hydrator::default()->hydrate($payload, UserDto::class);
+echo $user->address->city; // Sample
 ```
 
-Параметры `Nested`:
-- `type` — тип элемента (для массивов/коллекций)
-- `itemCast` — cast для каждого элемента массива перед hydration/type stage
-- `from` — путь к данным (dot‑notation)
-- `fallback` — альтернативные пути
-- `each` — путь внутри каждого элемента массива
-- `discriminator` + `map` — полиморфная гидрация
-- `discriminatorMode` — режим discriminator: `Value` (значение поля) или `Key` (имя ключа)
-- `unknownVariant` — поведение при неизвестном варианте: `KeepRaw`, `Skip`, `Error`
+То же объявление работает с constructor promotion и через `Returns`.
+Для одиночного свойства конкретный класс можно вывести из native-типа:
+`#[Nested] public AddressDto $address`. Для массива `type` задаёт класс элемента.
+Правила выбора объекта/списка, nullable/union и все параметры —
+в [справочнике Nested](attributes/data-transfer.md#nested).
 
 Пример key‑mode (кейс вида `{"person": {...}}`):
 ```php
@@ -353,6 +371,12 @@ final class StatusDefault implements DefaultValueProviderInterface
 ```
 
 Если достаточно простого значения — используйте `#[DefaultValue]`.
+
+Provider с `when: [ValueState::Present]` может проверить найденное значение
+и вернуть его перед `Nested`. Чтобы одновременно запретить null и проверить
+форму списка, используйте один provider с `when: [ValueState::Null, ValueState::Present]`.
+Рабочий пример и порядок нормализации — в
+[справочнике DefaultValue](attributes/data-transfer.md#defaultvalue).
 
 Для typed collections `#[DefaultValue(value: [], when: [ValueState::Missing])]`
 обычно больше не нужен: `missing -> empty collection` теперь покрывается ядром.

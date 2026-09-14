@@ -1,0 +1,9 @@
+{
+    "registered": "LOWER",
+    "plain": "lower",
+    "profile": "LOWER",
+    "property": "LOWER",
+    "nested": "Sample",
+    "providerPath": "child.count",
+    "illuminate": []
+}

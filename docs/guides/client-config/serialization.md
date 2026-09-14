@@ -61,18 +61,24 @@ $config = new ClientConfig(
 
 ## Casts
 
+`casts` — правила по PHP-типу для сериализации свойств запроса:
+
 ```php
 use Brahmic\ApiSutra\Casts\DateTimeCast;
+use Brahmic\ApiSutra\Config\ClientConfig;
 
 $config = new ClientConfig(
     baseUrl: 'https://api.example',
     casts: [
-        'datetime' => DateTimeCast::class,
+        DateTimeImmutable::class => DateTimeCast::class,
     ],
 );
 ```
 
-Если касты не заданы — используются только встроенные и атрибутные.
+Ключ — объявленный PHP-тип, например `DateTimeImmutable::class` или `'string'`.
+Гидратация ответа через `Returns` не использует эту настройку: ей нужны
+`DtoHydrationProfile` или `#[Cast]` свойства. Источники и приоритеты приведены
+в [справке casts](../casts.md#регистрация-кастов).
 
 ## Request DateTime
 ```php

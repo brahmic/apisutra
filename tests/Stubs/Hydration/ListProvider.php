@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Brahmic\ApiSutra\Tests\Stubs\Hydration;
+
+use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DefaultValueProviderInterface;
+use Brahmic\ApiSutra\Enums\DataTransfer\ValueState;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
+
+final readonly class ListProvider implements DefaultValueProviderInterface
+{
+    public function resolve(mixed $value, ValueState $state, array $source, ?PipelineContext $context): mixed
+    {
+        if (!is_array($value) || !array_is_list($value)) {
+            throw HydrationException::invalidValue('invalid_list_shape', 'list', get_debug_type($value));
+        }
+        return $value;
+    }
+}

@@ -10,7 +10,6 @@ use Brahmic\ApiSutra\Enums\Configuration\NamingStrategy;
 use Brahmic\ApiSutra\Enums\Execution\RequestRole;
 use Brahmic\ApiSutra\Serialization\Hydrator;
 use Brahmic\ApiSutra\Tests\Stubs\Collections\OutputItemCollection;
-use Brahmic\ApiSutra\Tests\Stubs\Casts\UppercaseCast;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\CastAttributeDto;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\CastStringDto;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\CollectionAutoDefaultDto;
@@ -186,10 +185,8 @@ describe('Hydrator', function () {
             ->and($dto->ownershipType)->toBe('lease');
     });
 
-    it('применяет каст из реестра по типу', function () {
-        $casts = new CastRegistry();
-        $casts->register('string', new UppercaseCast());
-        $hydrator = new Hydrator($casts);
+    it('применяет каст по типу из hydration profile DTO', function () {
+        $hydrator = new Hydrator(new CastRegistry());
 
         $dto = $hydrator->hydrate(['value' => 'hello'], CastStringDto::class);
 

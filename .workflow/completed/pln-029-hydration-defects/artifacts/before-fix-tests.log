@@ -1,0 +1,542 @@
+
+  ⨯.⨯.⨯.⨯⨯..⨯⨯....⨯⨯⨯⨯⨯⨯⨯.⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯.⨯⨯⨯....
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в address[0]: ожидается Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto, получено string
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в address[0]: ожидается Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto, получено string
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в address[0]: ожидается Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto, получено string
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в address[0]: ожидается Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto, получено string
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в address[0]: ожидается Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto, получено string
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в child[0].values: ожидается array, получено missing
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydratio…  HydrationException
+  Некорректные данные в item[0]: ожидается Brahmic\ApiSutra\Tests\Stubs\Dto\NestedItemDto, получено int
+
+  at src/Exceptions/Serialization/HydrationException.php:45
+     41▕         }
+     42▕
+     43▕         $path = $this->path ?? '';
+     44▕         $path = $prefix . ($path === '' || str_starts_with($path, '[') ? '' : '.') . $path;
+  ➜  45▕         return new self(
+     46▕             'Некорректные данные в ' . $path . ': ожидается ' . ($this->expected ?? 'unknown') . ', получено ' . ($this->actual ?? 'unknown'),
+     47▕             $this->getCode(),
+     48▕             $this,
+     49▕             reason: $this->reason,
+
+  1   src/Exceptions/Serialization/HydrationException.php:45
+  2   src/Serialization/Hydrator.php:206
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > i…  TypeError
+  Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto::__construct(): Argument #1 ($city) must be of type string, array given, called in /home/dev/www/packages/brahmic/apisutra/src/Serialization/Hydrator.php on line 548
+
+  at tests/Stubs/Hydration/AddressDto.php:11
+      7▕ use Brahmic\ApiSutra\Tests\Support\HydrationConstructionProbe;
+      8▕
+      9▕ final readonly class AddressDto
+     10▕ {
+  ➜  11▕     public function __construct(public string $city)
+     12▕     {
+     13▕         HydrationConstructionProbe::$calls++;
+     14▕     }
+     15▕ }
+
+  1   tests/Stubs/Hydration/AddressDto.php:11
+  2   src/Serialization/Hydrator.php:548
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > i…  TypeError
+  Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto::__construct(): Argument #1 ($city) must be of type string, array given, called in /home/dev/www/packages/brahmic/apisutra/src/Serialization/Hydrator.php on line 548
+
+  at tests/Stubs/Hydration/AddressDto.php:11
+      7▕ use Brahmic\ApiSutra\Tests\Support\HydrationConstructionProbe;
+      8▕
+      9▕ final readonly class AddressDto
+     10▕ {
+  ➜  11▕     public function __construct(public string $city)
+     12▕     {
+     13▕         HydrationConstructionProbe::$calls++;
+     14▕     }
+     15▕ }
+
+  1   tests/Stubs/Hydration/AddressDto.php:11
+  2   src/Serialization/Hydrator.php:548
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > i…  TypeError
+  Brahmic\ApiSutra\Tests\Stubs\Hydration\AddressDto::__construct(): Argument #1 ($city) must be of type string, array given, called in /home/dev/www/packages/brahmic/apisutra/src/Serialization/Hydrator.php on line 548
+
+  at tests/Stubs/Hydration/AddressDto.php:11
+      7▕ use Brahmic\ApiSutra\Tests\Support\HydrationConstructionProbe;
+      8▕
+      9▕ final readonly class AddressDto
+     10▕ {
+  ➜  11▕     public function __construct(public string $city)
+     12▕     {
+     13▕         HydrationConstructionProbe::$calls++;
+     14▕     }
+     15▕ }
+
+  1   tests/Stubs/Hydration/AddressDto.php:11
+  2   src/Serialization/Hydrator.php:548
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it возвращае…
+  Failed asserting that two strings are identical.
+  -'invalid_field_type'
+  +'required_field_missing'
+
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:64
+     60▕     try {
+     61▕         Hydrator::default()->hydrate($payload, ObjectDto::class);
+     62▕         test()->fail('Некорректный объект принят');
+     63▕     } catch (HydrationException $error) {
+  ➜  64▕         expect($error->reason)->toBe($reason)->and($error->path)->toBe($path)
+     65▕             ->and(HydrationConstructionProbe::$calls)->toBe(0);
+     66▕     }
+     67▕ })->with([
+     68▕     [[], 'required_field_missing', 'address'],
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:64
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it отклоняет…
+  Failed asserting that an instance of class Brahmic\ApiSutra\Exceptions\Serialization\HydrationException is an instance of class Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:80
+     76▕ ]);
+     77▕
+     78▕ it('отклоняет неоднозначную или несовместимую декларацию Nested', function (string $type): void {
+     79▕     expect(fn (): object => Hydrator::default()->hydrate(['address' => ['city' => 'Sample', 'values' => []]], $type))
+  ➜  80▕         ->toThrow(ConfigurationException::class);
+     81▕ })->with([AmbiguousObjectDto::class, AmbiguousCardinalityDto::class, InvalidObjectTypeDto::class]);
+     82▕
+     83▕ it('сохраняет пользовательские коллекции с конструктором, фабрикой и Traversable', function (): void {
+     84▕     $items = [['city' => 'First'], ['city' => 'Second']];
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:80
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it отклоняет…
+  Failed asserting that an instance of class Brahmic\ApiSutra\Exceptions\Serialization\HydrationException is an instance of class Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:80
+     76▕ ]);
+     77▕
+     78▕ it('отклоняет неоднозначную или несовместимую декларацию Nested', function (string $type): void {
+     79▕     expect(fn (): object => Hydrator::default()->hydrate(['address' => ['city' => 'Sample', 'values' => []]], $type))
+  ➜  80▕         ->toThrow(ConfigurationException::class);
+     81▕ })->with([AmbiguousObjectDto::class, AmbiguousCardinalityDto::class, InvalidObjectTypeDto::class]);
+     82▕
+     83▕ it('сохраняет пользовательские коллекции с конструктором, фабрикой и Traversable', function (): void {
+     84▕     $items = [['city' => 'First'], ['city' => 'Second']];
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:80
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it отклоняет…
+  Failed asserting that an instance of class Brahmic\ApiSutra\Exceptions\Serialization\HydrationException is an instance of class Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:80
+     76▕ ]);
+     77▕
+     78▕ it('отклоняет неоднозначную или несовместимую декларацию Nested', function (string $type): void {
+     79▕     expect(fn (): object => Hydrator::default()->hydrate(['address' => ['city' => 'Sample', 'values' => []]], $type))
+  ➜  80▕         ->toThrow(ConfigurationException::class);
+     81▕ })->with([AmbiguousObjectDto::class, AmbiguousCardinalityDto::class, InvalidObjectTypeDto::class]);
+     82▕
+     83▕ it('сохраняет пользовательские коллекции с конструктором, фабрикой и Traversable', function (): void {
+     84▕     $items = [['city' => 'First'], ['city' => 'Second']];
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:80
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it доставляе…
+  Failed asserting that false is true.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:108
+    104▕             ->and($result->exception->path)->toBe('data.address.city')
+    105▕             ->and($result->errors->first()->code->value)->toBe('hydration_error')
+    106▕             ->and(fn () => $handle->dataOrFail())->toThrow(HydrationException::class);
+    107▕     } else {
+  ➜ 108▕         expect($result->isSuccess())->toBeTrue()->and($result->data->address->city)->toBe('Sample');
+    109▕     }
+    110▕ })->with([false, true])->with([false, true]);
+    111▕
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:108
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it доставляе…
+  Failed asserting that null is identical to 'required_field_missing'.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:103
+     99▕
+    100▕     expect($transport->getRecorded())->toHaveCount(1)->and($result->response->status)->toBe(200);
+    101▕     if ($invalid) {
+    102▕         expect($result->exception)->toBeInstanceOf(HydrationException::class)
+  ➜ 103▕             ->and($result->exception->reason)->toBe('required_field_missing')
+    104▕             ->and($result->exception->path)->toBe('data.address.city')
+    105▕             ->and($result->errors->first()->code->value)->toBe('hydration_error')
+    106▕             ->and(fn () => $handle->dataOrFail())->toThrow(HydrationException::class);
+    107▕     } else {
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:103
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it доставляе…
+  Failed asserting that false is true.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:108
+    104▕             ->and($result->exception->path)->toBe('data.address.city')
+    105▕             ->and($result->errors->first()->code->value)->toBe('hydration_error')
+    106▕             ->and(fn () => $handle->dataOrFail())->toThrow(HydrationException::class);
+    107▕     } else {
+  ➜ 108▕         expect($result->isSuccess())->toBeTrue()->and($result->data->address->city)->toBe('Sample');
+    109▕     }
+    110▕ })->with([false, true])->with([false, true]);
+    111▕
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:108
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\NestedObjectHydrationTest > it доставляе…
+  Failed asserting that null is identical to 'required_field_missing'.
+
+  at tests/Unit/Serialization/NestedObjectHydrationTest.php:103
+     99▕
+    100▕     expect($transport->getRecorded())->toHaveCount(1)->and($result->response->status)->toBe(200);
+    101▕     if ($invalid) {
+    102▕         expect($result->exception)->toBeInstanceOf(HydrationException::class)
+  ➜ 103▕             ->and($result->exception->reason)->toBe('required_field_missing')
+    104▕             ->and($result->exception->path)->toBe('data.address.city')
+    105▕             ->and($result->errors->first()->code->value)->toBe('hydration_error')
+    106▕             ->and(fn () => $handle->dataOrFail())->toThrow(HydrationException::class);
+    107▕     } else {
+
+  1   tests/Unit/Serialization/NestedObjectHydrationTest.php:103
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'count'
+  +''
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'count'
+  +''
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'count'
+  +''
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'count.detail'
+  +'detail'
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'provider_rejected_value'
+  +'unexpected_response_shape'
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'provider_rejected_value'
+  +'unexpected_response_shape'
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'items[0].count'
+  +'items[0]'
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+     21▕     try {
+     22▕         Hydrator::default()->hydrate($payload, $type);
+     23▕         test()->fail('Provider должен был отказать');
+     24▕     } catch (HydrationException $error) {
+  ➜  25▕         expect($error->reason)->toBe('provider_rejected_value')->and($error->path)->toBe($path)
+     26▕             ->and($error->expected)->toBe('accepted value')->and($error->actual)->toBe($state);
+     27▕         $cause = $error;
+     28▕         while ($cause->getPrevious() !== null) {
+     29▕             $cause = $cause->getPrevious();
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:25
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it до…
+  Failed asserting that two strings are identical.
+  -'data.items[0].count'
+  +'data.items[0]'
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:50
+     46▕     $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test'), $transport);
+     47▕     $result = $client->send(new ContractRequest(ProviderEnvelopeDto::class, 'data'))->raw();
+     48▕
+     49▕     expect($result->isFailed())->toBeTrue()->and($result->response->status)->toBe(200)
+  ➜  50▕         ->and($result->exception->path)->toBe('data.items[0].count')
+     51▕         ->and($result->errors->first()->context)->toMatchArray(['path' => 'data.items[0].count', 'reason' => 'provider_rejected_value'])
+     52▕         ->and($transport->getRecorded())->toHaveCount(1);
+     53▕ });
+     54▕
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:50
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it пр…
+  Failed asserting that two strings are identical.
+  -'items'
+  +''
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:67
+     63▕     try {
+     64▕         Hydrator::default()->hydrate($payload, CheckedListDto::class);
+     65▕         test()->fail('Некорректный список принят');
+     66▕     } catch (HydrationException $error) {
+  ➜  67▕         expect($error->reason)->toBe($reason)->and($error->path)->toBe($path);
+     68▕     }
+     69▕ })->with([
+     70▕     [['items' => null], 'invalid_list_shape', 'items'],
+     71▕     [['items' => ['key' => ['kind' => 'known', 'city' => 'Sample']]], 'invalid_list_shape', 'items'],
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:67
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it пр…
+  Failed asserting that two strings are identical.
+  -'items'
+  +''
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:67
+     63▕     try {
+     64▕         Hydrator::default()->hydrate($payload, CheckedListDto::class);
+     65▕         test()->fail('Некорректный список принят');
+     66▕     } catch (HydrationException $error) {
+  ➜  67▕         expect($error->reason)->toBe($reason)->and($error->path)->toBe($path);
+     68▕     }
+     69▕ })->with([
+     70▕     [['items' => null], 'invalid_list_shape', 'items'],
+     71▕     [['items' => ['key' => ['kind' => 'known', 'city' => 'Sample']]], 'invalid_list_shape', 'items'],
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:67
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Serialization\DefaultValueProviderContractTest > it пр…
+  Failed asserting that two strings are identical.
+  -'items'
+  +''
+
+
+  at tests/Unit/Serialization/DefaultValueProviderContractTest.php:67
+     63▕     try {
+     64▕         Hydrator::default()->hydrate($payload, CheckedListDto::class);
+     65▕         test()->fail('Некорректный список принят');
+     66▕     } catch (HydrationException $error) {
+  ➜  67▕         expect($error->reason)->toBe($reason)->and($error->path)->toBe($path);
+     68▕     }
+     69▕ })->with([
+     70▕     [['items' => null], 'invalid_list_shape', 'items'],
+     71▕     [['items' => ['key' => ['kind' => 'known', 'city' => 'Sample']]], 'invalid_list_shape', 'items'],
+
+  1   tests/Unit/Serialization/DefaultValueProviderContractTest.php:67
+
+
+  Tests:    29 failed, 15 passed (76 assertions)
+  Duration: 0.09s

@@ -1,13 +1,25 @@
 # Casts
 
-Касты применяются при сериализации запросов и при гидрации DTO.
-Они помогают преобразовывать типы данных без ручной логики.
+Касты преобразуют значения при сериализации запросов и гидратации DTO.
+Для этих операций используются разные источники регистрации.
 
 ## Приоритет применения
-1) `#[Cast]` на свойстве  
-2) registry‑каст по типу, выбранному по runtime‑значению (для union)  
-3) safe scalar auto-cast по declared type при гидрации (`int` / `float` / `bool` / `string`)  
-4) встроенные правила по типу значения (DateTime/enum)
+
+Для гидратации ненулевого свойства без `#[Nested]`:
+
+1. `#[Cast]` на свойстве.
+2. Cast по типу из `DtoHydrationProfile::casts()`.
+3. Безопасное приведение scalar и встроенные правила DateTime/enum/DTO.
+
+Тип для union выбирается с учётом входного значения. Если задан `#[Nested]`,
+гидратор использует его обработку вместо `#[Cast]` всего свойства; поэлементный
+cast задаётся через [Nested.itemCast](attributes/data-transfer.md#nested).
+Provider `DefaultValue` выполняется раньше этой обработки; оставшийся null
+не передаётся в cast и проверяется на допустимость типом поля.
+
+Для сериализации свойств запроса `#[Cast]` имеет приоритет над клиентским
+registry и встроенными преобразованиями. Вложенные DTO сериализуются по своим
+[правилам DTO и wire body](client-config/serialization.md#dtoserializationprofile).
 
 ## Встроенные касты
 - `BooleanCast`
@@ -83,6 +95,8 @@ Numeric даёт строки `1`/`0`. С явным форматом serialize 
 
 ## Регистрация кастов
 
+`ClientConfig.casts` настраивает сериализацию свойств **исходящего запроса**:
+
 ```php
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Casts\DateTimeCast;
@@ -95,12 +109,28 @@ $config = new ClientConfig(
 );
 ```
 
-Если касты не регистрировать, работают только встроенные и атрибутные `#[Cast]`.
-Регистрация нужна для провайдер‑специфичных типов или единых правил по типу.
+Эта настройка не подключает cast к гидратации ответа через `Returns`.
+Для входящих DTO используйте атрибут `DtoHydrationProfile` на классе или общей
+базе и метод `casts()` профиля либо `#[Cast]` конкретного свойства.
+
+| Источник | Участие в гидратации DTO | Назначение |
+| --- | --- | --- |
+| `new Hydrator(casts: $registry)` | Нет | Аргумент сохранён для совместимости; содержимое не применяется к DTO |
+| `ClientConfig.casts` | Нет | Casts сериализации свойств запроса |
+| `CastRegistry::global()` | Нет, включая `Dto::from()` / `Hydrator::default()` | Общий registry для явного использования вызывающим кодом |
+| `ExtensionContext::registerCast()` / `ExtensionRegistry::registerCast()` | Нет | Регистрация в registry расширения; у стандартного SDK-клиента это registry запросов |
+| `DtoHydrationProfile::casts()` | Да | Правила по типу для DTO с привязанным профилем |
+| `#[Cast]` свойства | Да, если свойство не обрабатывается `Nested` | Явное преобразование значения |
+
+Клиентский и глобальный registry не заменяют профиль DTO. Профили сериализации
+DTO также настраиваются отдельно от профилей гидратации.
+См. [руководство DTO](dto.md) и
+[параметр ClientConfig.casts](client-config/serialization.md#casts).
 
 ## Атрибут #[Cast]
 ```php
 use Brahmic\ApiSutra\Attributes\DataTransfer\Cast;
+use Brahmic\ApiSutra\Casts\DateTimeCast;
 
 #[Cast(DateTimeCast::class, format: DATE_ATOM)]
 public DateTimeImmutable $createdAt;
