@@ -17,7 +17,7 @@
 Это обновлённые рекомендации; статус принятия решений не изменён.
 
 После [второго разбора](followup-review.md) исправление await относится к
-[030](../../current/pln-030-continuation-errors/pln-030-readme.md), В02 рекомендует
+[030](../../completed/pln-030-continuation-errors/pln-030-readme.md), В02 рекомендует
 конфликт деклараций, остатки проекций списка имеют явные sourceKey/remainder,
 а уточнение исходящих extras вынесено в [В12-Q1](questions.md).
 
@@ -509,7 +509,7 @@ hydration_depth_exceeded. Цикл во входных PHP-объектах да
 
 SDK объявляет способ отличить pending от финала: например, появление поля data
 или отдельный определитель готовности для плоского ответа. Контракт принят
-и реализуется в [030](../../current/pln-030-continuation-errors/contracts.md);
+и реализуется в [030](../../completed/pln-030-continuation-errors/contracts.md);
 Сам гидратор клиента и совместимые конструкторы await-сервисов также относятся
 к 030; перед его подключением общий дефект удержания значений metadata исправляет
 [031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md).

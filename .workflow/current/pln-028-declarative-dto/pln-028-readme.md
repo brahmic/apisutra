@@ -23,7 +23,7 @@
 коду пока не подтверждена. После
 [второго разбора](../../discussion/dsc-005-declarative-dto-contracts/followup-review.md)
 исправление ошибок await и переход старого поведения вынесены в
-[pln-030](../pln-030-continuation-errors/pln-030-readme.md).
+[pln-030](../../completed/pln-030-continuation-errors/pln-030-readme.md).
 
 Зависимости: 029 завершён; интеграция await и завершение 028 ждут принятой реализации
 030. Контракты и независимые части правил 028 можно прорабатывать до этого.

@@ -1,0 +1,23 @@
+{
+  "head": "4d50f78b5353539f31cc1ef2046e86541488982f",
+  "accepted_contracts_commit": "104f98e1fbb322972603b26adf9f37396b087670",
+  "metadata_fix_commit": "0950b773573f22b21aa0c14a357dee288478b90c",
+  "command": [
+    "vendor/bin/pest",
+    "tests/Unit/Result/ResultHandleContinuationAwaitTest.php",
+    "tests/Unit/Execution/CompositeFlowTest.php",
+    "--compact"
+  ],
+  "php": "8.4.15",
+  "source_sha256": {
+    "src/Continuation/ContinuationAwaitOptions.php": "bae0ccfc9af153601125a40aef0847f7a82d7909dfb85ed7149df53941579568",
+    "src/Continuation/ContinuationService.php": "fd6d9444f2fd080bdfd6e752c937618a3a2d7814641d4dccd3c21447dd5c791c",
+    "src/Result/ResultHandle.php": "09be183012e5788bc0c89c8ecc8cffa20a18231ea064137f702d2e054eeb89ab",
+    "src/Core/AbstractClient.php": "2b7056645d114048e2be5b194f72b0f8aa6c85a180b5d1975e963b90774e4354",
+    "src/Config/ClientConfig.php": "5f6561cb6ef6298b0678f7713147709b26740e0d76530758ace06974b6a2c9ca",
+    "src/Contracts/Interfaces/Core/ClientInterface.php": "3511cd0872d8bb1d6b6f86f40a5e3a9aaa03dbe83269bf47878895117a599883",
+    "src/Attributes/Response/ContinuationResult.php": "63d7524dad78722423492a3ab3e65bc325bc5836bf1bd021f33d522427791545",
+    ".workflow/current/pln-030-continuation-errors/contracts.md": "ef3ed950aa8083f729090a748a48228f6afe8334da84d2fd68b4f15a5b879b93",
+    ".workflow/current/pln-030-continuation-errors/acceptance.md": "2949e0441153ee5df344ee24f39dd8693b031795734e699ccc9d534b1e8662d5"
+  }
+}

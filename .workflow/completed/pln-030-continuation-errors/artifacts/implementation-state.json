@@ -1,0 +1,71 @@
+{
+  "head": "810933cc49d05ac938993c9ff355d7baeb968eeb",
+  "baseline": "4d50f78b5353539f31cc1ef2046e86541488982f",
+  "php": "8.4.15",
+  "acceptance": "C01–C33 passed",
+  "checks": {
+    "focused_tests": [
+      66,
+      221
+    ],
+    "composer_test": [
+      1790,
+      6625
+    ],
+    "redis_skipped": 17,
+    "lint_errors": 0,
+    "lint_warnings": 135,
+    "analyse_errors": 0,
+    "public_docs": 89,
+    "doc_examples": 7,
+    "staged_package": "passed"
+  },
+  "commands": [
+    "vendor/bin/pest tests/Unit/Result/ContinuationReadinessTest.php tests/Unit/Result/ResultHandleContinuationAwaitTest.php tests/Unit/Execution/CompositeFlowTest.php --compact",
+    "composer test",
+    "composer lint",
+    "composer analyse",
+    "composer check-docs",
+    "composer dump-autoload --optimize --strict-psr",
+    "python3 tests/Support/check-package.py --staged",
+    "php .workflow/current/pln-030-continuation-errors/artifacts/implementation-doc-examples.php"
+  ],
+  "source_sha256": {
+    "CHANEGLOG.md": "bbd75e1923bb0723f1fb901e8e88eec0b2cc08a100a082bd874e065dd9df77fc",
+    "docs/guides/attributes/response.md": "3cc610e0418d272989eff88fb36b9704963c08985da15182bd352cf919a7524d",
+    "docs/guides/client-config/responses-errors.md": "7ba87b4e16f9a20e65604ac4b0a7e2648992836bf9c0c6702a9b3f6b8718afe4",
+    "docs/guides/continuation-token.md": "df8aae2a517937c87d1c90b8a74cc351f97338628ed7560f7518ae7ac7968d7a",
+    "docs/guides/errors.md": "e2594047ef54e2f7a084c48a37bffe965dd8c3bfa6f64f22ced49aec9ab89846",
+    "docs/guides/provider-async-await.md": "d151c09ceabc2d8d3f63a78c45718dc04c532f54507d5a2d8ec62f93bd7a9360",
+    "docs/guides/provider-methodology.md": "c93c7c70a5c2a92cee25e88259e4b43bde795cacd55637c0434ad1b088c63635",
+    "src/Attributes/Response/ContinuationResult.php": "23bb522c9aaeb7ea428861c226fded9dcf6ed1ae99d4fe0cd161e14d7a96bfef",
+    "src/Config/ClientConfig.php": "fde64c94b9d6ff013c3f030ecfc731b8ff2a488ea998f411e7ded40cbd65a69c",
+    "src/Continuation/ContinuationContext.php": "857b3038cd86883a66cbdee86060a5e68743bf0d6833251a60fb1b822150d9f4",
+    "src/Continuation/ContinuationOutcome.php": "3068348c4915394e99a062e5dfb78479ef969ee2f9f287ca9d7e976f5bf37e2e",
+    "src/Continuation/ContinuationService.php": "3ee1a87bc89eae770c67a6d16d3650e54056c967f6d3e768b36097643dcc0403",
+    "src/Continuation/ContinuationState.php": "55ab508449ee68c32837ddc75fc4cf0ad18f81968b59e3e560c2ba7e558fa1a2",
+    "src/Continuation/FinalPathStateResolver.php": "9da79792c56631af0c437f5f75b0d6410dab64aab0673132ad37b59536d66d28",
+    "src/Contracts/Interfaces/Continuation/ContinuationStateResolverInterface.php": "11ede2a28ef06d8a4468d772b7c3dc8477d3c70f489c98d5ce0d78f2ce870c0d",
+    "src/Core/AbstractClient.php": "c11e6e9e766982e8cd1ab4a35c55e0a947e04ebcfb4c810569e871fb555b9794",
+    "src/Enums/Continuation/ContinuationStatus.php": "494834b99c471875da3e58843611a924a7002a0b51881d1d1fa77d94db677b84",
+    "src/Exceptions/Continuation/ContinuationAwaitException.php": "860f51ea8769758087032f96c1fe01bc579f8e86e66202acbd33f5cb5da1f157",
+    "src/Result/ResultHandle.php": "c16f79de3e62911914b282aeb87dcd90e7d750257461c3c3b47d095b4639cfda",
+    "tests/Stubs/Continuation/CompositeFinalRequest.php": "70b56751215e631efefeaee1d2806c48a42e44da72ef8fffc5ad817dc9348dfd",
+    "tests/Stubs/Continuation/ContextFinalDto.php": "0ad11f45230be8ae011f9576bdf77e4e5642c4727f6a2e38974ff935f6796807",
+    "tests/Stubs/Continuation/ContextRequest.php": "81fae13d3eda593a3c8b861f2eee1126527939d05f6930ec40be35d9ee45a6f3",
+    "tests/Stubs/Continuation/ContextStateResolver.php": "df32ef1ef6fab30775b9f0383df72f84654526a52a34f47a20bf79986d2469cd",
+    "tests/Stubs/Continuation/CountingFinalDto.php": "0f449a97ecf0e256df3b4321df24595127818e698befc79dd45b8cd1032a612f",
+    "tests/Stubs/Continuation/DefaultsFinalRequest.php": "7a819f7eab2e593b511bca923b1f0a7c82174ec2c42611d595efa77ea285cdd1",
+    "tests/Stubs/Continuation/DelegatingClient.php": "1912388324bc5e4f9710cd36d712d763d3d01ca845516b326d2da4bcb6c07a4b",
+    "tests/Stubs/Continuation/InvalidFinalDto.php": "4c0bc46204ddd4e95c0d4333b79d3166cb1a19ba8bf268d1fdb4a25fe94fd194",
+    "tests/Stubs/Continuation/InvalidResolverRequest.php": "cd180515cc5f214e616f51e5754241df1b6449b7909391aa89e0d27c4ad5b86f",
+    "tests/Stubs/Continuation/RecordingStateResolver.php": "6ffe726e8278be539767068045388853db858c7fdc6430496be204827e185333",
+    "tests/Stubs/Continuation/RootValueStateResolver.php": "83ed299955edf6cb02b4ff3a233c1a970fad2252f728afd0322143da165bebbd",
+    "tests/Stubs/Continuation/TerminalRequest.php": "20af4267582eab9e55de756c0851fb0878cec823a1c4cc5c0a5117ef6096953f",
+    "tests/Stubs/Continuation/TerminalStateResolver.php": "a938d68fec0546e62bb1de18c9a659db61eb8e8edf93bbe9d4c8038d9fce453a",
+    "tests/Stubs/Continuation/UndeclaredRequest.php": "fe40cd3aca482629be7961fa28157d6e503a1cdfb215878175ad9acc3c42c776",
+    "tests/Stubs/Continuation/WithoutCriterionRequest.php": "0dd2bfa207c449dbe37209a488d21b0c013035305de77807d93747b7a028f372",
+    "tests/Unit/Result/ContinuationReadinessTest.php": "8bedf1a1f27d9ddadec99e3b43398f0f6f932e6ee4d755920f17c7c5faa7384d",
+    "tests/Unit/Result/ResultHandleContinuationAwaitTest.php": "303abb0f3fb6bfd136b923621758c84fef238f76276076d2306bdeedebeb2b33"
+  }
+}

@@ -61,7 +61,7 @@ ContinuationConfigurationException. Первые probes отдельно вос�
 без previous. Определитель Pending/Ready — предлагаемое средство исправления,
 а не уже существующий API, который осталось подключить.
 
-Поэтому [030](../../current/pln-030-continuation-errors/pln-030-readme.md) получает
+Поэтому [030](../../completed/pln-030-continuation-errors/pln-030-readme.md) получает
 готовность, доставку ошибок, последний ответ и переход старого поведения.
 [028](../../current/pln-028-declarative-dto/pln-028-readme.md) получает принятую базу
 после 030 и подключает к ней свой набор. Инвариант 028 снова простой:

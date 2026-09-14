@@ -3,7 +3,8 @@
 - Дата создания: 2026-09-14
 - Дата обновления: 2026-09-14
 
-Контракт — [contracts.md](contracts.md). Сейчас ни одна строка не выполнена.
+Контракт — [contracts.md](contracts.md). C01–C33 выполнены на `810933c`;
+[соответствие тестам и результаты](implementation.md).
 Исходные воспроизведения на `eeb0b6a`: [review-probe](../../discussion/dsc-005-declarative-dto-contracts/artifacts/review-probe.json),
 [followup-probe](../../discussion/dsc-005-declarative-dto-contracts/artifacts/followup-probe.json),
 [clarification-probe](../../discussion/dsc-005-declarative-dto-contracts/artifacts/clarification-probe.json).

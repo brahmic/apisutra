@@ -2,7 +2,7 @@
 
 - Дата создания: 2026-09-14
 - Дата обновления: 2026-09-14
-- Статус: новый
+- Статус: завершено
 
 ## Основание и цель
 
@@ -17,14 +17,24 @@
 критерий готовности, а пакет исполняет общий цикл continuation. Изменение не должно
 требовать Laravel или знания протокола конкретного провайдера в ядре.
 
-## Готовность к реализации
+## Реализация завершена
+
+Код и публичная документация — `810933c`; [результаты приёмки](implementation.md).
+C01–C33 выполнены, включая передачу гидратора после 031.
+
+## Принятое основание реализации
 
 Контракт принят владельцем пакета 2026-09-14: [contracts.md](contracts.md),
 матрица — [acceptance.md](acceptance.md), основания — [ADR-001](../../adr/adr-001-continuation-readiness.md).
 Выбран архитектурно самый чистый вариант без сохранения старой эвристики.
 План готов к реализации этапов 2–4. Подключение гидратора клиента к await (C24–C26)
-выполняется после завершения [031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md);
+выполняется после завершения [031](../pln-031-metadata-value-isolation/pln-031-readme.md);
 остальная работа от 031 не зависит.
+
+Этап 2 начат после завершения 031, на коммите `4d50f78`.
+[Baseline реализации](artifacts/implementation-baseline-state.json) и
+[исходные continuation/composite тесты](artifacts/implementation-baseline-tests.log)
+сохранены до изменения кода.
 
 ## Подтверждённое поведение
 
@@ -52,7 +62,7 @@ applyUnwrap использует `unwrapped ?? data`, поэтому отсут�
 Дополнительная находка CR-01 оказалась общей для гидратора и сериализаторов:
 metadata cache удерживает объекты из constructor defaults и аргументов атрибутов.
 После [расширенной проверки](../../discussion/dsc-005-declarative-dto-contracts/metadata-review.md)
-это отдельный дефект P1 и [план 031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md).
+это отдельный дефект P1 и [план 031](../pln-031-metadata-value-isolation/pln-031-readme.md).
 
 ## Принятые решения
 
@@ -80,7 +90,7 @@ metadata cache удерживает объекты из constructor defaults и 
 - передача гидратора клиента в ContinuationService и перенос гидратации cached awaitAs;
 - регрессии и документация continuation/await и ошибок.
 
-В [028](../pln-028-declarative-dto/pln-028-readme.md) остаются HydrationRules, strict,
+В [028](../../current/pln-028-declarative-dto/pln-028-readme.md) остаются HydrationRules, strict,
 extras, sourcePath и подключение правил к одному гидратору клиента. Continuation
 получает этот экземпляр уже в 030; повторно менять конструкторы в 028 не требуется.
 030 не вводит внешние правила и не меняет scalar-политики.
@@ -102,34 +112,34 @@ metadata здесь нельзя.
   ошибками, изменениями поведения и передачей гидратора.
 - [x] Создать acceptance.md с матрицей C01–C33.
 - [x] Зафиксировать основание публичного решения в ADR-001.
-- [ ] В начале реализации сохранить baseline принятого commit в `artifacts/`.
+- [x] В начале реализации сохранить baseline принятого commit в `artifacts/`.
 
 ### 2. Разделение готовности и преобразования
 
-- [ ] Ввести `ContinuationStatus`, `ContinuationState`, `ContinuationContext`,
+- [x] Ввести `ContinuationStatus`, `ContinuationState`, `ContinuationContext`,
   `ContinuationStateResolverInterface` и `FinalPathStateResolver`; добавить `stateResolver`
   в атрибут и resolver в ClientConfig.
-- [ ] Сначала определять состояние ответа; гидратировать только Ready.
-- [ ] Удалить catch-эвристику, `resolveContinuationPayload` как источник финала
+- [x] Сначала определять состояние ответа; гидратировать только Ready.
+- [x] Удалить catch-эвристику, `resolveContinuationPayload` как источник финала
   и fallback unwrap к корню.
-- [ ] Поддержать Sync, Auto, Async и awaitByToken* по таблицам contracts.md.
-- [ ] После завершения 031 передать гидратор клиента в ContinuationService.
+- [x] Поддержать Sync, Auto, Async и awaitByToken* по таблицам contracts.md.
+- [x] После завершения 031 передать гидратор клиента в ContinuationService.
 
 ### 3. Доставка ошибки и кешированный await
 
-- [ ] Ввести `ContinuationAwaitException` с reason, attempts, lastResult и безопасным context.
-- [ ] Ввести `ContinuationOutcome`; перенести гидратацию cached awaitAs в ContinuationService.
-- [ ] Сохранить доставку исключений failed-результата через `throw()` и
+- [x] Ввести `ContinuationAwaitException` с reason, attempts, lastResult и безопасным context.
+- [x] Ввести `ContinuationOutcome`; перенести гидратацию cached awaitAs в ContinuationService.
+- [x] Сохранить доставку исключений failed-результата через `throw()` и
   configuration-ошибок без обёртки.
 
 ### 4. Проверки и документация
 
-- [ ] Выполнить матрицу C01–C33 на mock-транспорте с intervalMs=0 и счётчиком запросов.
-- [ ] Переписать существующие тесты continuation под объявленный критерий.
-- [ ] Выполнить `composer test`, `composer lint`, `composer analyse`, `composer check-docs`.
-- [ ] Обновить provider-async-await, continuation-token, response attributes, errors
+- [x] Выполнить матрицу C01–C33 на mock-транспорте с intervalMs=0 и счётчиком запросов.
+- [x] Переписать существующие тесты continuation под объявленный критерий.
+- [x] Выполнить `composer test`, `composer lint`, `composer analyse`, `composer check-docs`.
+- [x] Обновить provider-async-await, continuation-token, response attributes, errors
   и changelog с миграцией.
-- [ ] Записать версию, команды и результаты в acceptance.md/artifacts/.
+- [x] Записать версию, команды и результаты в acceptance.md/artifacts/.
 
 ## Доказательства и завершение
 

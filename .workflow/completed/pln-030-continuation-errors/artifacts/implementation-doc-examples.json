@@ -1,0 +1,9 @@
+{
+    "done": true,
+    "done-token": true,
+    "failed": true,
+    "failed-token": true,
+    "running": true,
+    "running-token": true,
+    "no-response": true
+}

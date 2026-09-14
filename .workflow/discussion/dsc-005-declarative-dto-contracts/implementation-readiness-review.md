@@ -77,7 +77,7 @@ M15 требует прогретый кеш и неизменное число 
 
 Приоритет P2, незавершённая публичная сигнатура/ветка алгоритма.
 
-[Контракт 030](../../current/pln-030-continuation-errors/contracts.md#критерий-готовности)
+[Контракт 030](../../completed/pln-030-continuation-errors/contracts.md#критерий-готовности)
 требует `resolve(ExecutionResult, ContinuationResult)`, у ContinuationResult
 обязательный `string $finalType`. Одновременно раздел «Финал» и C19 допускают
 `finalType = null` и возврат payload. `resolveFromStartResult()` сохраняет
@@ -98,7 +98,7 @@ resolver. Недокументированная пустая строка/фи�
 
 Приоритет P2, локальное противоречие формулировок.
 
-В разделе [«Финал»](../../current/pln-030-continuation-errors/contracts.md#финал)
+В разделе [«Финал»](../../completed/pln-030-continuation-errors/contracts.md#финал)
 пункт 2 задаёт HydrationException для scalar payload, а оборачивание описано только
 в пункте 3 после вызова гидратора. C20 ожидает ContinuationAwaitException с
 final_hydration_failed. Общий замысел и ADR поддерживают именно второй результат.
