@@ -102,6 +102,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Документация: актуализация, единые контракты и точки входа — новый план](current/pln-027-documentation-restructure/pln-027-readme.md)
 - [Транспорт, формат ответа, бюджет и retry — аудит пяти замечаний](audit/aud-005-transport-response-retry/aud-005-readme.md)
 - [Транспорт, raw, внешний дедлайн и условный retry — завершено](completed/pln-026-transport-response-retry/pln-026-readme.md)
 - [Совместные квоты и атомарный Redis/phpredis backend — завершено](completed/pln-025-joint-rate-limit-quotas/pln-025-readme.md)
