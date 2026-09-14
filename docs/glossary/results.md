@@ -46,7 +46,50 @@ errorRetryable(), errorCategory().
 - `awaitByToken(token, sourceRequestClass)`
 - `awaitByTokenAs(token, finalType)`
 
-Доступен через `$client->continuation()`.
+Доступен через `$client->continuation()`. При ручном создании конструктор принимает
+клиент и его `Hydrator`. Сначала определяет готовность, затем преобразует Ready-payload;
+ошибка DTO завершает ожидание. Полный контракт — в [гайде ожидания](../guides/provider-async-await.md).
+
+### ContinuationStateResolverInterface
+
+Определяет Pending/Ready/Failed методом `resolve(ExecutionResult, ContinuationContext)`.
+Подключается классом в `ContinuationResult::stateResolver` или экземпляром в
+`ClientConfig::continuationStateResolver`.
+
+### ContinuationContext
+
+Контекст определения готовности: финальный тип, путь unwrap, класс исходного запроса
+и режим. Тип и класс могут отсутствовать в зависимости от входа ожидания.
+
+### ContinuationState
+
+Результат resolver: `pending()`, `ready($payload, $path)` или `failed()`.
+Ready отделяет готовность провайдера от успешности гидратации DTO.
+
+### ContinuationStatus
+
+Enum состояний Pending, Ready и Failed, используемый в ContinuationState.
+
+### FinalPathStateResolver
+
+Встроенный resolver для непустого unwrap: существующее значение, отличное от null,
+означает Ready; отсутствие пути или null — Pending. К корню ответа не откатывается.
+
+### ContinuationMode
+
+Sync оценивает стартовый ответ, Auto может продолжить polling, Async начинает с poll.
+Порядок входов и критериев — в [гайде](../guides/provider-async-await.md).
+
+### ContinuationAwaitOptions
+
+Настройки ожидания. `maxAttempts` ограничивает число poll-запросов; стартовый ответ
+может дополнительно учитываться в диагностическом счётчике `attempts`.
+
+### ContinuationOutcome
+
+Сохранённый итог ожидания: value, исходный Ready-payload, его path, lastResult и attempts.
+Повторный `awaitAs()` с другим типом преобразует сохранённый payload тем же гидратором;
+с тем же типом возвращает прежний объект.
 
 ### ResolvedResultFactoryInterface
 Фабрика для создания ResolvedResultInterface. Позволяет клиенту подменять тип результата (например, MClientResult) через ClientConfig::resolvedResultFactory.
@@ -172,7 +215,21 @@ Extends SdkException. Ошибки конфигурации SDK: неверны�
 
 ### ContinuationConfigurationException
 Extends ConfigurationException. Ошибки конфигурации unified async-await:
-невалидный poll request, отсутствующий token, конфликт режима и provider-правил.
+невалидное объявление poll request, отсутствие или неверный критерий готовности.
+
+### ContinuationAwaitException
+
+Ошибка ожидания с `reason`, `attempts`, `lastResult` и исходной причиной в `previous`.
+Включает отсутствие token у Pending и ошибку преобразования Ready-payload
+(`final_hydration_failed`). Последний ответ доступен и без debug;
+см. [обработку ошибок ожидания](../guides/provider-async-await.md).
+
+### HydrationException
+
+Ошибка формы или типа DTO с `reason` и DTO-путём `path`. При внешних правилах
+добавляет исходный JSON Pointer `sourcePath`, `sourcePathKind` и `sourceCandidates`.
+`context()` сохраняет точные пути; `logContext()` маскирует неизвестные ключи источника.
+См. [диагностику гидратации](../guides/hydration-rules.md#диагностика-и-входы).
 
 ### TestingException
 Extends SdkException. Базовый класс исключений тестирования. Подклассы: UnmockedRequestException, MissingFixtureException.

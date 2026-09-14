@@ -283,7 +283,7 @@ DateTime semantics после унификации разделены по сл�
 Если ни одна ветка union не совпала по runtime, используется первый non-null тип
 (поведение совместимо с прежним fallback по выбору ветки, но без скрытого string reparsing на serialize).
 
-## Enum‑сериализация
+## Enum-сериализация
 
 После zero-config DX/wire separation сериализация рассматривается как разные слои:
 - **DX / `toArray()`** → через `DtoSerializationProfile`

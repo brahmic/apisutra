@@ -4,7 +4,7 @@
 
 # ApiSutra
 
-Изменения совместимости: [миграция на v0.2.0-alpha.1](docs/guides/migration.md).
+Изменения совместимости: [миграция версий и текущих изменений](docs/guides/migration.md).
 
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
 [![Test count](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbrahmic%2Fapisutra%2Frefs%2Fheads%2Fbadges%2Ftest-count.json&cacheSeconds=300)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
@@ -14,7 +14,7 @@
 Лицензия: [MIT](LICENSE).
 
 ApiSutra — фреймворк для построения SDK‑клиентов внешних API на PHP.
-Он даёт декларативные запросы и DTO через атрибуты, единый pipeline выполнения
+Он даёт декларативные запросы, DTO с атрибутами или внешними правилами, единый pipeline выполнения
 и расширяемость без копипаста.
 
 ## Ключевая идея
@@ -23,6 +23,8 @@ ApiSutra — фреймворк для построения SDK‑клиенто
 
 ## Возможности
 - атрибуты для HTTP, request/response и DTO‑маппинга
+- [правила для DTO без атрибутов](docs/guides/hydration-rules.md): строгие типы, вложенные формы и сохранение неизвестных полей в `_extra`
+- [ожидание асинхронной операции провайдера](docs/guides/provider-async-await.md) с явными состояниями Pending/Ready/Failed
 - единый pipeline с хуками, retries, rate‑limit, кешированием и timeouts
 - пагинация, batch и pool
 - мегаклиент для мультисервисных интеграций

@@ -23,9 +23,10 @@ $config = new ClientConfig(
 ```
 
 По умолчанию `NamingStrategy::None` (имена не преобразуются).
-Меняйте стратегию, если API использует другую схему именования для request/query/header/path
-или как hydration fallback. Для body DTO каноническая naming policy рекомендуется через
-`DtoSerializationProfile`.
+Меняйте стратегию, если API использует другую схему именования для request/query/header/path.
+Входящий naming fallback задаётся отдельно через `DtoHydrationProfile` или
+`RulePolicy::naming` во [внешнем наборе](../hydration-rules.md).
+Для body DTO каноническая naming policy рекомендуется через `DtoSerializationProfile`.
 
 ## QueryArrayFormat
 ```php

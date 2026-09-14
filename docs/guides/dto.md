@@ -24,7 +24,7 @@
 ### Важное уточнение
 Binding на `BaseDto` — это **рекомендуемый carrier**, но не обязательный единственный вариант.
 
-Автоматика резолвит DTO contract по **иерархии конкретного DTO-класса**:
+В атрибутной модели автоматика резолвит DTO contract по **иерархии конкретного DTO-класса**:
 - через `DtoHydrationProfile` / `DtoSerializationProfile`
 - через class-level override `DtoHydrate` / `DtoSerialize`
 - через property-level override
@@ -33,7 +33,12 @@ Binding на `BaseDto` — это **рекомендуемый carrier**, но �
 Это означает:
 - в рамках одного SDK может быть не один `BaseDto`, а несколько веток DTO с разными правилами
 - разные DTO-иерархии внутри одного клиента могут иметь разные profiles
-- главное, чтобы источник истины оставался в DTO/profile layer, а не в runtime-клиенте
+- источник истины для этой модели — DTO и его профиль
+
+Альтернатива для входящих данных — [внешний набор правил](hydration-rules.md),
+переданный клиенту или `Hydrator::forRules()`. Он позволяет оставить классы без
+атрибутов и базовых классов ApiSutra. Не совмещайте `DtoRules` и профиль гидратации
+на одном классе; исходящий профиль сериализации настраивается отдельно.
 
 Поэтому:
 - если у SDK есть один общий `BaseDto`, binding на нём обычно самый удобный
@@ -104,7 +109,7 @@ final readonly class OtherLastNamesBlockDto extends BaseBlockDto
 Если значение разрешено, в том числе допустимый null, default не вычисляется.
 Исключение из выражения default выходит так же, как исключение конструктора DTO.
 
-Это одинаково для `DTO::from()`, прямого Hydrator, Returns, пагинации и CompositeFlow,
+Это одинаково для `DTO::from()`, прямого Hydrator, Returns, пагинации, CompositeFlow и await,
 при включённом и выключенном кеше метаданных. В `#[DefaultValue(value: [new ...])]`
 объекты также создаются заново для каждого гидрируемого DTO.
 Правила вычисления объектных аргументов атрибутов описаны в
@@ -116,9 +121,12 @@ final readonly class OtherLastNamesBlockDto extends BaseBlockDto
 
 ## Обязательные поля и ошибки гидратации
 
-Обязательность следует из PHP-типа и объявления DTO; дополнительные настройки
-клиента или флаги `required` не нужны. Правила применяются после `From`/fallback,
+Без внешних правил обязательность следует из PHP-типа и объявления DTO.
+Приведённые ниже проверки применяются после `From`/fallback,
 нормализации пустой строки, `DefaultValue` и автодефолта typed collections.
+Внешний `FieldRule::required()` дополнительно требует наличия ключа **до** defaults,
+а `forbidExplicitNull()` запрещает исходный null даже для nullable-типа;
+см. [формы и присутствие](hydration-rules.md#формы-присутствие-и-defaults).
 
 | Объявление и вход | Результат |
 | --- | --- |
@@ -131,8 +139,9 @@ final readonly class OtherLastNamesBlockDto extends BaseBlockDto
 | После допустимых casts значение не подходит типу | `invalid_field_type`; scalar вместо вложенного DTO — `unexpected_response_shape`. |
 
 Конструктор вызывается один раз; проверяется тип его параметра, даже если он
-преобразует значение для свойства другого типа. Сохраняются существующие scalar
-conversions и выбор union-веток. Пользовательские casts имеют прежний приоритет.
+преобразует значение для свойства другого типа. В режиме Legacy сохраняются scalar
+conversions и выбор union-веток. Внешний набор может включить
+[Strict](hydration-rules.md#policy-и-строгие-типы), в том числе для результатов casts.
 
 Прямой `DTO::from()` выдаёт `HydrationException` с `reason`, `path`, `expected`,
 `actual`. В запросе это `hydration_error` с сохранённым HTTP-ответом. Путь содержит
@@ -361,10 +370,16 @@ final readonly class ProviderDtoHydrationProfile implements DtoHydrationProfileI
 ```
 
 ### Приоритеты
+
+Для атрибутной модели без внешнего набора:
+
 1. `#[Cast(...)]`
 2. `#[EmptyStringAsNull(...)]`
 3. hydration profile-level `emptyStringBehavior`
 4. дефолтное поведение `Keep`
+
+Во внешнем наборе нормализация задаётся через `RulePolicy::emptyString`;
+[приоритеты и порядок обработки](hydration-rules.md#формы-присутствие-и-defaults).
 
 ### Практические правила
 - default поведение ядра не меняется: `''` остаётся `''`

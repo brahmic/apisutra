@@ -24,7 +24,7 @@ use Brahmic\ApiSutra\Serialization\Rules\ValueShape;
 
 final readonly class EntryDto
 {
-    public function __construct(public int $id, public array $extra = []) {}
+    public function __construct(public int $id, public array $_extra = []) {}
 }
 
 final readonly class ReportDto
@@ -35,14 +35,14 @@ final readonly class ReportDto
         public array $items,
         public array $ids,
         public ?int $count = null,
-        public array $extra = [],
+        public array $_extra = [],
     ) {}
 }
 
 $rules = HydrationRules::create(new RulePolicy(scalars: ScalarPolicy::Strict))
     ->withDto(EntryDto::class, DtoRules::create()
         ->field('id', FieldRule::create()->from('record_id', 'id'))
-        ->extras('extra'))
+        ->extras('_extra'))
     ->withDto(ReportDto::class, DtoRules::create()
         ->field('owner', FieldRule::create()->shape(ValueShape::dto(EntryDto::class)))
         ->field('items', FieldRule::create()->from('rows')->shape(
@@ -50,7 +50,7 @@ $rules = HydrationRules::create(new RulePolicy(scalars: ScalarPolicy::Strict))
         ))
         ->field('ids', FieldRule::create()->shape(ValueShape::list(ValueShape::int())))
         ->field('count', FieldRule::create()->forbidExplicitNull())
-        ->extras('extra'));
+        ->extras('_extra'));
 
 $config = new ClientConfig(baseUrl: 'https://api.example', hydrationRules: $rules);
 $source = [
@@ -60,8 +60,8 @@ $source = [
     'next_feature' => null,
 ];
 $dto = Hydrator::forRules($rules)->hydrate($source, ReportDto::class);
-// owner.id = 7, owner.extra = ['future' => false], items[0].id = 8, count = null.
-// extra содержит next_feature и остаток rows с meta (форма описана ниже).
+// owner.id = 7, owner._extra = ['future' => false], items[0].id = 8, count = null.
+// _extra содержит next_feature и остаток rows с meta (форма описана ниже).
 ```
 
 Передайте `$config` своему SDK-клиенту. `#[Returns(ReportDto::class)]` использует
@@ -225,7 +225,11 @@ provider или профиль. Scoped provider реализует
 
 ## Дополнительные поля
 
-`extras('extra')` сохраняет данные, которые не прочитаны ядром. Receiver должен быть
+Рекомендуемое имя технического свойства — `_extra`. Оно задаётся явно через
+`DtoRules::extras()` и не зарезервировано ядром: существующие модели с `extra`
+или другим именем продолжают работать со своим объявлением.
+
+`extras('_extra')` сохраняет данные, которые не прочитаны ядром. Receiver должен быть
 public array или ?array: параметром единственного конструктора либо свойством класса
 без конструктора. Static/virtual/non-public, несовместимый тип, отдельный FieldRule и
 входные атрибуты receiver запрещены. Default параметра разрешён.
@@ -234,7 +238,14 @@ public array или ?array: параметром единственного ко
 Пересекающиеся пути объединяются: чтение родителя поглощает всё поддерево; порядок полей
 на результат не влияет. Пустые прочитанные ветви удаляются; нетронутые false, 0, null,
 пустые строки и массивы сохраняются. Чтение произвольных ключей provider не считается
-потреблением. Ключ источника с именем receiver остаётся внутри extra, а не заполняет его напрямую.
+потреблением. Ключ источника с именем receiver остаётся внутри `_extra`, а не заполняет его напрямую.
+
+Например, для `EntryDto` из примера источник
+`{"record_id": 7, "extra": {"enabled": true}, "_extra": "remote"}` даст
+`id = 7` и `_extra = ['extra' => ['enabled' => true], '_extra' => 'remote']`.
+Оба исходных ключа сохраняются. Если ключ прочитан правилом другого поля, он уже
+считается потреблённым и в остаток не попадёт. Префикс `_` лишь отличает техническое
+свойство визуально; от совпадения имён защищает этот порядок обработки.
 
 Для проекции each соседи выбранного значения остаются у владельца списка. В примере:
 
@@ -252,7 +263,7 @@ public array или ?array: параметром единственного ко
 списком записей. sourceKey хранит PHP-тип ключа **после** JSON-декодирования: `"1"`
 становится int 1, `"01"` остаётся строкой. Это не различает числовое имя object и индекс list.
 
-Value-discriminator остаётся в extra дочернего DTO, если не сопоставлен его полю.
+Value-discriminator остаётся в `_extra` дочернего DTO, если не сопоставлен его полю.
 В режиме Key дочерний DTO получает содержимое выбранной обёртки, её соседи остаются
 в остатке списка. KeepRaw сохраняет весь неизвестный элемент; соседи each остаются
 родителю. Skip поглощает весь элемент вместе с соседями each.
@@ -261,7 +272,7 @@ Value-discriminator остаётся в extra дочернего DTO, если �
 
 Клиент с набором исключает receiver по классу модели: и у гидратированного, и у вручную
 созданного объекта. Он не отправляется под своим именем и не разворачивается в корень.
-`toArray()` и DtoSerializer без набора продолжают сериализовать extra как обычное свойство.
+`toArray()` и DtoSerializer без набора продолжают сериализовать `_extra` как обычное свойство.
 
 В body, BodyRoot, multipart-body и при сборке query правило действует на DtoInterface,
 plain DTO, списки и публичные plain-обёртки любой допустимой глубины. Для plain DTO
@@ -334,7 +345,7 @@ RawResponse и Download обходят гидратацию DTO. [Готовно
 При переносе на набор удалите конфликтующие входные атрибуты только у полей с FieldRule.
 Рекурсивные вызовы Hydrator внутри casts/providers переводите на scope; простой вызов
 raw-фабрики менять не требуется. Не включайте strict до проверки реальных типов JSON.
-Исходящую модель с receiver пересмотрите отдельно: extra больше не отправляется
+Исходящую модель с receiver пересмотрите отдельно: `_extra` больше не отправляется
 клиентом с набором, а cast всего объекта с receiver запрещён. Без набора эти изменения
 не применяются. Общая [миграция версии](migration.md) и исправления
 [continuation](provider-async-await.md#миграция-с-эвристического-ожидания) описаны отдельно.

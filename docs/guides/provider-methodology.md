@@ -22,8 +22,8 @@
 `DtoSerializationProfile` и request-level enum policy.
 `title()` должен возвращать человекочитаемое название **текущего** значения enum.
 
-**Настоятельная рекомендация:** централизуйте DTO semantics по двум направлениям:
-- hydration DTO — через `DtoHydrationProfile`
+**Рекомендация:** централизуйте правила по направлениям:
+- hydration DTO — через `DtoHydrationProfile` либо [внешний `HydrationRules`](hydration-rules.md) для моделей без атрибутов
 - DX DTO serialization — через `DtoSerializationProfile`
 - wire body semantics — через `ClientConfig::wireBodySerializationPolicy`
 - request/query/header/path semantics — через `ClientConfig`
@@ -80,7 +80,7 @@ final class ProviderClient extends AbstractClient
 }
 ```
 
-**ВАЖНО**: Рекомендуемые базовые классы (старайтесь придерживаться этого правила):
+Рекомендуемые базовые классы для атрибутной модели SDK:
 - `BaseClient` — дефолтный `ClientConfig`, общие политики
 - `BaseRequest` — общие правила сериализации/валидации/опций
 - `BaseResource` — единая навигация и группировка запросов
@@ -94,12 +94,19 @@ final class ProviderClient extends AbstractClient
 Так вы централизуете кастомные задачи и правила в одном месте,
 без правок десятков классов.
 
-Для DTO рекомендуемый pattern:
+Для атрибутных DTO рекомендуемый pattern:
 - `BaseDto` / `BaseResponseDto` привязаны к `DtoHydrationProfile`
 - `BaseDto` / `BaseResponseDto` привязаны к `DtoSerializationProfile`
-- `ClientConfigFactory` передаёт тот же профиль в `ClientConfig`
+- `ClientConfigFactory` при необходимости передаёт профиль сериализации в `ClientConfig::dtoSerializationProfile`; входящий профиль остаётся привязан к классу
 - конкретные DTO обычно не размечаются дополнительно
 - class-level `#[DtoHydrate(...)]` / `#[DtoSerialize(...)]` используются только для редких override
+
+Для plain-моделей базовые DTO ApiSutra и атрибуты не нужны. Соберите один
+`HydrationRules` в factory, передайте его в `ClientConfig::hydrationRules`, а вне
+клиента — в `Hydrator::forRules()`. `DTO::from()` набор не наследует. Не совмещайте
+`DtoRules` с профилем гидратации одного класса; [правила конфликтов](hydration-rules.md#правила-и-проверка-конфигурации)
+проверяются при создании гидратора. Рекомендуемое имя приёмника неизвестных полей —
+`_extra`; клиент с набором исключает его из запросов.
 
 Допустимый pattern для DTO inheritance:
 - базовый DTO держит constructor-backed общие поля
@@ -198,18 +205,19 @@ tests/
 ## 3) Где задавать правила
 Распределяйте правила по уровню ответственности:
 - `ClientConfig` — глобальные дефолты (retry, rate‑limit, cache, timeouts)
-- `DtoHydrationProfile` — DTO hydration semantics (`from()`, pipeline hydration, naming fallback, date-time parse, stable casts)
+- `DtoHydrationProfile` — входные правила атрибутных DTO (`from()` и pipeline)
+- `HydrationRules` — входные правила plain DTO, strict, формы и остаток данных; [границы исходящих запросов](hydration-rules.md#receiver-в-исходящих-запросах)
 - `DtoSerializationProfile` — DX DTO semantics (`toArray()`, enum output, DTO naming, null policy)
 - `ClientConfig::wireBodySerializationPolicy` — transport body semantics
 - атрибуты запроса — специфика конкретного endpoint
 - runtime‑опции — разовые переопределения на вызов
 
 Практическое правило:
-- DTO hydration contract задаётся через `DtoHydrationProfile`
+- DTO hydration contract задаётся через `DtoHydrationProfile` либо внешний `HydrationRules`
 - DX DTO contract задаётся через `DtoSerializationProfile`
 - wire body contract задаётся через `ClientConfig::wireBodySerializationPolicy`
 - request/query/header/path contract задаётся через `ClientConfig`
-- один и тот же профиль можно передавать в `ClientConfig`, но он не должен конфликтовать с binding на `BaseDto`
+- профиль сериализации можно передавать в `ClientConfig`; набор гидратации передавайте явно клиенту и standalone-гидратору
 
 Если провайдер требует служебные креды в `body/query/form`, задавайте их
 централизованно через `ClientConfig::credentialsConfig`.
@@ -599,13 +607,16 @@ final class ProviderErrorContextFactory implements ErrorContextFactoryInterface
   и нужными потребителю данными. При сложной вложенности проверьте читаемость и группировку
   типов; количество уровней само по себе не требует согласования.
 - **Scalar auto-cast по declared type**: для обычных scalar DTO-полей (`int`, `float`, `bool`, `string`)
-  ядро уже делает safe auto-cast при гидрации. Не дублируйте `IntegerCast`/`FloatCast`/`BooleanCast`
+  в режиме Legacy ядро делает safe auto-cast при гидрации. Не дублируйте `IntegerCast`/`FloatCast`/`BooleanCast`
   без необходимости; явный `#[Cast]` оставляйте только для нестандартного provider-формата
-  или кастомной логики преобразования.
+  или кастомной логики преобразования. При [Strict](hydration-rules.md#policy-и-строгие-типы)
+  числовые строки отклоняются: проверяйте реальные типы JSON до включения режима.
 - **Typed collections и default policy**: для non-nullable typed collection ядро уже покрывает
   кейс `missing -> empty collection`. Явный `DefaultValue([])` оставляйте, только если нужно
   отдельно обработать `null` или жёстко зафиксировать это правило в DTO-контракте.
   `DefaultValue(... when: [Null])` не должен ломать built-in fallback для `Missing`.
+  Внешний `FieldRule::required()` проверяется раньше и не позволяет заменить отсутствие
+  ключа пустой коллекцией.
 - **Маппинг через атрибуты**: `#[Map]` используйте для симметричного двустороннего ключа,
   `#[From]`/`#[To]` — когда направления различаются, `#[Cast]` — для преобразования типов.
   Не размазывайте кастомные правила по DTO без договорённостей.

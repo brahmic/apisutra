@@ -4,11 +4,15 @@
 Интерфейс для запросов с поддержкой пагинации. Методы: withPage(), withLimit(), withCursor() (опц.) возвращают `RequestExecutionInterface`, extractMeta() извлекает мету из ответа.
 
 ## Pagination (атрибут)
-Атрибут конфигурации пагинации на запросе. Параметры: pageParam, limitParam, cursorParam, metaPath, itemsPath, offsetBased. Переопределяет defaults из ClientConfig.
+Атрибут конфигурации пагинации на запросе: пути данных и метаданных, параметры страницы,
+тип и коллекция элементов. Переопределяет defaults из ClientConfig;
+полный перечень — в [руководстве](../guides/pagination.md).
 
 ## PaginationConfig
 Конфиг пагинации на уровне клиента. Дополнительно поддерживает:
 itemsType, itemsCollection, itemsCollectionFactory, metaResolver, maxPages.
+С внешним набором гидратор клиента применяет itemsType и в items-only режиме;
+без набора там сохраняется raw-результат. См. [входы гидратации](../guides/hydration-rules.md#диагностика-и-входы).
 
 ## PaginationRule
 Value Object правил пагинации. Режимы задаются через PaginationMode. Поле failStrategy определяет поведение при ошибках. По умолчанию задаётся в ClientConfig::paginationRule и может быть переопределён через RequestOptions::withPaginationRule() или chain‑метод rules().

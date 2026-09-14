@@ -128,8 +128,8 @@ $config = new ClientConfig(
 ```
 
 Эта настройка не подключает cast к гидратации ответа через `Returns`.
-Для входящих DTO используйте атрибут `DtoHydrationProfile` на классе или общей
-базе и метод `casts()` профиля либо `#[Cast]` конкретного свойства.
+Для входящих DTO используйте профиль, `#[Cast]` свойства или
+[внешние правила](hydration-rules.md#policy-и-строгие-типы).
 
 | Источник | Участие в гидратации DTO | Назначение |
 | --- | --- | --- |
@@ -139,6 +139,8 @@ $config = new ClientConfig(
 | `ExtensionContext::registerCast()` / `ExtensionRegistry::registerCast()` | Нет | Регистрация в registry расширения; у стандартного SDK-клиента это registry запросов |
 | `DtoHydrationProfile::casts()` | Да | Правила по типу для DTO с привязанным профилем |
 | `#[Cast]` свойства | Да, если свойство не обрабатывается `Nested` | Явное преобразование значения |
+| `RulePolicy::casts` класса или набора | Да | Правила по PHP-типу в `HydrationRules` |
+| `FieldRule::cast()` / `ValueShape::list(itemCast:)` | Да | Преобразование поля / элемента с `HandlerSpec` |
 
 Клиентский и глобальный registry не заменяют профиль DTO. Профили сериализации
 DTO также настраиваются отдельно от профилей гидратации.
@@ -155,7 +157,7 @@ public DateTimeImmutable $createdAt;
 ```
 
 ## Примеры поведения
-- **Safe scalar auto-cast**: для DTO hydration `"12"` может стать `12` для `int`, `"12.5"` -> `12.5` для `float`, `"true"` -> `true` для `bool`. Небезопасные преобразования не выполняются.
+- **Safe scalar auto-cast**: при `ScalarPolicy::Legacy` (по умолчанию) `"12"` может стать `12` для `int`, `"12.5"` → `12.5` для `float`, `"true"` → `true` для `bool`. При `Strict` эти строки отклоняются; допустимые типы перечислены в [таблице strict](hydration-rules.md#policy-и-строгие-типы).
 - **Enum**: для DX / `toArray()` формат задаётся через `DtoSerializationProfile`; для wire body — через `wireBodySerializationPolicy`; для query/header/path — через request-level config клиента.
 - **DateTime**: типовой DX теперь идёт через `DtoHydrationProfile` / `DtoHydrate` / `DateTimeFrom` и `DtoSerializationProfile` / `DtoSerialize` / `DateTimeTo`. `#[Cast(DateTimeCast::class, ...)]` остаётся low-level escape hatch. Дефолтный `DateTimeCast::serialize()` принимает только `DateTimeInterface`.
 - **Json**: `JsonCast` сериализует массив/объект в JSON‑строку.

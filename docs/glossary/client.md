@@ -7,7 +7,11 @@
 Интерфейс для клиентов SDK. Методы: send(RequestInterface, SendMode $mode = SendMode::Sync): ResultHandle, sendAsync(RequestInterface): ResultHandle, response(ResolvedResultInterface): ClientResponse, getConfig(): ClientConfig, continuation(): ContinuationService. Позволяет типизировать зависимость от клиента без привязки к конкретной реализации.
 
 ## ClientConfig
-Readonly class конфигурации клиента. Группирует настройки в VO: retry (RetryConfig), cacheConfig (CacheConfig), rateLimit (RateLimitConfig), pool (PoolConfig), archive (ArchiveConfig), paginationRule (PaginationRule), dtoSerializationProfile (body DTO contract). Простые значения в корне: baseUrl, auth, authRetryOn401, authRetryAttempts, timeout, connectTimeout, delay, debug, throwOnErrors, environment, namingStrategy, idempotencyHeader, casts, queryArrayFormat, serializeNulls, requestPartsEnumOutput, requestPartsStrictEnums, extensions, logger/cache, resolvedResultFactory, errorMapper, responseFactory, containerProvider, continuationTokenExtractor, defaultContinuationMode, defaultPollRequest, continuationModeApplicator. Передаётся в конструктор клиента и задаёт defaults для всех запросов и request-level поведения.
+Неизменяемая конфигурация клиента: транспорт, авторизация, политики выполнения,
+сериализация и фабрики результата. `hydrationRules` подключает внешний набор DTO,
+`continuationStateResolver` — определение готовности ожидания. `with()` создаёт копию;
+`with(hydrationRules: null)` отключает набор в новой конфигурации.
+Полный перечень и defaults — в [справочнике ClientConfig](../guides/client-config/README.md).
 
 ## delay
 Параметр ClientConfig. Фиксированная задержка (мс) перед каждым запросом. Для "вежливого" обращения к API. Отличается от rate‑limit — это просто пауза.
@@ -46,7 +50,7 @@ VO конфигурации пула запросов (pool). Параметры
 
 ## NamingStrategy
 Namespace: `Brahmic\ApiSutra\Enums\Configuration\NamingStrategy`.
-Enum стратегии именования полей. None — как есть (default), SnakeCase — camelCase ↔ snake_case. Настраивается в ClientConfig, применяется при сериализации запросов и гидрации DTO.
+Enum стратегии именования полей. None — как есть (default), SnakeCase — camelCase ↔ snake_case. Для запросов задаётся в ClientConfig; для гидратации — отдельно в DtoHydrationProfile или RulePolicy внешнего набора.
 
 ## requestPartsEnumOutput
 Параметр ClientConfig. Определяет формат enum для query/header/path. `Object` не допускается для request parts.
@@ -88,7 +92,7 @@ Enum окружения приложения. Значения: Local, Testing, 
 Namespace: `Brahmic\ApiSutra\Enums\Errors\ErrorCode`.
 Enum кодов ошибок SDK. Категории: Transport (ConnectionFailed, Timeout, DnsError), HTTP 4xx (Unauthorized, Forbidden, NotFound, ValidationFailed, RateLimited), HTTP 5xx (ServerError, BadGateway, ServiceUnavailable, GatewayTimeout), Internal (ConfigurationError, HydrationError, SerializationError, ExtensionError).
 
-## Auto‑discovery клиентов
+## Auto-discovery клиентов
 Механизм автоматического поиска и регистрации namespace запросов клиента. Нужен для простого DX: запрос, созданный через DI, сам находит своего клиента без ручного перечисления namespace. Алгоритм: root‑scan по классам → fallback‑конвенции → кеш → регистрация в ClientRegistry.
 
 ## ClientRegistry

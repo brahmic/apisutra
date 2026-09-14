@@ -245,6 +245,10 @@ $config = new ClientConfig(
 
 Подробный DX и контракты: [Provider Async Await](../provider-async-await.md).
 
+Пример defaults выше предполагает критерий в `ContinuationResult` запроса:
+`stateResolver` или непустой `unwrap`. Для `awaitByTokenAs()`, а также ожидания
+без такого объявления добавьте клиентский `continuationStateResolver`.
+
 ## ClientResponseFactory / ErrorMapper
 
 ```php

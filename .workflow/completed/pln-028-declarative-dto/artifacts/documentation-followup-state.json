@@ -1,0 +1,121 @@
+{
+  "baseline_commit": "0d347b46e75e8fdcc9cdd45e0473f036c6bc645d",
+  "checks": [
+    {
+      "command": [
+        "php",
+        ".workflow/completed/pln-030-continuation-errors/artifacts/implementation-doc-examples.php"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n    \"done\": true,\n    \"done-token\": true,\n    \"failed\": true,\n    \"failed-token\": true,\n    \"running\": true,\n    \"running-token\": true,\n    \"no-response\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "php",
+        "-l",
+        "tests/Support/standalone-hydration-rules-smoke.php"
+      ],
+      "exit_code": 0,
+      "stdout": "No syntax errors detected in tests/Support/standalone-hydration-rules-smoke.php\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "HEAD",
+        "--exit-code",
+        "--",
+        "src"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "composer",
+        "check-docs"
+      ],
+      "exit_code": 0,
+      "stdout": "Локальные ссылки проверены: 90 документов.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        ".workflow/completed/pln-028-declarative-dto/artifacts/check-documentation-followup.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"documents\": 91,\n  \"local_links\": 863,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "php",
+        "tests/Support/standalone-hydration-rules-smoke.php"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n    \"graph\": [\n        7,\n        {\n            \"future\": false\n        },\n        8,\n        [\n            1,\n            2\n        ],\n        null\n    ],\n    \"extras\": {\n        \"rows\": [\n            {\n                \"sourceKey\": 0,\n                \"remainder\": {\n                    \"meta\": {\n                        \"revision\": 2\n                    }\n                }\n            }\n        ],\n        \"next_feature\": null\n    },\n    \"receiver_collision\": [\n        7,\n        {\n            \"extra\": {\n                \"enabled\": true\n            },\n            \"_extra\": \"remote\"\n        }\n    ],\n    \"strict\": [\n        \"invalid_field_type\",\n        \"items[1].id\",\n        \"\\/rows\\/1\\/value\\/record_id\"\n    ],\n    \"http\": 9,\n    \"wire\": {\n        \"id\": 7\n    },\n    \"scope\": 11,\n    \"illuminate\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "date": "2026-09-15",
+  "scope": "Документация 028/030/031 и исполняемый пример; src не изменён; исторические манифесты сохранены.",
+  "sha256": {
+    ".workflow/README.md": "e9fafb1cb2be900e0933826c5464969419efbe1d1218f43ce5e1746be33e3bbf",
+    ".workflow/completed/pln-028-declarative-dto/artifacts/check-documentation-followup.py": "58e614d68309a019f30f682192be57837354b436d99340bee0d4e6b761ea87f6",
+    ".workflow/completed/pln-028-declarative-dto/artifacts/documentation-followup-await.json": "6bc1b01a17c0bcf483205ed5546f438ca6fc41343339bac6610d7c3fbf00c4e9",
+    ".workflow/completed/pln-028-declarative-dto/artifacts/documentation-followup-links.json": "605c8ffe1c8697c24dbc47c30cc90b700d1d8f551556e4b3631229a26012bd6b",
+    ".workflow/completed/pln-028-declarative-dto/artifacts/documentation-followup-public.log": "fb65250f25bbfd5b4f3a02a1f7b6ec752a561f8f8c4d7d30c533f0cd2f9f2e00",
+    ".workflow/completed/pln-028-declarative-dto/artifacts/documentation-followup-rules.json": "f03d99920753d9d8dbd92015bac1da12349903446f9677cfc7242e7a0b8250c6",
+    ".workflow/completed/pln-028-declarative-dto/documentation-followup.md": "05206c195d6515b6ec1182c2d7831087fc467185f2dcc5e8a1cc6345ab096346",
+    "CHANEGLOG.md": "efe88f6a1437291a3902cf2dd7fed1a4fc4fb71fa67343e69c3b330e5a2ad252",
+    "README.md": "a92987bb27ff7b8a03cbe21a302800289d2ff24edf9fa84acbf7ae222afe970b",
+    "docs/glossary/README.md": "98f37ad29c634c17a025722605aa5561f6abd08a2afaba2a5f3277c12e14c258",
+    "docs/glossary/attributes.md": "622f8c600101cbfcbb221c5e2e1bc8ea7aa0413696f28f78212cd254aced142d",
+    "docs/glossary/client.md": "9665726ea8508c65e0447f95173b96da5eca9fc3fcf844596581f5a6f949c646",
+    "docs/glossary/dto.md": "4ff0cff832346790844b7da220bc6cd554ed8e6b30703c11d664958a7227c12f",
+    "docs/glossary/pagination.md": "127aac2d5a68ca7dc131eff6f71b1196cb59c24018e0842679016117a74457de",
+    "docs/glossary/requests.md": "7d3d78a36d2cbede3219d868e4215fd4218deb6ff89071ea25ce5ce6320dc312",
+    "docs/glossary/results.md": "13f244059e227edffc6fb53f9ca6cd06f1274dce05c37622838f78da7eae9b27",
+    "docs/guides/attributes/response.md": "48d1f52c056b4b2918d4336508771031c6582f180c8fdb5150097afdaf4d3e45",
+    "docs/guides/casts.md": "4fcd061a294e85af65c09f06e83f49ab3037926f35dc2b0b3d494bc77b5d4b1c",
+    "docs/guides/client-config/responses-errors.md": "4ec5a099770d51f09b0d2d65931c66b2263c70e745b69fbcd8a1f4705cb443aa",
+    "docs/guides/client-config/serialization.md": "fc16058bb6414a1d952cd80a78b02838c4afb2e56820ae6ce13aa7e8b7b7a755",
+    "docs/guides/dto.md": "d30cf0fc549d7c99cb99e96a1a649cd7e834868441e5e293b6a98655a7322a34",
+    "docs/guides/hydration-rules.md": "4f3218e1d27fc9672980d1483f7df985d4844ee3e8d812afda13b0ff12788dee",
+    "docs/guides/migration.md": "6c58f57fa6dab88672f70c3891a7490c768f31dce857409d3d467bdb69eab912",
+    "docs/guides/naming-strategy.md": "6c1cb05a65192953e6b03b21ddf909afc1e0ef86053a4bff6e584ee0947249f7",
+    "docs/guides/provider-checklist.md": "028ffe7292749d8c26d73e3e3c4ef5e1e1aa3f6cd9f0f56f8475a4fbbf4bce8f",
+    "docs/guides/provider-methodology.md": "bb11b8bf816cc1922b954fe7bb5820b7d9b02e53cf2ab0d7361c370203dc85b1",
+    "docs/guides/serialization.md": "ee262e657767077bb3b860ae08e1990f3b3d700f587afd50d1c7730c00334951",
+    "docs/technical/architecture.md": "fd4d15c0c363d19b0e9cd0413bdf2aab114fa3e4a92024f04c013313ce12eb5e",
+    "docs/technical/attributes.md": "78c5d1300bf3fef9a5fd2fe8820662b1d03e62d756b3b68f6127301a6eaf89b7",
+    "docs/technical/caching-retry.md": "416cbdb9d7478e5eb09e0432300b0bb7246fbebf7b2ad2a8693c3e7100cc7d82",
+    "docs/technical/error-handling.md": "84137c13902e6afd50dd635350f2db3e8781d70f714167039264d0737f20e4ea",
+    "docs/technical/pipeline.md": "257153db7886feeadd7a38e6318cb25998e9609fef9296af4f661c4fe6fd7227",
+    "tests/Support/standalone-hydration-rules-smoke.php": "187e138d43d3d332fa5d3f2aab102568d8181465bca438e792f35e9501eeb9bc"
+  },
+  "summary": {
+    "links": {
+      "documents": 91,
+      "local_links": 863,
+      "errors": []
+    },
+    "rules_observations": 8,
+    "await_checks": 7,
+    "sha256_files": 33
+  }
+}

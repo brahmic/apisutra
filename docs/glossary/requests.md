@@ -27,7 +27,10 @@ Namespace: `Brahmic\ApiSutra\Enums\Execution\SendMode`.
 Enum режима отправки. Sync — обычный sync‑путь, Async — non‑blocking транспортный путь. Используется в send(mode: SendMode::Async).
 
 ## Отложенная готовность результата (polling)
-Термин для сценариев, где провайдер возвращает промежуточный статус (например, `waiting`) и данные становятся доступны позже по тому же endpoint. Обычно реализуется повторными запросами (polling) или retry‑логикой на основе содержимого ответа. Это не то же самое, что sendAsync().
+Сценарий, где провайдер возвращает промежуточное состояние, а финальные данные
+становятся доступны позже. `await()` использует poll-запрос и явный критерий
+Pending/Ready/Failed; HTTP retry и `sendAsync()` решают другие задачи.
+См. [Provider Async Await](../guides/provider-async-await.md).
 
 ## PromiseInterface
 Интерфейс промиса (Guzzle Promises). Используется в ResultHandle::rawAsync() и resolvedAsync() для асинхронных операций.

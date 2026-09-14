@@ -17,6 +17,16 @@
 - `ErrorContextFactoryInterface` добавляет типизированный контекст для DX (`errorContext()`).
 - Системный context ядра: `traceId`, `httpStatus`, `requestClass`, `providerCode`.
 
+Явный `await()` выбрасывает ошибки ожидания независимо от `throwOnErrors`.
+`ContinuationAwaitException` сохраняет последний результат и причину ошибки;
+неудачная гидратация Ready-payload не превращается в следующий poll.
+См. [ожидание и миграцию](../guides/provider-async-await.md).
+
+При внешних правилах HydrationException разделяет DTO-путь и исходный JSON Pointer.
+`context()` сохраняет точные данные для результата, `logContext()` маскирует
+неизвестные ключи источника в автоматическом логе.
+[Границы диагностики](../guides/hydration-rules.md#диагностика-и-входы).
+
 ## Переопределения
 `AbstractRequest` и `AbstractClient` могут переопределять:
 - `hasRequestFailed()`

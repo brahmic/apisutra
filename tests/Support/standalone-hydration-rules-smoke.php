@@ -38,9 +38,14 @@ if (count($matches[1]) !== 2) {
 }
 eval("declare(strict_types=1);\n" . implode("\n", $matches[1]));
 $observations = [
-    'graph' => [$dto->owner->id, $dto->owner->extra, $dto->items[0]->id, $dto->ids, $dto->count],
-    'extras' => $dto->extra,
+    'graph' => [$dto->owner->id, $dto->owner->_extra, $dto->items[0]->id, $dto->ids, $dto->count],
+    'extras' => $dto->_extra,
 ];
+// Совпадающие имена в API сохраняются внутри явно настроенного receiver.
+$collision = Hydrator::forRules($rules)->hydrate([
+    'record_id' => 7, 'extra' => ['enabled' => true], '_extra' => 'remote',
+], EntryDto::class);
+$observations['receiver_collision'] = [$collision->id, $collision->_extra];
 $source['rows'][] = ['value' => ['record_id' => '9']];
 try {
     Hydrator::forRules($rules)->hydrate($source, ReportDto::class);
@@ -68,6 +73,7 @@ $observations['illuminate'] = array_values(array_filter(
 $expected = [
     'graph' => [7, ['future' => false], 8, [1, 2], null],
     'extras' => ['rows' => [['sourceKey' => 0, 'remainder' => ['meta' => ['revision' => 2]]]], 'next_feature' => null],
+    'receiver_collision' => [7, ['extra' => ['enabled' => true], '_extra' => 'remote']],
     'strict' => ['invalid_field_type', 'items[1].id', '/rows/1/value/record_id'],
     'http' => 9,
     'wire' => ['id' => 7],

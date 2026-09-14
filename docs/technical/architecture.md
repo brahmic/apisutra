@@ -16,13 +16,14 @@
 - **RequestSpec** — метаданные запроса, собираемые из атрибутов.
 - **Pipeline** — единый оркестратор исполнения.
 - **Serializer / Hydrator** — сериализация запроса и гидрация ответа.
+- **HydrationRules / HydrationScope** — внешний набор DTO и его сохранение при рекурсивной гидратации.
 - **Result / ClientResponse** — единый формат результатов и ответов.
 - **ContainerProvider** — интеграция с контейнером (Laravel/без контейнера).
 
 ## Принципы и границы
 - **Transport is pluggable** — SDK не навязывает HTTP‑клиент.
 - **Container optional** — без контейнера работает всё, кроме auto‑resolve и DTO‑валидации.
-- **Result‑first** — ошибки не выбрасываются по умолчанию.
+- **Result‑first** — обычный запрос возвращает ошибки в результате; явные `dataOrFail()` и `await()` могут выбрасывать исключения.
 - **Immutability** — конфиг и runtime‑опции неизменяемы.
 - **Attributes as config** — атрибуты описывают поведение, а не бизнес‑логику.
 
@@ -55,7 +56,8 @@
 - **PropertyTypeInspector** — единое чтение declared types и runtime-match логики для свойств.
 - **SerializationValueResolver** — общий resolver сериализации значений для `DtoSerializer` и `RequestPartsCollector`.
 - **HydrationTypeSelector** — выбор ветки union/declared type для гидрации.
-- **BuiltinHydrationCaster** — встроенный hydration-dispatch поверх registry/safe-scalar/date/enum/DTO/Base64File.
+- **BuiltinHydrationCaster** — выбор cast из атрибута/профиля и встроенных scalar/date/enum/DTO/Base64File преобразований.
+- **RuleSetCompiler** — проверка внешнего набора до обработки DTO; правила поля и casts набора применяет гидратор. [Контракт](../guides/hydration-rules.md).
 - **SafeScalarHydrationCaster** — безопасное приведение scalar значений по declared type DTO.
 
 Это внутренние сервисы ядра. Новые механизмы безопасного auto-cast следует добавлять

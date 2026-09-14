@@ -23,6 +23,16 @@ Pipeline — единый оркестратор жизненного цикла
 Порядок исполнения: глобальные → по типу → атрибуты → методы класса.
 
 ## Где подробности
+Гидратор клиента и его [внешние правила](../guides/hydration-rules.md) используются в
+Returns, пагинации, CompositeFlow и ожидании, включая повторный `awaitAs()`.
+HTTP cache хранит ответ, который гидратируется заново. Ненулевой результат response
+handler, RawResponse и Download обходят DTO-гидратацию.
+
+Готовность continuation определяется до преобразования Ready-payload. Ошибка этого
+преобразования завершает ожидание; [контракт ожидания](../guides/provider-async-await.md)
+не зависит от включения внешних правил. Casts/providers получают текущий гидратор
+через HydrationScope; `PipelineContext` standalone может отсутствовать.
+
 - Пайплайн и контекст: `docs/glossary/pipeline.md`
 - Результаты и ошибки: `docs/glossary/results.md`
 - Атрибуты: `docs/guides/attributes/README.md`
