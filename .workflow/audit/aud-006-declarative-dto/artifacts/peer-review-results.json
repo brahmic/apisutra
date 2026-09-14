@@ -1,0 +1,557 @@
+{
+    "php": "8.4.15",
+    "checks": 35,
+    "mismatches": 0,
+    "observations": [
+        {
+            "id": "C01-single-nested-array",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "unexpected_response_shape",
+                "path": "address[0]"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "unexpected_response_shape",
+                "path": "address[0]"
+            },
+            "matches": true
+        },
+        {
+            "id": "C02-single-nested-object",
+            "expected": {
+                "ok": true,
+                "value": "Sample"
+            },
+            "actual": {
+                "ok": true,
+                "value": "Sample"
+            },
+            "matches": true
+        },
+        {
+            "id": "C03-single-nested-http",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": "unexpected_response_shape",
+                    "path": "data.address[0]"
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": "unexpected_response_shape",
+                    "path": "data.address[0]"
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "C04-single-nested-typeerror",
+            "expected": {
+                "ok": false,
+                "exception": "TypeError"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "TypeError"
+            },
+            "matches": true
+        },
+        {
+            "id": "C05-single-nested-typeerror-http",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": null,
+                    "path": null,
+                    "previous": "TypeError"
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": null,
+                    "path": null,
+                    "previous": "TypeError"
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "C06-plain-child-native",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "child"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "child"
+            },
+            "matches": true
+        },
+        {
+            "id": "C07-plain-child-cast",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "C08-plain-child-cast-error",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "child.count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "child.count"
+            },
+            "matches": true
+        },
+        {
+            "id": "C09-scalar-list-profile",
+            "expected": {
+                "ok": true,
+                "value": [
+                    "1",
+                    "x",
+                    null
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    "1",
+                    "x",
+                    null
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "C10-scalar-list-plain",
+            "expected": {
+                "ok": true,
+                "value": [
+                    "1",
+                    "x",
+                    null
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    "1",
+                    "x",
+                    null
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "C11-scalar-itemcast-valid",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0,
+                    7
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0,
+                    7
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "C12-scalar-itemcast-string",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "strictIds[1]"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "strictIds[1]"
+            },
+            "matches": true
+        },
+        {
+            "id": "C13-scalar-itemcast-null",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "strictIds[1]"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "strictIds[1]"
+            },
+            "matches": true
+        },
+        {
+            "id": "C14-itemcast-no-arguments",
+            "expected": {
+                "ok": false,
+                "exception": "ArgumentCountError"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "ArgumentCountError"
+            },
+            "matches": true
+        },
+        {
+            "id": "C15-child-provider-path",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "explicit_null_not_allowed",
+                "path": "guardedChild"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "explicit_null_not_allowed",
+                "path": "guardedChild"
+            },
+            "matches": true
+        },
+        {
+            "id": "C16-child-provider-http-path",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": "explicit_null_not_allowed",
+                    "path": "data.guardedChild"
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": "explicit_null_not_allowed",
+                    "path": "data.guardedChild"
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "C17-provider-default-keep",
+            "expected": {
+                "ok": true,
+                "value": "present"
+            },
+            "actual": {
+                "ok": true,
+                "value": "present"
+            },
+            "matches": true
+        },
+        {
+            "id": "C18-provider-normalized",
+            "expected": {
+                "ok": true,
+                "value": "null"
+            },
+            "actual": {
+                "ok": true,
+                "value": "null"
+            },
+            "matches": true
+        },
+        {
+            "id": "C19-cast-skips-normalization",
+            "expected": {
+                "ok": true,
+                "value": "present"
+            },
+            "actual": {
+                "ok": true,
+                "value": "present"
+            },
+            "matches": true
+        },
+        {
+            "id": "C20-nullable-property",
+            "expected": {
+                "ok": true,
+                "value": null
+            },
+            "actual": {
+                "ok": true,
+                "value": null
+            },
+            "matches": true
+        },
+        {
+            "id": "C21-nullable-property-constructor",
+            "expected": {
+                "ok": true,
+                "value": null
+            },
+            "actual": {
+                "ok": true,
+                "value": null
+            },
+            "matches": true
+        },
+        {
+            "id": "C22-required-nullable-argument",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "required_field_missing",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "required_field_missing",
+                "path": "count"
+            },
+            "matches": true
+        },
+        {
+            "id": "C23-combined-provider-null",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "explicit_null_not_allowed",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "explicit_null_not_allowed",
+                "path": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "C24-combined-provider-list",
+            "expected": {
+                "ok": true,
+                "value": [
+                    7
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    7
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "C25-combined-provider-missing",
+            "expected": {
+                "ok": true,
+                "value": null
+            },
+            "actual": {
+                "ok": true,
+                "value": null
+            },
+            "matches": true
+        },
+        {
+            "id": "C26-combined-provider-shape",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "C27-combined-provider-item",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "guardedIds[1]"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "guardedIds[1]"
+            },
+            "matches": true
+        },
+        {
+            "id": "C28-default-not-repeatable",
+            "expected": {
+                "ok": true,
+                "value": false
+            },
+            "actual": {
+                "ok": true,
+                "value": false
+            },
+            "matches": true
+        },
+        {
+            "id": "C29-global-registry-ignored",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "C30-extension-registry-ignored",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "C31-handler-replaces-returns",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "handled": true
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "handled": true
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "C32-handler-null-fallback",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": "unwrap_path_missing",
+                    "path": "data"
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "status": 200,
+                    "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                    "reason": "unwrap_path_missing",
+                    "path": "data"
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "C33-provider-nonkeep-policy",
+            "expected": {
+                "ok": true,
+                "value": "null"
+            },
+            "actual": {
+                "ok": true,
+                "value": "null"
+            },
+            "matches": true
+        },
+        {
+            "id": "C34-parameterized-list-cast",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0,
+                    7
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0,
+                    7
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "C35-parameterized-list-cast-error",
+            "expected": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "listCast[1]"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "listCast[1]"
+            },
+            "matches": true
+        }
+    ]
+}

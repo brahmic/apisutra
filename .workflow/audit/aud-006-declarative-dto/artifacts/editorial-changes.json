@@ -1,0 +1,26 @@
+{
+  "date": "2026-09-14",
+  "files": [
+    {
+      "old_path": ".workflow/issue/iss-002-apisutra-reuse/iss-001-readme.md",
+      "new_path": ".workflow/issue/iss-002-apisutra-reuse/iss-002-readme.md",
+      "before_sha256": "0d20c3a6eb6f0310711493c1141c6e88fe5f22076ab28d9ae9e765507f01cff6",
+      "after_sha256": "7f00988f6e3c8e55fc1b7164f871cdc2b56c4d093d7a606621d429ddbedbc9fe",
+      "changes": [
+        "align main file ID with directory iss-002",
+        "label original SDK paths as text",
+        "add import provenance note"
+      ]
+    },
+    {
+      "old_path": ".workflow/issue/iss-002-apisutra-reuse/upstream-requirements.md",
+      "new_path": ".workflow/issue/iss-002-apisutra-reuse/upstream-requirements.md",
+      "before_sha256": "dc2aa04dd32063b5b1a8e32f690c6f3ed0c040fa85426e0311245720e020d8e3",
+      "after_sha256": "95a6a9c0e17ecb1e07a31a6e8fc97e899c9794a5bc2dd10878ec15d47121e43c",
+      "changes": [
+        "fix local backlink to imported audit"
+      ]
+    }
+  ],
+  "substantive_claims_and_php_fixtures_changed": false
+}

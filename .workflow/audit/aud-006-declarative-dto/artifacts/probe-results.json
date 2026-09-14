@@ -1,0 +1,1299 @@
+{
+    "php": "8.4.15",
+    "purpose": "Воспроизведение текущих возможностей и ограничений; это не приёмка будущих требований.",
+    "count": 83,
+    "mismatches": 0,
+    "observations": [
+        {
+            "id": "AS1-default-1",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": 123
+            },
+            "actual": {
+                "ok": true,
+                "value": 123
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-1",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": true,
+                "value": 123
+            },
+            "actual": {
+                "ok": true,
+                "value": 123
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-2",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": 0
+            },
+            "actual": {
+                "ok": true,
+                "value": 0
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-2",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": true,
+                "value": 0
+            },
+            "actual": {
+                "ok": true,
+                "value": 0
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-3",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": -9223372036854775808
+            },
+            "actual": {
+                "ok": true,
+                "value": -9223372036854775808
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-3",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": true,
+                "value": -9223372036854775808
+            },
+            "actual": {
+                "ok": true,
+                "value": -9223372036854775808
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-4",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": 9223372036854775807
+            },
+            "actual": {
+                "ok": true,
+                "value": 9223372036854775807
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-4",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": true,
+                "value": 9223372036854775807
+            },
+            "actual": {
+                "ok": true,
+                "value": 9223372036854775807
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-5",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": 123
+            },
+            "actual": {
+                "ok": true,
+                "value": 123
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-5",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "count",
+                "expected": "int",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-6",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": 123
+            },
+            "actual": {
+                "ok": true,
+                "value": 123
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-6",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "count",
+                "expected": "int",
+                "actual": "float"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-7",
+            "description": "Текущее приведение count",
+            "expected": {
+                "ok": true,
+                "value": 1
+            },
+            "actual": {
+                "ok": true,
+                "value": 1
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-7",
+            "description": "Профильный scalar-cast для count",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "count",
+                "expected": "int",
+                "actual": "bool"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-8",
+            "description": "Текущее приведение enabled",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-8",
+            "description": "Профильный scalar-cast для enabled",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-9",
+            "description": "Текущее приведение enabled",
+            "expected": {
+                "ok": true,
+                "value": false
+            },
+            "actual": {
+                "ok": true,
+                "value": false
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-9",
+            "description": "Профильный scalar-cast для enabled",
+            "expected": {
+                "ok": true,
+                "value": false
+            },
+            "actual": {
+                "ok": true,
+                "value": false
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-10",
+            "description": "Текущее приведение enabled",
+            "expected": {
+                "ok": true,
+                "value": false
+            },
+            "actual": {
+                "ok": true,
+                "value": false
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-10",
+            "description": "Профильный scalar-cast для enabled",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "enabled"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "enabled",
+                "expected": "bool",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-11",
+            "description": "Текущее приведение enabled",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-11",
+            "description": "Профильный scalar-cast для enabled",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "enabled"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "enabled",
+                "expected": "bool",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-12",
+            "description": "Текущее приведение enabled",
+            "expected": {
+                "ok": true,
+                "value": false
+            },
+            "actual": {
+                "ok": true,
+                "value": false
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-12",
+            "description": "Профильный scalar-cast для enabled",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "enabled"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "enabled",
+                "expected": "bool",
+                "actual": "int"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-13",
+            "description": "Текущее приведение enabled",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-13",
+            "description": "Профильный scalar-cast для enabled",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "enabled"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "enabled",
+                "expected": "bool",
+                "actual": "int"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-14",
+            "description": "Текущее приведение label",
+            "expected": {
+                "ok": true,
+                "value": "0"
+            },
+            "actual": {
+                "ok": true,
+                "value": "0"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-14",
+            "description": "Профильный scalar-cast для label",
+            "expected": {
+                "ok": true,
+                "value": "0"
+            },
+            "actual": {
+                "ok": true,
+                "value": "0"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-15",
+            "description": "Текущее приведение label",
+            "expected": {
+                "ok": true,
+                "value": ""
+            },
+            "actual": {
+                "ok": true,
+                "value": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-15",
+            "description": "Профильный scalar-cast для label",
+            "expected": {
+                "ok": true,
+                "value": ""
+            },
+            "actual": {
+                "ok": true,
+                "value": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-16",
+            "description": "Текущее приведение label",
+            "expected": {
+                "ok": true,
+                "value": "0"
+            },
+            "actual": {
+                "ok": true,
+                "value": "0"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-16",
+            "description": "Профильный scalar-cast для label",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "label"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "label",
+                "expected": "string",
+                "actual": "int"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-17",
+            "description": "Текущее приведение label",
+            "expected": {
+                "ok": true,
+                "value": "1.5"
+            },
+            "actual": {
+                "ok": true,
+                "value": "1.5"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-17",
+            "description": "Профильный scalar-cast для label",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "label"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "label",
+                "expected": "string",
+                "actual": "float"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-default-18",
+            "description": "Текущее приведение label",
+            "expected": {
+                "ok": true,
+                "value": ""
+            },
+            "actual": {
+                "ok": true,
+                "value": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-18",
+            "description": "Профильный scalar-cast для label",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "label"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "label",
+                "expected": "string",
+                "actual": "bool"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-overflow",
+            "description": "Переполнение штатного int не принимается",
+            "expected": {
+                "ok": false,
+                "reason": "integer_out_of_range",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "integer_out_of_range",
+                "path": "count",
+                "expected": "int",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-profile-overflow",
+            "description": "Строгий профиль отказывает переполненной строке до преобразования",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "count",
+                "expected": "int",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-child",
+            "description": "Профиль наследуется DTO вложенного объекта",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "child.count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "child.count",
+                "expected": "int",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-items",
+            "description": "Профиль наследуется DTO элементов списка",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "items[0].count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "items[0].count",
+                "expected": "int",
+                "actual": "string"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-unbound-child",
+            "description": "Профиль родителя не распространяется на независимый plain-класс",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-explicit-cast",
+            "description": "Явное преобразование имеет приоритет над профильным cast",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-after-cast",
+            "description": "После identity-cast reflection всё ещё преобразует строку в int",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-after-cast-array",
+            "description": "Невозможный тип после явного cast диагностируется",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "unchecked"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "unchecked",
+                "expected": "?int",
+                "actual": "array"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-registry",
+            "description": "Переданный Hydrator registry не задаёт профиль DTO",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-client-casts",
+            "description": "ClientConfig.casts не заменяет профиль гидратации DTO",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-isolation",
+            "description": "Профиль не меняет ранее созданный default-hydrator",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-pipeline-0",
+            "description": "Returns сохраняет reason, HTTP-ответ и одну попытку",
+            "expected": {
+                "ok": true,
+                "value": [
+                    "hydration_error",
+                    "invalid_field_type",
+                    "data.count",
+                    200,
+                    1
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    "hydration_error",
+                    "invalid_field_type",
+                    "data.count",
+                    200,
+                    1
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS1-pipeline-1",
+            "description": "Returns сохраняет reason, HTTP-ответ и одну попытку",
+            "expected": {
+                "ok": true,
+                "value": [
+                    "hydration_error",
+                    "invalid_field_type",
+                    "data.count",
+                    200,
+                    1
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    "hydration_error",
+                    "invalid_field_type",
+                    "data.count",
+                    200,
+                    1
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS2-extras",
+            "description": "Неописанные поля не попадают в extras",
+            "expected": {
+                "ok": true,
+                "value": []
+            },
+            "actual": {
+                "ok": true,
+                "value": []
+            },
+            "matches": true
+        },
+        {
+            "id": "AS2-collision",
+            "description": "Существующий ключ extras читается как обычное поле",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "own": 1
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "own": 1
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "AS2-raw-response",
+            "description": "Полные данные остаются в исходном ответе, но не в DTO",
+            "expected": {
+                "ok": true,
+                "value": [
+                    [],
+                    true
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    [],
+                    true
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-plain-object",
+            "description": "Plain readonly создаётся из объекта без контекста",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-plain-nested",
+            "description": "Native-тип plain child не запускает автоматическую гидрацию массива",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "child"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "child",
+                "expected": "Brahmic\\ApiSutra\\Tests\\Stubs\\DtoFeedbackAudit\\PlainScalarDto",
+                "actual": "array"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-plain-instance",
+            "description": "Готовый plain child принимается по native-типу",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-plain-list",
+            "description": "Nested умеет создавать plain readonly элементы",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-discriminator",
+            "description": "Известный вариант создаётся, неизвестный остаётся raw",
+            "expected": {
+                "ok": true,
+                "value": [
+                    7,
+                    {
+                        "kind": "future",
+                        "x": false
+                    }
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    7,
+                    {
+                        "kind": "future",
+                        "x": false
+                    }
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-known-invalid",
+            "description": "Известный повреждённый вариант не становится raw",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "items[0].id"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "items[0].id",
+                "expected": "int",
+                "actual": "array"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-fallback",
+            "description": "From использует fallback при отсутствии primary",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-source-path",
+            "description": "Ошибка хранит DTO path вместо выбранного source path",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "batchId"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_field_type",
+                "path": "batchId",
+                "expected": "int",
+                "actual": "array"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-unwrap-path",
+            "description": "В pipeline путь объединяет unwrap и DTO path, без source mapping",
+            "expected": {
+                "ok": true,
+                "value": [
+                    "data.items[1].batchId",
+                    false,
+                    false,
+                    1
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    "data.items[1].batchId",
+                    false,
+                    false,
+                    1
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-constructor",
+            "description": "Валидные данные вызывают конструктор ровно один раз",
+            "expected": {
+                "ok": true,
+                "value": 1
+            },
+            "actual": {
+                "ok": true,
+                "value": 1
+            },
+            "matches": true
+        },
+        {
+            "id": "AS3-constructor-invalid",
+            "description": "Неподходящий native-тип не вызывает конструктор",
+            "expected": {
+                "ok": true,
+                "value": 0
+            },
+            "actual": {
+                "ok": true,
+                "value": 0
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-missing-default",
+            "description": "Отсутствие optional-поля использует default null",
+            "expected": {
+                "ok": true,
+                "value": null
+            },
+            "actual": {
+                "ok": true,
+                "value": null
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-null-cast",
+            "description": "Явный null пропускает property-cast",
+            "expected": {
+                "ok": true,
+                "value": [
+                    null,
+                    0
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    null,
+                    0
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-required-nullable",
+            "description": "Обязательный nullable-параметр не становится optional",
+            "expected": {
+                "ok": false,
+                "reason": "required_field_missing",
+                "path": "count"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "required_field_missing",
+                "path": "count",
+                "expected": "?int",
+                "actual": "missing"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-required-null",
+            "description": "Обязательный nullable-параметр принимает явный null",
+            "expected": {
+                "ok": true,
+                "value": null
+            },
+            "actual": {
+                "ok": true,
+                "value": null
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-provider-missing",
+            "description": "DefaultValue.when=Null не мешает constructor default",
+            "expected": {
+                "ok": true,
+                "value": null
+            },
+            "actual": {
+                "ok": true,
+                "value": null
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-provider-value",
+            "description": "DefaultValue.when=Null не мешает значению",
+            "expected": {
+                "ok": true,
+                "value": 7
+            },
+            "actual": {
+                "ok": true,
+                "value": 7
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-provider-null",
+            "description": "DefaultValue provider может отказать null, но автоматически не получает путь поля",
+            "expected": {
+                "ok": false,
+                "reason": "explicit_null_not_allowed",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "explicit_null_not_allowed",
+                "path": "",
+                "expected": "present non-null value",
+                "actual": "null"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-provider-pipeline",
+            "description": "При отказе provider сохраняется unwrap, но имя поля отсутствует",
+            "expected": {
+                "ok": true,
+                "value": [
+                    "hydration_error",
+                    "data",
+                    200,
+                    1
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    "hydration_error",
+                    "data",
+                    200,
+                    1
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-nested-empty",
+            "description": "Nested принимает и переиндексирует форму empty",
+            "expected": {
+                "ok": true,
+                "value": []
+            },
+            "actual": {
+                "ok": true,
+                "value": []
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-cast-empty",
+            "description": "Cast проверяет форму до штатной hydrateCollection: empty",
+            "expected": {
+                "ok": true,
+                "value": []
+            },
+            "actual": {
+                "ok": true,
+                "value": []
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-nested-list",
+            "description": "Nested принимает и переиндексирует форму list",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-cast-list",
+            "description": "Cast проверяет форму до штатной hydrateCollection: list",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-nested-map",
+            "description": "Nested принимает и переиндексирует форму map",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-cast-map",
+            "description": "Cast проверяет форму до штатной hydrateCollection: map",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": "items"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_list_shape",
+                "path": "items",
+                "expected": "list",
+                "actual": "array"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-nested-sparse",
+            "description": "Nested принимает и переиндексирует форму sparse",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-cast-sparse",
+            "description": "Cast проверяет форму до штатной hydrateCollection: sparse",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": "items"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "invalid_list_shape",
+                "path": "items",
+                "expected": "list",
+                "actual": "array"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-cast-nested-combination",
+            "description": "Nested обходит property Cast на том же поле",
+            "expected": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "actual": {
+                "ok": true,
+                "value": [
+                    0
+                ]
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-list-missing",
+            "description": "Обязательный array-list отсутствовать не может",
+            "expected": {
+                "ok": false,
+                "reason": "required_field_missing",
+                "path": "items"
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "required_field_missing",
+                "path": "items",
+                "expected": "array",
+                "actual": "missing"
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-typed-missing",
+            "description": "Обязательная typed collection автоматически становится пустой",
+            "expected": {
+                "ok": true,
+                "value": 0
+            },
+            "actual": {
+                "ok": true,
+                "value": 0
+            },
+            "matches": true
+        },
+        {
+            "id": "AS4-typed-guard",
+            "description": "DefaultValue provider позволяет запретить autodefault, но путь пуст",
+            "expected": {
+                "ok": false,
+                "reason": "required_field_missing",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+                "reason": "required_field_missing",
+                "path": "",
+                "expected": "present non-null value",
+                "actual": "missing"
+            },
+            "matches": true
+        }
+    ]
+}

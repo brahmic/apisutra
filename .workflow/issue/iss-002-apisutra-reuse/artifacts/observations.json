@@ -1,0 +1,92 @@
+{
+    "php": "8.5.4",
+    "apisutra_version": "v0.2.0-alpha.1",
+    "apisutra_reference": "6857dc054648bd079f4e9ebf7d1511116f3ff17e",
+    "checks": 21,
+    "observations": [
+        {
+            "id": "P01",
+            "observation": "Returns/unwrap hydrate an ordinary readonly class; raw() keeps the DTO."
+        },
+        {
+            "id": "P02",
+            "observation": "Standalone and request hydration return equivalent values."
+        },
+        {
+            "id": "P03",
+            "observation": "Default scalar hydration coerces numeric strings, textual bools and numeric titles."
+        },
+        {
+            "id": "P04",
+            "observation": "Unknown source fields are not automatically collected into extra."
+        },
+        {
+            "id": "P05",
+            "observation": "Missing required nullable field is rejected; explicit null is allowed."
+        },
+        {
+            "id": "P06",
+            "observation": "Nullable constructor default accepts both missing and explicit null."
+        },
+        {
+            "id": "P07",
+            "observation": "Existing explicit property Cast can reject scalar coercion."
+        },
+        {
+            "id": "P08",
+            "observation": "Null bypasses the property Cast; it cannot reject present null here."
+        },
+        {
+            "id": "P09",
+            "observation": "Integer overflow already produces a structured hydration error."
+        },
+        {
+            "id": "P10",
+            "observation": "From and Nested discriminator work; unknown variants remain raw arrays."
+        },
+        {
+            "id": "P11",
+            "observation": "Malformed known variants fail with a nested path and preserved HTTP response."
+        },
+        {
+            "id": "P12",
+            "observation": "Diagnostic path uses DTO property name, not the mapped source key batch_id."
+        },
+        {
+            "id": "P13",
+            "observation": "Associative collection input is accepted and reindexed by Nested."
+        },
+        {
+            "id": "P14",
+            "observation": "Missing unwrap path does not fall back to the root payload."
+        },
+        {
+            "id": "P15",
+            "observation": "Null instead of the declared response DTO is rejected."
+        },
+        {
+            "id": "P16",
+            "observation": "Malformed JSON preserves the successful HTTP status for outcome classification."
+        },
+        {
+            "id": "P17",
+            "observation": "Literal boolean query and omitted nullable recipient work through native declarations."
+        },
+        {
+            "id": "P18",
+            "observation": "Declarative Body preserves false, string zero and explicit null with wire policy."
+        },
+        {
+            "id": "P19",
+            "observation": "Native fake hydrates DTOs but bypasses the real HttpTransport/PSR-18 boundary."
+        },
+        {
+            "id": "P20",
+            "observation": "Current MaxSutra executor loses the structured hydration field path; adaptation is required."
+        },
+        {
+            "id": "P21",
+            "observation": "Client and operation quotas compose locally; operation rejection does not consume the remaining client permit."
+        }
+    ]
+}

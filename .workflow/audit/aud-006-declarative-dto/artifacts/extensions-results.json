@@ -1,0 +1,201 @@
+{
+    "php": "8.4.15",
+    "checks": 14,
+    "mismatches": 0,
+    "observations": [
+        {
+            "id": "R01-provider-nested-raw",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "R02-known-invalid",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "items[0].id"
+            },
+            "actual": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "items[0].id"
+            },
+            "matches": true
+        },
+        {
+            "id": "R03-associative-list",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "R04-sparse-list",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "R05-empty-list",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "R06-null-list",
+            "expected": {
+                "ok": false,
+                "reason": "null_not_allowed",
+                "path": "items"
+            },
+            "actual": {
+                "ok": false,
+                "reason": "null_not_allowed",
+                "path": "items"
+            },
+            "matches": true
+        },
+        {
+            "id": "R07-pipeline-shape-error",
+            "expected": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "http": 200,
+                    "reason": "invalid_list_shape",
+                    "path": "data"
+                }
+            },
+            "actual": {
+                "ok": true,
+                "value": {
+                    "success": false,
+                    "http": 200,
+                    "reason": "invalid_list_shape",
+                    "path": "data"
+                }
+            },
+            "matches": true
+        },
+        {
+            "id": "R08-pipeline-known-and-raw",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "R09-matrix-valid",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "R10-matrix-inner-shape",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": "rows[0]"
+            },
+            "actual": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": "rows[0]"
+            },
+            "matches": true
+        },
+        {
+            "id": "R11-matrix-invalid-item",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "rows[0][0].count"
+            },
+            "actual": {
+                "ok": false,
+                "reason": "invalid_field_type",
+                "path": "rows[0][0].count"
+            },
+            "matches": true
+        },
+        {
+            "id": "R12-matrix-outer-shape",
+            "expected": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "actual": {
+                "ok": false,
+                "reason": "invalid_list_shape",
+                "path": ""
+            },
+            "matches": true
+        },
+        {
+            "id": "R13-matrix-empty",
+            "expected": {
+                "ok": true,
+                "value": true
+            },
+            "actual": {
+                "ok": true,
+                "value": true
+            },
+            "matches": true
+        },
+        {
+            "id": "R14-required-list",
+            "expected": {
+                "ok": false,
+                "reason": "required_field_missing",
+                "path": "items"
+            },
+            "actual": {
+                "ok": false,
+                "reason": "required_field_missing",
+                "path": "items"
+            },
+            "matches": true
+        }
+    ]
+}

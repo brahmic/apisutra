@@ -1,0 +1,362 @@
+{
+  "hashes": [
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/issue/002.md",
+      "status": "documented_removed_source"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/Hydrator.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/BuiltinHydrationCaster.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/HydrationValueValidator.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/DtoHydrationProfileResolver.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Config/DtoHydrationPolicy.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Pipeline/Hydration/ResponseHydrator.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Exceptions/Serialization/HydrationException.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Core/AbstractClient.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "composer.json",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "composer.lock",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/AuditClient.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/AuditRequest.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/CombinedListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/ConstructorCounter.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/CountedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/DiscriminatedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/ExplicitCastDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/GuardedTypedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/IdentityCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/ListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/MappedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/MixedGraphDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/NullCastDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/NullProviderDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/PathDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/PathListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/PlainGraphDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/PlainScalarDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/RejectStateDefault.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/RequiredNullableDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/RequiredTypedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictBase.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictGraphDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictListCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictProfile.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictScalarCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/StrictScalarDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/ThrowOnNullCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "Stubs/TypedItems.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "probe-results.json",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "targeted-tests.log",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/README.md",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadLimited.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadList.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadRecord.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/Record.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/RecordList.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictIntegerCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictRecord.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/WriteRecord.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/observations.json",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/iss-001-readme.md",
+      "status": "documented_editorial_change"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/upstream-requirements.md",
+      "status": "documented_editorial_change"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/GuardedVariantListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/ListShapeProvider.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/MatrixDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/RawVariant.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/RecordingHttpClient.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/RowCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "Stubs/UnknownVariantCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "colleague-probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "colleague-results.json",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "extensions-probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "extensions-results.json",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": "recheck-tests.log",
+      "status": "match"
+    }
+  ],
+  "counts": {
+    "match": 66,
+    "documented_editorial_change": 2,
+    "documented_removed_source": 1,
+    "mismatch": 0
+  },
+  "identical_verify_conditions": 20,
+  "excluded_original_condition": "P20",
+  "identical_repeated_outputs": {
+    "probe-results.json": true,
+    "colleague-results.json": true,
+    "extensions-results.json": true
+  }
+}

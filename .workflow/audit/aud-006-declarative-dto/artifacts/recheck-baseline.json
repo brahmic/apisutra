@@ -1,0 +1,62 @@
+{
+  "date": "2026-09-14",
+  "head": "1bbd7da61eebbdf75d50a41bca62a17e4ea2447f",
+  "release": "v0.2.0-alpha.1",
+  "release_commit": "6857dc054648bd079f4e9ebf7d1511116f3ff17e",
+  "source_tree": "ed2cbf16afada7631e362e640bf422cb7d3cb4d0",
+  "runtime_diff_since_release": "",
+  "php": "8.4.15",
+  "colleague_php": "8.5.4",
+  "commands": [
+    "php .workflow/audit/aud-006-declarative-dto/artifacts/colleague-probe.php",
+    "php .workflow/audit/aud-006-declarative-dto/artifacts/extensions-probe.php",
+    "vendor/bin/pest tests/Unit/Serialization/UriPipelineTest.php tests/Unit/RateLimit/JointQuotaTest.php tests/Unit/OperationInventory/OperationInventoryBuilderTest.php --compact"
+  ],
+  "results": {
+    "colleague_observations": 20,
+    "skipped": [
+      "P20"
+    ],
+    "extension_observations": 14,
+    "extension_mismatches": 0,
+    "existing_tests": 85,
+    "assertions": 373,
+    "new_php_syntax_checks": 9
+  },
+  "source_replacement": {
+    "removed": ".workflow/issue/002.md",
+    "previous_sha256": "b3a00c82088ca70dd481d760ff1e86fc60bf508853350e65b6853b1831ec4f9e",
+    "current": ".workflow/issue/iss-002-apisutra-reuse/upstream-requirements.md",
+    "byte_identity_claimed": false
+  },
+  "original_baseline_files_verified_unchanged": 43,
+  "input_sha256": {
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/README.md": "97c7b2f6d9e7e50f3153ba741493475811c649936f6c8751791c53e97534b976",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadLimited.php": "80e5cc51530b5b382a5caa43b7637104001855d1c88b1916e89271ed0c465dcd",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadList.php": "0956a66109925547a5848946b88b123ffce2e4c473b76d4c2f0f4c55cca6463f",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadRecord.php": "44de9790c91550fbc10bf3df79634448552ecd173013dfcb6692a43fb6c8e270",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/Record.php": "670bd07e946e858bb805c2862d1ee72cf22b5e8a6d3dc320dd25edf8361a934c",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/RecordList.php": "b322da477b4ebb9f65e2a99ccf34a933633309e2c70f19a132bb887af26bd79d",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictIntegerCast.php": "57d227072865b2c088fd74ea3f01193ad901b28a210fd6f97d68d4fc5d7d55a8",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictRecord.php": "37a091c8b86eb833e64ccb99aed00df884fed990d30a05fec2eba9919780a48e",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/WriteRecord.php": "c046b8d2479b49e850dfb13f454a238a982c74743818b7d1186eb64552d37c2d",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/observations.json": "1ace1ae3397e7ba5bc62b783839cbeda240cc91c261a339d30f00b79723d5a9f",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/probe.php": "aae0261fe1d9134b74f071b6be67368f8d4d15ee926f6d9195c738f25bc6ea71",
+    ".workflow/issue/iss-002-apisutra-reuse/iss-001-readme.md": "0d20c3a6eb6f0310711493c1141c6e88fe5f22076ab28d9ae9e765507f01cff6",
+    ".workflow/issue/iss-002-apisutra-reuse/upstream-requirements.md": "dc2aa04dd32063b5b1a8e32f690c6f3ed0c040fa85426e0311245720e020d8e3"
+  },
+  "artifact_sha256": {
+    "Stubs/GuardedVariantListDto.php": "56cb70fd4e5b609a7bbed8a4ad7e5114a97820e3f191250d12088112c4f16340",
+    "Stubs/ListShapeProvider.php": "4a761ebb42452f93b8a61c6ebd3baa989d46c83c178857025f3d37098024dd6c",
+    "Stubs/MatrixDto.php": "b289b202e1e982fe1a5fd51489b6b437afa8a4d2a0b5c1fb500bf106df5d9134",
+    "Stubs/RawVariant.php": "2e888c3a5d11793bfa532a5c6049164526cbe0dfbe324ba24aabc0fae756f4bd",
+    "Stubs/RecordingHttpClient.php": "4d50eed6dd4903037e217de08d2f6cb63ab0ff1af3014b50841d82986c6c3359",
+    "Stubs/RowCast.php": "b7dd0fb11bcc4f758c82ce61dedec919764bae7dcec38b9f83f247c1ee536ea5",
+    "Stubs/UnknownVariantCast.php": "a8d492e57377a5ca9629db17f6db509c5c237574defe24d486656bcc258f740b",
+    "colleague-probe.php": "01b9ba9b22fdbd17e63d4de8bbb3da5a830d146eae2072c4d58bd72b79f1f74c",
+    "colleague-results.json": "81763f8f765c9a94f8d5bb55b11c4fc2252f06a003627598008bd6421d7ff148",
+    "extensions-probe.php": "53a3997c3c772eb169b3b87d81cd6bf4838167d50ddc97ea7fc93c741479ac3e",
+    "extensions-results.json": "87f14b24c13c69b52bf86a6fa136e51a142f6d29ddce8ddb11b36c007b0fa1f4",
+    "recheck-tests.log": "d2bcd9a0a1a4e17d4bf195a44f5224f144eea2cef04708577f16da43c68365e0"
+  }
+}

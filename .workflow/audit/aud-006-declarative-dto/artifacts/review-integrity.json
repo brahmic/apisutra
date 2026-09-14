@@ -1,0 +1,419 @@
+{
+  "hashes": [
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/issue/002.md",
+      "status": "missing"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/Hydrator.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/BuiltinHydrationCaster.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/HydrationValueValidator.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Serialization/DtoHydrationProfileResolver.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Config/DtoHydrationPolicy.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Pipeline/Hydration/ResponseHydrator.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Exceptions/Serialization/HydrationException.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "src/Core/AbstractClient.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "composer.json",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": "composer.lock",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/AuditClient.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/AuditRequest.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/CombinedListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ConstructorCounter.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/CountedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/DiscriminatedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ExplicitCastDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/GuardedTypedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/IdentityCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/MappedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/MixedGraphDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/NullCastDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/NullProviderDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PathDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PathListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PlainGraphDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PlainScalarDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RejectStateDefault.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RequiredNullableDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RequiredTypedDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictBase.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictGraphDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictListCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictProfile.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictScalarCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictScalarDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ThrowOnNullCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/TypedItems.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/probe-results.json",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/targeted-tests.log",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/README.md",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadLimited.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadList.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadRecord.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/Record.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/RecordList.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictIntegerCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictRecord.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/WriteRecord.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/observations.json",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/artifacts/probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/iss-001-readme.md",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/issue/iss-002-apisutra-reuse/upstream-requirements.md",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/GuardedVariantListDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ListShapeProvider.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/MatrixDto.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RawVariant.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RecordingHttpClient.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RowCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/UnknownVariantCast.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/colleague-probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/colleague-results.json",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/extensions-probe.php",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/extensions-results.json",
+      "status": "match"
+    },
+    {
+      "manifest": "recheck-baseline.json",
+      "path": ".workflow/audit/aud-006-declarative-dto/artifacts/recheck-tests.log",
+      "status": "match"
+    }
+  ],
+  "probes": [
+    {
+      "script": "probe.php",
+      "identical": true,
+      "output": "review-probe-results.json"
+    },
+    {
+      "script": "colleague-probe.php",
+      "identical": true,
+      "output": "review-colleague-results.json"
+    },
+    {
+      "script": "extensions-probe.php",
+      "identical": true,
+      "output": "review-extensions-results.json"
+    }
+  ],
+  "php_syntax": [
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/AuditClient.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/AuditRequest.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/CombinedListDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ConstructorCounter.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/CountedDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/DiscriminatedDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ExplicitCastDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/GuardedTypedDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/GuardedVariantListDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/IdentityCast.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ListDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ListShapeProvider.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/MappedDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/MatrixDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/MixedGraphDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/NullCastDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/NullProviderDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PathDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PathListDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PlainGraphDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/PlainScalarDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RawVariant.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RecordingHttpClient.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RejectStateDefault.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RequiredNullableDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RequiredTypedDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/RowCast.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictBase.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictGraphDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictListCast.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictListDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictProfile.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictScalarCast.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/StrictScalarDto.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/ThrowOnNullCast.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/TypedItems.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/Stubs/UnknownVariantCast.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/colleague-probe.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/extensions-probe.php",
+    ".workflow/audit/aud-006-declarative-dto/artifacts/probe.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadLimited.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadList.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/ReadRecord.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/Record.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/RecordList.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictIntegerCast.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/StrictRecord.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/fixtures/WriteRecord.php",
+    ".workflow/issue/iss-002-apisutra-reuse/artifacts/probe.php"
+  ],
+  "runtime_diff": "",
+  "source_tree": "ed2cbf16afada7631e362e640bf422cb7d3cb4d0"
+}
