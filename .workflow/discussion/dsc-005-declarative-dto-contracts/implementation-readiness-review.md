@@ -3,6 +3,11 @@
 - Дата создания: 2026-09-14
 - Дата обновления: 2026-09-14
 
+Последующая проверка 2026-09-14: IR-01–IR-05 закрыты в контрактах и приёмке;
+сигнатура DefaultSpec::value согласована с enum-значениями. План 031 реализован:
+[результаты](../../completed/pln-031-metadata-value-isolation/implementation.md).
+Ниже сохранён вердикт предыдущего разбора до этих правок.
+
 ## Вердикт
 
 Контракты, матрицы приёмки и ADR действительно появились. Решение В12 принято:
@@ -50,7 +55,7 @@ receiver исключается из запросов клиента с набо
 
 Приоритет P2, подтверждённое противоречие приёмки и действующего API.
 
-[M12](../../current/pln-031-metadata-value-isolation/acceptance.md#матрица) ожидает
+[M12](../../completed/pln-031-metadata-value-isolation/acceptance.md#матрица) ожидает
 счётчики [1, 1] для Cast в query, body, header и path. Однако
 [RequestPartsCollector](../../../src/Serialization/RequestPartsCollector.php)
 в ветках Header и Path выполняет только serializeEnumOnly и не вызывает Cast.
@@ -188,8 +193,8 @@ use Brahmic\ApiSutra\Workflow\Pln031\Fixtures\CountingCast;
 use Brahmic\ApiSutra\Workflow\Pln031\Fixtures\MutableCounter;
 
 require 'vendor/autoload.php';
-require '.workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/MutableCounter.php';
-require '.workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/CountingCast.php';
+require '.workflow/completed/pln-031-metadata-value-isolation/artifacts/Fixtures/MutableCounter.php';
+require '.workflow/completed/pln-031-metadata-value-isolation/artifacts/Fixtures/CountingCast.php';
 
 #[Get('/items/{id}')]
 final class HeaderPathProbe extends AbstractRequest

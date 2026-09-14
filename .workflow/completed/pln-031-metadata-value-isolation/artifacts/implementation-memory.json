@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "samples": {
+    "hydrator-default": [
+      {
+        "iterations": 1200,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 2400,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 4800,
+        "retained_bytes": 0
+      }
+    ],
+    "hydrator-cast": [
+      {
+        "iterations": 1200,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 2400,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 4800,
+        "retained_bytes": 0
+      }
+    ],
+    "dto-serializer": [
+      {
+        "iterations": 1200,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 2400,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 4800,
+        "retained_bytes": 0
+      }
+    ],
+    "request-parts": [
+      {
+        "iterations": 1200,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 2400,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 4800,
+        "retained_bytes": 0
+      }
+    ],
+    "cold-hydrator-cast": [
+      {
+        "iterations": 1200,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 2400,
+        "retained_bytes": 0
+      },
+      {
+        "iterations": 4800,
+        "retained_bytes": 0
+      }
+    ]
+  }
+}

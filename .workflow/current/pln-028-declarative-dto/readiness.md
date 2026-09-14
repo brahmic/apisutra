@@ -46,7 +46,7 @@ assertions. Новые 14 наблюдений воспроизводят лож
 объектный constructor default при включённом metadata cache. Первоначально это
 исправление относилось к 030; после [расширения CR-01](../../discussion/dsc-005-declarative-dto-contracts/metadata-review.md)
 полный общий дефект defaults/атрибутных args исправляет отдельный
-[031](../pln-031-metadata-value-isolation/pln-031-readme.md).
+[031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md).
 Передача гидратора клиента в await и конструкторы остаются
 целиком в 030; 028 настраивает уже переданный исполнитель.
 Точная готовность по A/B/C записана в [плане](pln-028-readme.md#приёмка-и-проверки):

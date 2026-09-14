@@ -31,7 +31,7 @@
 Согласно [третьему разбору](../../discussion/dsc-005-declarative-dto-contracts/clarification-review.md),
 саму передачу исполнителя в await и совместимость конструкторов выполняет 030.
 После [расширения CR-01](../../discussion/dsc-005-declarative-dto-contracts/metadata-review.md)
-общий дефект metadata cache выделен в [031](../pln-031-metadata-value-isolation/pln-031-readme.md):
+общий дефект metadata cache выделен в [031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md):
 он закрывает defaults/атрибутные args и входящие/исходящие преобразования.
 Использование общего metadata cache в 028 и итоговая приёмка опираются на завершённый
 031; контракты 028 можно выбирать независимо. Повторной реализации этих исправлений

@@ -512,7 +512,7 @@ SDK объявляет способ отличить pending от финала: 
 и реализуется в [030](../../current/pln-030-continuation-errors/contracts.md);
 Сам гидратор клиента и совместимые конструкторы await-сервисов также относятся
 к 030; перед его подключением общий дефект удержания значений metadata исправляет
-[031](../../current/pln-031-metadata-value-isolation/pln-031-readme.md).
+[031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md).
 028 затем настраивает набор у этого исполнителя. Наличие token само по себе не значит,
 что отчёт ещё не готов.
 

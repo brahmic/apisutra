@@ -1,0 +1,230 @@
+{
+    "head": "104f98e1fbb322972603b26adf9f37396b087670",
+    "php": "8.4.15",
+    "sapi": "cli",
+    "opcache_enable_cli": "0",
+    "opcache_jit": "",
+    "xdebug": false,
+    "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+    "runs": 7,
+    "note": "warm — один экземпляр и прогретый кеш; cold — новый экземпляр и кеш на каждую операцию; off — выключенный кеш",
+    "peak_memory_bytes": 10485760,
+    "scenarios": {
+        "hydrator.values.warm.single": {
+            "iterations": 2000,
+            "median_ms": 17.153,
+            "min_ms": 16.738,
+            "max_ms": 17.737,
+            "spread_ms": 0.999,
+            "retained_bytes_max": 216
+        },
+        "hydrator.values.warm.collection": {
+            "iterations": 60,
+            "median_ms": 53.655,
+            "min_ms": 51.03,
+            "max_ms": 54.286,
+            "spread_ms": 3.256,
+            "retained_bytes_max": 216
+        },
+        "hydrator.values.cold.single": {
+            "iterations": 300,
+            "median_ms": 4.69,
+            "min_ms": 4.366,
+            "max_ms": 8.626,
+            "spread_ms": 4.261,
+            "retained_bytes_max": 57560
+        },
+        "hydrator.values.cold.collection": {
+            "iterations": 20,
+            "median_ms": 17.964,
+            "min_ms": 17.345,
+            "max_ms": 18.723,
+            "spread_ms": 1.377,
+            "retained_bytes_max": 216
+        },
+        "hydrator.values.off.single": {
+            "iterations": 300,
+            "median_ms": 3.759,
+            "min_ms": 3.659,
+            "max_ms": 4.059,
+            "spread_ms": 0.4,
+            "retained_bytes_max": 216
+        },
+        "hydrator.values.off.collection": {
+            "iterations": 20,
+            "median_ms": 26.405,
+            "min_ms": 25.68,
+            "max_ms": 26.904,
+            "spread_ms": 1.224,
+            "retained_bytes_max": 216
+        },
+        "hydrator.objects.warm.single": {
+            "iterations": 2000,
+            "median_ms": 10.125,
+            "min_ms": 9.933,
+            "max_ms": 12.085,
+            "spread_ms": 2.152,
+            "retained_bytes_max": 216
+        },
+        "hydrator.objects.warm.collection": {
+            "iterations": 60,
+            "median_ms": 31.42,
+            "min_ms": 30.609,
+            "max_ms": 31.937,
+            "spread_ms": 1.328,
+            "retained_bytes_max": 216
+        },
+        "hydrator.objects.cold.single": {
+            "iterations": 300,
+            "median_ms": 2.332,
+            "min_ms": 2.218,
+            "max_ms": 2.875,
+            "spread_ms": 0.658,
+            "retained_bytes_max": 216
+        },
+        "hydrator.objects.cold.collection": {
+            "iterations": 20,
+            "median_ms": 10.698,
+            "min_ms": 10.167,
+            "max_ms": 12.214,
+            "spread_ms": 2.046,
+            "retained_bytes_max": 216
+        },
+        "hydrator.objects.off.single": {
+            "iterations": 300,
+            "median_ms": 2.168,
+            "min_ms": 2.117,
+            "max_ms": 2.81,
+            "spread_ms": 0.693,
+            "retained_bytes_max": 216
+        },
+        "hydrator.objects.off.collection": {
+            "iterations": 20,
+            "median_ms": 14.914,
+            "min_ms": 14.249,
+            "max_ms": 17.845,
+            "spread_ms": 3.596,
+            "retained_bytes_max": 216
+        },
+        "hydrator.cast-object.warm.single": {
+            "iterations": 2000,
+            "median_ms": 5.538,
+            "min_ms": 5.467,
+            "max_ms": 5.566,
+            "spread_ms": 0.099,
+            "retained_bytes_max": 216
+        },
+        "hydrator.cast-object.cold.single": {
+            "iterations": 300,
+            "median_ms": 1.372,
+            "min_ms": 1.336,
+            "max_ms": 1.871,
+            "spread_ms": 0.535,
+            "retained_bytes_max": 216
+        },
+        "hydrator.cast-object.off.single": {
+            "iterations": 300,
+            "median_ms": 1.206,
+            "min_ms": 1.175,
+            "max_ms": 1.248,
+            "spread_ms": 0.073,
+            "retained_bytes_max": 216
+        },
+        "dto-serializer.values.warm.single": {
+            "iterations": 2000,
+            "median_ms": 11.204,
+            "min_ms": 11.038,
+            "max_ms": 11.692,
+            "spread_ms": 0.654,
+            "retained_bytes_max": 216
+        },
+        "dto-serializer.values.cold.single": {
+            "iterations": 300,
+            "median_ms": 2.397,
+            "min_ms": 2.328,
+            "max_ms": 2.519,
+            "spread_ms": 0.191,
+            "retained_bytes_max": 216
+        },
+        "dto-serializer.values.off.single": {
+            "iterations": 300,
+            "median_ms": 2.282,
+            "min_ms": 2.263,
+            "max_ms": 2.364,
+            "spread_ms": 0.1,
+            "retained_bytes_max": 216
+        },
+        "dto-serializer.objects.warm.single": {
+            "iterations": 2000,
+            "median_ms": 3.283,
+            "min_ms": 3.258,
+            "max_ms": 4.116,
+            "spread_ms": 0.858,
+            "retained_bytes_max": 216
+        },
+        "dto-serializer.objects.cold.single": {
+            "iterations": 300,
+            "median_ms": 0.758,
+            "min_ms": 0.746,
+            "max_ms": 0.816,
+            "spread_ms": 0.07,
+            "retained_bytes_max": 216
+        },
+        "dto-serializer.objects.off.single": {
+            "iterations": 300,
+            "median_ms": 0.708,
+            "min_ms": 0.69,
+            "max_ms": 0.838,
+            "spread_ms": 0.149,
+            "retained_bytes_max": 216
+        },
+        "request-parts.values.warm.single": {
+            "iterations": 1000,
+            "median_ms": 13.425,
+            "min_ms": 12.263,
+            "max_ms": 16.011,
+            "spread_ms": 3.748,
+            "retained_bytes_max": 216
+        },
+        "request-parts.values.cold.single": {
+            "iterations": 200,
+            "median_ms": 3.758,
+            "min_ms": 3.687,
+            "max_ms": 4.191,
+            "spread_ms": 0.505,
+            "retained_bytes_max": 216
+        },
+        "request-parts.values.off.single": {
+            "iterations": 200,
+            "median_ms": 3.753,
+            "min_ms": 3.543,
+            "max_ms": 4.724,
+            "spread_ms": 1.18,
+            "retained_bytes_max": 216
+        },
+        "request-parts.objects.warm.single": {
+            "iterations": 1000,
+            "median_ms": 7.578,
+            "min_ms": 7.219,
+            "max_ms": 8.898,
+            "spread_ms": 1.679,
+            "retained_bytes_max": 216
+        },
+        "request-parts.objects.cold.single": {
+            "iterations": 200,
+            "median_ms": 2.186,
+            "min_ms": 2.025,
+            "max_ms": 2.345,
+            "spread_ms": 0.321,
+            "retained_bytes_max": 216
+        },
+        "request-parts.objects.off.single": {
+            "iterations": 200,
+            "median_ms": 2.158,
+            "min_ms": 2.024,
+            "max_ms": 2.446,
+            "spread_ms": 0.422,
+            "retained_bytes_max": 216
+        }
+    }
+}

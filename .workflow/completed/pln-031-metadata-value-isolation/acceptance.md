@@ -4,7 +4,7 @@
 - Дата обновления: 2026-09-14
 
 Контракт — [contracts.md](contracts.md). Матрица ниже задаёт обязательные проверки
-реализации; сейчас ни одна строка не выполнена. Исходное состояние зафиксировано
+реализации; строки M01–M22 (включая M12a) и P01–P04 пройдены: [результаты](implementation.md). Исходное состояние зафиксировано
 в [baseline-state.json](artifacts/baseline-state.json): HEAD `eeb0b6a`, PHP 8.4.15,
 433 теста / 1385 assertions, 33 наблюдения [metadata-probe](artifacts/metadata-probe.json).
 
@@ -81,7 +81,7 @@ Baseline дефектной версии — [cost-baseline.json](artifacts/cost
 
 ```bash
 vendor/bin/pest tests/Unit/Serialization --compact
-php .workflow/current/pln-031-metadata-value-isolation/artifacts/cost-benchmark.php
+php .workflow/completed/pln-031-metadata-value-isolation/artifacts/cost-benchmark.php
 composer test
 composer lint
 composer analyse

@@ -3,13 +3,16 @@
 - Дата создания: 2026-09-14
 - Дата обновления: 2026-09-14
 
+CR-01 закрыт реализацией `0950b77`: [приёмка 031](../../completed/pln-031-metadata-value-isolation/implementation.md).
+Ниже сохранены исходная фактура и область дефекта до исправления.
+
 ## Вывод и изменения планов
 
 Оба замечания подтверждены. Прежняя оценка P2 и привязка исправления constructor
 defaults к await были слишком узкими. CR-01 — **P1**, общий дефект изоляции
 значений metadata cache, уже действующий во входящих и исходящих клиентских путях.
 
-Создан [pln-031](../../current/pln-031-metadata-value-isolation/pln-031-readme.md):
+Создан [pln-031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md):
 он исправляет constructor defaults и объектные значения кешированных атрибутов
 во всех трёх преобразователях. В 030 остаются только готовность/ошибки continuation
 и совместимая передача гидратора. Подключение кеширующего исполнителя и завершение
@@ -22,10 +25,10 @@ defaults к await были слишком узкими. CR-01 — **P1**, общ
 Hydrator/DtoSerializer/Serializer и публичные вызовы клиента, транспорт полностью
 MockTransport с запретом посторонних запросов. Фикстуры имеют искусственные данные.
 Scratchpad-файла коллеги в репозитории нет: написано самостоятельное воспроизведение,
-сохранённое сразу в [artifacts плана 031](../../current/pln-031-metadata-value-isolation/artifacts/metadata-probe.php).
+сохранённое сразу в [artifacts плана 031](../../completed/pln-031-metadata-value-isolation/artifacts/metadata-probe.php).
 
 ```bash
-python3 .workflow/current/pln-031-metadata-value-isolation/artifacts/recheck.py
+python3 .workflow/completed/pln-031-metadata-value-isolation/artifacts/recheck.py
 ```
 
 | Проверка | Результат |
@@ -37,16 +40,16 @@ python3 .workflow/current/pln-031-metadata-value-isolation/artifacts/recheck.py
 | Serialization + continuation/composite | 433 passed, 1385 assertions |
 | Новые PHP-артефакты | 11 файлов проходят php -l |
 
-[Наблюдения](../../current/pln-031-metadata-value-isolation/artifacts/metadata-probe.json),
-[состояние и SHA-256](../../current/pln-031-metadata-value-isolation/artifacts/baseline-state.json),
-[тесты](../../current/pln-031-metadata-value-isolation/artifacts/tests.log),
-[синтаксис](../../current/pln-031-metadata-value-isolation/artifacts/php-lint.log).
+[Наблюдения](../../completed/pln-031-metadata-value-isolation/artifacts/metadata-probe.json),
+[состояние и SHA-256](../../completed/pln-031-metadata-value-isolation/artifacts/baseline-state.json),
+[тесты](../../completed/pln-031-metadata-value-isolation/artifacts/tests.log),
+[синтаксис](../../completed/pln-031-metadata-value-isolation/artifacts/php-lint.log).
 Старые probes, их результаты и контрольные суммы не изменены. Прохождение нового
 probe доказывает существование дефекта, а не его устранение. Прежняя проверка
 10 документов / 186 ссылок относится к предыдущему состоянию документов;
 новые ссылки проверяются отдельно, без перезаписи прежнего результата.
-Команда `python3 .workflow/current/pln-031-metadata-value-isolation/artifacts/check-docs.py`
-проверяет текущие документы и якоря; [результат](../../current/pln-031-metadata-value-isolation/artifacts/baseline-docs.json)
+Команда `python3 .workflow/completed/pln-031-metadata-value-isolation/artifacts/check-docs.py`
+проверяет текущие документы и якоря; [результат](../../completed/pln-031-metadata-value-isolation/artifacts/baseline-docs.json)
 хранится рядом с новыми доказательствами. `composer check-docs` проверяет публичные
 документы отдельно; whitespace проверяется и для отслеживаемых, и для новых файлов.
 

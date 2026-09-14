@@ -1,0 +1,230 @@
+{
+  "head": "104f98e1fbb322972603b26adf9f37396b087670",
+  "php": "8.4.15",
+  "sapi": "cli",
+  "opcache_enable_cli": "0",
+  "opcache_jit": "",
+  "xdebug": false,
+  "os": "Linux 6.6.87.2-microsoft-standard-WSL2",
+  "runs": 7,
+  "note": "warm — один экземпляр и прогретый кеш; cold — новый экземпляр и кеш на каждую операцию; off — выключенный кеш",
+  "peak_memory_bytes": 10485760,
+  "scenarios": {
+    "hydrator.values.warm.single": {
+      "iterations": 4000,
+      "median_ms": 35.484,
+      "min_ms": 34.88,
+      "max_ms": 37.872,
+      "spread_ms": 2.991,
+      "retained_bytes_max": 216
+    },
+    "hydrator.values.warm.collection": {
+      "iterations": 120,
+      "median_ms": 108.46,
+      "min_ms": 105.906,
+      "max_ms": 110.259,
+      "spread_ms": 4.353,
+      "retained_bytes_max": 216
+    },
+    "hydrator.values.cold.single": {
+      "iterations": 600,
+      "median_ms": 10.159,
+      "min_ms": 9.813,
+      "max_ms": 11.248,
+      "spread_ms": 1.435,
+      "retained_bytes_max": 57560
+    },
+    "hydrator.values.cold.collection": {
+      "iterations": 40,
+      "median_ms": 37.116,
+      "min_ms": 36.8,
+      "max_ms": 38.165,
+      "spread_ms": 1.365,
+      "retained_bytes_max": 216
+    },
+    "hydrator.values.off.single": {
+      "iterations": 600,
+      "median_ms": 9.366,
+      "min_ms": 8.65,
+      "max_ms": 10.482,
+      "spread_ms": 1.832,
+      "retained_bytes_max": 216
+    },
+    "hydrator.values.off.collection": {
+      "iterations": 40,
+      "median_ms": 55.4,
+      "min_ms": 53.647,
+      "max_ms": 60.688,
+      "spread_ms": 7.041,
+      "retained_bytes_max": 216
+    },
+    "hydrator.objects.warm.single": {
+      "iterations": 4000,
+      "median_ms": 21.359,
+      "min_ms": 20.988,
+      "max_ms": 26.488,
+      "spread_ms": 5.5,
+      "retained_bytes_max": 216
+    },
+    "hydrator.objects.warm.collection": {
+      "iterations": 120,
+      "median_ms": 65.513,
+      "min_ms": 64.068,
+      "max_ms": 66.752,
+      "spread_ms": 2.684,
+      "retained_bytes_max": 216
+    },
+    "hydrator.objects.cold.single": {
+      "iterations": 600,
+      "median_ms": 5.294,
+      "min_ms": 5.114,
+      "max_ms": 6.155,
+      "spread_ms": 1.041,
+      "retained_bytes_max": 216
+    },
+    "hydrator.objects.cold.collection": {
+      "iterations": 40,
+      "median_ms": 22.453,
+      "min_ms": 21.711,
+      "max_ms": 23.41,
+      "spread_ms": 1.699,
+      "retained_bytes_max": 216
+    },
+    "hydrator.objects.off.single": {
+      "iterations": 600,
+      "median_ms": 4.379,
+      "min_ms": 4.28,
+      "max_ms": 4.434,
+      "spread_ms": 0.155,
+      "retained_bytes_max": 216
+    },
+    "hydrator.objects.off.collection": {
+      "iterations": 40,
+      "median_ms": 30.092,
+      "min_ms": 29.107,
+      "max_ms": 32.498,
+      "spread_ms": 3.391,
+      "retained_bytes_max": 216
+    },
+    "hydrator.cast-object.warm.single": {
+      "iterations": 4000,
+      "median_ms": 13.841,
+      "min_ms": 13.602,
+      "max_ms": 14.357,
+      "spread_ms": 0.755,
+      "retained_bytes_max": 216
+    },
+    "hydrator.cast-object.cold.single": {
+      "iterations": 600,
+      "median_ms": 3.564,
+      "min_ms": 3.461,
+      "max_ms": 5.233,
+      "spread_ms": 1.772,
+      "retained_bytes_max": 65752
+    },
+    "hydrator.cast-object.off.single": {
+      "iterations": 600,
+      "median_ms": 2.595,
+      "min_ms": 2.566,
+      "max_ms": 2.795,
+      "spread_ms": 0.229,
+      "retained_bytes_max": 216
+    },
+    "dto-serializer.values.warm.single": {
+      "iterations": 4000,
+      "median_ms": 23.022,
+      "min_ms": 22.645,
+      "max_ms": 23.531,
+      "spread_ms": 0.886,
+      "retained_bytes_max": 216
+    },
+    "dto-serializer.values.cold.single": {
+      "iterations": 600,
+      "median_ms": 5.256,
+      "min_ms": 5.159,
+      "max_ms": 5.615,
+      "spread_ms": 0.456,
+      "retained_bytes_max": 216
+    },
+    "dto-serializer.values.off.single": {
+      "iterations": 600,
+      "median_ms": 5.084,
+      "min_ms": 4.892,
+      "max_ms": 5.273,
+      "spread_ms": 0.381,
+      "retained_bytes_max": 216
+    },
+    "dto-serializer.objects.warm.single": {
+      "iterations": 4000,
+      "median_ms": 8.182,
+      "min_ms": 8.055,
+      "max_ms": 8.546,
+      "spread_ms": 0.492,
+      "retained_bytes_max": 216
+    },
+    "dto-serializer.objects.cold.single": {
+      "iterations": 600,
+      "median_ms": 1.837,
+      "min_ms": 1.814,
+      "max_ms": 2.181,
+      "spread_ms": 0.367,
+      "retained_bytes_max": 216
+    },
+    "dto-serializer.objects.off.single": {
+      "iterations": 600,
+      "median_ms": 1.615,
+      "min_ms": 1.579,
+      "max_ms": 1.681,
+      "spread_ms": 0.102,
+      "retained_bytes_max": 216
+    },
+    "request-parts.values.warm.single": {
+      "iterations": 2000,
+      "median_ms": 25.259,
+      "min_ms": 24.809,
+      "max_ms": 29.408,
+      "spread_ms": 4.599,
+      "retained_bytes_max": 216
+    },
+    "request-parts.values.cold.single": {
+      "iterations": 400,
+      "median_ms": 8.981,
+      "min_ms": 8.588,
+      "max_ms": 9.611,
+      "spread_ms": 1.023,
+      "retained_bytes_max": 216
+    },
+    "request-parts.values.off.single": {
+      "iterations": 400,
+      "median_ms": 8.374,
+      "min_ms": 7.875,
+      "max_ms": 9.443,
+      "spread_ms": 1.568,
+      "retained_bytes_max": 216
+    },
+    "request-parts.objects.warm.single": {
+      "iterations": 2000,
+      "median_ms": 17.361,
+      "min_ms": 16.68,
+      "max_ms": 17.6,
+      "spread_ms": 0.92,
+      "retained_bytes_max": 216
+    },
+    "request-parts.objects.cold.single": {
+      "iterations": 400,
+      "median_ms": 5.753,
+      "min_ms": 5.385,
+      "max_ms": 6.055,
+      "spread_ms": 0.67,
+      "retained_bytes_max": 216
+    },
+    "request-parts.objects.off.single": {
+      "iterations": 400,
+      "median_ms": 4.976,
+      "min_ms": 4.741,
+      "max_ms": 5.41,
+      "spread_ms": 0.668,
+      "retained_bytes_max": 216
+    }
+  }
+}

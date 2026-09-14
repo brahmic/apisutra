@@ -9,7 +9,7 @@
 Альтернативы и причины выбора остаются в дискуссии, основания публичных границ —
 в [ADR-002](../../adr/adr-002-external-hydration-rules.md).
 
-Зависимости: изоляция значений metadata — [031](../pln-031-metadata-value-isolation/pln-031-readme.md);
+Зависимости: изоляция значений metadata — [031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md);
 готовность и ошибки await — [030](../pln-030-continuation-errors/pln-030-readme.md).
 Без подключённого набора поведение совпадает с базовой версией после 029, 031 и 030.
 

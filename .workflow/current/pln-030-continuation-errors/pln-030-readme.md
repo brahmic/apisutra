@@ -23,7 +23,7 @@
 матрица — [acceptance.md](acceptance.md), основания — [ADR-001](../../adr/adr-001-continuation-readiness.md).
 Выбран архитектурно самый чистый вариант без сохранения старой эвристики.
 План готов к реализации этапов 2–4. Подключение гидратора клиента к await (C24–C26)
-выполняется после завершения [031](../pln-031-metadata-value-isolation/pln-031-readme.md);
+выполняется после завершения [031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md);
 остальная работа от 031 не зависит.
 
 ## Подтверждённое поведение
@@ -52,7 +52,7 @@ applyUnwrap использует `unwrapped ?? data`, поэтому отсут�
 Дополнительная находка CR-01 оказалась общей для гидратора и сериализаторов:
 metadata cache удерживает объекты из constructor defaults и аргументов атрибутов.
 После [расширенной проверки](../../discussion/dsc-005-declarative-dto-contracts/metadata-review.md)
-это отдельный дефект P1 и [план 031](../pln-031-metadata-value-isolation/pln-031-readme.md).
+это отдельный дефект P1 и [план 031](../../completed/pln-031-metadata-value-isolation/pln-031-readme.md).
 
 ## Принятые решения
 

@@ -44,7 +44,7 @@ SDK внешних API хранит публичные модели обычны
   приоритетов.
 - `HydrationException` получает необязательные поля происхождения. Автоматические логгеры
   переходят на `logContext()`.
-- Предпосылки: изоляция значений metadata — [план 031](../current/pln-031-metadata-value-isolation/pln-031-readme.md);
+- Предпосылки: изоляция значений metadata — [план 031](../completed/pln-031-metadata-value-isolation/pln-031-readme.md);
   await получает гидратор клиента по [ADR-001](adr-001-continuation-readiness.md).
 - Сериализатор клиента получает тот же набор правил, чтобы исключать receiver из запросов.
   Явное включение receiver можно добавить позже как opt-in без смены поведения по умолчанию.

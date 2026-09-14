@@ -1,0 +1,87 @@
+{
+  "head": "0950b773573f22b21aa0c14a357dee288478b90c",
+  "php": "8.4.15",
+  "probe_exit_code": 1,
+  "note": "Исходный probe ожидает дефект; проверяются вручную заданные исправленные observations, а не его checks.",
+  "checks": {
+    "cache_off": true,
+    "cache_on": true,
+    "DefaultProduction": true,
+    "Local": true,
+    "Testing": true,
+    "registry": true,
+    "client_casts": true
+  },
+  "executions": [
+    {
+      "command": [
+        "vendor/bin/pest",
+        "tests/Unit/Serialization/MetadataValueIsolationTest.php",
+        "--compact"
+      ],
+      "exit_code": 0,
+      "log": "implementation-regressions.log"
+    },
+    {
+      "command": [
+        "composer",
+        "test",
+        "--",
+        "--compact"
+      ],
+      "exit_code": 0,
+      "log": "implementation-tests.log"
+    }
+  ],
+  "source_sha256": {
+    "src/Serialization/BuiltinHydrationCaster.php": "abad04f537a6f43fb98b084c7a71530bd6c4aa8ec1d965ca45976914106c8431",
+    "src/Serialization/Concerns/ReflectionHelperTrait.php": "fd737ad3df57ab02efceb42521465ebc606a40c70c620ff726a421d61719d5c0",
+    "src/Serialization/DtoHydrationProfileResolver.php": "54d2236d1fef154c66804640ad954358c5145c9c2e00a82af85c76994e867cda",
+    "src/Serialization/DtoSerializationProfileResolver.php": "34a4fcefe6630cb53b38918d2eaf710bd99e18cbc540f0c90ed2fb2fa82611e5",
+    "src/Serialization/DtoSerializer.php": "898f04fb4988df3b8fa558762cf236801c52e7590f4d2ded35320446e4213e39",
+    "src/Serialization/Enrichment/CredentialsEnricher.php": "55c77228e64e64e20a5320b7c38abbc3cd1357726b507debe78fd077e3c26993",
+    "src/Serialization/EnumSerializationHelper.php": "8c2e87f275baa0d8ad8a576495d8bc3a3b246d38c5a079da955cf0f4e45a8f12",
+    "src/Serialization/FilePayloadPreparer.php": "808c9e205b0796cde141148ff2f978c51a7af0eb3560a7d0d60d448903841ca4",
+    "src/Serialization/HydrationTypeSelector.php": "0075c5b11c75668c470e2e7c8f113bd04254f1356a815efeff27ecbd38100ef7",
+    "src/Serialization/HydrationValueValidator.php": "8881285ace982238e45a511f755a4ef208bec3e15e0b08055c4860c8833bfba0",
+    "src/Serialization/Hydrator.php": "439bb9a9bd36cb0b5d30f33002bcdf8d5350fac0651b2338c1c8d5a8cb7186fc",
+    "src/Serialization/IntegerRange.php": "0b858e9d26ba64c02f6d4548f6a398f06e0c04c48a37a551b8c0920a7706ce89",
+    "src/Serialization/JsonEncoder.php": "d6df75e3e6574538fa95207cb85fcd81c8b2b1e8d9daa086c7c9e8d103957d74",
+    "src/Serialization/NamingStrategyResolver.php": "5aae29e1e8f139fb6a440dc53495bb867994ab521d783008b9d3b31cf9fa3075",
+    "src/Serialization/NestedObjectTypeResolver.php": "346d8167643fa7d5a8607596823202b9137aca9c7b5fd93ed75adab0bac3ca77",
+    "src/Serialization/PropertyTypeInspector.php": "50d873e55ea3212d43b20ee2bf0e20978dda146a68fd5e90fd80f48747fed6b0",
+    "src/Serialization/RequestPartsCollector.php": "847c0fd0faf2260572d3c840ef5a1ffddd9dd91ad3c2d28d7e4bfa1acac91089",
+    "src/Serialization/RequestUrlBuilder.php": "69bd5078c57131596a04babbbe83ad3b833fa20b950441af9654f678e058ed32",
+    "src/Serialization/SafeScalarHydrationCaster.php": "68aa1d0f13f9c51fbdc4e5b1449c4e72cc9a032d1dc5433eb7748fc398bea0b5",
+    "src/Serialization/SerializationValueResolver.php": "9a2e1b550abe9f8a02f5a48ce99a5f25822b2abed26578e0f4c6575578b6179c",
+    "src/Serialization/Serializer.php": "0a0fafd9875e2999346b7554485a3468848cab42ec058e57aa58c5782b5369f4",
+    "src/Serialization/UrlQuery.php": "733f08bbf83fe2f69f0f10ddbb10aa67f86b29f27960abcb00afc051fc7e2932",
+    "src/Serialization/VO/PropertyMeta.php": "f69cc84d5e9c839144d8f7eb32dc169ee9212db90cd9753d253b1db4be6a65ab",
+    "src/Serialization/VO/RequestPartsBag.php": "08e3a0d16cbe7f063610e4d2ed86f740e6141297edfdb8e3ab2729d6d6793f80",
+    "src/Serialization/VO/ResolvedDtoHydration.php": "e88df7281dbe2d6c0a73dfded820face79165a09244c5cdefbb729c9fec662e6",
+    "src/Serialization/VO/ResolvedDtoSerialization.php": "68a1dd941584dac50b5482639ead5506e2f4f1010e2ca8f5b52fa3d1b491cc47",
+    "tests/Stubs/MetadataIsolation/AttributeDefaultDto.php": "d796bb70517c82629e59e6de3458e68684b7257a47d9ef53b47c2f9c0b500be2",
+    "tests/Stubs/MetadataIsolation/BodyCastRequest.php": "2f5dbc0c4c257e5e743a46b8827e3eca23be8c9e4709bd557d745615adb270c1",
+    "tests/Stubs/MetadataIsolation/BodyDtoRequest.php": "77653f1980d0183453aa119814fbc053e72e9897975c2967e02f954f97b84c61",
+    "tests/Stubs/MetadataIsolation/CastDto.php": "bf4f7ccab422de77c9c95d8ee6439c06d860d84204fea0ca68d0c3f430156b54",
+    "tests/Stubs/MetadataIsolation/CastRequest.php": "c4d23034c7379ec8ca11b24b65d9e511bc7ed8ecbaf6590b8a5c0022fa96a67a",
+    "tests/Stubs/MetadataIsolation/CompositeDefaultsRequest.php": "67b58e79d24a9062930bce71899715326d493d18725c26c7e51e14b95dbee41d",
+    "tests/Stubs/MetadataIsolation/CountingCast.php": "23e58afa8a290e48868144ccc6477cf3f787fe3b50e84c6532383dce70ccf248",
+    "tests/Stubs/MetadataIsolation/CreatedCast.php": "aa217a4a650b11a07b098ce1b1c13267579650edda1bffb64a1e64e01040d955",
+    "tests/Stubs/MetadataIsolation/CreatedCastDto.php": "676dc79247251920814ff75d19a51e2e1689bc5ddd9a52e1620f935d8fb96df0",
+    "tests/Stubs/MetadataIsolation/CreatedDefaultDto.php": "d4b9c92f90223a1022874b215eb3dbc9f61a94c13b768f96c55079d604389a71",
+    "tests/Stubs/MetadataIsolation/CreatedValue.php": "e7ed644ef2d064a186c4231fdeb397a83fdd8d637ec07ee10d3b85d8bfb2f569",
+    "tests/Stubs/MetadataIsolation/DefaultsContainer.php": "f9a4e2a8db4123212df68ba76cf9a137ec449fdbe6bf74b684c704da48f6fc4b",
+    "tests/Stubs/MetadataIsolation/DefaultsDto.php": "5ca26650a61132e4c946d30d50b3297230858ae3db87b51966251d40fa2150fb",
+    "tests/Stubs/MetadataIsolation/DefaultsRequest.php": "4c8fdd5ec9d44f89b880d507e90268df829bfce5030b4f1c2488edda7651694b",
+    "tests/Stubs/MetadataIsolation/FilledDefaultDto.php": "12762acfb679005d4080c15b09db2ee5d0af296cacf2d50876c8c9f6679acc8c",
+    "tests/Stubs/MetadataIsolation/HeaderPathRequest.php": "5394aeff68b74d319511489186003f8704ae73db7c5733f5e7ddb6208b995810",
+    "tests/Stubs/MetadataIsolation/MutableCounter.php": "21fb49e171db58ad0d5eaaf829fb1487e0593dba72d82c24ce1bade726d89d7c",
+    "tests/Stubs/MetadataIsolation/PaginatedDefaultsRequest.php": "2e6f48527e570dfd86fe6820bb933251e6a28a6f1b80759136afbaaf1f6aa2e4",
+    "tests/Stubs/MetadataIsolation/RecursiveDto.php": "127ad9e4839bcf6621c4b680253a32023e7713c9e9e0feb6ac105fe64e5260c0",
+    "tests/Stubs/MetadataIsolation/ValuesDto.php": "f4a616ec3bef56ac454c5620910578fd47f0131448e77a75455f0632b4b8ff93",
+    "tests/Stubs/MetadataIsolation/ValuesRequest.php": "df213516e7a6f4fd37c652f91f2801c500024508ec75c1e7a524b815bb45b08e",
+    "tests/Stubs/MetadataIsolation/VariadicDto.php": "dd078a547ad0c0d7893b7c58784a5358fe34e6768e5acd11b686c405dea812d4",
+    "tests/Unit/Serialization/MetadataValueIsolationTest.php": "b12a969b5645ade72bb32db4dd9e5b3541913818599ddad541f0da56689fbd80"
+  }
+}

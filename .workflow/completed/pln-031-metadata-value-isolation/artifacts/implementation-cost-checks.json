@@ -1,0 +1,165 @@
+{
+  "baseline_head": "104f98e1fbb322972603b26adf9f37396b087670",
+  "implementation_head": "104f98e1fbb322972603b26adf9f37396b087670",
+  "working_tree_diff": [
+    "src/Serialization/Concerns/ReflectionHelperTrait.php",
+    "src/Serialization/DtoSerializer.php",
+    "src/Serialization/Hydrator.php",
+    "src/Serialization/RequestPartsCollector.php"
+  ],
+  "checks": {
+    "P01:hydrator.values.warm.single": true,
+    "P02:hydrator.values.warm.single": true,
+    "P01:hydrator.values.warm.collection": true,
+    "P02:hydrator.values.warm.collection": true,
+    "P02:hydrator.objects.warm.single": true,
+    "P02:hydrator.objects.warm.collection": true,
+    "P02:hydrator.cast-object.warm.single": true,
+    "P01:dto-serializer.values.warm.single": true,
+    "P02:dto-serializer.values.warm.single": true,
+    "P02:dto-serializer.objects.warm.single": true,
+    "P01:request-parts.values.warm.single": true,
+    "P02:request-parts.values.warm.single": true,
+    "P02:request-parts.objects.warm.single": true,
+    "P03:steady_state": true
+  },
+  "memory_comparison": {
+    "hydrator.values.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.values.warm.collection": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.values.cold.single": {
+      "single": 57560,
+      "double": 57560,
+      "no_growth": true
+    },
+    "hydrator.values.cold.collection": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.values.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.values.off.collection": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.objects.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.objects.warm.collection": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.objects.cold.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.objects.cold.collection": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.objects.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.objects.off.collection": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.cast-object.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "hydrator.cast-object.cold.single": {
+      "single": 216,
+      "double": 65752,
+      "no_growth": false
+    },
+    "hydrator.cast-object.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "dto-serializer.values.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "dto-serializer.values.cold.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "dto-serializer.values.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "dto-serializer.objects.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "dto-serializer.objects.cold.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "dto-serializer.objects.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "request-parts.values.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "request-parts.values.cold.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "request-parts.values.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "request-parts.objects.warm.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "request-parts.objects.cold.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    },
+    "request-parts.objects.off.single": {
+      "single": 216,
+      "double": 216,
+      "no_growth": true
+    }
+  },
+  "memory_confirmation": "implementation-memory.json: 1200/2400/4800 операций после прогрева, включая cold-hydrator-cast",
+  "P04": "Объектные сценарии сохранены в implementation-after-cost.json; дополнительные вычисления new ожидаемы."
+}

@@ -1,0 +1,114 @@
+{
+    "checks": {
+        "default_environment_production": true,
+        "cache_off_constructor": true,
+        "cache_off_nested_constructor": true,
+        "cache_off_attribute_default": true,
+        "cache_off_hydrate_cast": true,
+        "cache_off_dto_serialize_cast": true,
+        "cache_off_request_query_cast": true,
+        "cache_off_wire_dto_cast": true,
+        "cache_on_constructor": false,
+        "cache_on_nested_constructor": false,
+        "cache_on_attribute_default": false,
+        "cache_on_hydrate_cast": false,
+        "cache_on_dto_serialize_cast": false,
+        "cache_on_request_query_cast": false,
+        "cache_on_wire_dto_cast": false,
+        "DefaultProduction_returns": false,
+        "DefaultProduction_pagination": false,
+        "DefaultProduction_composite": false,
+        "DefaultProduction_http_count": true,
+        "Local_returns": true,
+        "Local_pagination": true,
+        "Local_composite": true,
+        "Local_http_count": true,
+        "Testing_returns": true,
+        "Testing_pagination": true,
+        "Testing_composite": true,
+        "Testing_http_count": true,
+        "dto_from_independent": true,
+        "registry_retains_client_and_mutation": false,
+        "fresh_client_isolated": true,
+        "default_client_hydrate_cast": false,
+        "default_client_query_cast": false,
+        "default_client_body_cast": false
+    },
+    "observations": {
+        "cache_off": {
+            "constructor_shared": false,
+            "nested_constructor_shared": false,
+            "attribute_default_second": 0,
+            "hydrate_cast": [
+                1,
+                1
+            ],
+            "dto_serialize_cast": [
+                1,
+                1
+            ],
+            "request_query_cast": [
+                1,
+                1
+            ],
+            "wire_dto_cast": [
+                1,
+                1
+            ]
+        },
+        "cache_on": {
+            "constructor_shared": false,
+            "nested_constructor_shared": false,
+            "attribute_default_second": 0,
+            "hydrate_cast": [
+                1,
+                1
+            ],
+            "dto_serialize_cast": [
+                1,
+                1
+            ],
+            "request_query_cast": [
+                1,
+                1
+            ],
+            "wire_dto_cast": [
+                1,
+                1
+            ]
+        },
+        "DefaultProduction": {
+            "returns_second": 0,
+            "pagination_items_shared": false,
+            "pagination_cross_returns": 0,
+            "composite_state": 0
+        },
+        "Local": {
+            "returns_second": 0,
+            "pagination_items_shared": false,
+            "pagination_cross_returns": 0,
+            "composite_state": 0
+        },
+        "Testing": {
+            "returns_second": 0,
+            "pagination_items_shared": false,
+            "pagination_cross_returns": 0,
+            "composite_state": 0
+        },
+        "retained_client_second_task": 0,
+        "default_client_casts": {
+            "hydrate": [
+                1,
+                1
+            ],
+            "query": [
+                1,
+                1
+            ],
+            "body": [
+                1,
+                1
+            ]
+        }
+    }
+}
