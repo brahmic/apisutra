@@ -34,6 +34,7 @@ pagination) работает единообразно для всех клиен
 
 ## Что есть «из коробки»
 - атрибуты для HTTP, request/response и DTO‑маппинга
+- [внешние правила DTO](guides/hydration-rules.md): модели без атрибутов, strict, extras и sourcePath
 - каноническая DTO DX-сериализация через `toArray()` и отдельный safe wire contract для outbound body
 - pipeline с хуками, retry, rate‑limit, кешированием и временем ожидания
 - pre-serialize enrichment request parts (provider credentials в body/query/form)
@@ -59,6 +60,7 @@ pagination) работает единообразно для всех клиен
 ## Как читать документацию
 - Быстрый старт: [Guides](./guides/README.md) → Quickstart
 - Каноническая DTO hydration/serialization модель: [Guides](./guides/dto.md), [Serialization](./guides/serialization.md) и [ClientConfig Serialization](./guides/client-config/serialization.md)
+- Модели без атрибутов и правила клиента: [Внешние правила гидратации](guides/hydration-rules.md)
 - Анализ провайдера: [Анализ провайдера](./guides/provider-analysis.md)
 - Методология провайдера: [Методология провайдера](./guides/provider-methodology.md)
 - Мультисервисная архитектура: [Мегаклиент](./guides/megaclient.md)

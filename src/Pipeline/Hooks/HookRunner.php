@@ -17,6 +17,7 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Brahmic\ApiSutra\Enums\Errors\ErrorCode;
 use Brahmic\ApiSutra\Exceptions\ControlFlow\ControlFlowException;
 use ReflectionClass;
+use ReflectionMethod;
 use Throwable;
 
 final readonly class HookRunner
@@ -97,6 +98,9 @@ final readonly class HookRunner
     {
         $dtoClass = $this->resolveDtoClass(Hook::BeforeHydrate, $request, $context);
         $handlers = $this->resolveHandlers(Hook::BeforeHydrate, $request, $dtoClass);
+        if ($handlers !== [] && $context->config->hydrationRules !== null) {
+            $context->hydrationSourceTransformed = true;
+        }
         $data = $this->applyBeforeHydrateHandlers($handlers, $context, $data);
         return $this->applyBeforeHydrateRequestHook($request, $context, $data);
     }
@@ -166,6 +170,17 @@ final readonly class HookRunner
     ): array {
         if (!$request instanceof AbstractRequest) {
             return $data;
+        }
+
+        if ($context->config->hydrationRules !== null) {
+            $hook = new ReflectionMethod($request, 'beforeHydrate');
+            $bridge = new ReflectionMethod($request, 'beforeHydrateInternal');
+            if (
+                $hook->getDeclaringClass()->getName() !== AbstractRequest::class
+                || $bridge->getDeclaringClass()->getName() !== AbstractRequest::class
+            ) {
+                $context->hydrationSourceTransformed = true;
+            }
         }
 
         return $request->beforeHydrateInternal($context, $data);

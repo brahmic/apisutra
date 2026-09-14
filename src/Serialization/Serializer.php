@@ -22,6 +22,9 @@ use Brahmic\ApiSutra\VO\Files\FileTransferOptions;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Serialization\Enrichment\CredentialsEnricher;
 use Brahmic\ApiSutra\Serialization\VO\RequestPartsBag;
+use Brahmic\ApiSutra\Serialization\Rules\HydrationRules;
+use Brahmic\ApiSutra\Serialization\Rules\ReceiverOutput;
+use Brahmic\ApiSutra\Serialization\Rules\RuleSetCompiler;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 
@@ -53,12 +56,14 @@ final class Serializer
     public function __construct(
         private readonly CastRegistry $casts,
         private readonly ?AttributeMetadataCache $cache = null,
+        private readonly ?HydrationRules $rules = null,
     ) {
         $this->profileResolver = new DtoSerializationProfileResolver();
         $this->partsCollector = new RequestPartsCollector(
             casts: $this->casts,
             cache: $this->cache,
             dtoSerializer: fn (object $dto, ?PipelineContext $context): array => $this->serializeWireDto($dto, $context),
+            receiverOutput: $rules === null ? null : new ReceiverOutput((new RuleSetCompiler($rules))->receivers()),
         );
         $this->urlBuilder = new RequestUrlBuilder();
         $this->filePayloadPreparer = new FilePayloadPreparer();
@@ -326,7 +331,7 @@ final class Serializer
     private function getDtoSerializer(): DtoSerializer
     {
         if ($this->dtoSerializer === null) {
-            $this->dtoSerializer = new DtoSerializer($this->casts, $this->cache);
+            $this->dtoSerializer = new DtoSerializer($this->casts, $this->cache, rules: $this->rules);
         }
 
         return $this->dtoSerializer;

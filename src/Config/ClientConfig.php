@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Config;
 
 use Brahmic\ApiSutra\Contracts\Interfaces\Continuation\ContinuationStateResolverInterface;
+use Brahmic\ApiSutra\Serialization\Rules\HydrationRules;
 use Brahmic\ApiSutra\RateLimiting\RateLimitBackendInterface;
 use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
@@ -129,6 +130,7 @@ final readonly class ClientConfig
         public bool $includeClientQuota = true,
         public ?RateLimitBackendInterface $rateLimitBackend = null,
         public ?ContinuationStateResolverInterface $continuationStateResolver = null,
+        public ?HydrationRules $hydrationRules = null,
     ) {
         if ($cache instanceof CacheConfig) {
             $this->cacheConfig = $cache;
@@ -216,6 +218,7 @@ final readonly class ClientConfig
             'defaultPollRequest' => $this->defaultPollRequest,
             'continuationModeApplicator' => $this->continuationModeApplicator,
             'continuationStateResolver' => $this->continuationStateResolver,
+            'hydrationRules' => $this->hydrationRules,
             'redaction' => $this->redaction,
             'textBooleanFormat' => $this->textBooleanFormat,
             'originPolicy' => $this->originPolicy,

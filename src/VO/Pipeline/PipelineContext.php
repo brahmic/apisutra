@@ -21,6 +21,8 @@ use Throwable;
 
 class PipelineContext
 {
+    /** BeforeHydrate создал границу между HTTP-документом и входом гидратора. */
+    public bool $hydrationSourceTransformed = false;
     public ?CacheExecutionState $cacheExecution = null;
     public ?RequestDestination $destination = null;
     public ?FileTransferOptions $fileTransfer = null;

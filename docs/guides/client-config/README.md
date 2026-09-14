@@ -12,7 +12,7 @@
 - [Observability](./observability.md)
 - [Pool](./pool.md)
 - [Pagination](./pagination.md)
-- [Serialization](./serialization.md) (enum, dateTime)
+- [Serialization](./serialization.md) (enum, dateTime, hydrationRules)
 - [Responses & Errors](./responses-errors.md) (error mapping, continuation token, provider async-await defaults)
 - [Extensions](./extensions.md)
 - [Archive](./archive.md)

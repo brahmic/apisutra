@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Добавлены [внешние правила гидратации](docs/guides/hydration-rules.md): неизменяемые
+  HydrationRules для plain DTO, mapping, strict scalar/list, вложенные формы,
+  required/explicit null, defaults и extras. Клиент и standalone используют один набор;
+  scoped casts/providers сохраняют его при рекурсии. Receiver исключается из исходящих
+  запросов клиента, DX без набора не меняется. SourcePath различает исходные данные и
+  пользовательские преобразования, автоматические логи маскируют неизвестные ключи.
+  При включённом наборе items-only пагинация также применяет itemsType; без набора
+  сохраняется прежнее поведение после исправлений continuation и metadata cache.
+
 - **Изменение совместимости continuation:** ожидание требует явного `unwrap` или
   `ContinuationStateResolverInterface`; состояния Pending/Ready/Failed определяются
   до гидратации. Ошибка финального DTO больше не расходует polling-попытки,

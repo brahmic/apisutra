@@ -12,6 +12,8 @@ use Brahmic\ApiSutra\Config\DateTimeSerializationPolicy;
 use Brahmic\ApiSutra\Config\DtoSerializationPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DtoInterface;
+use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
+use Brahmic\ApiSutra\Serialization\Rules\ReceiverOutput;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use DateTimeInterface;
 use JsonSerializable;
@@ -26,6 +28,7 @@ final readonly class SerializationValueResolver
     public function __construct(
         private CastRegistry $casts,
         ?PropertyTypeInspector $propertyTypeInspector = null,
+        private ?ReceiverOutput $receiverOutput = null,
     ) {
         $this->propertyTypeInspector = $propertyTypeInspector ?? new PropertyTypeInspector();
         $this->enumSerializer = new EnumSerializationHelper();
@@ -47,6 +50,17 @@ final readonly class SerializationValueResolver
             return null;
         }
 
+        if ($this->receiverOutput !== null) {
+            $type = $this->propertyTypeInspector->resolvePropertyTypeByValue($property, $value);
+            $customCast = $cast !== null || $type !== null && $this->casts->get($type) !== null;
+            if ($customCast && $this->receiverOutput->contains($value)) {
+                throw new SerializationException(
+                    'Cast не поддерживает значение с receiver: '
+                    . $property->getDeclaringClass()->getName() . '::$' . $property->getName(),
+                );
+            }
+        }
+
         if ($cast !== null) {
             return (new $cast->class(...$cast->args))->serialize($value, $context);
         }
@@ -56,12 +70,13 @@ final readonly class SerializationValueResolver
         }
 
         if (is_array($value)) {
-            return $this->enumSerializer->serializeArray(
+            $result = $this->enumSerializer->serializeArray(
                 items: $value,
                 output: $policy->enumOutput,
                 strictMode: $policy->strictEnums,
                 dtoSerializer: fn (DtoInterface $dto): array => $dtoSerializer($dto, $context),
             );
+            return $this->receiverOutput?->project($result, fn (object $dto): array => $dtoSerializer($dto, $context)) ?? $result;
         }
 
         $resolved = $this->resolveCastByType(
@@ -81,7 +96,10 @@ final readonly class SerializationValueResolver
             return $resolved->serialize($value, $context);
         }
 
-        return $this->serializeObject($value);
+        $result = $this->serializeObject($value);
+        return $result === $value && $this->receiverOutput !== null
+            ? $this->receiverOutput->project($value, fn (object $dto): array => $dtoSerializer($dto, $context))
+            : $result;
     }
 
     private function resolveCastByType(?string $type, DateTimeSerializationPolicy $dateTimePolicy): ?CastInterface

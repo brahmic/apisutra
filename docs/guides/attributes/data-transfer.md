@@ -336,3 +336,11 @@ Provider задаёт только локальный суффикс пути, �
 #[Validate('required|email', message: 'Некорректный email')]
 public string $email;
 ```
+
+## Сочетание с внешними правилами
+
+`FieldRule` конфликтует с From, Map, Nested, Cast, DateTimeFrom, EmptyStringAsNull
+и DefaultValue того же свойства. Атрибуты других полей продолжают работать.
+Scoped casts/providers получают текущий набор и при атрибутной регистрации,
+включая `Nested(itemCast:)`. API и приоритеты — в
+[справке внешних правил](../hydration-rules.md#правила-и-проверка-конфигурации).

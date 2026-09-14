@@ -13,6 +13,9 @@ use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DtoInterface;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoHydration;
+use Brahmic\ApiSutra\Serialization\Rules\HydrationScope;
+use Brahmic\ApiSutra\Serialization\Rules\RulePolicy;
+use Brahmic\ApiSutra\Serialization\Rules\ScalarPolicy;
 use Brahmic\ApiSutra\VO\Files\Base64File;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Closure;
@@ -46,6 +49,8 @@ final readonly class BuiltinHydrationCaster
         ReflectionProperty $property,
         ResolvedDtoHydration $resolved,
         ?PipelineContext $context,
+        ?HydrationScope $scope = null,
+        ?RulePolicy $policy = null,
     ): mixed {
         if ($value === null) {
             return null;
@@ -57,7 +62,7 @@ final readonly class BuiltinHydrationCaster
             }
             $castInstance = new $cast->class(...$cast->args);
 
-            return $castInstance->hydrate($value, $context);
+            return $scope === null ? $castInstance->hydrate($value, $context) : $scope->cast($castInstance, $value);
         }
 
         $type = $this->typeSelector->resolveType($property, $value);
@@ -67,14 +72,19 @@ final readonly class BuiltinHydrationCaster
 
         $registryCast = $resolved->casts->get($type);
         if ($registryCast !== null) {
-            return $registryCast->hydrate($value, $context);
+            return $scope === null ? $registryCast->hydrate($value, $context) : $scope->cast($registryCast, $value);
+        }
+        $spec = $policy?->casts[$type] ?? null;
+        if ($spec !== null) {
+            $instance = new $spec->class(...$spec->args);
+            return $scope === null ? $instance->hydrate($value, $context) : $scope->cast($instance, $value);
         }
 
         if ($type === 'int' && IntegerRange::overflows($value)) {
             throw HydrationException::invalidValue('integer_out_of_range', 'int', get_debug_type($value));
         }
 
-        if ($this->safeScalarHydrationCaster->canHydrate($type, $value)) {
+        if ($policy?->scalars !== ScalarPolicy::Strict && $this->safeScalarHydrationCaster->canHydrate($type, $value)) {
             return $this->safeScalarHydrationCaster->hydrate($type, $value);
         }
 
@@ -92,7 +102,7 @@ final readonly class BuiltinHydrationCaster
             if (!is_array($value) && !is_object($value)) {
                 throw HydrationException::invalidValue('unexpected_response_shape', $type, get_debug_type($value));
             }
-            return ($this->dtoHydrator)($value, $type, $context);
+            return $scope === null ? ($this->dtoHydrator)($value, $type, $context) : $scope->hydrateDto($value, $type);
         }
 
         if ($type === Base64File::class && is_string($value)) {
@@ -100,5 +110,21 @@ final readonly class BuiltinHydrationCaster
         }
 
         return $value;
+    }
+
+    /** @internal Пользовательское преобразование отмечает границу происхождения результата. */
+    public function usesCustomCast(
+        mixed $value,
+        ?CastAttribute $cast,
+        ReflectionProperty $property,
+        ResolvedDtoHydration $resolved,
+        ?RulePolicy $policy,
+    ): bool {
+        if ($value === null) {
+            return false;
+        }
+        $type = $this->typeSelector->resolveType($property, $value);
+        return $cast !== null || $type !== null
+            && ($resolved->casts->get($type) !== null || isset($policy?->casts[$type]));
     }
 }

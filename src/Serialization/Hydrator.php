@@ -13,6 +13,8 @@ use Brahmic\ApiSutra\Attributes\DataTransfer\From;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Map;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Nested;
 use Brahmic\ApiSutra\Casts\CastRegistry;
+use Brahmic\ApiSutra\Config\DtoHydrationPolicy;
+use Brahmic\ApiSutra\Enums\Configuration\NamingStrategy;
 use Brahmic\ApiSutra\Collections\AbstractTypedCollection;
 use Brahmic\ApiSutra\Contracts\Interfaces\Casting\CastInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\DataTransfer\DefaultValueProviderInterface;
@@ -24,6 +26,20 @@ use Brahmic\ApiSutra\Enums\DataTransfer\ValueState;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\Concerns\ReflectionHelperTrait;
+use Brahmic\ApiSutra\Serialization\Rules\CompiledDtoRules;
+use Brahmic\ApiSutra\Serialization\Rules\HydratedProperty;
+use Brahmic\ApiSutra\Serialization\Rules\HydrationRules;
+use Brahmic\ApiSutra\Serialization\Rules\HydrationScope;
+use Brahmic\ApiSutra\Serialization\Rules\NestedValueProcessor;
+use Brahmic\ApiSutra\Serialization\Rules\InputShape;
+use Brahmic\ApiSutra\Serialization\Rules\RulePolicy;
+use Brahmic\ApiSutra\Serialization\Rules\RuleValueProcessor;
+use Brahmic\ApiSutra\Serialization\Rules\ScalarPolicy;
+use Brahmic\ApiSutra\Serialization\Rules\ScalarValues;
+use Brahmic\ApiSutra\Serialization\Rules\SourceConsumption;
+use Brahmic\ApiSutra\Serialization\Rules\SourceLocation;
+use Brahmic\ApiSutra\Serialization\Rules\SourcePathKind;
+use Brahmic\ApiSutra\Serialization\Rules\RuleSetCompiler;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoHydration;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\Support\PathResult;
@@ -44,6 +60,9 @@ final class Hydrator
     private readonly BuiltinHydrationCaster $builtinHydrationCaster;
     private readonly HydrationValueValidator $valueValidator;
     private readonly NestedObjectTypeResolver $nestedObjectTypeResolver;
+    private readonly ?RuleSetCompiler $rulesCompiler;
+    private readonly RuleValueProcessor $ruleValues;
+    private readonly ScalarValues $scalarValues;
 
     /**
      * $casts сохранён для совместимости; гидратация использует casts профиля DTO и свойства.
@@ -52,7 +71,11 @@ final class Hydrator
         private readonly CastRegistry $casts,
         private readonly ?AttributeMetadataCache $cache = null,
         private readonly ?DtoHydrationProfileResolver $profileResolver = null,
+        private readonly ?HydrationRules $rules = null,
     ) {
+        $this->rulesCompiler = $rules === null ? null : new RuleSetCompiler($rules);
+        $this->scalarValues = new ScalarValues();
+        $this->ruleValues = new RuleValueProcessor($this->scalarValues);
         $this->namingStrategyResolver = new NamingStrategyResolver();
         $this->valueValidator = new HydrationValueValidator();
         $this->nestedObjectTypeResolver = new NestedObjectTypeResolver();
@@ -73,6 +96,11 @@ final class Hydrator
         );
     }
 
+    public static function forRules(HydrationRules $rules): self
+    {
+        return new self(new CastRegistry(), new AttributeMetadataCache(), rules: $rules);
+    }
+
     /**
      * Гидрировать данные в DTO
      */
@@ -81,6 +109,31 @@ final class Hydrator
         string $dtoClass,
         ?PipelineContext $context = null,
     ): object {
+        return $this->scope($context)->hydrateDto($data, $dtoClass);
+    }
+
+    private function scope(?PipelineContext $context): HydrationScope
+    {
+        return HydrationScope::bind(
+            fn (array|object $data, string $class, HydrationScope $scope): object => $this->hydrateNode($data, $class, $scope),
+            $context,
+            $this->rules !== null,
+        );
+    }
+
+    private function hydrateNode(array|object $data, string $dtoClass, HydrationScope $scope): object
+    {
+        return $scope->node($data, function () use ($data, $dtoClass, $scope): object {
+            $operation = fn (): object => $this->hydrateObject($data, $dtoClass, $scope);
+            $boundary = is_subclass_of($dtoClass, ResponseDtoInterface::class)
+                || is_object($data) && (method_exists($data, 'toArray') || $data instanceof JsonSerializable);
+            return $boundary ? $scope->boundary($operation) : $operation();
+        });
+    }
+
+    private function hydrateObject(array|object $data, string $dtoClass, HydrationScope $scope): object
+    {
+        $context = $scope->context();
         if (!class_exists($dtoClass) || !(new ReflectionClass($dtoClass))->isInstantiable()) {
             throw new ConfigurationException('Недоступен класс DTO для гидратации: ' . $dtoClass);
         }
@@ -92,78 +145,59 @@ final class Hydrator
 
         $metadata = $this->getHydrationMetadata($dtoClass);
         $constructor = $metadata['constructor'];
-        $constructorNames = array_fill_keys(array_column($constructor ?? [], 'name'), true);
+        $constructorParameters = [];
+        foreach ($constructor ?? [] as $parameter) {
+            $constructorParameters[$parameter['name']] = $parameter['reflection'];
+        }
+        $compiled = $this->rulesCompiler?->forClass($dtoClass);
         $resolvedHydration = $this->resolveHydration($dtoClass);
         $values = [];
+        $origins = [];
+        $consumed = new SourceConsumption();
+        $receiver = $compiled?->declaration?->receiver;
 
         foreach ($metadata['properties'] as $propertyMeta) {
             $name = $propertyMeta['name'];
-            $from = $propertyMeta['from'];
-            $map = $propertyMeta['map'];
-            $nested = $propertyMeta['nested'];
-            $cast = $propertyMeta['cast'];
-            $dateTimeFrom = $propertyMeta['dateTimeFrom'];
-            $emptyStringAsNull = $propertyMeta['emptyStringAsNull'];
-            $default = $propertyMeta['default'];
-            $property = $propertyMeta['property'];
-
-            $key = $from->name
-                ?? $map->name
-                ?? $this->namingStrategyResolver->resolveByStrategy($name, $resolvedHydration->policy->namingStrategy);
-            $primaryPath = $nested->from ?? $key;
-            $fallbacks = $nested->fallback ?? [];
-            if ($fallbacks === [] && $from !== null) {
-                $fallbacks = $from->fallback;
+            if ($name === $receiver) {
+                continue;
             }
-            $resolved = $this->resolveValueWithFallbacks($array, $primaryPath, $fallbacks);
-            $state = $resolved->state;
-            $value = $resolved->value;
-
-            [$state, $value] = $this->normalizeEmptyStringValue(
-                state: $state,
-                value: $value,
-                cast: $cast,
-                emptyStringAsNull: $emptyStringAsNull,
-                resolvedHydration: $resolvedHydration,
-                property: $property,
-                dtoClass: $dtoClass,
+            $field = $this->hydrateProperty(
+                $array,
+                $propertyMeta,
+                $constructorParameters[$name] ?? null,
+                $resolvedHydration,
+                $compiled,
+                $scope,
             );
-
-            if ($default !== null && $this->shouldApplyDefault($default, $state)) {
-                try {
-                    $value = $this->resolveDefaultValue($default, $value, $state, $array, $context);
-                } catch (HydrationException $exception) {
-                    throw $exception->prependPath($name);
-                }
-                $state = $value === null ? ValueState::Null : ValueState::Present;
+            $origins[$name] = $field->location;
+            $consumed->mergeAt($field->segments, $field->consumed);
+            if ($field->state !== ValueState::Missing) {
+                $values[$name] = $field->value;
             }
-
-            if ($state === ValueState::Missing && $this->shouldAutoDefaultEmptyTypedCollection($property, $default, $state)) {
-                $values[$name] = $this->wrapCollection([], $this->getPrimaryType($property));
-                continue;
-            }
-
-            if ($state === ValueState::Missing) {
-                continue;
-            }
-
-            try {
-                if ($nested !== null) {
-                    $value = $this->hydrateNested($value, $nested, $property, $context);
-                } else {
-                    $value = $this->applyCasts($value, $cast, $dateTimeFrom, $property, $resolvedHydration, $context);
-                }
-            } catch (HydrationException $exception) {
-                throw $exception->prependPath($name);
-            }
-
-            // Для constructor-first проверяется параметр: конструктор может преобразовать значение для свойства.
-            if (!isset($constructorNames[$name])) {
-                $this->valueValidator->assertValue($value, $property->getType(), $property->getDeclaringClass(), $name);
-            }
-            $values[$name] = $value;
+        }
+        if ($receiver !== null) {
+            [$keep, $rest] = $consumed->remainder($array);
+            $values[$receiver] = $keep ? $rest : [];
         }
 
+        try {
+            return $this->instantiateHydratedDto($dtoClass, $metadata, $values);
+        } catch (HydrationException $exception) {
+            $location = $origins[$exception->path ?? '']
+                ?? $scope->location()->descend([$exception->path ?? ''], kind: SourcePathKind::Expected);
+            return $scope->at($location, static function () use ($exception): never {
+                throw $exception;
+            });
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $metadata
+     * @param array<string, mixed> $values
+     */
+    private function instantiateHydratedDto(string $dtoClass, array $metadata, array $values): object
+    {
+        $constructor = $metadata['constructor'];
         $reflection = new ReflectionClass($dtoClass);
         if ($constructor === null) {
             return $this->instantiateWithoutConstructorMetadata($reflection, $metadata['properties'], $values);
@@ -188,6 +222,237 @@ final class Hydrator
     }
 
     /**
+     * @param array<string, mixed> $source
+     * @param array<string, mixed> $meta
+     */
+    private function hydrateProperty(
+        array $source,
+        array $meta,
+        ?ReflectionParameter $parameter,
+        ResolvedDtoHydration $hydration,
+        ?CompiledDtoRules $compiled,
+        HydrationScope $scope,
+    ): HydratedProperty {
+        $name = $meta['name'];
+        $property = $meta['property'];
+        $rule = $compiled?->field($name);
+        $policy = $compiled?->policyFor($name);
+        if ($compiled !== null && !$compiled->legacyProfile) {
+            $hydration = new ResolvedDtoHydration(new DtoHydrationPolicy(
+                namingStrategy: $policy->naming ?? NamingStrategy::None,
+                dateTime: $policy->dateTime,
+                emptyStringBehavior: $policy->emptyString ?? EmptyStringBehavior::Keep,
+            ), $hydration->casts);
+        }
+        $key = $meta['from']->name ?? $meta['map']->name
+            ?? $this->namingStrategyResolver->resolveByStrategy($name, $hydration->policy->namingStrategy);
+        $primary = $rule->from ?? $meta['nested']->from ?? $key;
+        $fallbacks = $rule?->from !== null ? $rule->fallback : ($meta['nested']->fallback ?? []);
+        if ($rule?->from === null && $fallbacks === [] && $meta['from'] !== null) {
+            $fallbacks = $meta['from']->fallback;
+        }
+        [$resolved, $path] = $this->resolveValueWithFallbacks($source, $primary, $fallbacks);
+        $segments = explode('.', $path);
+        $location = $scope->location()->descend(
+            $segments,
+            kind: $resolved->isMissing() ? SourcePathKind::Expected : SourcePathKind::Resolved,
+        );
+        if ($location->kind === SourcePathKind::Expected) {
+            $candidates = array_map(
+                fn (string $candidate): SourceLocation => $scope->location()->descend(explode('.', $candidate)),
+                [$primary, ...$fallbacks],
+            );
+            $location = new SourceLocation(
+                $location->segments,
+                $location->safeSegments,
+                $location->kind,
+                array_map(static fn (SourceLocation $item): string => SourceLocation::pointer($item->segments), $candidates),
+                array_map(static fn (SourceLocation $item): string => SourceLocation::pointer($item->safeSegments), $candidates),
+            );
+        }
+
+        try {
+            return $scope->at($location, function () use (
+                $source,
+                $meta,
+                $parameter,
+                $hydration,
+                $policy,
+                $scope,
+                $rule,
+                $resolved,
+                $segments,
+                $location,
+                $property,
+            ): HydratedProperty {
+                $state = $resolved->state;
+                $value = $resolved->value;
+                $consumed = $resolved->isMissing() ? new SourceConsumption() : SourceConsumption::all();
+                if ($rule?->required && $state === ValueState::Missing) {
+                    throw HydrationException::invalidValue('required_field_missing', (string) ($property->getType() ?? 'mixed'), 'missing');
+                }
+                if ($rule?->forbidExplicitNull && $state === ValueState::Null) {
+                    throw HydrationException::invalidValue('explicit_null_not_allowed', 'non-null input', 'null');
+                }
+                if ($state === ValueState::Present) {
+                    $input = $rule?->inputShape;
+                    $shape = $rule?->cast === null ? $rule?->shape : null;
+                    while ($shape?->kind === 'nullable') {
+                        $shape = $shape->item;
+                    }
+                    $input ??= match ($shape?->kind) {
+                        'dto' => InputShape::Object,
+                        'list' => InputShape::List,
+                        default => null,
+                    };
+                    if ($input !== null) {
+                        $this->ruleValues->assertInput($value, $input, $shape->normalizeKeys ?? false);
+                    }
+                }
+                if ($rule?->cast === null) {
+                    [$state, $value] = $this->normalizeEmptyStringValue(
+                        $state,
+                        $value,
+                        $meta['cast'],
+                        $meta['emptyStringAsNull'],
+                        $hydration,
+                        $property,
+                        $property->getDeclaringClass()->getName(),
+                    );
+                }
+                $defaultApplied = false;
+                $externalDefault = $rule?->default;
+                if ($externalDefault !== null && in_array($state, $externalDefault->when, true)) {
+                    $spec = $externalDefault->provider;
+                    $value = $spec === null ? $externalDefault->value : $scope->provide(
+                        new $spec->class(...$spec->args),
+                        $value,
+                        $state,
+                        $source,
+                    );
+                    $defaultApplied = true;
+                } elseif ($meta['default'] !== null && $this->shouldApplyDefault($meta['default'], $state)) {
+                    $value = $this->resolveDefaultValue($meta['default'], $value, $state, $source, $scope->context(), $scope);
+                    $defaultApplied = true;
+                }
+                if ($defaultApplied) {
+                    $state = $value === null ? ValueState::Null : ValueState::Present;
+                    $location = $location->boundary();
+                }
+                if ($state === ValueState::Missing && $this->shouldAutoDefaultEmptyTypedCollection($property, $meta['default'], $state)) {
+                    $value = $this->wrapCollection([], $this->getPrimaryType($property));
+                    return new HydratedProperty($value, ValueState::Present, $segments, $location, $consumed);
+                }
+                if ($state === ValueState::Missing) {
+                    return new HydratedProperty(null, $state, $segments, $location, $consumed);
+                }
+                return $scope->at($location, function () use (
+                    $value,
+                    $state,
+                    $segments,
+                    $location,
+                    $consumed,
+                    $rule,
+                    $policy,
+                    $scope,
+                    $meta,
+                    $hydration,
+                    $parameter,
+                    $property,
+                    $defaultApplied,
+                    $resolved,
+                ): HydratedProperty {
+                    if ($rule?->cast !== null) {
+                        $spec = $rule->cast;
+                        $value = $scope->cast(new $spec->class(...$spec->args), $value);
+                        $location = $location->boundary();
+                        if ($rule->shape !== null) {
+                            $value = $scope->at($location, fn (): mixed => $this->ruleValues->transform(
+                                $value,
+                                $rule->shape,
+                                $policy,
+                                $scope,
+                                resultOnly: true,
+                            )->value);
+                        }
+                    } elseif ($rule?->shape !== null && $value !== null) {
+                        $shaped = $this->ruleValues->transform($value, $rule->shape, $policy, $scope, readyDto: $defaultApplied);
+                        $value = $shaped->value;
+                        if (!$defaultApplied && !$resolved->isMissing()) {
+                            $consumed = $shaped->consumed;
+                        }
+                        $containerShape = $rule->shape;
+                        while ($containerShape->kind === 'nullable') {
+                            $containerShape = $containerShape->item;
+                        }
+                        if (is_array($value) && $containerShape->kind === 'list') {
+                            $value = $this->wrapCollection($value, $this->getPrimaryType($property));
+                        }
+                    } elseif (!$rule?->noTransform) {
+                        if ($meta['nested'] !== null) {
+                            $nested = $meta['nested'];
+                            if (
+                                $this->rulesCompiler !== null && is_array($value)
+                                && $this->nestedObjectTypeResolver->resolve($nested, $property) === null
+                            ) {
+                                $propertyType = $this->getPrimaryType($property);
+                                $target = $nested->type ?? $propertyType;
+                                $processed = (new NestedValueProcessor($this->ruleValues))->process($value, $nested, $target, $scope);
+                                $value = $processed->value;
+                                if ($this->isDiscriminatedNested($nested) || ($target !== null && class_exists($target))) {
+                                    $value = $this->wrapCollection($value, $propertyType);
+                                }
+                                if (!$defaultApplied && !$resolved->isMissing()) {
+                                    $consumed = $processed->consumed;
+                                }
+                            } else {
+                                $value = $this->hydrateNested($value, $nested, $property, $scope->context(), $scope);
+                            }
+                        } else {
+                            $customCast = $this->builtinHydrationCaster->usesCustomCast(
+                                $value,
+                                $meta['cast'],
+                                $property,
+                                $hydration,
+                                $policy,
+                            );
+                            $value = $this->applyCasts(
+                                $value,
+                                $meta['cast'],
+                                $meta['dateTimeFrom'],
+                                $property,
+                                $hydration,
+                                $scope->context(),
+                                $scope,
+                                $policy,
+                            );
+                            if ($customCast) {
+                                $location = $location->boundary();
+                            }
+                        }
+                    }
+                    $value = $scope->at($location, function () use ($value, $policy, $parameter, $property): mixed {
+                        if ($policy?->scalars === ScalarPolicy::Strict) {
+                            return $this->scalarValues->strictReflection(
+                                $value,
+                                $parameter === null ? $property->getType() : $parameter->getType(),
+                                $parameter?->getDeclaringClass() ?? $property->getDeclaringClass(),
+                            );
+                        }
+                        if ($parameter === null) {
+                            $this->valueValidator->assertValue($value, $property->getType(), $property->getDeclaringClass(), '');
+                        }
+                        return $value;
+                    });
+                    return new HydratedProperty($value, $state, $segments, $location, $consumed);
+                });
+            });
+        } catch (HydrationException $exception) {
+            throw $exception->prependPath($name);
+        }
+    }
+
+    /**
      * Гидрировать массив в коллекцию DTO
      * @return array<int, object>
      */
@@ -196,21 +461,31 @@ final class Hydrator
         string $dtoClass,
         ?PipelineContext $context = null,
     ): array {
-        $result = [];
-        foreach ($items as $item) {
-            $result[] = $this->hydrateItem($item, $dtoClass, $context, count($result));
-        }
-
-        return $result;
+        $scope = $this->scope($context);
+        return $scope->node($items, function () use ($items, $dtoClass, $context, $scope): array {
+            $result = [];
+            foreach ($items as $key => $item) {
+                $result[] = $scope->at(
+                    $scope->location()->descend([$key], array_is_list($items)),
+                    fn (): object => $this->hydrateItem($item, $dtoClass, $context, count($result), $scope),
+                );
+            }
+            return $result;
+        });
     }
 
-    private function hydrateItem(mixed $item, string $dtoClass, ?PipelineContext $context, int $index): object
-    {
+    private function hydrateItem(
+        mixed $item,
+        string $dtoClass,
+        ?PipelineContext $context,
+        int $index,
+        ?HydrationScope $scope = null,
+    ): object {
         try {
             if (!is_array($item) && !is_object($item)) {
                 throw HydrationException::invalidValue('unexpected_response_shape', $dtoClass, get_debug_type($item));
             }
-            return $this->hydrate($item, $dtoClass, $context);
+            return $scope === null ? $this->hydrate($item, $dtoClass, $context) : $scope->hydrateDto($item, $dtoClass);
         } catch (HydrationException $exception) {
             throw $exception->prependPath('[' . $index . ']');
         }
@@ -240,6 +515,8 @@ final class Hydrator
         ReflectionProperty $property,
         ResolvedDtoHydration $resolvedHydration,
         ?PipelineContext $context,
+        ?HydrationScope $scope = null,
+        ?RulePolicy $policy = null,
     ): mixed {
         return $this->builtinHydrationCaster->hydrate(
             value: $value,
@@ -248,6 +525,8 @@ final class Hydrator
             property: $property,
             resolved: $resolvedHydration,
             context: $context,
+            scope: $scope,
+            policy: $policy,
         );
     }
 
@@ -443,6 +722,7 @@ final class Hydrator
         Nested $nested,
         ReflectionProperty $property,
         ?PipelineContext $context,
+        ?HydrationScope $scope = null,
     ): mixed {
         if ($value === null) {
             return null;
@@ -461,7 +741,7 @@ final class Hydrator
                 );
             }
 
-            return $this->hydrate($value, $objectType, $context);
+            return $scope === null ? $this->hydrate($value, $objectType, $context) : $scope->hydrateDto($value, $objectType);
         }
 
         if ($nested->each !== null && is_array($value)) {
@@ -472,7 +752,7 @@ final class Hydrator
         }
 
         if ($nested->itemCast !== null && is_array($value)) {
-            $value = $this->applyNestedItemCast($value, $nested, $context);
+            $value = $this->applyNestedItemCast($value, $nested, $context, $scope);
         }
 
         $propertyType = $this->getPrimaryType($property);
@@ -484,6 +764,7 @@ final class Hydrator
                 nested: $nested,
                 propertyType: $propertyType,
                 context: $context,
+                scope: $scope,
             );
         }
 
@@ -501,7 +782,7 @@ final class Hydrator
                         continue;
                     }
 
-                    $items[] = $this->hydrateItem($item, $targetType, $context, count($items));
+                    $items[] = $this->hydrateItem($item, $targetType, $context, count($items), $scope);
                 }
 
                 return $this->wrapCollection($items, $propertyType);
@@ -514,7 +795,7 @@ final class Hydrator
             if (!is_object($value)) {
                 throw HydrationException::invalidValue('unexpected_response_shape', $targetType, get_debug_type($value));
             }
-            return $this->hydrate($value, $targetType, $context);
+            return $scope === null ? $this->hydrate($value, $targetType, $context) : $scope->hydrateDto($value, $targetType);
         }
 
         return $value;
@@ -524,8 +805,12 @@ final class Hydrator
      * @param array<int|string, mixed> $items
      * @return array<int|string, mixed>
      */
-    private function applyNestedItemCast(array $items, Nested $nested, ?PipelineContext $context): array
-    {
+    private function applyNestedItemCast(
+        array $items,
+        Nested $nested,
+        ?PipelineContext $context,
+        ?HydrationScope $scope = null,
+    ): array {
         $castClass = $nested->itemCast;
         if (!is_string($castClass) || trim($castClass) === '') {
             return $items;
@@ -543,7 +828,7 @@ final class Hydrator
         $index = 0;
         foreach ($items as $key => $item) {
             try {
-                $items[$key] = $cast->hydrate($item, $context);
+                $items[$key] = $scope === null ? $cast->hydrate($item, $context) : $scope->cast($cast, $item);
             } catch (HydrationException $exception) {
                 throw $exception->prependPath('[' . $index . ']');
             }
@@ -588,6 +873,7 @@ final class Hydrator
         Nested $nested,
         ?string $propertyType,
         ?PipelineContext $context,
+        ?HydrationScope $scope = null,
     ): mixed {
         $items = [];
         $index = -1;
@@ -621,7 +907,7 @@ final class Hydrator
                 continue;
             }
 
-            $items[] = $this->hydrateItem($payload, $class, $context, $index);
+            $items[] = $this->hydrateItem($payload, $class, $context, $index, $scope);
         }
 
         return $this->wrapCollection($items, $propertyType);
@@ -777,22 +1063,23 @@ final class Hydrator
     /**
      * @param array<string, mixed> $data
      * @param array<int, string> $fallbacks
+     * @return array{PathResult, string}
      */
-    private function resolveValueWithFallbacks(array $data, string $primaryPath, array $fallbacks): PathResult
+    private function resolveValueWithFallbacks(array $data, string $primaryPath, array $fallbacks): array
     {
         $resolved = ArrayPath::getByPathWithStatus($data, $primaryPath);
         if (!$resolved->isMissing()) {
-            return $resolved;
+            return [$resolved, $primaryPath];
         }
 
         foreach ($fallbacks as $fallback) {
             $resolved = ArrayPath::getByPathWithStatus($data, $fallback);
             if (!$resolved->isMissing()) {
-                return $resolved;
+                return [$resolved, $fallback];
             }
         }
 
-        return $resolved;
+        return [$resolved, $primaryPath];
     }
 
     private function shouldApplyDefault(DefaultValue $default, ValueState $state): bool
@@ -870,6 +1157,7 @@ final class Hydrator
         ValueState $state,
         array $source,
         ?PipelineContext $context,
+        ?HydrationScope $scope = null,
     ): mixed {
         if ($default->value !== null && $default->provider !== null) {
             throw new ConfigurationException('DefaultValue не может иметь одновременно value и provider');
@@ -888,6 +1176,8 @@ final class Hydrator
         }
 
         $provider = new $default->provider();
-        return $provider->resolve($value, $state, $source, $context);
+        return $scope === null
+            ? $provider->resolve($value, $state, $source, $context)
+            : $scope->provide($provider, $value, $state, $source);
     }
 }

@@ -18,7 +18,6 @@ use Brahmic\ApiSutra\Casts\CastRegistry;
 use Brahmic\ApiSutra\Config\DateTimeSerializationPolicy;
 use Brahmic\ApiSutra\Config\DtoSerializationPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
-use Brahmic\ApiSutra\Enums\Http\FileFormat;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Enums\Request\RequestUnmappedTarget;
 use Brahmic\ApiSutra\Enums\Serialization\EnumOutput;
@@ -28,6 +27,7 @@ use Brahmic\ApiSutra\Serialization\EnumSerializationHelper;
 use Brahmic\ApiSutra\Serialization\VO\PropertyMeta;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoSerialization;
 use Brahmic\ApiSutra\Serialization\VO\RequestPartsBag;
+use Brahmic\ApiSutra\Serialization\Rules\ReceiverOutput;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\VO\Files\FileInput;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
@@ -50,6 +50,7 @@ final readonly class RequestPartsCollector
         private CastRegistry $casts,
         private ?AttributeMetadataCache $cache,
         private Closure $dtoSerializer,
+        private ?ReceiverOutput $receiverOutput = null,
     ) {
         $this->namingStrategyResolver = new NamingStrategyResolver();
         $this->enumSerializer = new EnumSerializationHelper();
@@ -90,7 +91,7 @@ final readonly class RequestPartsCollector
         }
 
         foreach ($properties as $metadata) {
-            if ($metadata->shouldSkip()) {
+            if ($metadata->shouldSkip() || $metadata->name === $this->receiverOutput?->receiverFor($request::class)) {
                 continue;
             }
 
@@ -431,6 +432,7 @@ final readonly class RequestPartsCollector
     ): mixed {
         $resolver = new SerializationValueResolver(
             $resolved->casts->isEmpty() ? $this->casts : $resolved->casts,
+            receiverOutput: $this->receiverOutput,
         );
 
         return $resolver->resolve(
@@ -452,7 +454,7 @@ final readonly class RequestPartsCollector
         EnumOutput $enumOutput,
         bool $strictMode,
     ): mixed {
-        $resolver = new SerializationValueResolver($this->casts);
+        $resolver = new SerializationValueResolver($this->casts, receiverOutput: $this->receiverOutput);
         $policy = $this->buildRequestPartsPolicy($context, $enumOutput, $strictMode);
 
         return $resolver->resolve(

@@ -23,7 +23,7 @@ enum и массивы только из таких значений могут 
 
 ## Приоритет применения
 
-Для гидратации ненулевого свойства без `#[Nested]`:
+Без внешнего набора для гидратации ненулевого свойства без `#[Nested]`:
 
 1. `#[Cast]` на свойстве.
 2. Cast по типу из `DtoHydrationProfile::casts()`.
@@ -163,3 +163,14 @@ public DateTimeImmutable $createdAt;
 ## Где применяется
 - **Request serialization** — свойства запроса
 - **DTO hydration** — свойства DTO
+
+## Casts внешнего набора и scope
+
+`HandlerSpec` в [HydrationRules](hydration-rules.md#scoped-cast-и-provider) создаёт
+обработчик на каждое применение. ScopedCastInterface и ScopedDefaultValueProviderInterface
+позволяют вложенно гидратировать DTO тем же набором. Scope передаётся и обработчикам,
+подключённым через атрибуты, Nested.itemCast и профиль.
+
+Для исходящих значений с receiver cast всего объекта/контейнера запрещён до его вызова:
+см. [границы исходящего представления](hydration-rules.md#receiver-в-исходящих-запросах).
+Глобальный, клиентский и extension registry не становятся источниками входных casts.

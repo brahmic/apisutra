@@ -229,6 +229,9 @@ final readonly class CompositeFlow
             return $data;
         }
 
+        if ($context->config->hydrationRules !== null) {
+            $context->hydrationSourceTransformed = true;
+        }
         return $this->hydrator->hydrate($data, $dtoType, $context);
     }
 }

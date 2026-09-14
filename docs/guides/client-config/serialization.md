@@ -2,9 +2,11 @@
 
 Настройки сериализации и маппинга.
 
-Проверка обязательных полей DTO и типов, строгий JsonCast и безопасные ошибки
-гидратации работают автоматически. Отдельный strict/required-флаг не нужен;
+Базовая проверка обязательных полей DTO и совместимости native-типов, строгий JsonCast
+и безопасные ошибки гидратации работают автоматически;
 [nullable/default определяются объявлением DTO](../dto.md#обязательные-поля-и-ошибки-гидратации).
+Для запрета неявных scalar conversions, проверки элементов списков и независимых
+от атрибутов моделей используйте [HydrationRules](../hydration-rules.md).
 Профили дат и пользовательские casts нужны для особенностей формата провайдера.
 [Исходный ответ для диагностики](../errors.md#подробная-диагностика-гидратации)
 доступен и при выключенном debug.
@@ -81,7 +83,7 @@ $config = new ClientConfig(
 
 Ключ — объявленный PHP-тип, например `DateTimeImmutable::class` или `'string'`.
 Гидратация ответа через `Returns` не использует эту настройку: ей нужны
-`DtoHydrationProfile` или `#[Cast]` свойства. Источники и приоритеты приведены
+`DtoHydrationProfile`, `#[Cast]` свойства или casts внешнего набора. Источники и приоритеты приведены
 в [справке casts](../casts.md#регистрация-кастов).
 
 ## Request DateTime
@@ -103,7 +105,8 @@ $config = new ClientConfig(
   - `path`
   - request body fields, которые не проходят через DTO body serializer
 - `timezone` приводит дату к указанной зоне перед форматированием
-- DTO hydration/body semantics не задаются через `ClientConfig`
+- `requestDateTime` не задаёт DTO hydration/body semantics; внешние входные правила
+  подключаются отдельным `ClientConfig::hydrationRules`
 
 Для union‑полей (`string|DateTimeInterface`) ветка выбирается по runtime‑значению,
 а не по порядку типов в объявлении свойства.
@@ -203,3 +206,14 @@ $config = new ClientConfig(
 - [Сериализация запросов](../serialization.md)
 - [Naming Strategy](../naming-strategy.md)
 - [Casts](../casts.md)
+
+## HydrationRules
+
+`hydrationRules: ?HydrationRules = null` — последний необязательный параметр ClientConfig.
+Клиент передаёт набор своему гидратору и сериализатору. Он применяется к Returns,
+пагинации, composite и await; объявленный receiver исключается из запросов клиента.
+Копирование через `with()` сохраняет набор, явный null отключает его в новой копии.
+
+API builders, приоритеты, строгие типы, исходящее представление receiver и диагностика
+описаны в [полной справке внешних правил](../hydration-rules.md). `ClientConfig::casts`
+по-прежнему относится к исходящему преобразованию и не подключается к гидратации.

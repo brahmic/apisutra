@@ -31,8 +31,8 @@
 - `toArray()` — каноническая DX-сериализация DTO
 - `from()` — каноническая гидрация DTO
 - outbound body по умолчанию подчиняется wire policy, а не обязан совпадать с `toArray()`
-- standalone `from()` и pipeline hydration должны давать один и тот же результат
-- hydration DTO semantics централизуются через `DtoHydrationProfile`
+- `from()` использует профиль DTO; для внешних правил standalone применяется `Hydrator::forRules()` с набором клиента
+- hydration DTO semantics задаются профилем DTO или [внешним набором правил](hydration-rules.md) клиента
 - DX DTO serialization semantics централизуются через `DtoSerializationProfile`
 - request/query/header/path semantics централизуются через `ClientConfig`
 - wire body semantics централизуются через `ClientConfig::wireBodySerializationPolicy`
@@ -54,6 +54,7 @@
 - Анонимные классы — только как альтернатива для прототипов, в примерах — именованные.
 
 ## Содержание
+- [Внешние правила гидратации DTO](hydration-rules.md) — модели без атрибутов, strict, extras
 - [Быстрый старт](./quickstart.md)
 - [Конфигурирование клиента (ClientConfig)](./client-config/README.md)
 - [Аутентификация](./auth.md)

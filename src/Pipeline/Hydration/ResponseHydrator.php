@@ -18,6 +18,8 @@ use Brahmic\ApiSutra\Extensions\ExtensionRegistry;
 use Brahmic\ApiSutra\Pagination\PaginationConfigResolver;
 use Brahmic\ApiSutra\Pagination\PaginationItemsCollectionBuilder;
 use Brahmic\ApiSutra\Serialization\Hydrator;
+use Brahmic\ApiSutra\Serialization\Rules\SourceLocation;
+use Brahmic\ApiSutra\Serialization\Rules\SourcePathKind;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\VO\Files\FileResponse;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
@@ -68,6 +70,37 @@ final readonly class ResponseHydrator
         mixed $data,
         ?DecodedResponse $decoded = null,
     ): mixed {
+        try {
+            return $this->hydrateDecodedResponse($request, $context, $data, $decoded);
+        } catch (HydrationException $exception) {
+            if ($this->config->hydrationRules === null || $exception->sourcePathKind !== null) {
+                throw $exception;
+            }
+            $segments = $exception->path === null || $exception->path === '$' ? [] : explode('.', $exception->path);
+            $kind = $exception->reason === 'unwrap_path_missing' ? SourcePathKind::Expected : SourcePathKind::Resolved;
+            $pointer = SourceLocation::pointer($segments);
+            $source = new SourceLocation(
+                $segments,
+                $segments,
+                $kind,
+                $kind === SourcePathKind::Expected ? [$pointer] : [],
+                $kind === SourcePathKind::Expected ? [$pointer] : [],
+            );
+            if ($exception->reason === null) {
+                $source = new SourceLocation(kind: SourcePathKind::Unavailable);
+            } elseif ($context->hydrationSourceTransformed) {
+                $source = (new SourceLocation())->boundary();
+            }
+            throw $exception->withSource($source);
+        }
+    }
+
+    private function hydrateDecodedResponse(
+        RequestInterface $request,
+        PipelineContext $context,
+        mixed $data,
+        ?DecodedResponse $decoded,
+    ): mixed {
         if ($this->isRawResponse($request, $context)) {
             return $data;
         }
@@ -113,6 +146,11 @@ final readonly class ResponseHydrator
                 }
 
                 return $container->withItems($items);
+            }
+
+            if ($this->config->hydrationRules !== null) {
+                $items = $this->extractPaginationItems($data, $pagination);
+                return $this->buildItemsCollection($this->hydratePaginationItems($items, $pagination, $context), $pagination);
             }
 
             // Режим items-only: возвращаем только items
@@ -254,7 +292,13 @@ final readonly class ResponseHydrator
         try {
             return $this->hydrator->hydrate($data, $dtoClass, $context);
         } catch (HydrationException $exception) {
-            throw $path === null ? $exception : $exception->prependPath($path);
+            if ($path !== null) {
+                if (!$context->hydrationSourceTransformed) {
+                    $exception = $exception->prependSourcePath($path);
+                }
+                $exception = $exception->prependPath($path);
+            }
+            throw $exception;
         } catch (SdkException $exception) {
             throw $exception;
         } catch (Throwable $exception) {
@@ -298,6 +342,9 @@ final readonly class ResponseHydrator
         try {
             return $this->hydrator->hydrateCollection($items, $pagination->itemsType, $context);
         } catch (HydrationException $exception) {
+            if ($pagination->itemsPath !== '' && !$context->hydrationSourceTransformed) {
+                $exception = $exception->prependSourcePath($pagination->itemsPath);
+            }
             throw $exception->prependPath($pagination->itemsPath === '' ? '$' : $pagination->itemsPath);
         } catch (SdkException $exception) {
             throw $exception;

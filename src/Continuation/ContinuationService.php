@@ -20,6 +20,8 @@ use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Request\RequestSpecResolver;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\Serialization\Hydrator;
+use Brahmic\ApiSutra\Serialization\Rules\SourceLocation;
+use Brahmic\ApiSutra\Serialization\Rules\SourcePathKind;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -150,9 +152,16 @@ final readonly class ContinuationService
             }
             $value = $this->hydrator->hydrate($outcome->payload, $type);
         } catch (HydrationException $exception) {
+            if ($this->client->getConfig()->hydrationRules !== null) {
+                if ($outcome->path === null) {
+                    $exception = $exception->withSource(new SourceLocation(kind: SourcePathKind::Unavailable));
+                } elseif ($exception->sourcePathKind === null) {
+                    $exception = $exception->withSource(new SourceLocation());
+                }
+            }
             $prefix = $outcome->path ?? ($shapeError ? '$' : '');
             if ($prefix !== '') {
-                $exception = $exception->prependPath($prefix);
+                $exception = $exception->prependSourcePath($prefix)->prependPath($prefix);
             }
             throw $this->awaitError(
                 'final_hydration_failed',
@@ -242,7 +251,7 @@ final readonly class ContinuationService
             default => 'Протокол завершил ожидание ошибкой',
         };
         $exception = new ContinuationAwaitException($message, $reason, $attempts, $result, $previous);
-        (new AuditLogger($this->client->getConfig()))->log(LogLevel::ERROR, $message, $exception->context());
+        (new AuditLogger($this->client->getConfig()))->log(LogLevel::ERROR, $message, $exception->logContext());
         return $exception;
     }
 

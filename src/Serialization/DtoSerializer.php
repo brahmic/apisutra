@@ -15,6 +15,9 @@ use Brahmic\ApiSutra\Config\DtoSerializationPolicy;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Serialization\Concerns\ReflectionHelperTrait;
 use Brahmic\ApiSutra\Serialization\VO\ResolvedDtoSerialization;
+use Brahmic\ApiSutra\Serialization\Rules\HydrationRules;
+use Brahmic\ApiSutra\Serialization\Rules\ReceiverOutput;
+use Brahmic\ApiSutra\Serialization\Rules\RuleSetCompiler;
 use Brahmic\ApiSutra\Support\ArrayPath;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Brahmic\ApiSutra\Exceptions\Serialization\SerializationException;
@@ -29,12 +32,15 @@ final class DtoSerializer
 
     /** @var array<int, true> Объекты только текущей ветки сериализации. */
     private array $serializing = [];
+    private readonly ?ReceiverOutput $receiverOutput;
 
     public function __construct(
         private readonly CastRegistry $casts,
         private readonly ?AttributeMetadataCache $cache = null,
         private readonly ?DtoSerializationProfileResolver $profileResolver = null,
+        ?HydrationRules $rules = null,
     ) {
+        $this->receiverOutput = $rules === null ? null : new ReceiverOutput((new RuleSetCompiler($rules))->receivers());
     }
 
     public static function default(): self
@@ -122,7 +128,7 @@ final class DtoSerializer
         $data = [];
 
         foreach ($this->getMetadata($dto) as $meta) {
-            if ($meta['isStatic']) {
+            if ($meta['isStatic'] || $meta['name'] === $this->receiverOutput?->receiverFor($dto::class)) {
                 continue;
             }
 
@@ -132,7 +138,10 @@ final class DtoSerializer
             $map = $meta['map'];
             $cast = $meta['cast'];
             $dateTimeTo = $meta['dateTimeTo'];
-            $valueResolver = new SerializationValueResolver($this->resolveCastRegistry($resolved));
+            $valueResolver = new SerializationValueResolver(
+                $this->resolveCastRegistry($resolved),
+                receiverOutput: $this->receiverOutput,
+            );
 
             $name = $to->name
                 ?? $map->name

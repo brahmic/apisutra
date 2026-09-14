@@ -37,4 +37,15 @@ final class ContinuationAwaitException extends SdkException
 
         return $context;
     }
+
+    /** @return array<string, mixed> */
+    public function logContext(): array
+    {
+        $context = $this->context();
+        $previous = $this->getPrevious();
+        if ($this->reason === 'final_hydration_failed' && $previous instanceof HydrationException) {
+            $context['hydration'] = $previous->logContext();
+        }
+        return $context;
+    }
 }

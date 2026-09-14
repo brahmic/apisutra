@@ -230,3 +230,10 @@ HTTP-ответ доступен через `ContinuationAwaitException::lastRes
 в previous. Для лимита, отсутствия token и неготового Sync обрабатывайте runtime-ошибку
 ожидания; `ContinuationConfigurationException` относится к неверной настройке.
 Это изменение совместимости alpha-версии; прежнего режима эвристики нет.
+
+## Внешние правила финального DTO
+
+Гидратор клиента применяет `hydrationRules` к Ready-payload и повторному `awaitAs()`.
+Strict-ошибка оборачивается в `final_hydration_failed` сразу, даже при наличии token.
+Путь финала дополняет `sourcePath`; при Ready без объявленного пути происхождение
+Unavailable. [Диагностика внешних правил](hydration-rules.md#диагностика-и-входы).
