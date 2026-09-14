@@ -6,6 +6,7 @@
 - **Returns** — когда нужен DTO‑ответ или unwrap вложенных данных.
 - **Download** — когда ответом является файл.
 - **RawResponse** — когда нужна строка тела без декодирования.
+- **ContinuationResult** — когда готовность финала и его тип отличаются от стартового ответа.
 
 ## Returns
 **Target:** class  
@@ -69,6 +70,21 @@ final class GetActiveOrder extends AbstractRequest {}
 уберите unwrap для корневого DTO или явно нормализуйте варианты ответа через
 `BeforeHydrate`/ResponseHandler. У `ContinuationResult::unwrap` и pagination itemsPath
 отдельные правила; строгий контракт здесь относится к `Returns`.
+
+## ContinuationResult
+
+**Target:** class. `finalType: string` — обязательный класс финального DTO;
+`unwrap?: string` — путь финала и критерий его присутствия;
+`pollRequest?: string` — класс запроса с одним обязательным scalar token-параметром;
+`defaultMode?: ContinuationMode` — режим провайдера;
+`stateResolver?: string` — класс `ContinuationStateResolverInterface` без обязательных
+аргументов конструктора.
+
+Приоритет критерия: `stateResolver` атрибута → непустой `unwrap` → resolver клиента.
+Если критерия нет, ожидание даёт configuration-ошибку до polling. В отличие от
+`Returns`, отсутствие/null данных по `unwrap` здесь означает Pending. Ошибка данных Ready
+немедленно завершает ожидание и сохраняет полный путь и последний HTTP-ответ.
+Полный контракт, пример resolver и миграция — в [Provider Async Await](../provider-async-await.md).
 
 ## RawResponse
 

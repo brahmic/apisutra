@@ -359,7 +359,7 @@ abstract class AbstractClient implements ContextualClientInterface, AttributeMet
     public function continuation(): ContinuationService
     {
         if ($this->continuationService === null) {
-            $this->continuationService = new ContinuationService($this);
+            $this->continuationService = new ContinuationService($this, $this->hydrator);
         }
 
         return $this->continuationService;

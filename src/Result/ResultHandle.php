@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Result;
 
 use Brahmic\ApiSutra\Continuation\ContinuationAwaitOptions;
+use Brahmic\ApiSutra\Continuation\ContinuationOutcome;
+use Brahmic\ApiSutra\Continuation\ContinuationService;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\ClientInterface;
+use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestExecutionInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Configuration\ContinuationConfigurationException;
-use Brahmic\ApiSutra\Serialization\Hydrator;
+use Brahmic\ApiSutra\Request\RequestSpecResolver;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Throwable;
 
 /**
  * Унифицированная обёртка результата выполнения запроса.
@@ -20,7 +22,7 @@ use Throwable;
  * Нюансы:
  * - Ленивая материализация: Promise разрешается только при первом обращении к raw()/resolved().
  * - await()/awaitAs() кешируют итог в рамках одного handle и не запускают повторный polling.
- * - awaitAs() умеет доприводить уже закешированный await-результат к новому DTO-типу.
+ * - awaitAs() гидратирует сохранённый Ready-payload при смене DTO-типа.
  * - Continuation orchestration доступен только если handle создан с client/sourceRequest контекстом.
  *
  * @see docs/guides/provider-async-await.md
@@ -29,8 +31,7 @@ use Throwable;
 final class ResultHandle
 {
     private ExecutionResult|PromiseInterface $result;
-    private bool $awaitResolved = false;
-    private mixed $awaitValue = null;
+    private ?ContinuationOutcome $awaitOutcome = null;
     private ?string $awaitType = null;
 
     public function __construct(
@@ -106,23 +107,20 @@ final class ResultHandle
 
     public function await(?ContinuationAwaitOptions $options = null): mixed
     {
-        if ($this->awaitResolved) {
-            return $this->awaitValue;
+        if ($this->awaitOutcome !== null) {
+            return $this->awaitOutcome->value;
         }
 
-        $value = $this->resolveContinuation($options);
-        $this->awaitResolved = true;
-        $this->awaitType = null;
-        $this->awaitValue = $value;
+        $this->awaitOutcome = $this->resolveContinuation($options);
 
-        return $value;
+        return $this->awaitOutcome->value;
     }
 
     /**
      * Дождаться финального результата и вернуть его в указанном DTO-типе.
      *
      * Если await уже выполнялся, метод не запускает polling повторно:
-     * используется cached значение с попыткой гидрации к новому типу.
+     * используется сохранённый payload до гидрации.
      */
     public function awaitAs(string $finalType, ?ContinuationAwaitOptions $options = null): mixed
     {
@@ -131,24 +129,21 @@ final class ResultHandle
             throw new ContinuationConfigurationException('finalType не должен быть пустым');
         }
 
-        if ($this->awaitResolved && $this->awaitType === $resolvedType) {
-            return $this->awaitValue;
+        if ($this->awaitOutcome !== null && $this->awaitType === $resolvedType) {
+            return $this->awaitOutcome->value;
         }
 
-        if ($this->awaitResolved) {
-            $mapped = $this->mapCachedAwaitValue($resolvedType);
+        if ($this->awaitOutcome !== null) {
+            $mapped = $this->continuationService()->hydrateOutcome($this->awaitOutcome, $resolvedType);
             $this->awaitType = $resolvedType;
-            $this->awaitValue = $mapped;
+            $this->awaitOutcome = $mapped;
 
-            return $mapped;
+            return $mapped->value;
         }
 
-        $value = $this->resolveContinuation($options, $resolvedType);
-        $this->awaitResolved = true;
-        $this->awaitType = $resolvedType;
-        $this->awaitValue = $value;
+        $this->awaitOutcome = $this->resolveContinuation($options, $resolvedType);
 
-        return $value;
+        return $this->awaitOutcome->value;
     }
 
     /**
@@ -174,7 +169,7 @@ final class ResultHandle
         return $this->raw()->requestDebugJson($redactSensitive, $flags);
     }
 
-    private function resolveContinuation(?ContinuationAwaitOptions $options, ?string $finalType = null): mixed
+    private function continuationService(): ContinuationService
     {
         if ($this->client === null) {
             throw new ContinuationConfigurationException(
@@ -182,33 +177,27 @@ final class ResultHandle
             );
         }
 
-        return $this->client->continuation()->awaitFromStartResult(
+        return $this->client->continuation();
+    }
+
+    private function resolveContinuation(
+        ?ContinuationAwaitOptions $options,
+        ?string $finalType = null,
+    ): ContinuationOutcome {
+        $outcome = $this->continuationService()->resolveFromStartResult(
             startResult: $this->raw(),
             sourceRequest: $this->sourceRequest,
             finalTypeOverride: $finalType,
             options: $options,
         );
-    }
+        $request = $this->sourceRequest instanceof RequestExecutionInterface
+            ? $this->sourceRequest->getRequest()
+            : $this->sourceRequest;
+        $declaredType = $request === null
+            ? null
+            : (new RequestSpecResolver())->resolveClass($request::class)->continuationResult?->finalType;
+        $this->awaitType = $finalType ?? $declaredType;
 
-    private function mapCachedAwaitValue(string $finalType): mixed
-    {
-        $value = $this->awaitValue;
-        if (is_object($value) && $value instanceof $finalType) {
-            return $value;
-        }
-
-        if (!is_array($value) && !is_object($value)) {
-            throw new ContinuationConfigurationException(
-                'Не удалось привести cached await-результат к типу ' . $finalType,
-            );
-        }
-
-        try {
-            return Hydrator::default()->hydrate($value, $finalType);
-        } catch (Throwable $exception) {
-            throw new ContinuationConfigurationException(
-                'Не удалось привести cached await-результат к типу ' . $finalType . ': ' . $exception->getMessage(),
-            );
-        }
+        return $outcome;
     }
 }

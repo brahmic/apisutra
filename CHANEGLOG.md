@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- **Изменение совместимости continuation:** ожидание требует явного `unwrap` или
+  `ContinuationStateResolverInterface`; состояния Pending/Ready/Failed определяются
+  до гидратации. Ошибка финального DTO больше не расходует polling-попытки,
+  DTO с defaults не завершает ожидание на промежуточном ответе. Добавлены
+  `ContinuationAwaitException` с previous, attempts и последним HTTP-ответом,
+  `ContinuationContext` и `ContinuationOutcome`. Повторный `awaitAs()` использует
+  исходный Ready-payload и гидратор клиента. Конструктор `ContinuationService`
+  теперь требует гидратор. [Миграция и контракт](docs/guides/provider-async-await.md#миграция-с-эвристического-ожидания).
+
 - Исправлена изоляция объектов в metadata cache Hydrator, DtoSerializer и Serializer:
   defaults конструктора и объектные аргументы атрибутов больше не разделяются
   между DTO и операциями одного клиента. Default вычисляется PHP только при

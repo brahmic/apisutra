@@ -483,7 +483,7 @@ final class ProviderContinuationTokenExtractor implements ContinuationTokenExtra
 {
     public function extract(ExecutionResult $result): ?string
     {
-        $data = $result->data;
+        $data = $result->response?->json();
         if (!is_array($data)) {
             return null;
         }
@@ -508,6 +508,7 @@ $config = new ClientConfig(
 Если метод поддерживает optional async (sync/async через одну бизнес-операцию),
 используйте unified async-await контракт:
 - `#[ContinuationResult(...)]` на request-классе;
+- непустой `unwrap` либо resolver готовности Pending/Ready/Failed;
 - `ContinuationMode` + `asProviderSync()/asProviderAsync()/asProviderAuto()`;
 - `ContinuationModeApplicatorInterface` для маппинга mode в provider-протокол;
 - `await()/awaitAs()` на `ResultHandle`;

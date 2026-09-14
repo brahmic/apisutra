@@ -14,6 +14,7 @@ use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\Testing\MockResponse;
 use Brahmic\ApiSutra\Testing\MockSequence;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\ContinuationFinalDto;
+use Brahmic\ApiSutra\Tests\Stubs\Continuation\RootValueStateResolver;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\ContinuationPollRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\ContinuationStartRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\SimpleGetRequest;
@@ -97,7 +98,7 @@ describe('ResultHandle continuation await', function () {
         $transport->fake([
             ContinuationStartRequest::class => MockResponse::success([
                 'operationToken' => 'tok-1',
-                'value' => 'ready',
+                'data' => ['value' => 'ready'],
             ]),
         ]);
 
@@ -199,6 +200,7 @@ describe('ResultHandle continuation await', function () {
                 environment: Environment::Testing,
                 continuationTokenExtractor: makeTestContinuationTokenExtractor(),
                 defaultPollRequest: ContinuationPollRequest::class,
+                continuationStateResolver: new RootValueStateResolver(),
             ),
             $transport,
         );

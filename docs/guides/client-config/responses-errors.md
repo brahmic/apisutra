@@ -239,6 +239,9 @@ $config = new ClientConfig(
 - `defaultContinuationMode` — дефолт режима provider-выполнения для запросов без runtime override.
 - `defaultPollRequest` — poll-request по умолчанию для `awaitByToken()`/`awaitByTokenAs()`.
 - `continuationModeApplicator` — провайдерный маппинг `ContinuationMode` в реальный протокол (`query/body/header`).
+- `continuationStateResolver` — экземпляр `ContinuationStateResolverInterface` для явной
+  готовности Pending/Ready/Failed. Применяется после `ContinuationResult::stateResolver`
+  и встроенного resolver по непустому `unwrap`; для `awaitByTokenAs()` обязателен.
 
 Подробный DX и контракты: [Provider Async Await](../provider-async-await.md).
 

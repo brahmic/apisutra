@@ -35,7 +35,7 @@ final class ProviderContinuationTokenExtractor implements ContinuationTokenExtra
     #[Override]
     public function extract(ExecutionResult $result): ?string
     {
-        $payload = $result->data;
+        $payload = $result->response?->json();
         if (!is_array($payload)) {
             return null;
         }
@@ -68,6 +68,12 @@ $resolvedToken = $handle->resolved()->continuationToken();
 используйте:
 - `$handle->await()` / `$handle->awaitAs(...)`
 - `$client->continuation()->awaitByToken(...)`
+
+Наличие token само по себе не определяет состояние операции. Ожидание дополнительно
+требует `ContinuationResult::unwrap` либо resolver готовности. Ready гидратируется,
+Pending продолжает polling, Failed завершает его даже при token. Подробности и
+миграция — в [контракте ожидания](./provider-async-await.md).
+Чтение HTTP JSON в примере работает и при `Returns`, когда `$result->data` уже DTO.
 
 ## Рекомендации для провайдерного SDK
 

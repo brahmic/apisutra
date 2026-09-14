@@ -5,39 +5,37 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Continuation;
 
 use Brahmic\ApiSutra\Attributes\Response\ContinuationResult;
+use Brahmic\ApiSutra\Contracts\Interfaces\Continuation\ContinuationStateResolverInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\ClientInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestExecutionInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Core\RequestOptionsProviderInterface;
 use Brahmic\ApiSutra\Core\AbstractRequest;
 use Brahmic\ApiSutra\Enums\Continuation\ContinuationMode;
+use Brahmic\ApiSutra\Enums\Continuation\ContinuationStatus;
 use Brahmic\ApiSutra\Exceptions\Configuration\ContinuationConfigurationException;
+use Brahmic\ApiSutra\Exceptions\Continuation\ContinuationAwaitException;
+use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
+use Brahmic\ApiSutra\Pipeline\Diagnostics\AuditLogger;
 use Brahmic\ApiSutra\Request\RequestSpecResolver;
 use Brahmic\ApiSutra\Result\ExecutionResult;
 use Brahmic\ApiSutra\Serialization\Hydrator;
-use Brahmic\ApiSutra\Support\ArrayPath;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Throwable;
+use Psr\Log\LogLevel;
 
 /**
- * Сервис orchestration для unified provider async-await сценариев.
- *
- * Инварианты:
- * - Не хардкодит provider-протокол: token извлекается только через configured extractor.
- * - Приоритет режима: runtime override -> ContinuationResult.defaultMode -> ClientConfig.defaultContinuationMode.
- * - В polling-цикле failed-ответ не считается фатальным, пока есть continuation token.
- * - Ошибка пробрасывается только когда продолжение невозможно (нет финала и нет token).
- * - Контракт poll-request валидируется fail-fast: ровно один обязательный scalar-параметр.
+ * Исполняет ожидание по явному критерию протокола и гидратирует только Ready.
+ * Ошибки гидратации и resolver никогда не превращаются в Pending.
  *
  * @see docs/guides/provider-async-await.md
- * @see docs/guides/continuation-token.md
  */
 final readonly class ContinuationService
 {
     public function __construct(
         private ClientInterface $client,
+        private Hydrator $hydrator,
     ) {
     }
 
@@ -47,61 +45,44 @@ final readonly class ContinuationService
         ?string $finalTypeOverride = null,
         ?ContinuationAwaitOptions $options = null,
     ): mixed {
+        return $this->resolveFromStartResult($startResult, $sourceRequest, $finalTypeOverride, $options)->value;
+    }
+
+    public function resolveFromStartResult(
+        ExecutionResult $startResult,
+        ?RequestInterface $sourceRequest = null,
+        ?string $finalTypeOverride = null,
+        ?ContinuationAwaitOptions $options = null,
+    ): ContinuationOutcome {
         $sourceClass = $this->resolveSourceRequestClass($sourceRequest);
-        $continuation = $this->resolveContinuationResult($sourceClass);
-        $mode = $this->resolveMode($sourceRequest, $continuation);
-        $finalType = $finalTypeOverride ?? $continuation?->finalType;
-        $unwrap = $continuation?->unwrap;
-        $pollRequestClass = $continuation->pollRequest ?? $this->client->getConfig()->defaultPollRequest;
-        $options ??= new ContinuationAwaitOptions();
-
-        if ($mode === ContinuationMode::Sync) {
-            $resolved = $this->tryResolveFinal(
-                $this->resolveContinuationPayload($startResult),
-                $finalType,
-                $unwrap,
-            );
-            if ($resolved['resolved'] === true) {
-                return $resolved['value'];
+        $declaration = $this->resolveContinuationResult($sourceClass);
+        $context = new ContinuationContext(
+            finalType: $this->normalizeFinalType($finalTypeOverride ?? $declaration?->finalType),
+            unwrap: $declaration?->unwrap,
+            sourceRequestClass: $sourceClass,
+            mode: $this->resolveMode($sourceRequest, $declaration),
+        );
+        $resolver = $this->resolveStateResolver($declaration, $context);
+        $attempts = 0;
+        if ($context->mode !== ContinuationMode::Async) {
+            $attempts++;
+            $outcome = $this->evaluate($startResult, $context, $resolver, $attempts);
+            if ($outcome !== null) {
+                return $outcome;
             }
-
-            if ($startResult->isFailed()) {
-                $startResult->throw();
-            }
-
-            throw new ContinuationConfigurationException(
-                'Не удалось собрать финальный результат в режиме Sync из стартового ответа',
-            );
-        }
-
-        if ($mode === ContinuationMode::Auto) {
-            $resolved = $this->tryResolveFinal(
-                $this->resolveContinuationPayload($startResult),
-                $finalType,
-                $unwrap,
-            );
-            if ($resolved['resolved'] === true) {
-                return $resolved['value'];
+            if ($context->mode === ContinuationMode::Sync) {
+                throw $this->awaitError('final_not_ready', $startResult, $attempts);
             }
         }
 
-        $token = $this->extractToken($startResult);
-        if (!is_string($token) || $token === '') {
-            if ($startResult->isFailed()) {
-                $startResult->throw();
-            }
-
-            throw new ContinuationConfigurationException(
-                'Continuation token отсутствует в стартовом результате',
-            );
-        }
-
+        $token = $this->requireToken($startResult, $attempts);
         return $this->awaitByTokenInternal(
-            token: $token,
-            finalType: $finalType,
-            unwrap: $unwrap,
-            pollRequestClass: $pollRequestClass,
-            options: $options,
+            $token,
+            $context,
+            $resolver,
+            $declaration->pollRequest ?? $this->client->getConfig()->defaultPollRequest,
+            $options ?? new ContinuationAwaitOptions(),
+            $attempts,
         );
     }
 
@@ -114,23 +95,25 @@ final readonly class ContinuationService
         if ($sourceClass === '') {
             throw new ContinuationConfigurationException('sourceRequestClass не должен быть пустым');
         }
-
-        $continuation = $this->resolveContinuationResult($sourceClass);
-        if (!$continuation instanceof ContinuationResult) {
+        $declaration = $this->resolveContinuationResult($sourceClass);
+        if ($declaration === null) {
             throw new ContinuationConfigurationException(
                 'Для sourceRequestClass не задан атрибут ContinuationResult: ' . $sourceClass,
             );
         }
-
-        $pollRequestClass = $continuation->pollRequest ?? $this->client->getConfig()->defaultPollRequest;
-
-        return $this->awaitByTokenInternal(
-            token: $token,
-            finalType: $continuation->finalType,
-            unwrap: $continuation->unwrap,
-            pollRequestClass: $pollRequestClass,
-            options: $options ?? new ContinuationAwaitOptions(),
+        $context = new ContinuationContext(
+            $this->normalizeFinalType($declaration->finalType),
+            $declaration->unwrap,
+            $sourceClass,
+            ContinuationMode::Async,
         );
+        return $this->awaitByTokenInternal(
+            $token,
+            $context,
+            $this->resolveStateResolver($declaration, $context),
+            $declaration->pollRequest ?? $this->client->getConfig()->defaultPollRequest,
+            $options ?? new ContinuationAwaitOptions(),
+        )->value;
     }
 
     public function awaitByTokenAs(
@@ -138,94 +121,184 @@ final readonly class ContinuationService
         string $finalType,
         ?ContinuationAwaitOptions $options = null,
     ): mixed {
+        $context = new ContinuationContext(
+            $this->normalizeFinalType($finalType),
+            null,
+            null,
+            ContinuationMode::Async,
+        );
         return $this->awaitByTokenInternal(
-            token: $token,
-            finalType: $finalType,
-            unwrap: null,
-            pollRequestClass: $this->client->getConfig()->defaultPollRequest,
-            options: $options ?? new ContinuationAwaitOptions(),
+            $token,
+            $context,
+            $this->resolveStateResolver(null, $context),
+            $this->client->getConfig()->defaultPollRequest,
+            $options ?? new ContinuationAwaitOptions(),
+        )->value;
+    }
+
+    public function hydrateOutcome(ContinuationOutcome $outcome, string $finalType): ContinuationOutcome
+    {
+        $type = $this->normalizeFinalType($finalType);
+        $shapeError = !is_array($outcome->payload) && !is_object($outcome->payload);
+        try {
+            if ($shapeError) {
+                throw HydrationException::invalidValue(
+                    'unexpected_response_shape',
+                    $type,
+                    get_debug_type($outcome->payload),
+                );
+            }
+            $value = $this->hydrator->hydrate($outcome->payload, $type);
+        } catch (HydrationException $exception) {
+            $prefix = $outcome->path ?? ($shapeError ? '$' : '');
+            if ($prefix !== '') {
+                $exception = $exception->prependPath($prefix);
+            }
+            throw $this->awaitError(
+                'final_hydration_failed',
+                $outcome->lastResult,
+                $outcome->attempts,
+                $exception,
+            );
+        }
+
+        return new ContinuationOutcome(
+            $value,
+            $outcome->payload,
+            $outcome->path,
+            $outcome->lastResult,
+            $outcome->attempts,
         );
     }
 
     private function awaitByTokenInternal(
         string $token,
-        ?string $finalType,
-        ?string $unwrap,
+        ContinuationContext $context,
+        ContinuationStateResolverInterface $resolver,
         ?string $pollRequestClass,
         ContinuationAwaitOptions $options,
-    ): mixed {
+        int $attempts = 0,
+    ): ContinuationOutcome {
         if ($pollRequestClass === null || trim($pollRequestClass) === '') {
             throw new ContinuationConfigurationException(
                 'Не задан poll request: укажите ContinuationResult.pollRequest или ClientConfig.defaultPollRequest',
             );
         }
-
         $currentToken = trim($token);
         if ($currentToken === '') {
             throw new ContinuationConfigurationException('Continuation token не должен быть пустым');
         }
 
-        for ($attempt = 1; $attempt <= $options->maxAttempts; $attempt++) {
-            $pollResult = $this->sendPollRequest($pollRequestClass, $currentToken);
-            $resolved = $this->tryResolveFinal(
-                $this->resolveContinuationPayload($pollResult),
-                $finalType,
-                $unwrap,
-            );
-            if ($resolved['resolved'] === true) {
-                return $resolved['value'];
+        for ($poll = 1; $poll <= $options->maxAttempts; $poll++) {
+            $result = $this->sendPollRequest($pollRequestClass, $currentToken);
+            $attempts++;
+            $outcome = $this->evaluate($result, $context, $resolver, $attempts);
+            if ($outcome !== null) {
+                return $outcome;
             }
-
-            $nextToken = $this->extractToken($pollResult);
-            if (is_string($nextToken) && trim($nextToken) !== '') {
-                $currentToken = trim($nextToken);
-
-                if ($attempt < $options->maxAttempts && $options->intervalMs > 0) {
-                    usleep($options->intervalMs * 1000);
-                }
-
-                continue;
+            $currentToken = $this->requireToken($result, $attempts);
+            if ($poll === $options->maxAttempts) {
+                throw $this->awaitError('attempts_exhausted', $result, $attempts);
             }
-
-            if ($pollResult->isFailed()) {
-                $pollResult->throw();
+            if ($options->intervalMs > 0) {
+                usleep($options->intervalMs * 1000);
             }
-
-            throw new ContinuationConfigurationException(
-                'Polling не вернул финальные данные и continuation token для следующей попытки',
-            );
         }
 
-        throw new ContinuationConfigurationException(
-            'Превышен лимит polling попыток: ' . $options->maxAttempts,
-        );
+        // ContinuationAwaitOptions запрещает нулевой лимит.
+        throw new ContinuationConfigurationException('Лимит polling должен быть положительным');
     }
 
-    /**
-     * Возвращает payload для continuation-логики с fallback-цепочкой.
-     *
-     * Порядок:
-     * - hydrated data из ExecutionResult;
-     * - debug response payload (если debug включён);
-     * - payload из ошибки первого failed-ответа.
-     */
-    private function resolveContinuationPayload(ExecutionResult $result): mixed
+    private function evaluate(
+        ExecutionResult $result,
+        ContinuationContext $context,
+        ContinuationStateResolverInterface $resolver,
+        int $attempts,
+    ): ?ContinuationOutcome {
+        $state = $resolver->resolve($result, $context);
+        if ($state->status === ContinuationStatus::Pending) {
+            return null;
+        }
+        if ($state->status === ContinuationStatus::Failed) {
+            $result->throw();
+            throw $this->awaitError('continuation_failed', $result, $attempts);
+        }
+        $outcome = new ContinuationOutcome($state->payload, $state->payload, $state->path, $result, $attempts);
+
+        return $context->finalType === null ? $outcome : $this->hydrateOutcome($outcome, $context->finalType);
+    }
+
+    private function awaitError(
+        string $reason,
+        ExecutionResult $result,
+        int $attempts,
+        ?HydrationException $previous = null,
+    ): ContinuationAwaitException {
+        $message = match ($reason) {
+            'final_hydration_failed' => 'Не удалось преобразовать готовый результат ожидания',
+            'final_not_ready' => 'Финальный результат ещё не готов в режиме Sync',
+            'continuation_token_missing' => 'Ожидание не получило token для продолжения',
+            'attempts_exhausted' => 'Исчерпан лимит polling-запросов',
+            default => 'Протокол завершил ожидание ошибкой',
+        };
+        $exception = new ContinuationAwaitException($message, $reason, $attempts, $result, $previous);
+        (new AuditLogger($this->client->getConfig()))->log(LogLevel::ERROR, $message, $exception->context());
+        return $exception;
+    }
+
+    private function requireToken(ExecutionResult $result, int $attempts): string
     {
-        if ($result->data !== null) {
-            return $result->data;
+        $extractor = $this->client->getConfig()->continuationTokenExtractor;
+        if ($extractor === null) {
+            throw new ContinuationConfigurationException(
+                'Для продолжения ожидания требуется continuationTokenExtractor',
+            );
         }
-
-        $debugPayload = $result->debug?->response?->json();
-        if (is_array($debugPayload)) {
-            return $debugPayload;
+        $token = $extractor->extract($result);
+        if ($token !== null && trim($token) !== '') {
+            return trim($token);
         }
+        $result->throw();
+        throw $this->awaitError('continuation_token_missing', $result, $attempts);
+    }
 
-        $errorPayload = $result->errors->first()?->response?->json();
-        if (is_array($errorPayload)) {
-            return $errorPayload;
+    private function resolveStateResolver(
+        ?ContinuationResult $declaration,
+        ContinuationContext $context,
+    ): ContinuationStateResolverInterface {
+        $class = $declaration?->stateResolver;
+        if ($class !== null) {
+            if (!is_subclass_of($class, ContinuationStateResolverInterface::class)) {
+                throw new ContinuationConfigurationException('Неверный класс stateResolver: ' . $class);
+            }
+            $reflection = new ReflectionClass($class);
+            $requiredParameters = $reflection->getConstructor()?->getNumberOfRequiredParameters() ?? 0;
+            if (!$reflection->isInstantiable() || $requiredParameters > 0) {
+                throw new ContinuationConfigurationException(
+                    'stateResolver должен создаваться без аргументов: ' . $class,
+                );
+            }
+            return new $class();
         }
+        if ($context->unwrap !== null && trim($context->unwrap) !== '') {
+            return new FinalPathStateResolver();
+        }
+        return $this->client->getConfig()->continuationStateResolver
+            ?? throw new ContinuationConfigurationException(
+                'Для ожидания требуется unwrap или continuationStateResolver',
+            );
+    }
 
-        return $result->data;
+    private function normalizeFinalType(?string $type): ?string
+    {
+        if ($type === null) {
+            return null;
+        }
+        $type = trim($type);
+        if ($type === '' || !class_exists($type)) {
+            throw new ContinuationConfigurationException('Класс финального DTO не найден: ' . $type);
+        }
+        return $type;
     }
 
     private function sendPollRequest(string $pollRequestClass, string $token): ExecutionResult
@@ -356,64 +429,6 @@ final readonly class ContinuationService
                 'Не удалось привести token к bool для параметра: ' . $parameter,
             ),
         };
-    }
-
-    /**
-     * @return array{resolved: bool, value: mixed}
-     */
-    private function tryResolveFinal(mixed $data, ?string $finalType, ?string $unwrap): array
-    {
-        $payload = $this->applyUnwrap($data, $unwrap);
-
-        if ($finalType === null || trim($finalType) === '') {
-            if ($payload === null) {
-                return ['resolved' => false, 'value' => null];
-            }
-
-            return ['resolved' => true, 'value' => $payload];
-        }
-
-        $resolvedType = trim($finalType);
-        if (!class_exists($resolvedType)) {
-            throw new ContinuationConfigurationException('Класс финального DTO не найден: ' . $resolvedType);
-        }
-
-        if (is_object($payload) && $payload instanceof $resolvedType) {
-            return ['resolved' => true, 'value' => $payload];
-        }
-
-        if (!is_array($payload) && !is_object($payload)) {
-            return ['resolved' => false, 'value' => null];
-        }
-
-        try {
-            $dto = Hydrator::default()->hydrate($payload, $resolvedType);
-        } catch (Throwable) {
-            return ['resolved' => false, 'value' => null];
-        }
-
-        return ['resolved' => true, 'value' => $dto];
-    }
-
-    private function applyUnwrap(mixed $data, ?string $unwrap): mixed
-    {
-        if ($unwrap === null || trim($unwrap) === '') {
-            return $data;
-        }
-
-        $unwrapped = ArrayPath::getByPath($data, $unwrap);
-
-        return $unwrapped ?? $data;
-    }
-
-    private function extractToken(ExecutionResult $result): ?string
-    {
-        $extractor = $this->client->getConfig()->continuationTokenExtractor;
-        if ($extractor === null) {
-            return null;
-        }
-
-        return $extractor->extract($result);
     }
 
     private function resolveMode(?RequestInterface $sourceRequest, ?ContinuationResult $continuation): ContinuationMode

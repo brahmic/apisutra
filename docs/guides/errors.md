@@ -174,6 +174,36 @@ SDK возвращает ошибку `ErrorCode::RequestContractViolation` до
 - `EarlyReturnException` — завершить пайплайн успехом без HTTP
 - `RetryableException` — форсировать retry на уровне обработки
 
+## Ошибки ожидания continuation
+
+`ContinuationAwaitException` находится в `Brahmic\ApiSutra\Exceptions\Continuation`
+и наследует `SdkException`. Его `reason` различает:
+
+| reason | Причина |
+| --- | --- |
+| `final_hydration_failed` | Ready-payload не преобразуется в финальный DTO, включая неверную форму |
+| `final_not_ready` | Sync получил Pending |
+| `continuation_token_missing` | Pending без token у результата без ошибки |
+| `attempts_exhausted` | После последнего разрешённого poll результат остаётся Pending |
+| `continuation_failed` | Resolver вернул Failed для результата без ошибки |
+
+`attempts` — число оценённых ответов, `lastResult` — последний `ExecutionResult`
+с HTTP-ответом. При `final_hydration_failed` previous содержит исходную
+`HydrationException`, путь которой включает `unwrap`/path resolver. Неверная форма
+Ready-payload даёт `unexpected_response_shape` с путём payload или `$`.
+Это правило действует также при смене типа в кешированном `awaitAs()`.
+
+`context()` и автоматический лог содержат reason, attempts, httpStatus, traceId
+и вложенный hydration-контекст. Payload, token и значения полей туда не включаются;
+исходный ответ доступен явно через `lastResult` при любом значении debug.
+Failed и Pending без token доставляют исходное исключение failed-результата через
+`throw()`; исключения resolver и конфигурации DTO не оборачиваются.
+Неверная настройка ожидания остаётся `ContinuationConfigurationException`.
+
+Критерии готовности, примеры и [миграция](./provider-async-await.md#миграция-с-эвристического-ожидания)
+описаны в руководстве ожидания. Стартовый `send()`/`raw()` сохраняет поведение
+result-first и `throwOnErrors`; ошибка await не заменяет его результат.
+
 ## Где детали
 - Ошибки и статусы: `docs/glossary/results.md`
 - Обработка ошибок: `docs/technical/error-handling.md`

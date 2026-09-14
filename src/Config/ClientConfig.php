@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brahmic\ApiSutra\Config;
 
+use Brahmic\ApiSutra\Contracts\Interfaces\Continuation\ContinuationStateResolverInterface;
 use Brahmic\ApiSutra\RateLimiting\RateLimitBackendInterface;
 use Brahmic\ApiSutra\Diagnostics\RedactionPolicy;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthenticatorInterface;
@@ -51,7 +52,8 @@ use Throwable;
  * - providerCatalogRegistry: read-only статические provider catalogs (DX metadata), не связанные с runtime result meta;
  * - defaultContinuationMode: дефолт mode для optional async;
  * - defaultPollRequest: poll-request fallback для awaitByToken/await;
- * - continuationModeApplicator: provider-specific mapping mode в transport-поля.
+ * - continuationModeApplicator: provider-specific mapping mode в transport-поля;
+ * - continuationStateResolver: явное определение Pending/Ready/Failed для ожидания.
  *
  * @see docs/guides/client-config/README.md
  * @see docs/guides/client-config/responses-errors.md
@@ -126,6 +128,7 @@ final readonly class ClientConfig
         public OriginPolicy $originPolicy = new OriginPolicy(),
         public bool $includeClientQuota = true,
         public ?RateLimitBackendInterface $rateLimitBackend = null,
+        public ?ContinuationStateResolverInterface $continuationStateResolver = null,
     ) {
         if ($cache instanceof CacheConfig) {
             $this->cacheConfig = $cache;
@@ -212,6 +215,7 @@ final readonly class ClientConfig
             'defaultContinuationMode' => $this->defaultContinuationMode,
             'defaultPollRequest' => $this->defaultPollRequest,
             'continuationModeApplicator' => $this->continuationModeApplicator,
+            'continuationStateResolver' => $this->continuationStateResolver,
             'redaction' => $this->redaction,
             'textBooleanFormat' => $this->textBooleanFormat,
             'originPolicy' => $this->originPolicy,
