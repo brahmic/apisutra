@@ -288,30 +288,53 @@ final readonly class RequestPartsCollector
 
         $cached = $this->cache?->get($cacheKey);
         if (is_array($cached)) {
-            return $cached;
+            $properties = $cached['properties'];
+            foreach ($cached['attributeFactories'] as $index => $factories) {
+                $values = $this->resolvePropertyAttributes([(array) $properties[$index]], [$factories], true);
+                $properties[$index] = new PropertyMeta(...$values[0]);
+            }
+            return $properties;
         }
 
         $reflection = new ReflectionClass($request);
         $properties = [];
+        $attributeFactories = [];
 
         foreach ($reflection->getProperties() as $property) {
+            $factories = [];
+            $attributes = $this->getPropertyAttributes($property, [
+                'ignore' => Ignore::class,
+                'path' => Path::class,
+                'query' => Query::class,
+                'body' => Body::class,
+                'bodyRoot' => BodyRoot::class,
+                'header' => Header::class,
+                'file' => File::class,
+                'cast' => CastAttribute::class,
+            ], $factories);
             $properties[] = new PropertyMeta(
-                name: $property->getName(),
-                property: $property,
-                isPublic: $property->isPublic(),
-                isStatic: $property->isStatic(),
-                ignore: $this->getAttribute($property, Ignore::class),
-                path: $this->getAttribute($property, Path::class),
-                query: $this->getAttribute($property, Query::class),
-                body: $this->getAttribute($property, Body::class),
-                bodyRoot: $this->getAttribute($property, BodyRoot::class),
-                header: $this->getAttribute($property, Header::class),
-                file: $this->getAttribute($property, File::class),
-                cast: $this->getAttribute($property, CastAttribute::class),
+                $property->getName(),
+                $property,
+                $property->isPublic(),
+                $property->isStatic(),
+                ...$attributes,
             );
+            if ($factories !== []) {
+                $attributeFactories[array_key_last($properties)] = $factories;
+            }
         }
 
-        $this->cache?->set($cacheKey, $properties);
+        if ($this->cache?->isEnabled()) {
+            $templates = $properties;
+            foreach ($attributeFactories as $index => $factories) {
+                $values = $this->resolvePropertyAttributes([(array) $properties[$index]], [$factories], false);
+                $templates[$index] = new PropertyMeta(...$values[0]);
+            }
+            $this->cache->set($cacheKey, [
+                'properties' => $templates,
+                'attributeFactories' => $attributeFactories,
+            ]);
+        }
 
         return $properties;
     }

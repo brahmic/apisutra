@@ -182,11 +182,12 @@ final class DtoSerializer
 
         $cached = $this->cache?->get($cacheKey);
         if (is_array($cached)) {
-            return $cached;
+            return $this->resolvePropertyAttributes($cached['properties'], $cached['attributeFactories'], true);
         }
 
         $reflection = new ReflectionClass($dto);
         $properties = [];
+        $attributeFactories = [];
 
         foreach ($reflection->getProperties() as $property) {
             if ($property->isStatic()) {
@@ -209,18 +210,29 @@ final class DtoSerializer
                 );
             }
 
+            $factories = [];
+            $attributes = $this->getPropertyAttributes($property, [
+                'to' => To::class,
+                'map' => Map::class,
+                'cast' => CastAttribute::class,
+                'dateTimeTo' => DateTimeTo::class,
+            ], $factories);
             $properties[] = [
                 'name' => $property->getName(),
                 'property' => $property,
-                'to' => $this->getAttribute($property, To::class),
-                'map' => $this->getAttribute($property, Map::class),
-                'cast' => $this->getAttribute($property, CastAttribute::class),
-                'dateTimeTo' => $this->getAttribute($property, DateTimeTo::class),
                 'isStatic' => $property->isStatic(),
-            ];
+            ] + $attributes;
+            if ($factories !== []) {
+                $attributeFactories[array_key_last($properties)] = $factories;
+            }
         }
 
-        $this->cache?->set($cacheKey, $properties);
+        if ($this->cache?->isEnabled()) {
+            $this->cache->set($cacheKey, [
+                'properties' => $this->resolvePropertyAttributes($properties, $attributeFactories, false),
+                'attributeFactories' => $attributeFactories,
+            ]);
+        }
 
         return $properties;
     }

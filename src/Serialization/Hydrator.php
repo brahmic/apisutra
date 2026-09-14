@@ -260,7 +260,7 @@ final class Hydrator
 
     /**
      * @param array<string, mixed> $values
-     * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool, default: mixed}> $constructor
+     * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool}> $constructor
      * @return array<string, mixed>
      */
     private function buildConstructorArguments(array $values, array $constructor): array
@@ -282,9 +282,7 @@ final class Hydrator
                 continue;
             }
 
-            if ($parameter['hasDefault']) {
-                $args[$paramName] = $parameter['default'];
-            } elseif (!$parameter['reflection']->isVariadic()) {
+            if (!$parameter['hasDefault'] && !$parameter['reflection']->isVariadic()) {
                 throw HydrationException::invalidValue(
                     'required_field_missing',
                     (string) ($parameter['reflection']->getType() ?? 'mixed'),
@@ -309,7 +307,7 @@ final class Hydrator
      *   dateTimeFrom: ?DateTimeFrom,
      *   default: ?DefaultValue
      * }> $properties
-     * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool, default: mixed}> $constructor
+     * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool}> $constructor
      * @return array<string, array{property: ReflectionProperty, value: mixed}>
      */
     private function buildRemainingPropertyAssignments(array $values, array $properties, array $constructor): array
@@ -703,7 +701,7 @@ final class Hydrator
      *     emptyStringAsNull: ?EmptyStringAsNull,
      *     default: ?DefaultValue
      *   }>,
-     *   constructor: ?array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool, default: mixed}>
+     *   constructor: ?array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool}>
      * }
      */
     private function getHydrationMetadata(string $dtoClass): array
@@ -712,28 +710,40 @@ final class Hydrator
 
         $cached = $this->cache?->get($cacheKey);
         if (is_array($cached)) {
+            $cached['properties'] = $this->resolvePropertyAttributes(
+                $cached['properties'],
+                $cached['attributeFactories'],
+                true,
+            );
             return $cached;
         }
 
         $reflection = new ReflectionClass($dtoClass);
         $properties = [];
+        $attributeFactories = [];
 
         foreach ($reflection->getProperties() as $property) {
             if ($property->isStatic()) {
                 continue;
             }
 
+            $factories = [];
+            $attributes = $this->getPropertyAttributes($property, [
+                'from' => From::class,
+                'map' => Map::class,
+                'nested' => Nested::class,
+                'cast' => CastAttribute::class,
+                'dateTimeFrom' => DateTimeFrom::class,
+                'emptyStringAsNull' => EmptyStringAsNull::class,
+                'default' => DefaultValue::class,
+            ], $factories);
             $properties[] = [
                 'name' => $property->getName(),
                 'property' => $property,
-                'from' => $this->getAttribute($property, From::class),
-                'map' => $this->getAttribute($property, Map::class),
-                'nested' => $this->getAttribute($property, Nested::class),
-                'cast' => $this->getAttribute($property, CastAttribute::class),
-                'dateTimeFrom' => $this->getAttribute($property, DateTimeFrom::class),
-                'emptyStringAsNull' => $this->getAttribute($property, EmptyStringAsNull::class),
-                'default' => $this->getAttribute($property, DefaultValue::class),
-            ];
+            ] + $attributes;
+            if ($factories !== []) {
+                $attributeFactories[array_key_last($properties)] = $factories;
+            }
         }
 
         $constructor = $reflection->getConstructor();
@@ -745,9 +755,6 @@ final class Hydrator
                     'name' => $parameter->getName(),
                     'reflection' => $parameter,
                     'hasDefault' => $parameter->isDefaultValueAvailable(),
-                    'default' => $parameter->isDefaultValueAvailable()
-                        ? $parameter->getDefaultValue()
-                        : null,
                 ];
             }
         }
@@ -755,9 +762,14 @@ final class Hydrator
         $metadata = [
             'properties' => $properties,
             'constructor' => $params,
+            'attributeFactories' => $attributeFactories,
         ];
 
-        $this->cache?->set($cacheKey, $metadata);
+        if ($this->cache?->isEnabled()) {
+            $template = $metadata;
+            $template['properties'] = $this->resolvePropertyAttributes($properties, $attributeFactories, false);
+            $this->cache->set($cacheKey, $template);
+        }
 
         return $metadata;
     }

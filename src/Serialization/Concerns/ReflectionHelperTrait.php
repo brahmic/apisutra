@@ -5,13 +5,62 @@ declare(strict_types=1);
 namespace Brahmic\ApiSutra\Serialization\Concerns;
 
 use Brahmic\ApiSutra\Serialization\PropertyTypeInspector;
+use ReflectionAttribute;
 use ReflectionProperty;
+use UnitEnum;
 
 trait ReflectionHelperTrait
 {
-    private function getAttribute(ReflectionProperty $property, string $class): ?object
+    /**
+     * @param array<string, class-string> $classes
+     * @param array<string, ReflectionAttribute> $factories
+     * @return array<string, object|null>
+     */
+    private function getPropertyAttributes(ReflectionProperty $property, array $classes, array &$factories): array
     {
-        return ($property->getAttributes($class)[0] ?? null)?->newInstance();
+        $attributes = [];
+        foreach ($classes as $key => $class) {
+            $declaration = $property->getAttributes($class)[0] ?? null;
+            $instance = $declaration?->newInstance();
+            $attributes[$key] = $instance;
+            // Приведение раскрывает также private/protected свойства, но не вызывает пользовательские методы.
+            if ($instance !== null && $this->containsAttributeObject((array) $instance)) {
+                $factories[$key] = $declaration;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /** @param array<mixed> $values */
+    private function containsAttributeObject(array $values): bool
+    {
+        foreach ($values as $value) {
+            if (is_object($value) && !$value instanceof UnitEnum) {
+                return true;
+            }
+            if (is_array($value) && $this->containsAttributeObject($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $properties
+     * @param array<int, array<string, ReflectionAttribute>> $factories
+     * @return array<int, array<string, mixed>>
+     */
+    private function resolvePropertyAttributes(array $properties, array $factories, bool $materialize): array
+    {
+        foreach ($factories as $index => $attributes) {
+            foreach ($attributes as $key => $declaration) {
+                $properties[$index][$key] = $materialize ? $declaration->newInstance() : null;
+            }
+        }
+
+        return $properties;
     }
 
     private function getPrimaryType(ReflectionProperty $property): ?string

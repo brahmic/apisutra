@@ -75,6 +75,11 @@ $rawJson = $result->requestDebugJson(false);
 - `Local/Testing` — отключает кеш метаданных атрибутов
 - `Production/Staging` — включает кеш метаданных
 
+Кеш хранит описание деклараций, а не общие объекты из constructor defaults или
+аргументов атрибутов. Выбор environment не меняет их изоляцию между DTO и операциями
+одного клиента. См. [defaults DTO](../dto.md#значения-по-умолчанию-и-изоляция-объектов)
+и [объектные аргументы атрибутов](../casts.md#объектные-аргументы-атрибутов).
+
 Также `environment` используется в auto‑discovery для включения кеша
 в режиме `DiscoveryCacheMode::Auto`.
 
