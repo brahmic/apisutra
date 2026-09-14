@@ -1,0 +1,63 @@
+{
+  "head": "eeb0b6a6154f8f95799be08f1389b799b19a6c24",
+  "php": "8.4.15",
+  "old_probes": {
+    "review-probe": {
+      "byte_identical": true,
+      "checks": 20
+    },
+    "followup-probe": {
+      "byte_identical": true,
+      "checks": 10
+    },
+    "clarification-probe": {
+      "byte_identical": true,
+      "checks": 14
+    }
+  },
+  "previous_hashes_verified": 12,
+  "reviewed_sources_verified": 24,
+  "029_files_verified": 45,
+  "metadata_checks": 33,
+  "php_files_linted": 11,
+  "tests": {
+    "passed": 433,
+    "assertions": 1385
+  },
+  "source_sha256": {
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/AttributeDefaultDto.php": "574b64ab29680c28ef098c2712f153f682891472f0744b77bcf4e6a8ff6a25b1",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/BodyDtoRequest.php": "bcfcd3f1f0a83e932f8fc4cbaad47fb1769eda9e72ccf5e8f22cefba70556253",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/CastDto.php": "a1ae925bb3feaef8eafad2d4532fb1b848b9e94d56e4d4a6ca79565774b36099",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/CastRequest.php": "651240c084cf5bf3c524f9e9658eb97886c0506e06708f86595ca691122ea1e6",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/CompositeDefaultsRequest.php": "c6b0225bf936a588cf18e7cea50ec0f8efd6c7f934117efc76b445279985837f",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/CountingCast.php": "5c556cc3d560e86189f947c7641993ef6e799b8cb5219e693f63e52970b17584",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/DefaultsDto.php": "ad4e1c6b08db4de7aef25eba9c11e2649c4d47e598ac700c873f6c2422f58ebd",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/DefaultsRequest.php": "c63714dd09b17b73c16d4a9b829afdab428cb91af347a92d8869f3a067c1784b",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/MutableCounter.php": "791b0516cf22ba1b7d57f9e432d77c39fa910c464930db35371c42c37eb48b68",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/Fixtures/PaginatedDefaultsRequest.php": "6d38bf020e483d78a6ca775df15ca7e795f417660b99f9674d966a2ee2520120",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/metadata-probe.php": "84b9b9699bc86befa9c96302894eb7422893087249e19d5ac35fb1c391c497d0",
+    ".workflow/current/pln-031-metadata-value-isolation/artifacts/recheck.py": "316eafc5fe177e2fdd4a79101c77cee88df2658c65ab1451ff8697b23413dafb",
+    "composer.lock": "e969e14ac0bb263c871d8a7144803bf5178617001550da2765e81d2e5033186a",
+    "src/Attributes/AttributeMetadataCache.php": "f12b5cad315fa665eb7e675bfad521bc24a8ffe33a54e3251953e3dacd8ef2cd",
+    "src/Attributes/AttributeRegistry.php": "91ba6e644d07407b2ef40fb077082a4ee5a8dc4e972e2de5ef61f51ed745247d",
+    "src/Attributes/DataTransfer/Cast.php": "46516c6a72ba2e86946f7bd117d309396d611413c1d3757c58236909ea7a6900",
+    "src/Attributes/DataTransfer/DefaultValue.php": "e27f1f3c2c7dfcd59942261b8ec00aa84fb23afb61ed68e6080a29fd821b226d",
+    "src/Config/ClientConfig.php": "5f6561cb6ef6298b0678f7713147709b26740e0d76530758ace06974b6a2c9ca",
+    "src/Core/AbstractClient.php": "2b7056645d114048e2be5b194f72b0f8aa6c85a180b5d1975e963b90774e4354",
+    "src/DataTransfer/AbstractDto.php": "4351f3dc44adf28e4cfd429b919d984b289388b7161c0f812832a559077de1d4",
+    "src/DataTransfer/AbstractPaginationContainerDto.php": "1450bfbeed2036a9c36752e97a8f85d2c4ac67d1f75f3e8b9a6ce855bc84cf9e",
+    "src/Laravel/SdkServiceProvider.php": "0a1f94a0a7d3c05e3a60bec674a23db63bbc575d3d97373bc9593b6fcbc75b73",
+    "src/Pipeline/Execution/CompositeFlow.php": "05432f15321ae17caacad5fec5f3e65b475394bc790821b35001ede5b893b3bd",
+    "src/Pipeline/Hydration/ResponseHydrator.php": "ee4ff2d23c09e5cb04234160a991cc969f7fcc6f29b48ed66f2b381d11734b30",
+    "src/Resolver/ClientRegistry.php": "eb8796e1a0767adfb9c752ec201424f08dd09853e14a83d0371c683aaaff3212",
+    "src/Serialization/BuiltinHydrationCaster.php": "abad04f537a6f43fb98b084c7a71530bd6c4aa8ec1d965ca45976914106c8431",
+    "src/Serialization/Concerns/ReflectionHelperTrait.php": "e11c9819dc9933233f71753854413de6dfdaca148febbe0e00259839d8adaac0",
+    "src/Serialization/DtoSerializer.php": "551fa82459c5ff3188d6894cf2720df5171e760a70eb63a0685a03e380928f77",
+    "src/Serialization/Hydrator.php": "1b670b71cec046cfdab087391ce491552f40b6c8747272fb1d8ec3b0ae46a886",
+    "src/Serialization/RequestPartsCollector.php": "65f937137ad0a67d0887c4aa328d69ab9d406e73e4958c1b2f287d187a0d50e9",
+    "src/Serialization/SerializationValueResolver.php": "9a2e1b550abe9f8a02f5a48ce99a5f25822b2abed26578e0f4c6575578b6179c",
+    "src/Serialization/Serializer.php": "0a0fafd9875e2999346b7554485a3468848cab42ec058e57aa58c5782b5369f4",
+    "tests/Stubs/Dto/PaginationContainerDto.php": "2f3595aab7cbbb0a45e95f54731e38af1ef707e8f9289a0c64e5d007aa58e765",
+    "tests/Stubs/TestClient.php": "ade6ae16b188acbbe8b639d68d0c991c8613865c9d1aa3b35a93d403610e6917"
+  }
+}

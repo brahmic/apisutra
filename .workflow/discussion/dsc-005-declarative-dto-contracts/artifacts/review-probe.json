@@ -1,0 +1,142 @@
+{
+    "checks": {
+        "direct_structured_error": true,
+        "poll_with_token": true,
+        "poll_without_token": true,
+        "sync_invalid": true,
+        "untyped_await": true,
+        "cached_error_loses_previous": true,
+        "sync_and_cached_do_not_poll": true,
+        "explicit_null_override": true,
+        "each_hides_wrapper_meta": true,
+        "value_keeps_discriminator": true,
+        "key_hides_wrapper_and_meta": true,
+        "standalone_null_context": true,
+        "callbacks_receive_pipeline_context": true,
+        "pipeline_context_has_no_hydrator": true,
+        "extra_serializes_under_own_name": true,
+        "json_integer_token": true,
+        "json_fraction_token": true,
+        "two_to_53_exact": true,
+        "two_to_53_plus_one_loses_value": true,
+        "larger_even_can_be_exact": true
+    },
+    "observations": {
+        "direct": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "reason": "invalid_field_type",
+            "path": "value",
+            "previous": null,
+            "message": "Некорректные данные в value: ожидается string, получено array"
+        },
+        "poll_with_token": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ContinuationConfigurationException",
+            "reason": null,
+            "path": null,
+            "previous": null,
+            "message": "Превышен лимит polling попыток: 2",
+            "requests": 2
+        },
+        "poll_without_token": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ContinuationConfigurationException",
+            "reason": null,
+            "path": null,
+            "previous": null,
+            "message": "Polling не вернул финальные данные и continuation token для следующей попытки",
+            "requests": 1
+        },
+        "sync_invalid": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ContinuationConfigurationException",
+            "reason": null,
+            "path": null,
+            "previous": null,
+            "message": "Не удалось собрать финальный результат в режиме Sync из стартового ответа"
+        },
+        "cached_invalid": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ContinuationConfigurationException",
+            "reason": null,
+            "path": null,
+            "previous": null,
+            "message": "Не удалось привести cached await-результат к типу Brahmic\\ApiSutra\\Tests\\Stubs\\Dto\\ContinuationFinalDto: Некорректные данные в value: ожидается string, получено array"
+        },
+        "child_inputs": {
+            "each": {
+                "id": 7,
+                "probe": "ok"
+            },
+            "value": {
+                "type": "known",
+                "id": 7,
+                "probe": "ok"
+            },
+            "key": {
+                "id": 7,
+                "probe": "ok"
+            }
+        },
+        "standalone_callbacks": [
+            {
+                "kind": "provider",
+                "context": null
+            },
+            {
+                "kind": "cast",
+                "context": null
+            },
+            {
+                "kind": "provider",
+                "context": null
+            },
+            {
+                "kind": "cast",
+                "context": null
+            },
+            {
+                "kind": "provider",
+                "context": null
+            },
+            {
+                "kind": "cast",
+                "context": null
+            }
+        ],
+        "http_context_callbacks": [
+            {
+                "kind": "provider",
+                "context": "Brahmic\\ApiSutra\\VO\\Pipeline\\PipelineContext"
+            },
+            {
+                "kind": "cast",
+                "context": "Brahmic\\ApiSutra\\VO\\Pipeline\\PipelineContext"
+            },
+            {
+                "kind": "provider",
+                "context": "Brahmic\\ApiSutra\\VO\\Pipeline\\PipelineContext"
+            },
+            {
+                "kind": "cast",
+                "context": "Brahmic\\ApiSutra\\VO\\Pipeline\\PipelineContext"
+            },
+            {
+                "kind": "provider",
+                "context": "Brahmic\\ApiSutra\\VO\\Pipeline\\PipelineContext"
+            },
+            {
+                "kind": "cast",
+                "context": "Brahmic\\ApiSutra\\VO\\Pipeline\\PipelineContext"
+            }
+        ],
+        "ordinary_extra_serialization": {
+            "id": 7,
+            "extra": {
+                "future": false
+            }
+        },
+        "integer_to_float": {
+            "9007199254740991": "9007199254740991",
+            "9007199254740992": "9007199254740992",
+            "9007199254740993": "9007199254740992",
+            "9007199254740994": "9007199254740994"
+        }
+    }
+}

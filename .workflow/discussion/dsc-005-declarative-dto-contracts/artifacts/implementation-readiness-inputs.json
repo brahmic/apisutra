@@ -1,0 +1,31 @@
+{
+  "reviewed_documents": 20,
+  "sha256": {
+    ".workflow/README.md": "a5e99a4ba8d879637bb5385e6e4d694cd864eca7cf06bd6d60ce4c273e11e56d",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/clarification-review.md": "29933c699b185da2e92c2fa9ad7337844bb18dcf72620d7243bf3e370dbce509",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/dsc-005-readme.md": "55f359721b1b4fcea9d7c2aa61f97fa809b5c7e9f79db5451b220a3665b49f08",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/followup-review.md": "7b00e7a1540eba39aed6f88beb0239b4683eae92ef5ad0e8b5a14de79f6b68f0",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/metadata-review.md": "ff05569015f497228f9ae39a47bc487561b48c512b23a6f26f0f64db22f68f40",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/peer-review.md": "fa0712d2d1fafc5fc69c175ff7608471cca0c3229e3a3f442c86105dac0af480",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/product-use-cases.md": "91e832ea037a876b24f0bb0c7e25f3f44de9ecc132de6473ea4fdeebfe5d7649",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/questions.md": "a2e72cb16b3c4fe4306ffeab20128696d75b10a1ef95e1b52358356e157c96ea",
+    ".workflow/current/pln-028-declarative-dto/acceptance.md": "f4ddad91e8b6f99d80e1f9485a24efd233c5cdec42097549d7926d0412929f9c",
+    ".workflow/current/pln-028-declarative-dto/contracts.md": "7868bdce41c63d17628bfb3728968a591b595b694f50183a94041b25cb090327",
+    ".workflow/current/pln-028-declarative-dto/pln-028-readme.md": "8a6a4f1ee0a50f4ef22e5efd6c87522e4537f5064288c72a31cf4cc119ecd1ee",
+    ".workflow/current/pln-028-declarative-dto/readiness.md": "fd67d68b7e6aee866f33691b92816ac32cfb6a2a0a797f0e0049826bf965314d",
+    ".workflow/current/pln-030-continuation-errors/acceptance.md": "1dcfca2c342058afaa41380477c27f1a569ec2de6b4a9e932027fab1ea83f911",
+    ".workflow/current/pln-030-continuation-errors/contracts.md": "db591b339a19a9effc47fb7e6a9bf82e4561733f20f4d306a0ac1d852d9e6b00",
+    ".workflow/current/pln-030-continuation-errors/pln-030-readme.md": "c8ec592439ceaf55c37a3e5a2b7e9627f882aeae6d4fd07c10e61633c00940eb",
+    ".workflow/current/pln-031-metadata-value-isolation/acceptance.md": "ed132d64c16812e8753bc77b9e2cfdfb2b38f0eb1de356cdd9f88a76f93f77fc",
+    ".workflow/current/pln-031-metadata-value-isolation/contracts.md": "d8b3e1332c31998d43dc11f97f73002a321438103ace45830604eaa0f8254067",
+    ".workflow/current/pln-031-metadata-value-isolation/pln-031-readme.md": "9aa2c7b958beac4760d8c765678a73a0466b95d668e490d9ed0208571e5a80d0",
+    ".workflow/adr/adr-001-continuation-readiness.md": "591949fa85f1bc702bf556436648dcfce52b7440092e76ca07f467abeef2b983",
+    ".workflow/adr/adr-002-external-hydration-rules.md": "ada601bc57b9bfd9de529411a9363c878f224802cb82e4ac85db7ff61c106e6a"
+  },
+  "links_including_report": {
+    "documents": 21,
+    "links": 294,
+    "errors": []
+  },
+  "report_probe_reproduced": true
+}

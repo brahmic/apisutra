@@ -1,0 +1,34 @@
+{
+    "checks": {
+        "plain_readonly_fixture": true,
+        "plain_direct_structured": true,
+        "plain_await_loses_error": true,
+        "no_http": true,
+        "native_dense_json_list": true,
+        "native_sparse_json_object": true,
+        "stable_dense_json_list": true,
+        "stable_sparse_json_list": true,
+        "dictionary_key_and_false_preserved": true,
+        "ordinary_serializer_preserves_carrier": true
+    },
+    "observations": {
+        "plain_direct": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "reason": "invalid_field_type",
+            "path": "id",
+            "previous": null
+        },
+        "plain_sync": {
+            "class": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ContinuationConfigurationException",
+            "reason": null,
+            "path": null,
+            "previous": null
+        },
+        "native_dense": "[{\"meta\":\"a\"},{\"meta\":\"b\"}]",
+        "native_sparse": "{\"1\":{\"meta\":\"b\"}}",
+        "stable_dense": "[{\"sourceKey\":0,\"remainder\":{\"meta\":\"a\"}},{\"sourceKey\":1,\"remainder\":{\"meta\":\"b\"}}]",
+        "stable_sparse": "[{\"sourceKey\":1,\"remainder\":{\"meta\":\"b\"}}]",
+        "stable_dictionary": "[{\"sourceKey\":\"record-b\",\"remainder\":{\"meta\":false}}]",
+        "dto_wire": "{\"id\":7,\"extra\":{\"rows\":[{\"sourceKey\":1,\"remainder\":{\"meta\":\"b\"}}]}}"
+    }
+}

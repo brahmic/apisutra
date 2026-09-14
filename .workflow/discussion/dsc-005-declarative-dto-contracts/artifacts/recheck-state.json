@@ -1,0 +1,10 @@
+{
+  "head": "eeb0b6a6154f8f95799be08f1389b799b19a6c24",
+  "php": "8.4.15",
+  "composer_lock_sha256": "e969e14ac0bb263c871d8a7144803bf5178617001550da2765e81d2e5033186a",
+  "probe_checks": 20,
+  "peer_review_equals_029": true,
+  "verified_029_files": 45,
+  "standalone_equals_readiness": true,
+  "node": "v22.21.1"
+}

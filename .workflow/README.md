@@ -106,7 +106,12 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 - [Декларативное преобразование DTO: проверка фидбека AS-1–AS-4](audit/aud-006-declarative-dto/aud-006-readme.md)
 - [Одиночный Nested, пути provider и контракт casts — завершено](completed/pln-029-hydration-defects/pln-029-readme.md)
+- [Готовность continuation-результата и сохранение ошибок await — новый план](current/pln-030-continuation-errors/pln-030-readme.md)
+- [Изоляция значений в metadata cache гидратора и сериализаторов — новый план, P1](current/pln-031-metadata-value-isolation/pln-031-readme.md)
 - [Внешние правила, дополнительные поля и строгие политики DTO — новый план](current/pln-028-declarative-dto/pln-028-readme.md)
+- [Контракты внешних правил DTO — решения В01–В17 приняты](discussion/dsc-005-declarative-dto-contracts/dsc-005-readme.md)
+- [ADR-001: явный критерий готовности continuation](adr/adr-001-continuation-readiness.md)
+- [ADR-002: внешний набор правил гидратации DTO](adr/adr-002-external-hydration-rules.md)
 - [Документация: актуализация, единые контракты и точки входа — новый план](current/pln-027-documentation-restructure/pln-027-readme.md)
 - [Транспорт, формат ответа, бюджет и retry — аудит пяти замечаний](audit/aud-005-transport-response-retry/aud-005-readme.md)
 - [Транспорт, raw, внешний дедлайн и условный retry — завершено](completed/pln-026-transport-response-retry/pln-026-readme.md)

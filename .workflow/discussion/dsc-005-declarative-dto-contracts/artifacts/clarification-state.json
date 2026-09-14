@@ -1,0 +1,35 @@
+{
+  "head": "eeb0b6a6154f8f95799be08f1389b799b19a6c24",
+  "php": "8.4.15",
+  "old_probes": {
+    "review-probe": {
+      "byte_identical": true,
+      "checks": 20
+    },
+    "followup-probe": {
+      "byte_identical": true,
+      "checks": 10
+    }
+  },
+  "clarification_checks": 14,
+  "reviewed_sources_verified": 24,
+  "029_files_verified": 45,
+  "tests": {
+    "passed": 9,
+    "assertions": 21
+  },
+  "source_sha256": {
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/clarification-probe.php": "5fd50a8768ad0dad67df7e1465f78c74e8412d2920deda9470e5e5f9dde346e5",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/Fixtures/DefaultFinalDto.php": "1f91a8245ad7226f2049063bf46f19cf52671fae581367b417c0520d67a72748",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/clarification-recheck.py": "5df826200775d52c719bcbfa75d85061c37045d3d8303f537f0e4915035e9a66",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/Fixtures/ExtraDto.php": "76d139224cb99f4de6db13968755d3331c2eb13d3804df5572f3220915cc96b8",
+    "src/Serialization/Hydrator.php": "1b670b71cec046cfdab087391ce491552f40b6c8747272fb1d8ec3b0ae46a886",
+    "src/Attributes/AttributeMetadataCache.php": "f12b5cad315fa665eb7e675bfad521bc24a8ffe33a54e3251953e3dacd8ef2cd",
+    "src/Core/AbstractClient.php": "2b7056645d114048e2be5b194f72b0f8aa6c85a180b5d1975e963b90774e4354",
+    "src/Continuation/ContinuationService.php": "fd6d9444f2fd080bdfd6e752c937618a3a2d7814641d4dccd3c21447dd5c791c",
+    "src/Result/ResultHandle.php": "09be183012e5788bc0c89c8ecc8cffa20a18231ea064137f702d2e054eeb89ab",
+    "src/DataTransfer/AbstractDto.php": "4351f3dc44adf28e4cfd429b919d984b289388b7161c0f812832a559077de1d4",
+    "src/DataTransfer/AbstractResponseDto.php": "5ccf19537f289e3b2c86e2aef5d5bdebdc2c733d61717fa750aca5621b06c5c2",
+    "tests/Stubs/Requests/ContinuationStartRequest.php": "12315aa1ecc9a8942ca3dfe0cb482b627a7dd4aa04b9e86eb3ce6f7e6ac19249"
+  }
+}

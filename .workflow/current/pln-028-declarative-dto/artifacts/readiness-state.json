@@ -1,0 +1,20 @@
+{
+  "commit": "eeb0b6a6154f8f95799be08f1389b799b19a6c24",
+  "php": "8.4.15",
+  "composer_lock_sha256": "e969e14ac0bb263c871d8a7144803bf5178617001550da2765e81d2e5033186a",
+  "peer_review_matches_029_acceptance": true,
+  "peer_review_checks": 35,
+  "peer_review_old_expectation_mismatches": 8,
+  "changed_case_ids": [
+    "C01-single-nested-array",
+    "C03-single-nested-http",
+    "C04-single-nested-typeerror",
+    "C05-single-nested-typeerror-http",
+    "C15-child-provider-path",
+    "C16-child-provider-http-path",
+    "C23-combined-provider-null",
+    "C26-combined-provider-shape"
+  ],
+  "verified_029_manifest_files": 45,
+  "029_manifest_mismatches": []
+}

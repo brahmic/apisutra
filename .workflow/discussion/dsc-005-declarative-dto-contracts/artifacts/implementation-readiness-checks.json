@@ -1,0 +1,51 @@
+{
+  "baseline": {
+    "review-probe": 20,
+    "followup-probe": 10,
+    "clarification-probe": 14,
+    "metadata-probe": 33,
+    "clarification-state.json": 12,
+    "baseline-state.json": 34,
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/reviewed-source.sha256": 24,
+    ".workflow/completed/pln-029-hydration-defects/artifacts/sha256.txt": 45
+  },
+  "documents": {
+    "documents": 20,
+    "links": 284,
+    "errors": []
+  },
+  "tests": {
+    "passed": 433,
+    "assertions": 1385
+  },
+  "runtime_observations": {
+    "off": [
+      {
+        "header": "0",
+        "url": "https://probe.test/items/0"
+      },
+      {
+        "header": "0",
+        "url": "https://probe.test/items/0"
+      }
+    ],
+    "on": [
+      {
+        "header": "0",
+        "url": "https://probe.test/items/0"
+      },
+      {
+        "header": "0",
+        "url": "https://probe.test/items/0"
+      }
+    ],
+    "whole_dto_json_cast_body": "\"{\\\"id\\\":7,\\\"extra\\\":{\\\"future\\\":false}}\""
+  },
+  "cost": {
+    "php": "8.4.15",
+    "scenarios": 27,
+    "runs": 7,
+    "opcache_enable_cli": "0",
+    "jit": ""
+  }
+}

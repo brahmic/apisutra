@@ -1,0 +1,47 @@
+{
+    "checks": {
+        "without_unwrap_false_ready": true,
+        "missing_unwrap_false_ready": true,
+        "null_unwrap_false_ready": true,
+        "false_ready_without_http": true,
+        "uncached_defaults_independent": true,
+        "cached_defaults_shared": true,
+        "cached_default_mutation_leaks": true,
+        "numeric_string_key_becomes_int": true,
+        "decoded_object_list_origin_lost": true,
+        "empty_object_list_origin_lost": true,
+        "recursive_carriers_are_lists": true,
+        "serializer_preserves_recursive_carriers": true,
+        "base_dto_has_no_class_attributes": true,
+        "base_response_has_no_class_attributes": true
+    },
+    "observations": {
+        "without_unwrap": {
+            "class": "Brahmic\\ApiSutra\\Workflow\\Dsc005\\Fixtures\\DefaultFinalDto",
+            "value": "default"
+        },
+        "missing_unwrap": {
+            "class": "Brahmic\\ApiSutra\\Workflow\\Dsc005\\Fixtures\\DefaultFinalDto",
+            "value": "default"
+        },
+        "null_unwrap": {
+            "class": "Brahmic\\ApiSutra\\Workflow\\Dsc005\\Fixtures\\DefaultFinalDto",
+            "value": "default"
+        },
+        "object_defaults": {
+            "uncached_same_object": false,
+            "cached_same_object": true,
+            "second_cached_marker": "synthetic-change"
+        },
+        "decoded_keys": [
+            1,
+            "01"
+        ],
+        "recursive_remainder": "[{\"sourceKey\":0,\"remainder\":[{\"sourceKey\":1,\"remainder\":{\"meta\":\"b\"}}]}]",
+        "recursive_wire": "{\"id\":7,\"extra\":{\"groups\":[{\"sourceKey\":0,\"remainder\":[{\"sourceKey\":1,\"remainder\":{\"meta\":\"b\"}}]}]}}",
+        "base_attributes": {
+            "Brahmic\\ApiSutra\\DataTransfer\\AbstractDto": 0,
+            "Brahmic\\ApiSutra\\DataTransfer\\AbstractResponseDto": 0
+        }
+    }
+}

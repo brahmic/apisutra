@@ -1,0 +1,14 @@
+{
+  "head": "eeb0b6a6154f8f95799be08f1389b799b19a6c24",
+  "php": "8.4.15",
+  "original_probe_identical": true,
+  "original_probe_checks": 20,
+  "followup_checks": 10,
+  "reviewed_sources_verified": 24,
+  "029_files_verified": 45,
+  "artifact_sha256": {
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/followup-probe.php": "0ad1a011ab798348e67fe088b53903cfa7d5f26a0851ad8c39f9925b9ecebb15",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/followup-recheck.py": "4ee4959c85a422db533c939cf3082f856841c843d2abb34949fca0149340c35d",
+    ".workflow/discussion/dsc-005-declarative-dto-contracts/artifacts/Fixtures/ExtraDto.php": "76d139224cb99f4de6db13968755d3331c2eb13d3804df5572f3220915cc96b8"
+  }
+}
