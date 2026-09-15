@@ -55,8 +55,10 @@ $config = $config->with(
 );
 ```
 
-Если нужен кеш токена, передайте PSR‑16 store в `ClientConfig::cache`
-или `ClientConfig::cacheConfig->store`.
+Для общего кеша токена передайте PSR‑16 store в `ClientConfig::cacheStore`.
+Это тот же backend, который использует HTTP-кеш; `CacheConfig` содержит только параметры.
+`with(cacheStore: null)` отключает общий store в копии без очистки записей.
+Локальное хранение и явно заданный locks сохраняются. [Полная семантика](../execution/cache.md#копирование-и-отключение).
 
 ## Refresh и 401
 - `AuthenticatorInterface::shouldRefresh()` и `getRefreshRequest()` управляют обновлением токена.
@@ -112,9 +114,14 @@ SDK для привязки и перечитывания; вызывать их
 
 ```php
 use Brahmic\ApiSutra\Config\CacheConfig;
+use Brahmic\ApiSutra\Config\ClientConfig;
 
 // $lockProvider — реализация AuthLockProviderInterface выбранного хранилища.
-$cacheConfig = new CacheConfig(store: $tokenStore, locks: $lockProvider);
+$config = new ClientConfig(
+    baseUrl: 'https://api.example',
+    cacheStore: $tokenStore,
+    cacheConfig: new CacheConfig(locks: $lockProvider),
+);
 ```
 
 Это необязательное расширение. SDK не подключает Redis или Laravel автоматически

@@ -1,0 +1,7 @@
+{
+  "command": [
+    "composer",
+    "analyse-docs"
+  ],
+  "exit": 0
+}

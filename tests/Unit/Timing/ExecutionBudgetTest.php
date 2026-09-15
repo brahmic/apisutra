@@ -89,7 +89,7 @@ it('не ждёт auth lock дольше остатка и не начинает
     $auth = new LockAwareAuthenticator(cacheKey: 'fixture-lock');
     $transport = new MockTransport();
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', auth: $auth, cache: new CacheConfig(locks: $locks),
+        baseUrl: 'https://fixture.test', auth: $auth, cacheConfig: new CacheConfig(locks: $locks),
         retry: new RetryConfig(totalTimeoutMs: 125),
     ), $transport, $clock, $clock);
     $result = (new RetryPolicyRequest())->setClient($client)->send()->raw();
@@ -104,7 +104,9 @@ it('поздний hook не кеширует успех и новое выпо�
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success(['ok' => true])]);
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', cache: new CacheConfig(store: new ArrayCache()),
+        baseUrl: 'https://fixture.test',
+        cacheStore: new ArrayCache(),
+        cacheConfig: new CacheConfig(),
         retry: new RetryConfig(totalTimeoutMs: 1000),
     ), $transport, $clock, $clock);
     $client->hooks()->on(Hook::AfterHydrate, new class($clock, $throws) implements HookInterface {

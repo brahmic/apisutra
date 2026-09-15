@@ -104,7 +104,7 @@ it('raw обходит format handler и BeforeHydrate, сохраняя ост�
 it('один cached HTTP ответ допускает Auto и Raw без новых ключей', function (): void {
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success(['ok' => true])]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cache: new CacheConfig(store: new ArrayCache())), $transport);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cacheStore: new ArrayCache(), cacheConfig: new CacheConfig()), $transport);
     $request = new CacheableRequest('fixture');
     expect($client->send($request)->raw()->data)->toBe(['ok' => true])
         ->and($client->send($request->withRawResponse())->raw()->data)->toBe('{"ok":true}')

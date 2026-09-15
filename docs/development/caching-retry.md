@@ -29,3 +29,8 @@
 только атомарно принимает или отклоняет набор. По умолчанию состояние локальное
 и окна измеряются monotonic clock. PSR-16 сохранён только для одной квоты.
 [Контракт](../reference/execution/rate-limit.md), [Redis](../reference/integrations/redis.md).
+
+`CacheManager`, `AuthBindingResolver`, `AuthHandler` и подключение auth в AbstractClient
+читают общий backend только из `ClientConfig.cacheStore`. Параметры CacheConfig
+разрешаются отдельно; CacheExecutionState хранит выбранный store одного выполнения.
+У метаданных, rate limiting и отдельных расширений остаются собственные настройки кеша.

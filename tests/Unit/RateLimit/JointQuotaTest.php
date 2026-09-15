@@ -247,7 +247,7 @@ it('пересчитывает effective timeout после quota wait и retry 
 
 it('cache hit не обращается к квотам, смена fake сохраняет локальный счётчик', function (): void {
     $backend = new ScriptedRateLimitBackend();
-    $client = jointClient(new ClientConfig(baseUrl: 'https://quota.test', cache: new ArrayCache(),
+    $client = jointClient(new ClientConfig(baseUrl: 'https://quota.test', cacheStore: new ArrayCache(),
         rateLimit: new RateLimitConfig(), rateLimitBackend: $backend));
     $client->send(new CacheableRequest('same'));
     $client->send(new CacheableRequest('same'));

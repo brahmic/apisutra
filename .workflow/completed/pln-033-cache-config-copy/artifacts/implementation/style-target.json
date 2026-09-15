@@ -1,0 +1,19 @@
+{
+  "command": [
+    "vendor/bin/phpcs",
+    "-n",
+    "--report=summary",
+    "docs/example/client-showcase/run.php",
+    "src/Config/CacheConfig.php",
+    "src/Config/ClientConfig.php",
+    "src/Core/AbstractClient.php",
+    "src/Pipeline/Auth/AuthBindingResolver.php",
+    "src/Pipeline/Auth/AuthHandler.php",
+    "src/Pipeline/Cache/CacheManager.php",
+    "tests/Support/ClockCache.php",
+    "tests/Unit/Core/ClientConfigCacheTest.php",
+    "tests/Unit/Cache/CacheStoreSeparationTest.php",
+    "tests/Support/TestClientFactory.php"
+  ],
+  "exit": 0
+}

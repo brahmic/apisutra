@@ -44,7 +44,7 @@ final class AuthBindingResolver
         if (isset($bindings[$scope])) {
             return $bindings[$scope];
         }
-        $store = $shared ? ($this->config->cache ?? $this->config->cacheConfig?->store) : null;
+        $store = $shared ? $this->config->cacheStore : null;
         if (!$shared) {
             (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Auth token cache использует локальную область', [
                 'reason' => 'auth_cache_identity_unavailable',

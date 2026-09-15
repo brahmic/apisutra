@@ -134,7 +134,7 @@ it('не меняет существующий BooleanCast без явного �
 it('различает false и пустую строку в автоматическом кеше', function (): void {
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success()]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cache: new CacheConfig(store: new StrictCache())), $transport);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cacheStore: new StrictCache(), cacheConfig: new CacheConfig()), $transport);
     foreach ([false, '', false, ''] as $value) {
         expect((new UriQueryRequest($value))->setClient($client)->send()->raw()->isSuccess())->toBeTrue();
     }

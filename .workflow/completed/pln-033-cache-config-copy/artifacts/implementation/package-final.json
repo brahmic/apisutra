@@ -1,0 +1,9 @@
+{
+  "command": [
+    "composer",
+    "check-package",
+    "--",
+    "--staged"
+  ],
+  "exit": 0
+}

@@ -1,0 +1,32 @@
+
+[1mPHP CODE SNIFFER REPORT SUMMARY[0m
+--------------------------------------------------------------------------------
+[1mFILE                                                            ERRORS  WARNINGS[0m
+--------------------------------------------------------------------------------
+...es/brahmic/apisutra/tests/Support/standalone-auth-smoke.php  [31m5[0m       [33m0[0m
+...ackages/brahmic/apisutra/tests/Support/standalone-smoke.php  [31m1[0m       [33m0[0m
+...ckages/brahmic/apisutra/tests/Unit/Auth/AuthHandlerTest.php  [31m1[0m       [33m0[0m
+.../brahmic/apisutra/tests/Unit/Auth/AuthLeaseContractTest.php  [31m12[0m      [33m0[0m
+...ges/brahmic/apisutra/tests/Unit/Auth/TokenIsolationTest.php  [31m6[0m       [33m0[0m
+...ic/apisutra/tests/Unit/Cache/AutomaticCacheIdentityTest.php  [31m3[0m       [33m0[0m
+...es/brahmic/apisutra/tests/Unit/Cache/CacheIsolationTest.php  [31m2[0m       [33m0[0m
+...hmic/apisutra/tests/Unit/Cache/CacheManagerDownloadTest.php  [31m3[0m       [33m0[0m
+...ic/apisutra/tests/Unit/Cache/CacheManagerFileUploadTest.php  [31m3[0m       [33m0[0m
+...mic/apisutra/tests/Unit/Cache/CacheManagerOverridesTest.php  [31m13[0m      [33m0[0m
+...ages/brahmic/apisutra/tests/Unit/Cache/CacheManagerTest.php  [31m1[0m       [33m0[0m
+...s/brahmic/apisutra/tests/Unit/Cache/CacheManagerTtlTest.php  [31m1[0m       [33m0[0m
+...ic/apisutra/tests/Unit/Pipeline/PipelineIntegrationTest.php  [31m1[0m       [33m0[0m
+...nit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php  [31m1[0m       [33m0[0m
+...c/apisutra/tests/Unit/Pipeline/PreparedBodyContractTest.php  [31m3[0m       [33m0[0m
+...es/brahmic/apisutra/tests/Unit/RateLimit/JointQuotaTest.php  [31m52[0m      [33m0[0m
+...utra/tests/Unit/Serialization/BigIntegerIntegrationTest.php  [31m7[0m       [33m0[0m
+...ra/tests/Unit/Serialization/ConstructorOwnedEntriesTest.php  [31m1[0m       [33m0[0m
+...isutra/tests/Unit/Serialization/ExternalUrlContractTest.php  [31m3[0m       [33m0[0m
+...ahmic/apisutra/tests/Unit/Serialization/RawResponseTest.php  [31m4[0m       [33m0[0m
+.../brahmic/apisutra/tests/Unit/Timing/ExecutionBudgetTest.php  [31m17[0m      [33m0[0m
+...brahmic/apisutra/tests/Unit/Timing/ExternalDeadlineTest.php  [31m11[0m      [33m0[0m
+--------------------------------------------------------------------------------
+[1mA TOTAL OF 151 ERRORS AND 0 WARNINGS WERE FOUND IN 22 FILES[0m
+--------------------------------------------------------------------------------
+[1mPHPCBF CAN FIX 151 OF THESE SNIFF VIOLATIONS AUTOMATICALLY[0m
+--------------------------------------------------------------------------------

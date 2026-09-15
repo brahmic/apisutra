@@ -1,0 +1,227 @@
+{
+    "environment": {
+        "php": "8.4.15",
+        "apisutra": "dev-master",
+        "reference": "b3fb3e78582f4b69bfca3fd061b9a1c718949933"
+    },
+    "observations": [
+        {
+            "id": "U01",
+            "case": "with copies config; does not change existing client",
+            "result": {
+                "base": 30,
+                "copy": 7,
+                "existingClient": 30,
+                "sameProvider": true
+            }
+        },
+        {
+            "id": "U02",
+            "case": "with replaces whole nested RetryConfig",
+            "result": {
+                "originalAttempts": 1,
+                "newAttempts": 3,
+                "originalBudget": 900,
+                "newBudget": null
+            }
+        },
+        {
+            "id": "U03",
+            "case": "fromLaravel reads only debug and environment automatically",
+            "result": {
+                "calls": [
+                    "isDebug",
+                    "environment"
+                ],
+                "debug": true,
+                "environment": "testing",
+                "logger": null,
+                "cache": null,
+                "auth": null
+            }
+        },
+        {
+            "id": "U04",
+            "case": "fromLaravel explicit overrides avoid lookups",
+            "result": {
+                "calls": [],
+                "debug": false,
+                "environment": "production"
+            }
+        },
+        {
+            "id": "U05",
+            "case": "cache baseline",
+            "result": {
+                "httpCalls": 1,
+                "first": {
+                    "n": 1
+                },
+                "second": {
+                    "n": 1
+                }
+            }
+        },
+        {
+            "id": "U06",
+            "case": "with cacheConfig replacement",
+            "result": {
+                "retainedOldConfig": false,
+                "ttl": 10
+            }
+        },
+        {
+            "id": "U07",
+            "case": "with cache null leaves cacheConfig effective",
+            "result": {
+                "cacheIsNull": true,
+                "cacheConfigIsNull": false,
+                "execution": {
+                    "httpCalls": 2,
+                    "first": {
+                        "n": 1
+                    },
+                    "second": {
+                        "n": 2
+                    }
+                }
+            }
+        },
+        {
+            "id": "U08",
+            "case": "with both cache entries null disables",
+            "result": {
+                "httpCalls": 2,
+                "first": {
+                    "n": 1
+                },
+                "second": {
+                    "n": 2
+                }
+            }
+        },
+        {
+            "id": "U09",
+            "case": "with cache replacement works",
+            "result": {
+                "usesReplacement": true,
+                "ttl": 10
+            }
+        },
+        {
+            "id": "U10",
+            "case": "retry attempts null",
+            "result": {
+                "httpCalls": 1,
+                "status": 503
+            }
+        },
+        {
+            "id": "U11",
+            "case": "retry attempts 1",
+            "result": {
+                "httpCalls": 1,
+                "status": 503
+            }
+        },
+        {
+            "id": "U12",
+            "case": "retry attempts 2",
+            "result": {
+                "httpCalls": 2,
+                "status": 200
+            }
+        },
+        {
+            "id": "U13",
+            "case": "with unrelated option loses separately supplied cache store",
+            "result": {
+                "originalUsesStore": true,
+                "copyUsesStore": true,
+                "before": {
+                    "httpCalls": 1,
+                    "first": {
+                        "n": 1
+                    },
+                    "second": {
+                        "n": 1
+                    }
+                },
+                "after": {
+                    "httpCalls": 1,
+                    "first": {
+                        "n": 1
+                    },
+                    "second": {
+                        "n": 1
+                    }
+                }
+            }
+        },
+        {
+            "id": "U14",
+            "case": "with no overrides also loses separately supplied cache store",
+            "result": {
+                "originalUsesStore": true,
+                "copyUsesStore": true,
+                "execution": {
+                    "httpCalls": 1,
+                    "first": {
+                        "n": 1
+                    },
+                    "second": {
+                        "n": 1
+                    }
+                }
+            }
+        },
+        {
+            "id": "U15",
+            "case": "constructor initializes scalar before property fallback",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "DTO hydration property already initialized before fallback assignment: ConstructorOwned::$kind",
+            "context": null
+        },
+        {
+            "id": "U16",
+            "case": "constructor initialized scalar inside list",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "DTO hydration property already initialized before fallback assignment: ConstructorOwned::$kind",
+            "context": null
+        },
+        {
+            "id": "U17",
+            "case": "constructor initialized scalar through HTTP Returns",
+            "result": {
+                "success": false,
+                "status": 200,
+                "exception": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+                "httpCalls": 1
+            }
+        },
+        {
+            "id": "U18",
+            "case": "constructor initialized scalar with conflicting source",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "DTO hydration property already initialized before fallback assignment: ConstructorOwned::$kind",
+            "context": null
+        },
+        {
+            "id": "U19",
+            "case": "constructor initialized scalar with missing source",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в kind: ожидается string, получено missing",
+            "context": {
+                "reason": "required_field_missing",
+                "path": "kind",
+                "expected": "string",
+                "actual": "missing",
+                "sourcePath": "/kind",
+                "sourcePathKind": "expected",
+                "sourceCandidates": [
+                    "/kind"
+                ]
+            }
+        }
+    ]
+}

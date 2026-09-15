@@ -146,7 +146,7 @@ it('разрешённый auth refresh не наследует внешний U
 it('обходит автоматический cache и запрещает его явное включение', function (): void {
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success()]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cache: new CacheConfig(store: new StrictCache())), $transport);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cacheStore: new StrictCache(), cacheConfig: new CacheConfig()), $transport);
     $request = (new CacheProbeRequest())->setClient($client)->withUrl('https://storage.test/file');
     $request->send();
     $request->send();

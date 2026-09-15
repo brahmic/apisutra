@@ -1,0 +1,39 @@
+{
+  "cache": {
+    "command": [
+      "php",
+      ".workflow/current/pln-033-cache-config-copy/artifacts/capture-cache-baseline.php"
+    ],
+    "exit": 0
+  },
+  "upstream": {
+    "command": [
+      "php",
+      ".workflow/issue/iss-003-apisutra-contracts/artifacts/upstream-probe.php"
+    ],
+    "exit": 0
+  },
+  "php": {
+    "command": [
+      "php",
+      "-v"
+    ],
+    "exit": 0
+  },
+  "head": {
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0
+  },
+  "src-tree": {
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD:src"
+    ],
+    "exit": 0
+  }
+}

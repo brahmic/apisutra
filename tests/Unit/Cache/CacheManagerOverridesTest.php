@@ -29,7 +29,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -58,7 +59,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -84,7 +86,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -106,7 +109,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -128,7 +132,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 45, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 45, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -153,7 +158,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -179,7 +185,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -205,7 +212,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, mode: CacheMode::Disabled, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, mode: CacheMode::Disabled, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -233,7 +241,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -262,7 +271,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'prefix:'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'prefix:'),
             environment: Environment::Testing,
         );
 
@@ -286,7 +296,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);
@@ -313,7 +324,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);
@@ -339,7 +351,8 @@ describe('CacheManager overrides', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
         $client = new TestClient($config, $transport);

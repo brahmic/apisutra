@@ -1,0 +1,7 @@
+{
+  "command": [
+    "php",
+    "tests/Support/standalone-client-showcase-smoke.php"
+  ],
+  "exit": 0
+}

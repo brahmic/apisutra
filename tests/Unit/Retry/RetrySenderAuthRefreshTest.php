@@ -138,7 +138,7 @@ describe('RetrySender auth refresh', function () {
             baseUrl: 'https://api.test',
             auth: $auth,
             authRetryAttempts: 1,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             timeout: 5,
             environment: Environment::Testing,
         );

@@ -1,0 +1,7 @@
+{
+  "command": [
+    "composer",
+    "check-docs"
+  ],
+  "exit": 0
+}

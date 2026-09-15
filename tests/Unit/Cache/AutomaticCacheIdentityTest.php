@@ -35,7 +35,7 @@ beforeEach(function (): void {
     }]);
     $this->config = new ClientConfig(
         baseUrl: 'https://api.test',
-        cache: $this->store,
+        cacheStore: $this->store,
         environment: Environment::Testing,
     );
 });
@@ -73,7 +73,8 @@ it('одинаковый prefix или runtime scope не объединяет �
     foreach (['fixture-a', 'fixture-b'] as $token) {
         $client = new TestClient($this->config->with(
             auth: new BearerAuthenticator($token),
-            cache: new CacheConfig(store: $this->store, prefix: 'shared'),
+            cacheStore: $this->store,
+            cacheConfig: new CacheConfig(prefix: 'shared'),
         ), $this->transport);
         $request = (new TenantCacheRequest())->setClient($client);
         $requests[] = $runtime ? $request->withCacheScope('same') : $request;
@@ -109,9 +110,7 @@ it('конфигурационный tenant сохраняется при атр
 });
 
 it('пропускает кеш при неизвестной identity независимо от prefix', function (string $source): void {
-    $config = $this->config->with(cache: new CacheConfig(
-        store: $this->store, prefix: 'explicit', identity: $source === 'config' ? new CacheIdentity(null) : null,
-    ));
+    $config = $this->config->with(cacheStore: $this->store, cacheConfig: new CacheConfig(prefix: 'explicit', identity: $source === 'config' ? new CacheIdentity(null) : null));
     if ($source === 'auth') {
         $config = $config->with(auth: new NamedAuthenticator('fixture'));
     }

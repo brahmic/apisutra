@@ -9,7 +9,7 @@
 | <a id="throwonerrors"></a> throwOnErrors | Параметр ClientConfig. | [Контракт](../reference/results/errors.md) |
 | <a id="archiveconfig"></a> ArchiveConfig | VO конфигурации архивов. | [Контракт](../reference/files/archives.md) |
 | <a id="retryconfig"></a> RetryConfig | VO конфигурации retry. | [Контракт](../reference/execution/retry.md) |
-| <a id="cacheconfig"></a> CacheConfig | VO конфигурации кеширования. | [Контракт](../reference/execution/cache.md) |
+| <a id="cacheconfig"></a> CacheConfig | Параметры кеширования без backend; store подключается через ClientConfig.cacheStore. | [Контракт](../reference/execution/cache.md) |
 | <a id="cachemode"></a> CacheMode | Enum режима кеша. | [Контракт](../reference/execution/cache.md) |
 | <a id="ratelimitconfig"></a> RateLimitConfig | VO конфигурации rate‑limit. | [Контракт](../reference/execution/rate-limit.md) |
 | <a id="backoffstrategy"></a> BackoffStrategy | Способ увеличения паузы между повторами: постоянный, линейный или экспоненциальный. | [Контракт](../reference/execution/retry.md) |

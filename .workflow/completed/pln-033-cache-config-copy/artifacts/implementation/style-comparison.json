@@ -1,0 +1,3408 @@
+{
+  "baseline": "3ff9531",
+  "new_errors": [],
+  "files": [
+    {
+      "file": "docs/example/client-showcase/run.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/docs/example/client-showcase/run.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/docs/example/client-showcase/run.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "src/Config/CacheConfig.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Config/CacheConfig.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Config/CacheConfig.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "src/Config/ClientConfig.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Config/ClientConfig.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Config/ClientConfig.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "src/Core/AbstractClient.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Core/AbstractClient.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Core/AbstractClient.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "src/Pipeline/Auth/AuthBindingResolver.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Pipeline/Auth/AuthBindingResolver.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Pipeline/Auth/AuthBindingResolver.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "src/Pipeline/Auth/AuthHandler.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Pipeline/Auth/AuthHandler.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Pipeline/Auth/AuthHandler.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "src/Pipeline/Cache/CacheManager.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Pipeline/Cache/CacheManager.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/src/Pipeline/Cache/CacheManager.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Integration/CoreFlowIntegrationTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Integration/CoreFlowIntegrationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Integration/CoreFlowIntegrationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Support/ClockCache.php",
+      "before": {
+        "totals": {
+          "errors": 0
+        },
+        "files": {}
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/ClockCache.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Support/TestClientFactory.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/TestClientFactory.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/TestClientFactory.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Support/standalone-auth-smoke.php",
+      "before": {
+        "totals": {
+          "errors": 5,
+          "warnings": 0,
+          "fixable": 5
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/standalone-auth-smoke.php": {
+            "errors": 5,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "The first expression of a multi-line control structure must be on the line after the opening parenthesis",
+                "source": "PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 48,
+                "column": 9
+              },
+              {
+                "message": "The closing parenthesis of a multi-line control structure must be on the line after the last expression",
+                "source": "PSR12.ControlStructures.ControlStructureSpacing.CloseParenthesisLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 49,
+                "column": 122
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 64,
+                "column": 38
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 64,
+                "column": 50
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 64,
+                "column": 63
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 5,
+          "warnings": 0,
+          "fixable": 5
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/standalone-auth-smoke.php": {
+            "errors": 5,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "The first expression of a multi-line control structure must be on the line after the opening parenthesis",
+                "source": "PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 48,
+                "column": 9
+              },
+              {
+                "message": "The closing parenthesis of a multi-line control structure must be on the line after the last expression",
+                "source": "PSR12.ControlStructures.ControlStructureSpacing.CloseParenthesisLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 49,
+                "column": 122
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 64,
+                "column": 38
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 64,
+                "column": 50
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 64,
+                "column": 63
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Support/standalone-smoke.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/standalone-smoke.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/standalone-smoke.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Support/streaming-memory-smoke.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/streaming-memory-smoke.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Support/streaming-memory-smoke.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Auth/AuthHandlerRefreshLockTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/AuthHandlerRefreshLockTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/AuthHandlerRefreshLockTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Auth/AuthHandlerTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/AuthHandlerTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/AuthHandlerTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Auth/AuthLeaseContractTest.php",
+      "before": {
+        "totals": {
+          "errors": 12,
+          "warnings": 0,
+          "fixable": 12
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/AuthLeaseContractTest.php": {
+            "errors": 12,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 61,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 61,
+                "column": 55
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 83,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 83,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 98,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 98,
+                "column": 65
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 98,
+                "column": 101
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 131,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 131,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 145,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 145,
+                "column": 54
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 146,
+                "column": 48
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 12,
+          "warnings": 0,
+          "fixable": 12
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/AuthLeaseContractTest.php": {
+            "errors": 12,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 61,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 61,
+                "column": 55
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 83,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 83,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 98,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 98,
+                "column": 65
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 98,
+                "column": 101
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 131,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 131,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 145,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 145,
+                "column": 54
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 146,
+                "column": 54
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Auth/TokenIsolationTest.php",
+      "before": {
+        "totals": {
+          "errors": 4,
+          "warnings": 0,
+          "fixable": 4
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/TokenIsolationTest.php": {
+            "errors": 4,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 66,
+                "column": 26
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 90,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 150,
+                "column": 26
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 178,
+                "column": 42
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 4,
+          "warnings": 0,
+          "fixable": 4
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Auth/TokenIsolationTest.php": {
+            "errors": 4,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 66,
+                "column": 26
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 90,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 151,
+                "column": 26
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 180,
+                "column": 42
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/AutomaticCacheIdentityTest.php",
+      "before": {
+        "totals": {
+          "errors": 4,
+          "warnings": 0,
+          "fixable": 4
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/AutomaticCacheIdentityTest.php": {
+            "errors": 4,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 113,
+                "column": 30
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 113,
+                "column": 50
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 183,
+                "column": 14
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 183,
+                "column": 71
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 2,
+          "warnings": 0,
+          "fixable": 2
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/AutomaticCacheIdentityTest.php": {
+            "errors": 2,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 182,
+                "column": 14
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 182,
+                "column": 71
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheIsolationTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheIsolationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheIsolationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheManagerDownloadTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerDownloadTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerDownloadTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheManagerFileUploadTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerFileUploadTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerFileUploadTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheManagerOverridesTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerOverridesTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerOverridesTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheManagerTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheManagerTtlTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerTtlTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheManagerTtlTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Cache/CacheStoreSeparationTest.php",
+      "before": {
+        "totals": {
+          "errors": 0
+        },
+        "files": {}
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Cache/CacheStoreSeparationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Core/ClientConfigCacheTest.php",
+      "before": {
+        "totals": {
+          "errors": 0
+        },
+        "files": {}
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Core/ClientConfigCacheTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Pipeline/PipelineIntegrationTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Pipeline/PipelineIntegrationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Pipeline/PipelineIntegrationTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Pipeline/PreparedBodyContractTest.php",
+      "before": {
+        "totals": {
+          "errors": 2,
+          "warnings": 0,
+          "fixable": 2
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Pipeline/PreparedBodyContractTest.php": {
+            "errors": 2,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 247,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 247,
+                "column": 55
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 2,
+          "warnings": 0,
+          "fixable": 2
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Pipeline/PreparedBodyContractTest.php": {
+            "errors": 2,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 248,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 248,
+                "column": 55
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/RateLimit/JointQuotaTest.php",
+      "before": {
+        "totals": {
+          "errors": 52,
+          "warnings": 0,
+          "fixable": 52
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/RateLimit/JointQuotaTest.php": {
+            "errors": 52,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 86,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 86,
+                "column": 75
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 87,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 87,
+                "column": 60
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 87,
+                "column": 86
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 205,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 205,
+                "column": 75
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 205,
+                "column": 109
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 206,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 206,
+                "column": 81
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 70
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 129
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 131
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 133
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 215,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 215,
+                "column": 75
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 215,
+                "column": 109
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 216,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 216,
+                "column": 53
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 225,
+                "column": 19
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 225,
+                "column": 34
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 226,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 226,
+                "column": 73
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 226,
+                "column": 116
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 227,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 227,
+                "column": 42
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 241,
+                "column": 34
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 241,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 241,
+                "column": 112
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 242,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 242,
+                "column": 112
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 250,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 250,
+                "column": 75
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 251,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 251,
+                "column": 43
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 251,
+                "column": 69
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 267,
+                "column": 34
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 267,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 268,
+                "column": 76
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 269,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 269,
+                "column": 92
+              },
+              {
+                "message": "Newline required after opening brace",
+                "source": "Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 286,
+                "column": 36
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 286,
+                "column": 94
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 292,
+                "column": 31
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 293,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 293,
+                "column": 58
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 293,
+                "column": 84
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 339,
+                "column": 34
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 339,
+                "column": 78
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 340,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 340,
+                "column": 43
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 340,
+                "column": 69
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 52,
+          "warnings": 0,
+          "fixable": 52
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/RateLimit/JointQuotaTest.php": {
+            "errors": 52,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 86,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 86,
+                "column": 75
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 87,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 87,
+                "column": 60
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 87,
+                "column": 86
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 205,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 205,
+                "column": 75
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 205,
+                "column": 109
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 206,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 206,
+                "column": 81
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 70
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 129
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 131
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 214,
+                "column": 133
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 215,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 215,
+                "column": 75
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 215,
+                "column": 109
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 216,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 216,
+                "column": 53
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 225,
+                "column": 19
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 225,
+                "column": 34
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 226,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 226,
+                "column": 73
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 226,
+                "column": 116
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 227,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 227,
+                "column": 42
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 241,
+                "column": 34
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 241,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 241,
+                "column": 112
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 242,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 242,
+                "column": 112
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 250,
+                "column": 31
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 250,
+                "column": 75
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 251,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 251,
+                "column": 43
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 251,
+                "column": 69
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 267,
+                "column": 34
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 267,
+                "column": 78
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 268,
+                "column": 76
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 269,
+                "column": 1
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 269,
+                "column": 92
+              },
+              {
+                "message": "Newline required after opening brace",
+                "source": "Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 286,
+                "column": 36
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 286,
+                "column": 94
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 292,
+                "column": 31
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 293,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 293,
+                "column": 58
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 293,
+                "column": 84
+              },
+              {
+                "message": "Opening parenthesis of a multi-line function call must be the last content on the line",
+                "source": "PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 339,
+                "column": 34
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 339,
+                "column": 78
+              },
+              {
+                "message": "Multi-line function call not indented correctly; expected 4 spaces but found 8",
+                "source": "PSR2.Methods.FunctionCallSignature.Indent",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 340,
+                "column": 1
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 340,
+                "column": 43
+              },
+              {
+                "message": "Closing parenthesis of a multi-line function call must be on a line by itself",
+                "source": "PSR2.Methods.FunctionCallSignature.CloseBracketLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 340,
+                "column": 69
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Retry/RetrySenderAuthRefreshTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Retry/RetrySenderAuthRefreshTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Retry/RetrySenderAuthRefreshTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/BigIntegerIntegrationTest.php",
+      "before": {
+        "totals": {
+          "errors": 7,
+          "warnings": 0,
+          "fixable": 7
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/BigIntegerIntegrationTest.php": {
+            "errors": 7,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 53
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 53
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 85
+              },
+              {
+                "message": "Newline required after opening brace",
+                "source": "Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 117,
+                "column": 63
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 117,
+                "column": 80
+              },
+              {
+                "message": "Newline required after opening brace",
+                "source": "Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 118,
+                "column": 33
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 118,
+                "column": 54
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 7,
+          "warnings": 0,
+          "fixable": 7
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/BigIntegerIntegrationTest.php": {
+            "errors": 7,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 53
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 53
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 85
+              },
+              {
+                "message": "Newline required after opening brace",
+                "source": "Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 117,
+                "column": 63
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 117,
+                "column": 80
+              },
+              {
+                "message": "Newline required after opening brace",
+                "source": "Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 118,
+                "column": 33
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 118,
+                "column": 54
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/ConstructorOwnedEntriesTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ConstructorOwnedEntriesTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ConstructorOwnedEntriesTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/ExternalHydrationEntriesTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ExternalHydrationEntriesTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ExternalHydrationEntriesTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/ExternalHydrationWireTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ExternalHydrationWireTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ExternalHydrationWireTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/ExternalUrlContractTest.php",
+      "before": {
+        "totals": {
+          "errors": 3,
+          "warnings": 0,
+          "fixable": 3
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ExternalUrlContractTest.php": {
+            "errors": 3,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 47,
+                "column": 48
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 90,
+                "column": 38
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 135,
+                "column": 38
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 3,
+          "warnings": 0,
+          "fixable": 3
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/ExternalUrlContractTest.php": {
+            "errors": 3,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 47,
+                "column": 48
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 90,
+                "column": 38
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 135,
+                "column": 38
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/HydrationCompatibilityTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/HydrationCompatibilityTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/HydrationCompatibilityTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/RawResponseTest.php",
+      "before": {
+        "totals": {
+          "errors": 4,
+          "warnings": 0,
+          "fixable": 4
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/RawResponseTest.php": {
+            "errors": 4,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 66
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 66
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 95
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 97
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 4,
+          "warnings": 0,
+          "fixable": 4
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/RawResponseTest.php": {
+            "errors": 4,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 66
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 66
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 95
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 94,
+                "column": 97
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Serialization/UriPipelineTest.php",
+      "before": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/UriPipelineTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 0,
+          "warnings": 0,
+          "fixable": 0
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Serialization/UriPipelineTest.php": {
+            "errors": 0,
+            "warnings": 0,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Timing/ExecutionBudgetTest.php",
+      "before": {
+        "totals": {
+          "errors": 16,
+          "warnings": 0,
+          "fixable": 16
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Timing/ExecutionBudgetTest.php": {
+            "errors": 16,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 65,
+                "column": 42
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 68,
+                "column": 51
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 69,
+                "column": 66
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 69,
+                "column": 67
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 92,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 92,
+                "column": 55
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 107,
+                "column": 42
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 110,
+                "column": 50
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 88
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 111,
+                "column": 89
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 138,
+                "column": 69
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 138,
+                "column": 85
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 138,
+                "column": 88
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 162,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 171,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 171,
+                "column": 55
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 15,
+          "warnings": 0,
+          "fixable": 15
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Timing/ExecutionBudgetTest.php": {
+            "errors": 15,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 65,
+                "column": 42
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 68,
+                "column": 51
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 69,
+                "column": 66
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 69,
+                "column": 67
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 92,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 92,
+                "column": 55
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 112,
+                "column": 50
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 113,
+                "column": 88
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 113,
+                "column": 89
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 140,
+                "column": 69
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 140,
+                "column": 85
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 140,
+                "column": 88
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 164,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 173,
+                "column": 42
+              },
+              {
+                "message": "Only one argument is allowed per line in a multi-line function call",
+                "source": "PSR2.Methods.FunctionCallSignature.MultipleArguments",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 173,
+                "column": 55
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "file": "tests/Unit/Timing/ExternalDeadlineTest.php",
+      "before": {
+        "totals": {
+          "errors": 11,
+          "warnings": 0,
+          "fixable": 11
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Timing/ExternalDeadlineTest.php": {
+            "errors": 11,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 66
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 66
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 95
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 97
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 165,
+                "column": 48
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 166,
+                "column": 66
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 166,
+                "column": 67
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 66
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 66
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 108
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 110
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "totals": {
+          "errors": 11,
+          "warnings": 0,
+          "fixable": 11
+        },
+        "files": {
+          "/home/dev/www/packages/brahmic/apisutra/tests/Unit/Timing/ExternalDeadlineTest.php": {
+            "errors": 11,
+            "warnings": 0,
+            "messages": [
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 66
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 66
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 95
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 152,
+                "column": 97
+              },
+              {
+                "message": "Expected 1 space after class keyword; 0 found",
+                "source": "PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 165,
+                "column": 48
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 166,
+                "column": 66
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 166,
+                "column": 67
+              },
+              {
+                "message": "Opening brace should be on a new line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 66
+              },
+              {
+                "message": "Opening brace must be the last content on the line",
+                "source": "Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 66
+              },
+              {
+                "message": "Each PHP statement must be on a line by itself",
+                "source": "Generic.Formatting.DisallowMultipleStatements.SameLine",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 108
+              },
+              {
+                "message": "Closing brace must be on a line by itself",
+                "source": "Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore",
+                "severity": 5,
+                "fixable": true,
+                "type": "ERROR",
+                "line": 167,
+                "column": 110
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

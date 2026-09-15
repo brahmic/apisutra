@@ -481,7 +481,7 @@ abstract class AbstractClient implements ContextualClientInterface, AttributeMet
     private function configureAuthCache(ClientConfig $config): void
     {
         if ($config->auth instanceof CacheAwareInterface) {
-            $cache = $config->cache ?? $config->cacheConfig?->store;
+            $cache = $config->cacheStore;
             if ($cache !== null) {
                 $config->auth->setCache($cache);
             }

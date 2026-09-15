@@ -99,7 +99,7 @@ $cache = new Psr16Cache(new FilesystemAdapter('', 0, $cacheDir));
 $client = ProviderClient::make(
     apiKey: LiveEnv::apiKey(),
     transport: $transport,
-    cache: $cache,
+    cacheStore: $cache,
     cacheTtl: 604800,
 );
 ```

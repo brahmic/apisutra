@@ -35,14 +35,15 @@ beforeEach(function (): void {
     ])]);
     $this->config = new ClientConfig(
         baseUrl: 'https://api.test',
-        cache: new CacheConfig(store: $this->store, prefix: 'provider:account-a'),
+        cacheStore: $this->store,
+        cacheConfig: new CacheConfig(prefix: 'provider:account-a'),
         environment: Environment::Testing,
     );
     $this->client = new TestClient($this->config, $this->transport);
 });
 
 it('изолирует двух клиентов, позволяет общий scope и очищает только своё пространство', function (): void {
-    $b = new TestClient($this->config->with(cache: new CacheConfig(store: $this->store, prefix: 'provider:account-b')), $this->transport);
+    $b = new TestClient($this->config->with(cacheStore: $this->store, cacheConfig: new CacheConfig(prefix: 'provider:account-b')), $this->transport);
     $same = new TestClient($this->config, $this->transport);
     $aRequest = (new CacheProbeRequest())->setClient($this->client);
     $bRequest = (new CacheProbeRequest())->setClient($b);
@@ -61,7 +62,7 @@ it('изолирует двух клиентов, позволяет общий 
 });
 
 it('без prefix кеширует в автоматическом пространстве и безопасно очищает его', function (): void {
-    $client = new TestClient($this->config->with(cache: new CacheConfig(store: $this->store)), $this->transport);
+    $client = new TestClient($this->config->with(cacheStore: $this->store, cacheConfig: new CacheConfig()), $this->transport);
     $request = (new CacheProbeRequest())->setClient($client);
     expect($request->withCache()->dataOrFail())->toBe(['value' => 1])
         ->and($request->withCache()->dataOrFail())->toBe(['value' => 1]);
@@ -141,7 +142,7 @@ it('custom key объединяет HTTP-варианты только внут�
 
 it('cache hit не продлевает TTL и режимы не меняют группу очистки', function (): void {
     $store = new ControllableTimeCache(1000);
-    $client = new TestClient($this->config->with(cache: new CacheConfig(store: $store, prefix: 'account', ttl: 10)), $this->transport);
+    $client = new TestClient($this->config->with(cacheStore: $store, cacheConfig: new CacheConfig(prefix: 'account', ttl: 10)), $this->transport);
     $request = (new CacheProbeRequest())->setClient($client);
     expect($request->dataOrFail())->toBe(['value' => 1]);
     $store->advance(6);
@@ -213,7 +214,7 @@ it('read-only не создаёт служебные записи при пус�
 it('раздельные store и CacheConfig поддерживают кеширование', function (): void {
     $config = new ClientConfig(
         baseUrl: 'https://api.test',
-        cache: $this->store,
+        cacheStore: $this->store,
         cacheConfig: new CacheConfig(prefix: 'account'),
         environment: Environment::Testing,
     );
@@ -246,7 +247,8 @@ it('после auth retry не записывает ответ под ключо
     $store = new ArrayCache();
     $client = new TestClient($this->config->with(
         auth: new RefreshingAuthenticator(),
-        cache: new CacheConfig(store: $store, prefix: 'account'),
+        cacheStore: $store,
+        cacheConfig: new CacheConfig(prefix: 'account'),
     ), $this->transport);
     $this->transport->fake([
         CacheProbeRequest::class => MockResponse::sequence([

@@ -28,7 +28,7 @@ describe('AuthHandler refresh lock', function () {
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             auth: $auth,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             environment: Environment::Testing,
         );
 
@@ -64,7 +64,7 @@ describe('AuthHandler refresh lock', function () {
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             auth: $auth,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             environment: Environment::Testing,
         );
 
@@ -99,7 +99,7 @@ describe('AuthHandler refresh lock', function () {
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             auth: $auth,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             environment: Environment::Testing,
         );
 
@@ -124,7 +124,7 @@ describe('AuthHandler refresh lock', function () {
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             auth: $auth,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             environment: Environment::Testing,
         );
 
@@ -150,7 +150,7 @@ describe('AuthHandler refresh lock', function () {
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             auth: $auth,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             environment: Environment::Testing,
         );
 
@@ -185,7 +185,7 @@ describe('AuthHandler refresh lock', function () {
             baseUrl: 'https://api.test',
             auth: $auth,
             authRetryAttempts: 1,
-            cache: new CacheConfig(locks: $locks),
+            cacheConfig: new CacheConfig(locks: $locks),
             environment: Environment::Testing,
         );
 

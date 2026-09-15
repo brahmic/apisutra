@@ -1,0 +1,115 @@
+{
+  "target": {
+    "command": [
+      "vendor/bin/pest",
+      "--colors=never",
+      "tests/Unit/Core/ClientConfigCacheTest.php",
+      "tests/Unit/Cache",
+      "tests/Unit/Auth"
+    ],
+    "exit": 0
+  },
+  "tests": {
+    "command": [
+      "composer",
+      "test",
+      "--",
+      "--colors=never"
+    ],
+    "exit": 0
+  },
+  "phpstan": {
+    "command": [
+      "vendor/bin/phpstan",
+      "analyse",
+      "--no-progress",
+      "--memory-limit=1G",
+      "src/Config/ClientConfig.php",
+      "src/Config/CacheConfig.php",
+      "src/Core/AbstractClient.php",
+      "src/Pipeline/Auth/AuthBindingResolver.php",
+      "src/Pipeline/Auth/AuthHandler.php",
+      "src/Pipeline/Cache/CacheManager.php",
+      "src/Traits/TestingClientTrait.php"
+    ],
+    "exit": 0
+  },
+  "style": {
+    "command": [
+      "vendor/bin/phpcs",
+      "-n",
+      "--report=summary",
+      "docs/example/client-showcase/run.php",
+      "src/Config/CacheConfig.php",
+      "src/Config/ClientConfig.php",
+      "src/Core/AbstractClient.php",
+      "src/Pipeline/Auth/AuthBindingResolver.php",
+      "src/Pipeline/Auth/AuthHandler.php",
+      "src/Pipeline/Cache/CacheManager.php",
+      "tests/Integration/CoreFlowIntegrationTest.php",
+      "tests/Support/ClockCache.php",
+      "tests/Support/TestClientFactory.php",
+      "tests/Support/standalone-auth-smoke.php",
+      "tests/Support/standalone-smoke.php",
+      "tests/Support/streaming-memory-smoke.php",
+      "tests/Unit/Auth/AuthHandlerRefreshLockTest.php",
+      "tests/Unit/Auth/AuthHandlerTest.php",
+      "tests/Unit/Auth/AuthLeaseContractTest.php",
+      "tests/Unit/Auth/TokenIsolationTest.php",
+      "tests/Unit/Cache/AutomaticCacheIdentityTest.php",
+      "tests/Unit/Cache/CacheIsolationTest.php",
+      "tests/Unit/Cache/CacheManagerDownloadTest.php",
+      "tests/Unit/Cache/CacheManagerFileUploadTest.php",
+      "tests/Unit/Cache/CacheManagerOverridesTest.php",
+      "tests/Unit/Cache/CacheManagerTest.php",
+      "tests/Unit/Cache/CacheManagerTtlTest.php",
+      "tests/Unit/Cache/CacheStoreSeparationTest.php",
+      "tests/Unit/Core/ClientConfigCacheTest.php",
+      "tests/Unit/Pipeline/PipelineIntegrationTest.php",
+      "tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php",
+      "tests/Unit/Pipeline/PreparedBodyContractTest.php",
+      "tests/Unit/RateLimit/JointQuotaTest.php",
+      "tests/Unit/Retry/RetrySenderAuthRefreshTest.php",
+      "tests/Unit/Serialization/BigIntegerIntegrationTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedEntriesTest.php",
+      "tests/Unit/Serialization/ExternalHydrationEntriesTest.php",
+      "tests/Unit/Serialization/ExternalHydrationWireTest.php",
+      "tests/Unit/Serialization/ExternalUrlContractTest.php",
+      "tests/Unit/Serialization/HydrationCompatibilityTest.php",
+      "tests/Unit/Serialization/RawResponseTest.php",
+      "tests/Unit/Serialization/UriPipelineTest.php",
+      "tests/Unit/Timing/ExecutionBudgetTest.php",
+      "tests/Unit/Timing/ExternalDeadlineTest.php"
+    ],
+    "exit": 1
+  },
+  "docs": {
+    "command": [
+      "composer",
+      "check-docs"
+    ],
+    "exit": 0
+  },
+  "docs-types": {
+    "command": [
+      "composer",
+      "analyse-docs"
+    ],
+    "exit": 0
+  },
+  "upstream": {
+    "command": [
+      "php",
+      "/home/dev/www/packages/brahmic/apisutra/.workflow/current/pln-033-cache-config-copy/artifacts/migrated-upstream-probe.php"
+    ],
+    "exit": 0
+  },
+  "whitespace": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0
+  }
+}

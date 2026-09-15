@@ -18,13 +18,40 @@ use Brahmic\ApiSutra\Config\ClientConfig;
 $config = new ClientConfig(
     baseUrl: 'https://api.example',
     auth: new BearerAuthenticator($token),
-    cache: new CacheConfig(store: $store, ttl: 60),
+    cacheStore: $store, cacheConfig: new CacheConfig(ttl: 60),
 );
 ```
 
-Короткая запись `cache: $store` тоже включает кеширование разрешённых операций.
-Можно разделить настройки: `cache: $store, cacheConfig: new CacheConfig(ttl: 60)`.
-Дефолты `CacheConfig`: `ttl=3600`, `prefix=''`, `mode=Enabled`, `identity=null`.
+`cacheStore: $store` без блока параметров включает кеширование разрешённых операций.
+`CacheConfig` содержит только параметры: `ttl=3600`, `prefix=''`, `mode=Enabled`,
+`identity=null`, `locks=null`. Без cacheStore блок сам по себе кеш не подключает.
+HTTP и общий auth-кеш используют один store, сохраняя отдельные ключи и правила identity.
+
+## Копирование и отключение
+
+| Изменение | Результат новой конфигурации |
+| --- | --- |
+| `with()`, `with(timeout: 7)` | Store и весь блок параметров сохранены по ссылке |
+| `with(cacheStore: $otherStore)` | Заменён только backend |
+| `with(cacheConfig: new CacheConfig(ttl: 10))` | Параметры заменены целиком; store сохранён |
+| `with(cacheStore: null)` | Общий backend отключён, параметры сохранены |
+| `with(cacheConfig: null)` | Store сохранён, действуют defaults, включая Enabled |
+| `with(cacheStore: null, cacheConfig: null)` | Подключение и параметры убраны |
+
+Новая конфигурация не меняет исходную и уже созданный клиент, не очищает и не клонирует
+хранилище. Новый TTL действует на новые записи; существующие сроки сами не обновляются.
+При null store даже `withCache()` не подключит прежний backend. После сброса только
+параметров Disabled сменится на Enabled и HTTP-кеш снова сможет работать.
+
+Для отключения только HTTP сохраняйте store и задавайте `CacheMode::Disabled`
+или `withoutCache()` для одного выполнения. Auth продолжает использовать store;
+обычные явные HTTP overrides сохраняют прежний приоритет над Disabled.
+Явный `cacheConfig.locks` также сохраняется при `cacheStore: null` и может использовать
+собственный backend. Для сброса и store, и locks сбросьте оба поля.
+
+Старые `cache:` и `CacheConfig(store: ...)` удалены. См. [миграцию](../../migration/unreleased.md#разделение-store-и-параметров-кеша).
+
+## Пространство кеша
 
 Пространство включает класс SDK-клиента, `baseUrl`, фактически выбранную auth identity
 и объявленный SDK контекст tenant. Одинаковые подключения разделяют кеш между
@@ -114,7 +141,7 @@ final class TenantSummaryRequest extends AbstractRequest implements CacheIdentit
 ```
 
 Для контекста подключения SDK аналогично передаёт объект контракта в
-`new CacheConfig(store: $store, identity: $tenantContext)`. Конфигурационная identity
+`new CacheConfig(identity: $tenantContext)` рядом с `cacheStore: $store`. Конфигурационная identity
 не заменяет обязательную identity собственного authenticator. Если выбранный
 контракт возвращает неопределённое значение, запрос выполняется без кеширования;
 при DEBUG-логировании доступна причина `cache_reason=unknown_identity`.

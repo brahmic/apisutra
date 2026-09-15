@@ -22,6 +22,7 @@ use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Brahmic\ApiSutra\VO\Http\ProviderResponse;
 use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 use Psr\Log\LogLevel;
+use Psr\SimpleCache\CacheInterface;
 
 /** Кеш ответов с автоматической identity и изолированным инвалидированием. */
 final readonly class CacheManager
@@ -40,8 +41,8 @@ final readonly class CacheManager
 
     public function clearScope(): void
     {
-        $cache = $this->config->cacheConfig ?? new CacheConfig(store: $this->config->cache);
-        $store = $cache->store ?? $this->config->cache;
+        $cache = $this->config->cacheConfig ?? new CacheConfig();
+        $store = $this->config->cacheStore;
         if ($store === null) {
             return;
         }
@@ -68,7 +69,7 @@ final readonly class CacheManager
         if ($state === null) {
             return;
         }
-        [$cache, $override] = $state;
+        [$cache, $override, $store] = $state;
         $scope = $this->scope($request, $cache, $options);
         if ($scope === null || !$this->isAllowed($request, $cache, $override)) {
             return;
@@ -82,7 +83,7 @@ final readonly class CacheManager
         if ($group === null) {
             return;
         }
-        (new CacheGenerations($cache->store))->invalidate(
+        (new CacheGenerations($store))->invalidate(
             CacheGenerations::key('group', $scope, $group),
             max(60, $override->ttl ?? $cache->ttl),
         );
@@ -109,7 +110,7 @@ final readonly class CacheManager
         if ($state === null || $context->preparedRequest === null) {
             return;
         }
-        [$cache, $override] = $state;
+        [$cache, $override, $store] = $state;
         $scope = $this->scope($request, $cache, $context->options, $context);
         if ($scope === null || $this->identities->request($request) === null) {
             (new AuditLogger($this->config))->log(LogLevel::DEBUG, 'Кеш пропущен: identity не определена', [
@@ -123,7 +124,7 @@ final readonly class CacheManager
         }
 
         $ttl = $override->ttl ?? $cache->ttl;
-        $generations = new CacheGenerations($cache->store);
+        $generations = new CacheGenerations($store);
         $scopeKey = CacheGenerations::key('scope', $scope);
         $groupKey = CacheGenerations::key('group', $scope, $this->groupIdentity($request, $context->preparedRequest));
         $mode = $this->resolveCacheMode($cache, $override->mode);
@@ -134,7 +135,7 @@ final readonly class CacheManager
             return;
         }
         $context->cacheExecution = new CacheExecutionState(
-            $cache->store,
+            $store,
             $scopeKey,
             $scopeGeneration,
             $groupKey,
@@ -232,8 +233,7 @@ final readonly class CacheManager
     private function hasSameAccess(RequestInterface $request, PipelineContext $context, CacheExecutionState $state): bool
     {
         $cache = $this->resolveCacheConfig($request);
-        return $cache !== null
-            && $this->scope($request, $cache, $context->options, $context) === $state->scopeIdentity
+        return $this->scope($request, $cache, $context->options, $context) === $state->scopeIdentity
             && $this->identities->request($request) === $state->tenantIdentity;
     }
 
@@ -287,33 +287,19 @@ final readonly class CacheManager
         ]));
     }
 
-    private function resolveCacheConfig(RequestInterface $request): ?CacheConfig
+    private function resolveCacheConfig(RequestInterface $request): CacheConfig
     {
-        $cacheConfig = $this->config->cacheConfig;
-        if ($cacheConfig !== null && $cacheConfig->store === null && $this->config->cache !== null) {
-            $cacheConfig = new CacheConfig(
-                store: $this->config->cache,
-                ttl: $cacheConfig->ttl,
-                prefix: $cacheConfig->prefix,
-                mode: $cacheConfig->mode,
-                identity: $cacheConfig->identity,
-                locks: $cacheConfig->locks,
-            );
-        }
-        if ($cacheConfig === null && $this->config->cache !== null) {
-            $cacheConfig = new CacheConfig(store: $this->config->cache);
-        }
+        $cacheConfig = $this->config->cacheConfig ?? new CacheConfig();
 
         if ($request instanceof AbstractRequest) {
             $attribute = $request->getCacheAttribute();
             if ($attribute !== null) {
                 return new CacheConfig(
-                    store: $cacheConfig->store ?? $this->config->cache,
-                    ttl: $attribute->ttl ?? $cacheConfig->ttl ?? 3600,
-                    prefix: $cacheConfig->prefix ?? '',
+                    ttl: $attribute->ttl ?? $cacheConfig->ttl,
+                    prefix: $cacheConfig->prefix,
                     mode: $attribute->mode,
-                    identity: $cacheConfig?->identity,
-                    locks: $cacheConfig?->locks,
+                    identity: $cacheConfig->identity,
+                    locks: $cacheConfig->locks,
                 );
             }
         }
@@ -354,16 +340,16 @@ final readonly class CacheManager
     }
 
     /**
-     * @return array{0: CacheConfig, 1: CacheOverride}|null
+     * @return array{CacheConfig, CacheOverride, CacheInterface}|null
      */
     private function resolveCacheState(RequestInterface $request, ?RequestOptions $options): ?array
     {
-        $cache = $this->resolveCacheWithStore($request);
-        if ($cache === null) {
+        $store = $this->config->cacheStore;
+        if ($store === null) {
             return null;
         }
 
-        return [$cache, $this->resolveCacheOverride($request, $options)];
+        return [$this->resolveCacheConfig($request), $this->resolveCacheOverride($request, $options), $store];
     }
 
     private function resolveCacheMode(CacheConfig $cache, ?CacheMode $overrideMode): CacheMode
@@ -385,21 +371,6 @@ final readonly class CacheManager
             CacheMode::Enabled, CacheMode::WriteOnly => true,
             CacheMode::Disabled, CacheMode::ReadOnly => false,
         };
-    }
-
-    private function hasStore(?CacheConfig $cache): bool
-    {
-        return $cache !== null && $cache->store !== null;
-    }
-
-    private function resolveCacheWithStore(RequestInterface $request): ?CacheConfig
-    {
-        $cache = $this->resolveCacheConfig($request);
-        if (!$this->hasStore($cache)) {
-            return null;
-        }
-
-        return $cache;
     }
 
     /**

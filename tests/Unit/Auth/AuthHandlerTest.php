@@ -22,7 +22,8 @@ describe('AuthHandler', function () {
         $config = new ClientConfig(
             baseUrl: 'https://provider.test',
             auth: $auth,
-            cache: new CacheConfig(store: $cache),
+            cacheStore: $cache,
+            cacheConfig: new CacheConfig(),
             environment: Environment::Testing,
         );
 

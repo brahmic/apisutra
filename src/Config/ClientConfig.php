@@ -56,14 +56,12 @@ use Throwable;
  * - continuationModeApplicator: provider-specific mapping mode в transport-поля;
  * - continuationStateResolver: явное определение Pending/Ready/Failed для ожидания.
  *
- * @see docs/guides/client-config/README.md
- * @see docs/guides/client-config/responses-errors.md
- * @see docs/guides/provider-async-await.md
+ * @see docs/reference/client/configuration.md
+ * @see docs/reference/results/errors.md
+ * @see docs/guides/recipes/continuation.md
  */
 final readonly class ClientConfig
 {
-    public ?CacheInterface $cache;
-    public ?CacheConfig $cacheConfig;
     public PaginationRule $paginationRule;
     public DateTimeSerializationPolicy $requestDateTime;
 
@@ -86,8 +84,8 @@ final readonly class ClientConfig
         public int $authRetryAttempts = 1,
         public ?LoggerInterface $logger = null,
         public string $logLevel = LogLevel::INFO,
-        CacheInterface|CacheConfig|null $cache = null,
-        ?CacheConfig $cacheConfig = null,
+        public ?CacheInterface $cacheStore = null,
+        public ?CacheConfig $cacheConfig = null,
         public int $timeout = 30,
         public int $connectTimeout = 10,
         public ?RetryConfig $retry = null,
@@ -132,14 +130,6 @@ final readonly class ClientConfig
         public ?ContinuationStateResolverInterface $continuationStateResolver = null,
         public ?HydrationRules $hydrationRules = null,
     ) {
-        if ($cache instanceof CacheConfig) {
-            $this->cacheConfig = $cache;
-            $this->cache = $cache->store;
-        } else {
-            $this->cache = $cache;
-            $this->cacheConfig = $cacheConfig;
-        }
-
         $this->paginationRule = $paginationRule ?? PaginationRule::single();
         $this->requestDateTime = $requestDateTime ?? new DateTimeSerializationPolicy();
         $this->validate();
@@ -177,7 +167,7 @@ final readonly class ClientConfig
             'authRetryAttempts' => $this->authRetryAttempts,
             'logger' => $this->logger,
             'logLevel' => $this->logLevel,
-            'cache' => $this->cacheConfig ?? $this->cache,
+            'cacheStore' => $this->cacheStore,
             'cacheConfig' => $this->cacheConfig,
             'timeout' => $this->timeout,
             'connectTimeout' => $this->connectTimeout,

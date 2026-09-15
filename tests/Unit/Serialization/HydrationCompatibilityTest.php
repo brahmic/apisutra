@@ -101,7 +101,7 @@ it('доставляет ошибки JsonCast через promise и throwOnErro
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success(['payload' => '{"ok":true}'])]);
     $cache = new StrictCache();
-    $config = new ClientConfig(baseUrl: 'https://fixture.test', environment: Environment::Testing, cache: $cache);
+    $config = new ClientConfig(baseUrl: 'https://fixture.test', environment: Environment::Testing, cacheStore: $cache);
     $request = (new HydrationProbeRequest(HydrationJsonPayloadDto::class))->setClient(new TestClient($config, $transport));
     expect($request->send()->dataOrFail()->payload)->toBe(['ok' => true]);
     // Моделируем сохранённый HTTP-ответ, который не проходит текущий контракт DTO.

@@ -59,7 +59,7 @@ it('исчерпание ожидания прекращает исполнен�
     $transport->fake([AuthRequest::class => MockResponse::make('rejected', 401)]);
     $config = new ClientConfig(
         baseUrl: 'https://fixture.test', auth: $auth, timeout: 5,
-        cache: new CacheConfig(locks: $locks),
+        cacheConfig: new CacheConfig(locks: $locks),
         retry: new RetryConfig(totalTimeoutMs: $deadline ? 100 : null, retryExceptions: [Throwable::class]),
     );
     $client = new TestClient($config, $transport, $clock, $clock);
@@ -80,7 +80,7 @@ it('ошибка lock backend не включает fallback и не раскр�
     $transport = new MockTransport();
     $transport->fake([RefreshTokenRequest::class => MockResponse::success(['token' => 'fixture'])]);
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', auth: new LockAwareAuthenticator(), cache: new CacheConfig(locks: $locks),
+        baseUrl: 'https://fixture.test', auth: new LockAwareAuthenticator(), cacheConfig: new CacheConfig(locks: $locks),
     ), $transport);
     $result = (new AuthRequest('fixture'))->setClient($client)->send()->raw();
     expect($result->errors->first()->code->value)->toBe('execution_error')
@@ -95,7 +95,7 @@ it('ошибка release сохраняет исходный отказ refresh'
     $transport = new MockTransport();
     $transport->fake([RefreshTokenRequest::class => MockResponse::make('rejected', 401)]);
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', authRetryOn401: false, auth: new LockAwareAuthenticator(), cache: new CacheConfig(locks: $locks),
+        baseUrl: 'https://fixture.test', authRetryOn401: false, auth: new LockAwareAuthenticator(), cacheConfig: new CacheConfig(locks: $locks),
     ), $transport);
     $result = (new AuthRequest('fixture'))->setClient($client)->send()->raw();
     expect($result->response->status)->toBe(401)
@@ -114,9 +114,9 @@ it('store с capability выбирается автоматически, явн�
         }
     };
     $provider = new TestAuthLockProvider();
-    $config = new ClientConfig(baseUrl: 'https://fixture.test', cache: new CacheConfig(store: $cache, locks: $explicit ? $provider : null));
+    $config = new ClientConfig(baseUrl: 'https://fixture.test', cacheStore: $cache, cacheConfig: new CacheConfig(locks: $explicit ? $provider : null));
     $copy = $config->with(debug: true);
-    $lock = new AuthRefreshLock($copy->cache, $copy->cacheConfig->locks);
+    $lock = new AuthRefreshLock($copy->cacheStore, $copy->cacheConfig->locks);
     $lease = $lock->acquireLease('fixture', 5);
     expect($lease !== null)->toBe($explicit)->and($cache->calls)->toBe($explicit ? 0 : 1);
 })->with([false, true]);
@@ -128,7 +128,7 @@ it('deadline после медленного захвата освобождае
     $locks->onAcquire = static fn () => $clock->advance(150);
     $transport = new MockTransport();
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', auth: new LockAwareAuthenticator(), cache: new CacheConfig(locks: $locks),
+        baseUrl: 'https://fixture.test', auth: new LockAwareAuthenticator(), cacheConfig: new CacheConfig(locks: $locks),
         retry: new RetryConfig(totalTimeoutMs: 100),
     ), $transport, $clock, $clock);
     $result = (new AuthRequest('fixture'))->setClient($client)->send()->raw();
@@ -143,7 +143,7 @@ it('lock timeout сохраняет throwOnErrors и async контракт', fu
     $transport = new MockTransport();
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test', timeout: 5, auth: new LockAwareAuthenticator(),
-        cache: new CacheConfig(locks: $locks), throwOnErrors: $throws,
+        cacheConfig: new CacheConfig(locks: $locks), throwOnErrors: $throws,
     ), $transport, $clock, $clock);
     $request = (new AuthRequest('fixture'))->setClient($client);
     if ($throws) {

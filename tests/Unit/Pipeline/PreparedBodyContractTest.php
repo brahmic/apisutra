@@ -181,7 +181,8 @@ it('очистка upload сохраняет запрет кеша, auth и об
     $factory = new HttpFactory();
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test',
-        cache: new CacheConfig(store: $cache),
+        cacheStore: $cache,
+        cacheConfig: new CacheConfig(),
         auth: new ApiKeyAuthenticator('fixture-secret'),
         retry: new RetryConfig(totalTimeoutMs: 3000),
     ), new HttpTransport($http, $factory, $factory));

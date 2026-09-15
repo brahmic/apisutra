@@ -7,12 +7,10 @@ namespace Brahmic\ApiSutra\Config;
 use Brahmic\ApiSutra\Contracts\Interfaces\Auth\AuthLockProviderInterface;
 use Brahmic\ApiSutra\Contracts\Interfaces\Cache\CacheIdentityProviderInterface;
 use Brahmic\ApiSutra\Enums\Cache\CacheMode;
-use Psr\SimpleCache\CacheInterface;
 
 final readonly class CacheConfig
 {
     public function __construct(
-        public ?CacheInterface $store = null,
         public int $ttl = 3600,
         public string $prefix = '',
         public CacheMode $mode = CacheMode::Enabled,

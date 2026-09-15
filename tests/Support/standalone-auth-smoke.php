@@ -43,7 +43,7 @@ foreach (['a', 'b'] as $name) {
         new Response(200, ['Content-Type' => 'application/json'], '{"id":1,"name":"fixture"}'),
         new Response(200, ['Content-Type' => 'application/json'], '{"id":1,"name":"fixture"}'),
     ]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://' . $name . '.fixture.test', auth: $auth, cache: $store), new HttpTransport($http, $factory, $factory));
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://' . $name . '.fixture.test', auth: $auth, cacheStore: $store), new HttpTransport($http, $factory, $factory));
     $request = (new AuthRequest('fixture'))->withoutCache();
     if (!$client->send($request)->raw()->isSuccess() || !$client->sendAsync($request)->raw()->isSuccess()
         || count($http->requests) !== 3 || $http->requests[2]->getHeaderLine('Authorization') !== 'Bearer token-' . $name) {
@@ -61,7 +61,7 @@ $locks = new TestAuthLockProvider($clock);
 $locks->busy = true;
 $http = new ConsumingHttpClient([]);
 $client = new TestClient(new ClientConfig(
-    baseUrl: 'https://fixture.test', timeout: 5, auth: $auth, cache: new CacheConfig(locks: $locks),
+    baseUrl: 'https://fixture.test', timeout: 5, auth: $auth, cacheConfig: new CacheConfig(locks: $locks),
 ), new HttpTransport($http, $factory, $factory), $clock, $clock);
 $result = (new AuthRequest('fixture'))->setClient($client)->sendAsync()->raw();
 if ($result->errors->first()?->context['reason'] !== 'auth_refresh_lock_timeout' || $http->requests !== []) {

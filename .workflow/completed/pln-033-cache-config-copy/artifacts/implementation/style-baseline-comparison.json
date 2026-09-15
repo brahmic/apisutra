@@ -1,0 +1,187 @@
+[
+  {
+    "file": "src/Config/CacheConfig.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "src/Config/ClientConfig.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "src/Core/AbstractClient.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "src/Pipeline/Auth/AuthBindingResolver.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "src/Pipeline/Auth/AuthHandler.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "src/Pipeline/Cache/CacheManager.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Integration/CoreFlowIntegrationTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Support/TestClientFactory.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Support/standalone-auth-smoke.php",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "file": "tests/Support/standalone-smoke.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Support/streaming-memory-smoke.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Auth/AuthHandlerRefreshLockTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Auth/AuthHandlerTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Auth/AuthLeaseContractTest.php",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "file": "tests/Unit/Auth/TokenIsolationTest.php",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "file": "tests/Unit/Cache/AutomaticCacheIdentityTest.php",
+    "before": 4,
+    "after": 2
+  },
+  {
+    "file": "tests/Unit/Cache/CacheIsolationTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Cache/CacheManagerDownloadTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Cache/CacheManagerFileUploadTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Cache/CacheManagerOverridesTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Cache/CacheManagerTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Cache/CacheManagerTtlTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Pipeline/PipelineIntegrationTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Pipeline/PreparedBodyContractTest.php",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "file": "tests/Unit/RateLimit/JointQuotaTest.php",
+    "before": 52,
+    "after": 52
+  },
+  {
+    "file": "tests/Unit/Retry/RetrySenderAuthRefreshTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Serialization/BigIntegerIntegrationTest.php",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "file": "tests/Unit/Serialization/ConstructorOwnedEntriesTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Serialization/ExternalHydrationEntriesTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Serialization/ExternalHydrationWireTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Serialization/ExternalUrlContractTest.php",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "file": "tests/Unit/Serialization/HydrationCompatibilityTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Serialization/RawResponseTest.php",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "file": "tests/Unit/Serialization/UriPipelineTest.php",
+    "before": 0,
+    "after": 0
+  },
+  {
+    "file": "tests/Unit/Timing/ExecutionBudgetTest.php",
+    "before": 16,
+    "after": 17
+  },
+  {
+    "file": "tests/Unit/Timing/ExternalDeadlineTest.php",
+    "before": 11,
+    "after": 11
+  }
+]

@@ -14,18 +14,18 @@ null-семантики; HTTP и auth читают их в разном поря
 
 Владелец предложил устранить неоднозначность архитектурно и 2026-09-15 допустил
 миграцию ради более чистого и гибкого API. Ответ и пересмотр прежних K01/K02
-зафиксированы в [K03](../current/pln-033-cache-config-copy/questions.md#k03-разделение-api-и-миграция).
+зафиксированы в [K03](../completed/pln-033-cache-config-copy/questions.md#k03-разделение-api-и-миграция).
 
 ## Решение
 
-В том же [плане 033](../current/pln-033-cache-config-copy/pln-033-readme.md) заменить
+В том же [плане 033](../completed/pln-033-cache-config-copy/pln-033-readme.md) заменить
 cache на cacheStore, принимающий только PSR-16 store или null; удалить store из
 CacheConfig. Блок настроек сохраняется как независимый аргумент cacheConfig.
 Совместимые алиасы старых форм не оставлять: они вернули бы второй путь объявления.
 
 Конкретные сигнатуры, defaults, with/null, ошибки и границы HTTP/auth принадлежат
-[контракту](../current/pln-033-cache-config-copy/contracts.md), действия потребителя —
-[миграции](../current/pln-033-cache-config-copy/migration.md). Этот ADR объясняет выбор,
+[контракту](../completed/pln-033-cache-config-copy/contracts.md), действия потребителя —
+[миграции](../completed/pln-033-cache-config-copy/migration.md). Этот ADR объясняет выбор,
 но не дублирует таблицы поведения. Новый API ещё не реализован.
 
 ## Последствия
@@ -55,4 +55,4 @@ CacheConfig. Блок настроек сохраняется как незав�
 | Заодно разнести HTTP/auth на разные конфигурации | Самостоятельный объём с новыми правилами identity/locks; для AS-6 не требуется |
 
 Предшествующее обсуждение и его пересмотр сохранены в
-[архитектурном разборе](../current/pln-033-cache-config-copy/architecture-review.md).
+[архитектурном разборе](../completed/pln-033-cache-config-copy/architecture-review.md).
