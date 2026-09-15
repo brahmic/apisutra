@@ -1,0 +1,14 @@
+{
+  "log_normalization": "strip ANSI colors, trailing spaces and empty EOF lines",
+  "command": [
+    "composer",
+    "check-package",
+    "--",
+    "--report",
+    ".workflow/current/pln-034-unified-cache-config/artifacts/package-final-report.json"
+  ],
+  "cwd": "repository root",
+  "exit_code": 0,
+  "seconds": 5.25,
+  "time_utc": "2026-09-15T16:43:25.146500+00:00"
+}

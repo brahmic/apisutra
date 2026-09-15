@@ -18,7 +18,7 @@ client showcase, справочник и API registry; добавлена вер
 | U01–U06 | ClientConfigCacheTest: ссылки, полная/частичная замена, null, TypeError/Error, позиции, Laravel, отсутствие IO |
 | U07–U12 | UnifiedCacheConfigTest: GET/TTL, отключение тремя способами, auth/locks, прежние записи и долгоживущий клиент; AutomaticCacheIdentityTest/AuthLeaseContractTest: tenant, атрибут и fallback locks |
 | U13 | Документация и типизация примеров прошли; client showcase выполняется в обоих архивах |
-| U14 | Тесты, analyse и lint прошли; финальные архивы и CI ожидают проверки из основного checkout |
+| U14 | Тесты, analyse, lint и финальные архивы прошли; ожидается CI релизного commit |
 
 ## Проверки
 
@@ -33,8 +33,9 @@ client showcase, справочник и API registry; добавлена вер
   [типы примеров](artifacts/docs-types.json): успешно.
 - [Первый package-прогон](artifacts/package.json): все 20 smoke прошли в каждом архиве;
   сравнение состава нашло только служебный .git-файл worktree, который Composer archive
-  включил как обычный файл. Финальную проверку выполнить из основного checkout без
-  изменения упаковки ради среды.
+  включил как обычный файл. [Финальная проверка](artifacts/package-final.json) из
+  основного checkout прошла: состав Git/Composer совпадает, 724 файла и 20 standalone
+  smoke в каждом архиве без dev-зависимостей. [Полный манифест](artifacts/package-final-report.json).
 
 Первый целевой прогон выявил оставшуюся старую форму изменения только identity в
 тесте: новый блок не содержал store. Фикстура переведена на CacheConfig::with(),
