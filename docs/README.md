@@ -12,6 +12,7 @@
 - [Описать DTO](start/describe-dto.md).
 - [Изучить возможности DTO на одном примере](guides/dto/showcase.md).
 - [Изучить создание и настройку клиента](guides/client/showcase.md).
+- [Загрузить, скачать файл и открыть архив](guides/recipes/files.md) — запускаемый пример без сети.
 - [Использовать готовый SDK](start/use-sdk.md).
 - [Диагностировать проблему](start/diagnose.md).
 

@@ -7,7 +7,8 @@
 | --- | --- |
 | [Records SDK](sdk/README.md) | Конфигурация, транспорт, ресурс, запрос, DTO и ошибка HTTP |
 | [Возможности клиента](client-showcase/README.md) | Auth, таймауты, retry, квоты, кеш, DTO, диагностика и разовые опции |
-| [Возможности DTO](dto-showcase/README.md) | Атрибуты и правила одного товара, DX/wire, defaults и диагностика |
+| [Возможности DTO](dto-showcase/README.md) | Атрибуты и правила одного товара, сериализация, Base64-поле, defaults и диагностика |
+| [Файлы и архивы](files/README.md) | Multipart/binary/Base64 upload, download в путь и поток, чтение TAR |
 | [Ожидание операции](continuation/README.md) | Pending/Ready, token, строгий финал и кеш await |
 | [Правила DTO](hydration-rules/README.md) | Mapping, nested/each, strict-список, extras и scoped cast |
 

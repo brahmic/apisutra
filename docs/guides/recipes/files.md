@@ -1,34 +1,160 @@
 # Файлы и архивы
 
-## Файлы
+Этот рецепт загружает документ тремя способами, скачивает его в путь и поток,
+затем читает файл из TAR-архива. Все операции воспроизводятся без сети:
 
-### Upload файла
-```php
-$file = FileInput::fromPath('/path/to/report.pdf');
-$result = $client->files()->upload($file)->dataOrFail();
+```bash
+php docs/example/files/run.php
 ```
-Тип: `UploadResultDto`
 
-### Download файла
+Команда выполняется из checkout после `composer install`. В установленном пакете
+добавьте к пути `vendor/brahmic/apisutra/`. Для TAR нужен `ext-phar`.
+Полная сборка клиента, локальные ответы и очистка временных файлов находятся в
+[run.php](../../example/files/run.php), результаты — в [expected.json](../../example/files/fixtures/expected.json).
+
+## Выбрать формат загрузки
+
+| Что принимает API | Декларация | Тело запроса |
+| --- | --- | --- |
+| Файл вместе с обычными полями | `FileFormat::Multipart` и `Body` | multipart/form-data; файловые байты передаются потоком |
+| Только содержимое одного файла | `FileFormat::Binary` | Raw body из потока, MIME берётся из FileInput |
+| Файл внутри JSON | `FileFormat::Base64` | Строка Base64 по имени поля; тело материализуется в памяти |
+
+Исходник можно открыть через `FileInput::fromPath()`, получить из строки через
+`fromContent()` или передать PSR-7 поток через `fromStream()`.
+[Полный контракт форматов и источников](../../reference/files/uploads.md).
+
+## Загрузить файл с описанием
+
+[MultipartUploadRequest](../../example/files/src/Resources/Files/MultipartUploadRequest.php)
+объявляет файловое поле `document` и текстовое `description`:
+
 ```php
-$resolved = $client->files()->download($id)->resolved();
-$file = $resolved->data();
-```
-Тип: `ResolvedResult<FileResponse>`
+declare(strict_types=1);
 
-## Архивы
+namespace Example\Files\Resources\Files;
 
-### Архив в ответе
-```php
-$archive = $client->reports()->archive($range)->dataOrFail();
-```
-Тип: `ArchiveResponse`
+use Brahmic\ApiSutra\Attributes\Http\Post;
+use Brahmic\ApiSutra\Attributes\Request\Body;
+use Brahmic\ApiSutra\Attributes\Request\File;
+use Brahmic\ApiSutra\Core\AbstractRequest;
+use Brahmic\ApiSutra\Enums\Http\FileFormat;
+use Brahmic\ApiSutra\VO\Files\FileInput;
 
-## Открыть скачанный архив
-```php
-$file = (new DownloadFile(10))->send()->dataOrFail();
-if ($file->isArchive()) {
-    $archive = $file->asArchive();
-    $first = $archive->first();
+#[Post('/files')]
+final class MultipartUploadRequest extends AbstractRequest
+{
+    public function __construct(
+        #[File('document', format: FileFormat::Multipart)]
+        public FileInput $document,
+        #[Body('description')]
+        public string $description,
+    ) {
+    }
 }
 ```
+
+Фрагмент ниже предполагает `$client` из [run.php](../../example/files/run.php)
+и существующий путь `$path` к документу:
+
+```php
+use Brahmic\ApiSutra\VO\Files\FileInput;
+use Example\Files\Resources\Files\MultipartUploadRequest;
+
+$input = FileInput::fromPath($path);
+try {
+    $result = $client->send(new MultipartUploadRequest($input, 'Monthly report'))->dataOrFail();
+} finally {
+    $input->close();
+}
+```
+
+Учебный ответ — `['id' => 7]`. Аналогичные запросы
+[BinaryUploadRequest](../../example/files/src/Resources/Files/BinaryUploadRequest.php) и
+[Base64UploadRequest](../../example/files/src/Resources/Files/Base64UploadRequest.php)
+показывают другие форматы. Для каждого вызова пример открывает источник заново.
+POST повторяется только при явно разрешённой безопасности операции;
+[повторы файлов и позиции потоков](../../reference/files/uploads.md#повторная-отправка).
+
+## Скачать в файл
+
+[DownloadFileRequest](../../example/files/src/Resources/Files/DownloadFileRequest.php)
+объявляет `Get('/files/{id}')`, `Path` для id и `Download` для результата `FileResponse`.
+Здесь `$directory` — существующий временный каталог, созданный в run.php:
+
+```php
+use Example\Files\Resources\Files\DownloadFileRequest;
+
+$file = $client->send(
+    (new DownloadFileRequest(7))->withDownloadTo($directory . '/report.txt'),
+)->dataOrFail();
+try {
+    echo $file->filename(); // report.txt
+    echo $file->size(); // 10 байт
+} finally {
+    $file->close();
+}
+```
+
+`withDownloadTo()` публикует файл после успешного получения ответа. Существующий путь
+защищён от перезаписи; для явной замены передайте `overwrite: true`.
+Без цели SDK вернёт `FileResponse` с временным файлом; позднее можно вызвать `saveTo($path)`.
+[Пути, перезапись и владение ресурсами](../../reference/files/downloads.md#сохранение-сразу-в-путь-или-поток).
+
+## Скачать в свой поток
+
+Тот же `$client` может записать результат в writable PSR-7 поток:
+
+```php
+use Example\Files\Resources\Files\DownloadFileRequest;
+use GuzzleHttp\Psr7\Utils;
+
+$sink = Utils::streamFor('');
+$file = null;
+try {
+    $file = $client->send((new DownloadFileRequest(7))->withDownloadTo($sink))->dataOrFail();
+    $sink->rewind();
+    echo $sink->getContents(); // Report #7 с переводом строки
+} finally {
+    $file?->close();
+    $sink->close();
+}
+```
+
+Пользовательский поток принадлежит вызывающему коду. Закрытие `FileResponse`
+не закрывает `$sink`; SDK записывает с текущей позиции приёмника.
+Для больших файлов обрабатывайте поток порциями: `content()` читает ответ целиком.
+
+## Открыть скачанный архив
+
+В run.php следующий fake-ответ содержит [report.tar](../../example/files/fixtures/report.tar)
+с MIME `application/x-tar`. После такой настройки:
+
+```php
+use Example\Files\Resources\Files\DownloadFileRequest;
+
+$file = $client->send(new DownloadFileRequest(8))->dataOrFail();
+try {
+    if ($file->isArchive()) {
+        $archive = $file->asArchive();
+        $entry = $archive->get('report.txt');
+        $entry?->saveTo($directory . '/extracted.txt');
+    }
+} finally {
+    unset($entry, $archive);
+    $file->close();
+}
+```
+
+`asArchive()` материализует архив в памяти. Для ZIP требуется `ext-zip`, для TAR —
+`ext-phar`. Выбор элемента, извлечение всех файлов и автоматическая обработка
+через ArchiveExtension описаны в [справочнике архивов](../../reference/files/archives.md).
+
+## Файл внутри DTO
+
+Если API возвращает содержимое файла строкой внутри JSON, используйте
+[Base64File и DataUriBase64FileCast](../dto/showcase.md#файл-в-поле-dto).
+Витрина DTO показывает чтение поля и обратную сериализацию в JSON.
+`File` описывает исходящий файловый параметр запроса; `Download` — файловый ответ целиком.
+
+[Все исполняемые примеры](../../example/README.md) · [Справочник файлов](../../reference/files/README.md).

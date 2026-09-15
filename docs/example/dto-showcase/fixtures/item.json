@@ -8,6 +8,7 @@
   "created_at": "2026-09-15T10:30:00+00:00",
   "state": "active",
   "price": "12.34",
+  "manual_file": "data:text/plain;base64,U0RLIG1hbnVhbA==",
   "seller": {"id": 9, "name": "Книжная лавка", "tier": "gold"},
   "tags": [{"name": "php"}, {"name": "sdk"}],
   "related_ids": [11, 12],

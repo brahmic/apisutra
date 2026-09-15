@@ -55,6 +55,7 @@ unset($fallbackSource['product_id'], $fallbackSource['title'], $fallbackSource['
 $fallbackSource['id'] = 8;
 $fallbackSource['description'] = 'Описание книги';
 $fallbackSource['stock'] = 0;
+$fallbackSource['manual_file'] = 'U0RLIG1hbnVhbA==';
 /** @var CatalogItemDto $fallback */
 $fallback = $hydrator->hydrate($fallbackSource, CatalogItemDto::class);
 
@@ -109,6 +110,8 @@ echo json_encode([
         'createdAt' => $item->createdAt->format(DATE_ATOM),
         'status' => $item->status->value,
         'priceMinor' => $item->priceMinor,
+        'manualContent' => $item->manual->content(),
+        'manualSize' => $item->manual->size(),
         'seller' => $item->seller,
         'firstTag' => $item->tags->first()?->name,
         'tagCount' => $item->tags->count(),
@@ -129,6 +132,7 @@ echo json_encode([
         'description' => $fallback->description,
         'tagCount' => $fallback->tags->count(),
         'stock' => $fallback->stock,
+        'manualContent' => $fallback->manual->content(),
     ],
     'errors' => $errors,
     'conflictRejected' => $conflictRejected,

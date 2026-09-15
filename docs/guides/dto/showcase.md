@@ -1,11 +1,10 @@
 # Возможности DTO на одном примере
 
-`CatalogItemDto` описывает товар вымышленного каталога. На одной модели показаны
-переименование полей, defaults, преобразования, вложенность, коллекции и исходящий JSON.
-Начните с таблицы результатов или прочитайте пример сверху вниз; все декларации ниже исполняются.
+`CatalogItemDto` описывает товар: маппинг, defaults, преобразования, вложенность, коллекции, Base64-файл и исходящий JSON.
 
 [Входной JSON](#входной-json) · [DTO](#декларация-dto) · [Правила](#правила-клиента) ·
-[Результат](#что-получит-приложение) · [Отправка](#что-уйдёт-в-запрос) · [Ошибки](#как-выглядят-ошибки) · [Другие варианты](#как-выбрать-другой-приём).
+[Результат](#что-получит-приложение) · [Сериализация](#атрибуты-сериализации) · [Файл в DTO](#файл-в-поле-dto) ·
+[Отправка](#что-уйдёт-в-запрос) · [Ошибки](#как-выглядят-ошибки) · [Другие варианты](#как-выбрать-другой-приём).
 
 Из checkout после `composer install`:
 
@@ -13,14 +12,12 @@
 php docs/example/dto-showcase/run.php
 ```
 
-В установленном пакете добавьте к пути `vendor/brahmic/apisutra/`.
-[Запуск](../../example/dto-showcase/run.php) использует локальный MockTransport без сети;
-[ожидаемый результат](../../example/dto-showcase/fixtures/expected.json) содержит DTO, DX, HTTP payload и ошибки.
+В установленном пакете добавьте к пути `vendor/brahmic/apisutra/`. [Запуск](../../example/dto-showcase/run.php) использует MockTransport без сети.
+[Ожидаемый результат](../../example/dto-showcase/fixtures/expected.json): DTO, DX, HTTP payload и ошибки.
 
 ## Входной JSON
 
-Это [содержимое поля `data`](../../example/dto-showcase/fixtures/item.json) успешного ответа API.
-В нём намеренно нет `displayName` и `stock`, а `title` задан как null.
+Это [поле `data`](../../example/dto-showcase/fixtures/item.json) успешного ответа API: без displayName и stock, с title=null.
 
 ```json
 {
@@ -33,6 +30,7 @@ php docs/example/dto-showcase/run.php
   "created_at": "2026-09-15T10:30:00+00:00",
   "state": "active",
   "price": "12.34",
+  "manual_file": "data:text/plain;base64,U0RLIG1hbnVhbA==",
   "seller": {"id": 9, "name": "Книжная лавка", "tier": "gold"},
   "tags": [{"name": "php"}, {"name": "sdk"}],
   "related_ids": [11, 12],
@@ -46,9 +44,8 @@ php docs/example/dto-showcase/run.php
 
 ## Декларация DTO
 
-Полный [CatalogItemDto](../../example/dto-showcase/src/CatalogItemDto.php). База `AbstractDto`
-даёт `from()`, `toArray()` и `with()` и подходит для `Returns`. `AbstractResponseDto`
-дополнительно предоставляет `computed()`; [обычные PHP-классы](plain-models.md) также поддерживаются.
+Полный [CatalogItemDto](../../example/dto-showcase/src/CatalogItemDto.php): `AbstractDto` даёт `from()`, `toArray()`, `with()` и подходит для `Returns`.
+`AbstractResponseDto` добавляет `computed()`; [обычные PHP-классы](plain-models.md) также поддерживаются.
 
 ```php
 declare(strict_types=1);
@@ -65,9 +62,11 @@ use Brahmic\ApiSutra\Attributes\DataTransfer\From;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Map;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Nested;
 use Brahmic\ApiSutra\Attributes\DataTransfer\To;
+use Brahmic\ApiSutra\Casts\DataUriBase64FileCast;
 use Brahmic\ApiSutra\DataTransfer\AbstractDto;
 use Brahmic\ApiSutra\Enums\DataTransfer\ValueState;
 use Brahmic\ApiSutra\Enums\Serialization\EnumOutput;
+use Brahmic\ApiSutra\VO\Files\Base64File;
 use DateTimeImmutable;
 
 // toArray() сохраняет null и строковые значения enum.
@@ -113,6 +112,10 @@ final readonly class CatalogItemDto extends AbstractDto
         #[To('price')]
         #[Cast(MinorUnitsCast::class)]
         public int $priceMinor,
+        // Файл внутри JSON: вход допускает data URI, выход содержит чистый Base64.
+        #[Map('manual_file')]
+        #[Cast(DataUriBase64FileCast::class)]
+        public Base64File $manual,
         // SellerDto — обычный PHP-класс; Nested создаёт отдельный вложенный объект.
         #[Nested(type: SellerDto::class)]
         public SellerDto $seller,
@@ -139,18 +142,14 @@ final readonly class CatalogItemDto extends AbstractDto
 
 Вспомогательные типы: [SellerDto](../../example/dto-showcase/src/SellerDto.php) — обычный класс;
 [TagDto](../../example/dto-showcase/src/TagDto.php) и [TagCollection](../../example/dto-showcase/src/TagCollection.php) — типизированная коллекция;
-[ImageDto](../../example/dto-showcase/src/ImageDto.php) / [VideoDto](../../example/dto-showcase/src/VideoDto.php) — варианты;
-[ItemStatus](../../example/dto-showcase/src/ItemStatus.php) — enum.
+[ImageDto](../../example/dto-showcase/src/ImageDto.php) / [VideoDto](../../example/dto-showcase/src/VideoDto.php) — варианты; [ItemStatus](../../example/dto-showcase/src/ItemStatus.php) — enum.
 
-[MinorUnitsCast](../../example/dto-showcase/src/MinorUnitsCast.php) переводит строковую цену
-в целые сотые и обратно. Учебный формат допускает до семи цифр перед точкой и ровно две после неё.
-[DisplayNameProvider](../../example/dto-showcase/src/DisplayNameProvider.php) возвращает `Товар BK-7`
-по исходному `vendor_code`; provider видит исходные данные, а не уже заполненные свойства DTO.
+[MinorUnitsCast](../../example/dto-showcase/src/MinorUnitsCast.php): строка цены ↔ целые сотые; до семи цифр перед точкой и ровно две после.
+[DisplayNameProvider](../../example/dto-showcase/src/DisplayNameProvider.php) вычисляет `Товар BK-7` по vendor_code из исходных данных DTO.
 
 ## Правила клиента
 
-[CatalogRules](../../example/dto-showcase/src/CatalogRules.php) дополняет атрибуты:
-строгие типы, проверка элементов массива, `each`, discriminator, запрет явного null и extras.
+[CatalogRules](../../example/dto-showcase/src/CatalogRules.php): строгие типы, элементы массива, `each`, discriminator, запрет явного null и extras.
 
 ```php
 declare(strict_types=1);
@@ -188,19 +187,14 @@ final class CatalogRules
 }
 ```
 
-`FieldRule` применяется к полям `relatedIds`, `media` и `stock`; их входное поведение
-не дублируется атрибутами. Исходящий `To` на них разрешён. Попытка добавить
-`field('id', ...)` к уже объявленному `From` даст `ConfigurationException`.
-[Правила конфликтов](../../reference/dto/field-rules.md#правила-и-проверка-конфигурации).
+`FieldRule` задаёт входное поведение relatedIds, media и stock; исходящий `To` разрешён.
+`field('id', ...)` вместе с `From` даст `ConfigurationException`: [конфликты](../../reference/dto/field-rules.md#правила-и-проверка-конфигурации).
 
-В [run.php](../../example/dto-showcase/run.php) JSON загружается в массив `$source`,
-а набор создаётся через `$rules = CatalogRules::create()`. Самостоятельная гидратация:
+В [run.php](../../example/dto-showcase/run.php) `$source` содержит входной JSON, `$rules = CatalogRules::create()`. Самостоятельная гидратация:
 `Hydrator::forRules($rules)->hydrate($source, CatalogItemDto::class)`.
 
-Тот же `$rules` передаётся в `ClientConfig(hydrationRules: $rules, ...)`.
-[GetCatalogItemRequest](../../example/dto-showcase/src/GetCatalogItemRequest.php) использует
-`Returns(CatalogItemDto::class, unwrap: 'data')`. `CatalogItemDto::from()` само по себе
-набор клиента не получает: для этого примера нужен `Hydrator::forRules()` или клиент с набором.
+Тот же `$rules` передаётся в `ClientConfig(hydrationRules: $rules, ...)`; [GetCatalogItemRequest](../../example/dto-showcase/src/GetCatalogItemRequest.php)
+объявляет `Returns(CatalogItemDto::class, unwrap: 'data')`. `CatalogItemDto::from()` не получает набор клиента: нужен `Hydrator::forRules()` или клиент.
 
 ## Что получит приложение
 
@@ -215,6 +209,7 @@ final class CatalogRules
 | `createdAt` | строка с датой и смещением | DateTimeFrom → DateTimeImmutable, дата остаётся объектом до сериализации |
 | `status` | `state: "active"` | Native enum → `ItemStatus::Active` |
 | `priceMinor` | `price: "12.34"` | Cast → `1234`; при сериализации снова `"12.34"` |
+| `manual` | data URI в manual_file | Cast → Base64File; `content()` возвращает `"SDK manual"`, `size()` — 10 байт |
 | `seller` | объект с id/name/tier | Nested → SellerDto; непрочитанный tier сохраняется в `seller->_extra` |
 | `tags` | два объекта с name | Nested → TagCollection с двумя TagDto; отсутствие поля даёт пустую коллекцию |
 | `relatedIds` | `[11, 12]` | ValueShape::list(int) → список int; строка внутри списка даёт ошибку |
@@ -229,28 +224,43 @@ final class CatalogRules
 {"metrics":{"votes":12},"assets":[{"sourceKey":0,"remainder":{"rank":1}},{"sourceKey":1,"remainder":{"rank":2}}],"future_flag":false}
 ```
 
-Остаток `seller` принадлежит самому SellerDto. Ключ discriminator `type` здесь прочитан
-свойством выбранного ImageDto/VideoDto. Прочитанный null удаляется из остатка;
-false сохраняется, если поле никто не прочитал. Имя `_extra` задаётся явно и не зарезервировано.
+Остаток seller принадлежит SellerDto; discriminator type прочитан свойством ImageDto/VideoDto.
+Прочитанный null удаляется из остатка; непрочитанный false сохраняется. Имя `_extra` задаётся явно и не зарезервировано.
+
+## Атрибуты сериализации
+
+| Атрибут в модели выше | Назначение и результат |
+| --- | --- |
+| `To('product_id')` | Задаёт исходящее имя: id → product_id |
+| `Map('vendor_code')` | Задаёт общее внешнее имя для чтения и записи sku |
+| `DateTimeTo(format: 'Y-m-d', timezone: 'UTC')` | Превращает дату в `"2026-09-15"` при `toArray()` и отправке |
+| `Cast(MinorUnitsCast::class)` | Вызывает обратное преобразование: 1234 → `"12.34"` |
+| `DtoSerialize(enumOutput: EnumOutput::Value, serializeNulls: true)` | Настраивает `toArray()` для класса: enum → value, null сохраняется; у HTTP-тела отдельная политика |
+
+## Файл в поле DTO
+
+`manual` выше — инструкция внутри JSON. `DataUriBase64FileCast` принимает чистый Base64 и data URI:
+`$item->manual->content()` даёт `"SDK manual"`; `$item->manual->saveTo($path)` сохраняет эти байты в указанный файл.
+При `toArray()` и отправке Cast возвращает `manual_file: "U0RLIG1hbnVhbA=="` без MIME-префикса data URI.
+Base64 материализуется в памяти. Потоковые upload/download показаны в [файловом рецепте](../recipes/files.md).
+[Контракт Base64File и списки файлов](../../reference/files/downloads.md#base64-в-ответе).
 
 ## Что уйдёт в запрос
 
-[SaveCatalogItemRequest](../../example/dto-showcase/src/SaveCatalogItemRequest.php) передаёт
-этот же объект через `BodyRoot`. Реальная сериализация проверяется на записанном запросе MockTransport.
+[SaveCatalogItemRequest](../../example/dto-showcase/src/SaveCatalogItemRequest.php) передаёт объект через `BodyRoot`; MockTransport записывает JSON.
 
 | Значение | `$item->toArray()` — DX | JSON запроса клиента — wire |
 | --- | --- | --- |
 | `id` / `sku` | product_id / vendor_code | product_id / vendor_code |
 | Дата / enum / цена | `"2026-09-15"` / `"active"` / `"12.34"` | Те же значения |
+| `manual` | Чистый Base64 под именем manual_file | Та же строка без data URI-префикса |
 | `description` / `stock` | null сохраняется благодаря DtoSerialize | Ключи опущены стандартной wire-политикой |
 | `_extra`, включая seller | Обычное свойство с остатком | Исключено набором клиента на обеих глубинах |
 | `media` | Массив объектов под именем assets | Массив без входной обёртки value и без rank |
 
-Входной `each` не восстанавливает обёртку при записи: исходящая форма задаётся отдельно.
-`toArray()` не является обещанием побайтового round-trip исходного JSON.
-Настройки [DX и wire](../../reference/serialization/dto-output.md) выбираются по контракту API;
-исключение receiver зависит от класса и набора, в том числе для DTO, созданного вручную.
-[Ограничения непрозрачных casts и представлений](../../reference/serialization/receiver-output.md).
+Входной `each` не восстанавливает обёртку; `toArray()` не гарантирует побайтовый round-trip JSON.
+Настройки [DX и wire](../../reference/serialization/dto-output.md) выбираются по контракту API.
+Исключение receiver зависит от класса и набора, включая DTO, созданные вручную: [границы casts и представлений](../../reference/serialization/receiver-output.md).
 
 ## Как выглядят ошибки
 
@@ -269,9 +279,8 @@ false сохраняется, если поле никто не прочитал
 | Дата не соответствует формату | invalid_datetime | createdAt | /created_at |
 | Цена `"12,34"` | invalid_price (свой cast) | priceMinor | /price (boundary) |
 
-Boundary у cast означает известный вход преобразования, а не адрес внутри его результата.
-Для `computed()` и непрозрачных преобразований точный источник может быть недоступен.
-[Диагностика и безопасный лог](../../reference/dto/diagnostics.md) описывают остальные границы.
+Boundary у cast указывает вход преобразования; для computed и непрозрачных преобразований точный источник может быть недоступен.
+[Диагностика и безопасный лог](../../reference/dto/diagnostics.md) описывают границы точности.
 
 ## Как выбрать другой приём
 
@@ -288,5 +297,4 @@ Boundary у cast означает известный вход преобразо
 
 [Выбрать DTO для своего SDK](../../start/describe-dto.md) · [Полный справочник](../../reference/dto/README.md) · [Исходники и запуск](../../example/dto-showcase/README.md).
 
-Фиксированный `type`, список и словарь, установленные конструктором, показаны
-в отдельном [примере constructorValue](../../reference/dto/constructor-values.md).
+Фиксированный type, список и словарь из конструктора — в [примере constructorValue](../../reference/dto/constructor-values.md).

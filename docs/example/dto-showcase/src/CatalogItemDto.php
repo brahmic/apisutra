@@ -14,9 +14,11 @@ use Brahmic\ApiSutra\Attributes\DataTransfer\From;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Map;
 use Brahmic\ApiSutra\Attributes\DataTransfer\Nested;
 use Brahmic\ApiSutra\Attributes\DataTransfer\To;
+use Brahmic\ApiSutra\Casts\DataUriBase64FileCast;
 use Brahmic\ApiSutra\DataTransfer\AbstractDto;
 use Brahmic\ApiSutra\Enums\DataTransfer\ValueState;
 use Brahmic\ApiSutra\Enums\Serialization\EnumOutput;
+use Brahmic\ApiSutra\VO\Files\Base64File;
 use DateTimeImmutable;
 
 // toArray() сохраняет null и строковые значения enum.
@@ -62,6 +64,10 @@ final readonly class CatalogItemDto extends AbstractDto
         #[To('price')]
         #[Cast(MinorUnitsCast::class)]
         public int $priceMinor,
+        // Файл внутри JSON: вход допускает data URI, выход содержит чистый Base64.
+        #[Map('manual_file')]
+        #[Cast(DataUriBase64FileCast::class)]
+        public Base64File $manual,
         // SellerDto — обычный PHP-класс; Nested создаёт отдельный вложенный объект.
         #[Nested(type: SellerDto::class)]
         public SellerDto $seller,

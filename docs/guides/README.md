@@ -14,7 +14,7 @@
 - [Первый запрос](quickstart.md).
 - [Добавить ожидание операции](recipes/continuation.md).
 - [Публичные расширения](recipes/extensions.md).
-- [Файлы и архивы](recipes/files.md).
+- [Файлы и архивы](recipes/files.md) — multipart/binary/Base64, скачивание в путь и поток, чтение TAR.
 - [Пагинация](recipes/pagination.md).
 - [Описать запрос операции](requests.md).
 - [Исследование внешнего API](sdk/analysis.md).

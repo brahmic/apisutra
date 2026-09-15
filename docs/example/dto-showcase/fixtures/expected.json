@@ -9,6 +9,8 @@
     "createdAt": "2026-09-15T10:30:00+00:00",
     "status": "active",
     "priceMinor": 1234,
+    "manualContent": "SDK manual",
+    "manualSize": 10,
     "seller": {"id": 9, "name": "Книжная лавка", "_extra": {"tier": "gold"}},
     "firstTag": "php",
     "tagCount": 2,
@@ -35,6 +37,7 @@
     "created_at": "2026-09-15",
     "state": "active",
     "price": "12.34",
+    "manual_file": "U0RLIG1hbnVhbA==",
     "seller": {"id": 9, "name": "Книжная лавка", "_extra": {"tier": "gold"}},
     "tags": [{"name": "php"}, {"name": "sdk"}],
     "related_ids": [11, 12],
@@ -62,6 +65,7 @@
     "created_at": "2026-09-15",
     "state": "active",
     "price": "12.34",
+    "manual_file": "U0RLIG1hbnVhbA==",
     "seller": {"id": 9, "name": "Книжная лавка"},
     "tags": [{"name": "php"}, {"name": "sdk"}],
     "related_ids": [11, 12],
@@ -76,7 +80,8 @@
     "title": "Без названия",
     "description": "Описание книги",
     "tagCount": 0,
-    "stock": 0
+    "stock": 0,
+    "manualContent": "SDK manual"
   },
   "errors": {
     "missing_id": {"reason": "required_field_missing", "path": "id", "sourcePath": "/product_id", "sourcePathKind": "expected"},

@@ -361,7 +361,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\Request\\File",
-      "docs": ["docs/reference/attributes/request.md", "docs/reference/client/validation.md", "docs/reference/files/uploads.md", "docs/reference/serialization/uri-query.md"],
+      "docs": ["docs/reference/attributes/request.md", "docs/reference/client/validation.md", "docs/reference/files/uploads.md", "docs/reference/serialization/uri-query.md", "docs/guides/recipes/files.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"name": {"type": "?string", "optional": true, "variadic": false}, "format": {"type": "Brahmic\\ApiSutra\\Enums\\Http\\FileFormat", "optional": true, "variadic": false}}}
       },
@@ -469,7 +469,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\Response\\Download",
-      "docs": ["docs/reference/attributes/response.md", "docs/reference/files/downloads.md"],
+      "docs": ["docs/reference/attributes/response.md", "docs/reference/files/downloads.md", "docs/guides/recipes/files.md"],
       "methods": {
         "__construct": {"return": "", "parameters": []}
       },
@@ -533,7 +533,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Casts\\DataUriBase64FileCast",
-      "docs": ["docs/reference/dto/shapes.md", "docs/reference/files/downloads.md"]
+      "docs": ["docs/reference/dto/shapes.md", "docs/reference/files/downloads.md", "docs/guides/dto/showcase.md#файл-в-поле-dto"]
     },
     {
       "class": "Brahmic\\ApiSutra\\Casts\\DateTimeCast",
@@ -1488,11 +1488,11 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\VO\\Files\\Base64File",
-      "docs": ["docs/reference/dto/shapes.md", "docs/reference/files/downloads.md"]
+      "docs": ["docs/reference/dto/shapes.md", "docs/reference/files/downloads.md", "docs/guides/dto/showcase.md#файл-в-поле-dto"]
     },
     {
       "class": "Brahmic\\ApiSutra\\VO\\Files\\FileInput",
-      "docs": ["docs/reference/client/validation.md", "docs/reference/files/uploads.md", "docs/reference/serialization/uri-query.md"]
+      "docs": ["docs/reference/client/validation.md", "docs/reference/files/uploads.md", "docs/reference/serialization/uri-query.md", "docs/guides/recipes/files.md"]
     },
     {
       "class": "Brahmic\\ApiSutra\\VO\\Http\\PreparedRequest",
