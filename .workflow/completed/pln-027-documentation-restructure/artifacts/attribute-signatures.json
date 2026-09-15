@@ -1,0 +1,252 @@
+{
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\Cache": {
+    "constructor_source": "Cache(?int $ttl = null, CacheMode $mode = CacheMode::Enabled, ?string $key = null)",
+    "source": "src/Attributes/Behavior/Cache.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\Execution": {
+    "constructor_source": "Execution(ExecutionMode $mode = ExecutionMode::Sequential, FailStrategy $failStrategy = FailStrategy::FailAll)",
+    "source": "src/Attributes/Behavior/Execution.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\Idempotent": {
+    "constructor_source": "Idempotent(?string $header = null)",
+    "source": "src/Attributes/Behavior/Idempotent.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\NoAuth": {
+    "constructor_source": "NoAuth()",
+    "source": "src/Attributes/Behavior/NoAuth.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\Pagination": {
+    "constructor_source": "Pagination(?string $pageParam = null, ?string $limitParam = null, ?string $cursorParam = null, ?string $metaPath = null, ?string $itemsPath = null, ?bool $offsetBased = null, ?string $metaResolver = null, ?string $itemsType = null, ?string $itemsCollection = null, ?string $itemsCollectionFactory = null, ?int $maxPages = null)",
+    "source": "src/Attributes/Behavior/Pagination.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\RateLimit": {
+    "constructor_source": "RateLimit(?int $limit = null, ?int $period = null, RateLimitBehavior $behavior = RateLimitBehavior::Wait, ?string $key = null, ?bool $includeClientQuota = null)",
+    "source": "src/Attributes/Behavior/RateLimit.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\Retry": {
+    "constructor_source": "Retry(bool $enabled = true, int $attempts = 3, int $baseDelay = 100, int $maxDelay = 10000, BackoffStrategy $backoff = BackoffStrategy::Exponential, bool $jitter = true, array $retryOn = [429, 500, 502, 503, 504], ?bool $safe = null)",
+    "source": "src/Attributes/Behavior/Retry.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Behavior\\Timeout": {
+    "constructor_source": "Timeout(int $seconds, ?int $connectTimeout = null)",
+    "source": "src/Attributes/Behavior/Timeout.php",
+    "signature_doc": "docs/reference/attributes/behavior.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\About": {
+    "constructor_source": "About(string $title, ?string $description = null, string|int|float|bool|array|null $example = null, ?array $examples = null, ?string $format = null, ?string $nullableReason = null, ?string $note = null)",
+    "source": "src/Attributes/DataTransfer/About.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Cast": {
+    "constructor_source": "Cast(string $class, mixed ...$args)",
+    "source": "src/Attributes/DataTransfer/Cast.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DateTimeFrom": {
+    "constructor_source": "DateTimeFrom(?string $format = null, ?string $defaultTimezone = null, ?bool $preserveOffset = null, ?bool $strictMissingTimezone = null, ?bool $strictFormat = null, ?DateTimeInvalidBehavior $invalidBehavior = null)",
+    "source": "src/Attributes/DataTransfer/DateTimeFrom.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DateTimeTo": {
+    "constructor_source": "DateTimeTo(?string $format = null, ?string $timezone = null)",
+    "source": "src/Attributes/DataTransfer/DateTimeTo.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DefaultValue": {
+    "constructor_source": "DefaultValue(int|float|string|bool|array|null $value = null, ?string $provider = null, array $when = [ValueState::Missing])",
+    "source": "src/Attributes/DataTransfer/DefaultValue.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DtoHydrate": {
+    "constructor_source": "DtoHydrate(?NamingStrategy $namingStrategy = null, ?string $dateTimeFormat = null, ?string $dateTimeDefaultTimezone = null, ?bool $dateTimePreserveOffset = null, ?bool $dateTimeStrictMissingTimezone = null, ?bool $dateTimeStrictFormat = null, ?DateTimeInvalidBehavior $dateTimeInvalidBehavior = null, ?EmptyStringBehavior $emptyStringBehavior = null)",
+    "source": "src/Attributes/DataTransfer/DtoHydrate.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DtoHydrationProfile": {
+    "constructor_source": "DtoHydrationProfile(string $class)",
+    "source": "src/Attributes/DataTransfer/DtoHydrationProfile.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DtoSerializationProfile": {
+    "constructor_source": "DtoSerializationProfile(string $class)",
+    "source": "src/Attributes/DataTransfer/DtoSerializationProfile.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DtoSerialize": {
+    "constructor_source": "DtoSerialize(?EnumOutput $enumOutput = null, ?bool $strictEnums = null, ?NamingStrategy $namingStrategy = null, ?bool $serializeNulls = null, ?string $dateTimeFormat = null, ?string $dateTimeTimezone = null)",
+    "source": "src/Attributes/DataTransfer/DtoSerialize.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\EmptyStringAsNull": {
+    "constructor_source": "EmptyStringAsNull(bool $blank = false)",
+    "source": "src/Attributes/DataTransfer/EmptyStringAsNull.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\From": {
+    "constructor_source": "From(string $name, array $fallback = [])",
+    "source": "src/Attributes/DataTransfer/From.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Label": {
+    "constructor_source": "Label(string $name)",
+    "source": "src/Attributes/DataTransfer/Label.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Map": {
+    "constructor_source": "Map(string $name)",
+    "source": "src/Attributes/DataTransfer/Map.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Nested": {
+    "constructor_source": "Nested(?string $type = null, ?string $itemCast = null, ?string $from = null, array $fallback = [], ?string $each = null, ?string $discriminator = null, ?array $map = null, NestedDiscriminatorMode $discriminatorMode = NestedDiscriminatorMode::Value, NestedUnknownVariant $unknownVariant = NestedUnknownVariant::KeepRaw)",
+    "source": "src/Attributes/DataTransfer/Nested.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\To": {
+    "constructor_source": "To(string $name)",
+    "source": "src/Attributes/DataTransfer/To.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Validate": {
+    "constructor_source": "Validate(string $rules, ?string $message = null)",
+    "source": "src/Attributes/DataTransfer/Validate.php",
+    "signature_doc": "docs/reference/attributes/hydration.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Hooks\\AfterHydrate": {
+    "constructor_source": "AfterHydrate(string $handler, HookPriority $priority = HookPriority::Normal, ?string $name = null)",
+    "source": "src/Attributes/Hooks/AfterHydrate.php",
+    "signature_doc": "docs/reference/attributes/hooks.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Hooks\\AfterResponse": {
+    "constructor_source": "AfterResponse(string $handler, HookPriority $priority = HookPriority::Normal, ?string $name = null)",
+    "source": "src/Attributes/Hooks/AfterResponse.php",
+    "signature_doc": "docs/reference/attributes/hooks.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Hooks\\BeforeHydrate": {
+    "constructor_source": "BeforeHydrate(string $handler, HookPriority $priority = HookPriority::Normal, ?string $name = null)",
+    "source": "src/Attributes/Hooks/BeforeHydrate.php",
+    "signature_doc": "docs/reference/attributes/hooks.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Hooks\\BeforeSend": {
+    "constructor_source": "BeforeSend(string $handler, HookPriority $priority = HookPriority::Normal, ?string $name = null)",
+    "source": "src/Attributes/Hooks/BeforeSend.php",
+    "signature_doc": "docs/reference/attributes/hooks.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Http\\Delete": {
+    "constructor_source": "Delete(string $path)",
+    "source": "src/Attributes/Http/Delete.php",
+    "signature_doc": "docs/reference/attributes/http.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Http\\Get": {
+    "constructor_source": "Get(string $path)",
+    "source": "src/Attributes/Http/Get.php",
+    "signature_doc": "docs/reference/attributes/http.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Http\\Patch": {
+    "constructor_source": "Patch(string $path)",
+    "source": "src/Attributes/Http/Patch.php",
+    "signature_doc": "docs/reference/attributes/http.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Http\\Post": {
+    "constructor_source": "Post(string $path)",
+    "source": "src/Attributes/Http/Post.php",
+    "signature_doc": "docs/reference/attributes/http.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Http\\Put": {
+    "constructor_source": "Put(string $path)",
+    "source": "src/Attributes/Http/Put.php",
+    "signature_doc": "docs/reference/attributes/http.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\AuthScope": {
+    "constructor_source": "AuthScope(string|BackedEnum $scope)",
+    "source": "src/Attributes/Request/AuthScope.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\Body": {
+    "constructor_source": "Body(?string $nested = null)",
+    "source": "src/Attributes/Request/Body.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\BodyRoot": {
+    "constructor_source": "BodyRoot()",
+    "source": "src/Attributes/Request/BodyRoot.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\File": {
+    "constructor_source": "File(?string $name = null, FileFormat $format = FileFormat::Multipart)",
+    "source": "src/Attributes/Request/File.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\Header": {
+    "constructor_source": "Header(string $name)",
+    "source": "src/Attributes/Request/Header.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\Ignore": {
+    "constructor_source": "Ignore()",
+    "source": "src/Attributes/Request/Ignore.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\OperationDescriptor": {
+    "constructor_source": "OperationDescriptor(?string $title = null, ?string $description = null, ?string $note = null)",
+    "source": "src/Attributes/Request/OperationDescriptor.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\Path": {
+    "constructor_source": "Path(?string $name = null)",
+    "source": "src/Attributes/Request/Path.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\Query": {
+    "constructor_source": "Query(?string $name = null, ?QueryArrayFormat $arrayFormat = null, ?bool $nullable = null)",
+    "source": "src/Attributes/Request/Query.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\RequestDefaults": {
+    "constructor_source": "RequestDefaults(RequestUnmappedTarget $unmapped = RequestUnmappedTarget::Convention)",
+    "source": "src/Attributes/Request/RequestDefaults.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\RequestDiscriminator": {
+    "constructor_source": "RequestDiscriminator(string $field, array $map)",
+    "source": "src/Attributes/Request/RequestDiscriminator.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\RequestOneOf": {
+    "constructor_source": "RequestOneOf(string $name, array $variants, array $requiredCommon = [], OneOfMode $mode = OneOfMode::ExactlyOne)",
+    "source": "src/Attributes/Request/RequestOneOf.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Request\\SkipCredentialsEnrichment": {
+    "constructor_source": "SkipCredentialsEnrichment()",
+    "source": "src/Attributes/Request/SkipCredentialsEnrichment.php",
+    "signature_doc": "docs/reference/attributes/request.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Response\\ContinuationResult": {
+    "constructor_source": "ContinuationResult(string $finalType, ?string $unwrap = null, ?string $pollRequest = null, ?ContinuationMode $defaultMode = null, ?string $stateResolver = null)",
+    "source": "src/Attributes/Response/ContinuationResult.php",
+    "signature_doc": "docs/reference/attributes/response.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Response\\Download": {
+    "constructor_source": "Download()",
+    "source": "src/Attributes/Response/Download.php",
+    "signature_doc": "docs/reference/attributes/response.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Response\\RawResponse": {
+    "constructor_source": "RawResponse()",
+    "source": "src/Attributes/Response/RawResponse.php",
+    "signature_doc": "docs/reference/attributes/response.md"
+  },
+  "Brahmic\\ApiSutra\\Attributes\\Response\\Returns": {
+    "constructor_source": "Returns(string $response, ?string $unwrap = null, ?string $type = null)",
+    "source": "src/Attributes/Response/Returns.php",
+    "signature_doc": "docs/reference/attributes/response.md"
+  }
+}

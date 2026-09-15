@@ -1,81 +1,65 @@
-# Быстрый старт
+# Первый запрос
 
-Минимальный путь: конфиг → клиент → запрос → результат.
+За несколько минут выполните запрос через учебный SDK: конфигурация → транспорт →
+клиент → ресурс → запрос → DTO или ошибка. Нужен PHP 8.4+ и Composer.
 
-## 1) Конфигурация клиента
-```php
-use Brahmic\ApiSutra\Config\ClientConfig;
+## Запуск опубликованного примера
 
-$config = new ClientConfig(
-    baseUrl: 'https://api.example',
-);
+В проекте потребителя:
+
+```bash
+composer require "brahmic/apisutra:^0.2@alpha"
+php vendor/brahmic/apisutra/docs/example/sdk/run.php
 ```
 
-## 2) Клиент
-```php
-use Brahmic\ApiSutra\Core\AbstractClient;
+В checkout ApiSutra:
 
-final class DemoClient extends AbstractClient {}
+```bash
+composer install
+php docs/example/sdk/run.php
 ```
 
-> В Laravel транспорт может быть подставлен автоматически, если доступен PSR‑18 клиент
-> (например, Guzzle). В остальных случаях настройте TransportInterface вручную.
+Обе команды выполняют [один и тот же файл](../example/sdk/run.php). Он использует
+локальные фикстуры и `MockTransport`: ключи API и сетевой доступ для запуска не нужны.
+Результат:
 
-## 3) DTO ответа
-```php
-use Brahmic\ApiSutra\DataTransfer\AbstractResponseDto;
-
-final readonly class UserDto extends AbstractResponseDto
-{
-    public function __construct(
-        public int $id,
-        public string $name,
-    ) {}
-}
+```json
+{"id":7,"title":"Первая запись","extra":{"future_flag":false},"failed":true,"status":404}
 ```
 
-## 4) Запрос
-```php
-use Brahmic\ApiSutra\Attributes\Http\Get;
-use Brahmic\ApiSutra\Attributes\Request\Query;
-use Brahmic\ApiSutra\Attributes\Response\Returns;
-use Brahmic\ApiSutra\Core\AbstractRequest;
+## Как устроен пример
 
-#[Get('/users')]
-#[Returns(UserDto::class, unwrap: 'data')]
-final class GetUser extends AbstractRequest
-{
-    public function __construct(
-        #[Query('id')]
-        public int $id,
-    ) {}
-}
-```
+1. [ClientConfigFactory](../example/sdk/src/Config/ClientConfigFactory.php) задаёт
+   `baseUrl` и подключает правила DTO.
+2. [DemoClient](../example/sdk/src/DemoClient.php) принимает конфигурацию и транспорт
+   через конструктор `AbstractClient`. Созданная конфигурация действительно используется.
+3. [RecordsResource](../example/sdk/src/Resources/Records/RecordsResource.php)
+   возвращает привязанный к клиенту запрос.
+4. [GetRecordRequest](../example/sdk/src/Resources/Records/Get/GetRecordRequest.php)
+   объявляет GET, параметр пути и `Returns` с `unwrap: 'data'`.
+5. [GetRecordResponseDto](../example/sdk/src/Resources/Records/Get/GetRecordResponseDto.php)
+   остаётся обычным PHP-классом. [Правила](../example/sdk/src/Config/HydrationRulesFactory.php)
+   преобразуют `record_id` в `id`, проверяют строгие скаляры и сохраняют неизвестные поля в `_extra`.
+6. `dataOrFail()` возвращает DTO или выбрасывает исключение. Второй вызов использует
+   `resolved()` и показывает проверку HTTP-ошибки без извлечения данных.
 
-## 5) Выполнение
-```php
-// Laravel: транспорт подставится автоматически из контейнера
-$client = app(DemoClient::class);
+Исходники лежат рядом с пояснениями; их можно скопировать в собственный SDK и
+зарегистрировать свой namespace в Composer. `bootstrap.php` нужен только для
+автозагрузки учебного пространства имён.
 
-$request = new GetUser(1);
-$request->setClient($client);
+## Перейти к своему API
 
-$user = $request->send()->dataOrFail();
-```
+Замените базовый URL, путь запроса и форму DTO по подтверждённому ответу API.
+Для настоящего HTTP передайте настроенный транспорт; у него есть собственные
+зависимости, ограничения timeout и redirects. См. [standalone-подключение](integration/standalone.md).
 
-## Примечания
-- В non‑Laravel окружении передайте `TransportInterface` в конструктор клиента вручную.
-- В Laravel клиент может быть подставлен автоматически через `ClientResolver`.
-- Для управления ошибками используйте `throwOnErrors` в `ClientConfig` или `dataOrFail()`.
+В Laravel конфигурация SDK задаётся явным binding клиента; `app(DemoClient::class)`
+сам по себе не использует локальную переменную `$config`.
+[Полный путь регистрации](integration/laravel.md) использует опубликованный service provider.
 
-## Дальше
-- [Запросы](./requests.md)
-- [DTO](./dto.md)
-- [Attributes](./attributes/README.md)
-- [ClientConfig](./client-config/README.md)
-- [Transport](./transport.md)
+## Продолжить
 
-В Laravel provider подключается package discovery без обязательной публикации конфига.
-Обычный DI сохраняет заданные значения SDK-запроса; перенос входящих HTTP-данных
-выполняется явной RequestFactory. Пользовательские bindings имеют приоритет.
-[Подключение, миграция и тестирование](laravel.md).
+- [Создать SDK целиком](../start/create-sdk.md) — факты API, проектирование и расширение покрытия.
+- [Добавить операцию](../start/add-operation.md) — следующий запрос и его тест.
+- [Выбрать модель DTO](../start/describe-dto.md) — внешние правила или атрибуты.
+- [Исходники учебного SDK](../example/sdk/README.md) — дерево, запуск и ожидаемый результат.

@@ -1,0 +1,1442 @@
+{
+  "documents": 205,
+  "local_links": 1853,
+  "sizes": [
+    {
+      "path": "README.md",
+      "lines": 77,
+      "bytes": 5132,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "CHANEGLOG.md",
+      "lines": 476,
+      "bytes": 51488,
+      "limit": null,
+      "bridge": false
+    },
+    {
+      "path": "docs/README.md",
+      "lines": 52,
+      "bytes": 3593,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/example/README.md",
+      "lines": 18,
+      "bytes": 1410,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/example/continuation/README.md",
+      "lines": 25,
+      "bytes": 1518,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/example/documentation-guide.md",
+      "lines": 72,
+      "bytes": 5833,
+      "limit": 110,
+      "bridge": true
+    },
+    {
+      "path": "docs/example/hydration-rules/README.md",
+      "lines": 27,
+      "bytes": 1590,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/example/request-use-cases.md",
+      "lines": 90,
+      "bytes": 8667,
+      "limit": 128,
+      "bridge": true
+    },
+    {
+      "path": "docs/example/sdk/README.md",
+      "lines": 52,
+      "bytes": 2996,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/README.md",
+      "lines": 59,
+      "bytes": 3061,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/architecture.md",
+      "lines": 32,
+      "bytes": 4712,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/attributes.md",
+      "lines": 38,
+      "bytes": 4589,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/auth.md",
+      "lines": 22,
+      "bytes": 2682,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/client.md",
+      "lines": 54,
+      "bytes": 7704,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/collections.md",
+      "lines": 18,
+      "bytes": 1527,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/dto.md",
+      "lines": 61,
+      "bytes": 10041,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/execution.md",
+      "lines": 42,
+      "bytes": 4881,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/extensions.md",
+      "lines": 20,
+      "bytes": 2305,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/files.md",
+      "lines": 17,
+      "bytes": 1442,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/laravel.md",
+      "lines": 18,
+      "bytes": 2091,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/pagination.md",
+      "lines": 27,
+      "bytes": 3048,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/pipeline.md",
+      "lines": 36,
+      "bytes": 4129,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/requests.md",
+      "lines": 26,
+      "bytes": 3951,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/results.md",
+      "lines": 80,
+      "bytes": 12196,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary/testing.md",
+      "lines": 26,
+      "bytes": 3205,
+      "limit": 180,
+      "bridge": false
+    },
+    {
+      "path": "docs/glossary.md",
+      "lines": 6,
+      "bytes": 185,
+      "limit": 44,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/README.md",
+      "lines": 47,
+      "bytes": 3016,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/attributes/README.md",
+      "lines": 10,
+      "bytes": 534,
+      "limit": 48,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/attributes/behavior.md",
+      "lines": 24,
+      "bytes": 1382,
+      "limit": 62,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/attributes/data-transfer.md",
+      "lines": 40,
+      "bytes": 2744,
+      "limit": 78,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/attributes/hooks.md",
+      "lines": 16,
+      "bytes": 907,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/attributes/http.md",
+      "lines": 20,
+      "bytes": 1078,
+      "limit": 58,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/attributes/request.md",
+      "lines": 34,
+      "bytes": 2137,
+      "limit": 72,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/attributes/response.md",
+      "lines": 18,
+      "bytes": 1063,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/auth.md",
+      "lines": 54,
+      "bytes": 4082,
+      "limit": 92,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/batch.md",
+      "lines": 24,
+      "bytes": 1700,
+      "limit": 62,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/casts.md",
+      "lines": 30,
+      "bytes": 2232,
+      "limit": 68,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/README.md",
+      "lines": 10,
+      "bytes": 515,
+      "limit": 48,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/archive.md",
+      "lines": 14,
+      "bytes": 854,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/auth.md",
+      "lines": 22,
+      "bytes": 1555,
+      "limit": 60,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/cache.md",
+      "lines": 22,
+      "bytes": 1889,
+      "limit": 60,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/container-provider.md",
+      "lines": 16,
+      "bytes": 1231,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/extensions.md",
+      "lines": 12,
+      "bytes": 774,
+      "limit": 50,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/observability.md",
+      "lines": 14,
+      "bytes": 789,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/pagination.md",
+      "lines": 18,
+      "bytes": 1273,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/pool.md",
+      "lines": 20,
+      "bytes": 1367,
+      "limit": 58,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/rate-limit.md",
+      "lines": 18,
+      "bytes": 1316,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/responses-errors.md",
+      "lines": 24,
+      "bytes": 1762,
+      "limit": 62,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/retry.md",
+      "lines": 14,
+      "bytes": 873,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/serialization.md",
+      "lines": 24,
+      "bytes": 1558,
+      "limit": 62,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-config/timeouts-delay.md",
+      "lines": 16,
+      "bytes": 1219,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/client-discovery.md",
+      "lines": 24,
+      "bytes": 1698,
+      "limit": 62,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/collections.md",
+      "lines": 26,
+      "bytes": 1710,
+      "limit": 64,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/continuation-token.md",
+      "lines": 14,
+      "bytes": 1047,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/dto/README.md",
+      "lines": 9,
+      "bytes": 472,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/dto/attribute-models.md",
+      "lines": 28,
+      "bytes": 2028,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/dto/plain-models.md",
+      "lines": 51,
+      "bytes": 4550,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/dto.md",
+      "lines": 46,
+      "bytes": 3561,
+      "limit": 84,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/errors.md",
+      "lines": 50,
+      "bytes": 4262,
+      "limit": 88,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/extensions.md",
+      "lines": 18,
+      "bytes": 1299,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/external-urls.md",
+      "lines": 14,
+      "bytes": 1000,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/files.md",
+      "lines": 34,
+      "bytes": 2684,
+      "limit": 72,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/hooks.md",
+      "lines": 18,
+      "bytes": 1195,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/hydration-rules.md",
+      "lines": 26,
+      "bytes": 1938,
+      "limit": 64,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/integration/laravel.md",
+      "lines": 49,
+      "bytes": 3278,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/integration/multi-service.md",
+      "lines": 127,
+      "bytes": 7281,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/integration/standalone.md",
+      "lines": 46,
+      "bytes": 2578,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/laravel.md",
+      "lines": 34,
+      "bytes": 2765,
+      "limit": 72,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/live-testing.md",
+      "lines": 66,
+      "bytes": 4657,
+      "limit": 104,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/logging.md",
+      "lines": 22,
+      "bytes": 1495,
+      "limit": 60,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/megaclient.md",
+      "lines": 40,
+      "bytes": 3586,
+      "limit": 78,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/migration.md",
+      "lines": 14,
+      "bytes": 1092,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/naming-strategy.md",
+      "lines": 16,
+      "bytes": 1028,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/operation-inventory.md",
+      "lines": 48,
+      "bytes": 3887,
+      "limit": 86,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/pagination.md",
+      "lines": 34,
+      "bytes": 2670,
+      "limit": 72,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/provider-analysis.md",
+      "lines": 28,
+      "bytes": 1827,
+      "limit": 66,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/provider-async-await.md",
+      "lines": 38,
+      "bytes": 3401,
+      "limit": 76,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/provider-catalogs.md",
+      "lines": 28,
+      "bytes": 2053,
+      "limit": 66,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/provider-checklist.md",
+      "lines": 20,
+      "bytes": 1556,
+      "limit": 58,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/provider-methodology.md",
+      "lines": 68,
+      "bytes": 6179,
+      "limit": 106,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/quickstart.md",
+      "lines": 84,
+      "bytes": 5242,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/recipes/continuation.md",
+      "lines": 95,
+      "bytes": 3187,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/recipes/extensions.md",
+      "lines": 39,
+      "bytes": 1076,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/recipes/files.md",
+      "lines": 34,
+      "bytes": 732,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/recipes/pagination.md",
+      "lines": 145,
+      "bytes": 3638,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/redis-rate-limit.md",
+      "lines": 16,
+      "bytes": 1056,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/request-pipeline.md",
+      "lines": 22,
+      "bytes": 1442,
+      "limit": 60,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/requests.md",
+      "lines": 74,
+      "bytes": 5743,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/resources.md",
+      "lines": 18,
+      "bytes": 1268,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/retries-rate-limit.md",
+      "lines": 34,
+      "bytes": 2684,
+      "limit": 72,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/sdk/README.md",
+      "lines": 12,
+      "bytes": 724,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/sdk/analysis.md",
+      "lines": 155,
+      "bytes": 10776,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/sdk/coverage.md",
+      "lines": 74,
+      "bytes": 7296,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/sdk/design.md",
+      "lines": 203,
+      "bytes": 11877,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/sdk/first-operation.md",
+      "lines": 57,
+      "bytes": 4890,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/sdk/release.md",
+      "lines": 61,
+      "bytes": 5726,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/serialization.md",
+      "lines": 76,
+      "bytes": 6236,
+      "limit": 114,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/testing/live.md",
+      "lines": 216,
+      "bytes": 12838,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/testing/unit.md",
+      "lines": 48,
+      "bytes": 3927,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/testing.md",
+      "lines": 40,
+      "bytes": 3158,
+      "limit": 78,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/transport.md",
+      "lines": 26,
+      "bytes": 2038,
+      "limit": 64,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/troubleshooting.md",
+      "lines": 63,
+      "bytes": 4528,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/guides/use-cases.md",
+      "lines": 18,
+      "bytes": 1225,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/validation.md",
+      "lines": 28,
+      "bytes": 2028,
+      "limit": 66,
+      "bridge": true
+    },
+    {
+      "path": "docs/guides/versioning.md",
+      "lines": 30,
+      "bytes": 2389,
+      "limit": 68,
+      "bridge": true
+    },
+    {
+      "path": "docs/migration/README.md",
+      "lines": 13,
+      "bytes": 1120,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/migration/unreleased.md",
+      "lines": 31,
+      "bytes": 2946,
+      "limit": 300,
+      "bridge": false
+    },
+    {
+      "path": "docs/migration/v0.2.0-alpha.1.md",
+      "lines": 58,
+      "bytes": 12819,
+      "limit": null,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/README.md",
+      "lines": 19,
+      "bytes": 1080,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/README.md",
+      "lines": 13,
+      "bytes": 690,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/behavior.md",
+      "lines": 169,
+      "bytes": 7195,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/hooks.md",
+      "lines": 39,
+      "bytes": 1488,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/http.md",
+      "lines": 49,
+      "bytes": 1655,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/hydration.md",
+      "lines": 223,
+      "bytes": 11382,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/request.md",
+      "lines": 253,
+      "bytes": 9150,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/attributes/response.md",
+      "lines": 142,
+      "bytes": 8783,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/auth/README.md",
+      "lines": 10,
+      "bytes": 544,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/auth/credentials.md",
+      "lines": 113,
+      "bytes": 7650,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/auth/strategies.md",
+      "lines": 296,
+      "bytes": 10647,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/auth/tokens.md",
+      "lines": 206,
+      "bytes": 15845,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/README.md",
+      "lines": 16,
+      "bytes": 946,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/catalogs.md",
+      "lines": 148,
+      "bytes": 6284,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/configuration.md",
+      "lines": 74,
+      "bytes": 5803,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/construction.md",
+      "lines": 101,
+      "bytes": 5512,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/discovery.md",
+      "lines": 98,
+      "bytes": 4938,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/operation-inventory.md",
+      "lines": 160,
+      "bytes": 6992,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/resources.md",
+      "lines": 104,
+      "bytes": 4071,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/response-dto-catalog.md",
+      "lines": 301,
+      "bytes": 13717,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/validation.md",
+      "lines": 191,
+      "bytes": 10380,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/client/versioning.md",
+      "lines": 137,
+      "bytes": 6027,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/README.md",
+      "lines": 19,
+      "bytes": 1280,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/collections.md",
+      "lines": 157,
+      "bytes": 6334,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/defaults.md",
+      "lines": 263,
+      "bytes": 15553,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/diagnostics.md",
+      "lines": 76,
+      "bytes": 6678,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/extras.md",
+      "lines": 46,
+      "bytes": 3789,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/field-rules.md",
+      "lines": 70,
+      "bytes": 6002,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/lifecycle.md",
+      "lines": 62,
+      "bytes": 5065,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/models.md",
+      "lines": 51,
+      "bytes": 2321,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/profiles.md",
+      "lines": 75,
+      "bytes": 4959,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/scalars.md",
+      "lines": 68,
+      "bytes": 4822,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/scope.md",
+      "lines": 22,
+      "bytes": 1827,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/shapes.md",
+      "lines": 140,
+      "bytes": 9358,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/dto/variants.md",
+      "lines": 13,
+      "bytes": 1042,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/README.md",
+      "lines": 16,
+      "bytes": 889,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/batch-pool.md",
+      "lines": 181,
+      "bytes": 7003,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/cache.md",
+      "lines": 238,
+      "bytes": 18795,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/continuation-await.md",
+      "lines": 209,
+      "bytes": 12269,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/continuation-state.md",
+      "lines": 112,
+      "bytes": 6547,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/deadlines.md",
+      "lines": 159,
+      "bytes": 11223,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/pagination.md",
+      "lines": 275,
+      "bytes": 11245,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/rate-limit.md",
+      "lines": 200,
+      "bytes": 16039,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/retry.md",
+      "lines": 250,
+      "bytes": 17507,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/execution/transport.md",
+      "lines": 263,
+      "bytes": 19719,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/extensions/README.md",
+      "lines": 9,
+      "bytes": 478,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/extensions/extensions.md",
+      "lines": 92,
+      "bytes": 4087,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/extensions/hooks.md",
+      "lines": 70,
+      "bytes": 3142,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/files/README.md",
+      "lines": 10,
+      "bytes": 508,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/files/archives.md",
+      "lines": 104,
+      "bytes": 3815,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/files/downloads.md",
+      "lines": 164,
+      "bytes": 11445,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/files/uploads.md",
+      "lines": 82,
+      "bytes": 4566,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/integrations/README.md",
+      "lines": 9,
+      "bytes": 445,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/integrations/laravel.md",
+      "lines": 174,
+      "bytes": 10039,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/integrations/redis.md",
+      "lines": 111,
+      "bytes": 8807,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/request/README.md",
+      "lines": 9,
+      "bytes": 523,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/request/composition.md",
+      "lines": 115,
+      "bytes": 5384,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/request/declaration.md",
+      "lines": 290,
+      "bytes": 13247,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/results/README.md",
+      "lines": 10,
+      "bytes": 569,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/results/errors.md",
+      "lines": 297,
+      "bytes": 20565,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/results/handles.md",
+      "lines": 240,
+      "bytes": 13929,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/results/observability.md",
+      "lines": 215,
+      "bytes": 11757,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/README.md",
+      "lines": 13,
+      "bytes": 711,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/body.md",
+      "lines": 99,
+      "bytes": 4838,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/casts.md",
+      "lines": 185,
+      "bytes": 13013,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/dto-output.md",
+      "lines": 233,
+      "bytes": 12131,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/receiver-output.md",
+      "lines": 35,
+      "bytes": 2937,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/request-parts.md",
+      "lines": 179,
+      "bytes": 9449,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/serialization/uri-query.md",
+      "lines": 238,
+      "bytes": 15911,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/testing/README.md",
+      "lines": 10,
+      "bytes": 546,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/testing/fixtures.md",
+      "lines": 63,
+      "bytes": 3448,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/testing/live.md",
+      "lines": 185,
+      "bytes": 9907,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/reference/testing/mocking.md",
+      "lines": 117,
+      "bytes": 5087,
+      "limit": 320,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/README.md",
+      "lines": 21,
+      "bytes": 1939,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/add-operation.md",
+      "lines": 35,
+      "bytes": 3000,
+      "limit": 200,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/agent.md",
+      "lines": 41,
+      "bytes": 2879,
+      "limit": 200,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/create-sdk.md",
+      "lines": 48,
+      "bytes": 4609,
+      "limit": 200,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/describe-dto.md",
+      "lines": 37,
+      "bytes": 3053,
+      "limit": 200,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/diagnose.md",
+      "lines": 36,
+      "bytes": 2935,
+      "limit": 200,
+      "bridge": false
+    },
+    {
+      "path": "docs/start/use-sdk.md",
+      "lines": 34,
+      "bytes": 2638,
+      "limit": 200,
+      "bridge": false
+    },
+    {
+      "path": "docs/technical/README.md",
+      "lines": 12,
+      "bytes": 830,
+      "limit": 48,
+      "bridge": true
+    },
+    {
+      "path": "docs/technical/architecture.md",
+      "lines": 28,
+      "bytes": 2591,
+      "limit": 64,
+      "bridge": true
+    },
+    {
+      "path": "docs/technical/attributes.md",
+      "lines": 28,
+      "bytes": 2440,
+      "limit": 64,
+      "bridge": true
+    },
+    {
+      "path": "docs/technical/caching-retry.md",
+      "lines": 18,
+      "bytes": 1420,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "docs/technical/error-handling.md",
+      "lines": 16,
+      "bytes": 1328,
+      "limit": 52,
+      "bridge": true
+    },
+    {
+      "path": "docs/technical/execution.md",
+      "lines": 20,
+      "bytes": 1642,
+      "limit": 56,
+      "bridge": true
+    },
+    {
+      "path": "docs/technical/pipeline.md",
+      "lines": 18,
+      "bytes": 1364,
+      "limit": 54,
+      "bridge": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "lines": 54,
+      "bytes": 3981,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/README.md",
+      "lines": 18,
+      "bytes": 1538,
+      "limit": 150,
+      "bridge": false
+    },
+    {
+      "path": "development/architecture.md",
+      "lines": 65,
+      "bytes": 4849,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/attributes.md",
+      "lines": 65,
+      "bytes": 4436,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/caching-retry.md",
+      "lines": 31,
+      "bytes": 2099,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/documentation.md",
+      "lines": 77,
+      "bytes": 6179,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/error-handling.md",
+      "lines": 34,
+      "bytes": 2151,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/execution.md",
+      "lines": 33,
+      "bytes": 2545,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/pipeline.md",
+      "lines": 23,
+      "bytes": 1230,
+      "limit": 220,
+      "bridge": false
+    },
+    {
+      "path": "development/testing.md",
+      "lines": 103,
+      "bytes": 7143,
+      "limit": 220,
+      "bridge": false
+    }
+  ],
+  "errors": []
+}

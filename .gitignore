@@ -5,3 +5,5 @@
 /.temp
 /.laravel-integration/
 /.phpstan-cache/
+
+__pycache__/

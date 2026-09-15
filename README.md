@@ -4,143 +4,58 @@
 
 # ApiSutra
 
-Изменения совместимости: [миграция версий и текущих изменений](docs/guides/migration.md).
-
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
-[![Test count](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbrahmic%2Fapisutra%2Frefs%2Fheads%2Fbadges%2Ftest-count.json&cacheSeconds=300)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
-[![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](./composer.json)
-[![Packagist Version](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
+[![Documentation](https://img.shields.io/badge/docs-read-2563eb)](docs/README.md)
+[![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](composer.json)
+[![Packagist](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
 
-Лицензия: [MIT](LICENSE).
+ApiSutra — PHP-пакет для создания SDK внешних API. Вы описываете операции, DTO
+и правила протокола, а пакет выполняет HTTP-запросы, преобразует ответы и даёт
+общий API результатов, ошибок, повторных попыток и пагинации.
 
-ApiSutra — фреймворк для построения SDK‑клиентов внешних API на PHP.
-Он даёт декларативные запросы, DTO с атрибутами или внешними правилами, единый pipeline выполнения
-и расширяемость без копипаста.
+## Начать использование
 
-## Ключевая идея
-Вы описываете запросы, DTO и поведение декларативно, а инфраструктура
-(auth, cache, retry, rate‑limit, pagination) работает единообразно для всех клиентов.
+Нужен PHP 8.4+ и Composer. Ядро работает без приложения Laravel.
 
-## Возможности
-- атрибуты для HTTP, request/response и DTO‑маппинга
-- [правила для DTO без атрибутов](docs/guides/hydration-rules.md): строгие типы, вложенные формы и сохранение неизвестных полей в `_extra`
-- [ожидание асинхронной операции провайдера](docs/guides/provider-async-await.md) с явными состояниями Pending/Ready/Failed
-- единый pipeline с хуками, retries, rate‑limit, кешированием и timeouts
-- пагинация, batch и pool
-- мегаклиент для мультисервисных интеграций
-- разделение сервисов по конфигам (baseUrl/auth) без смешивания логики 
-- результаты и ошибки в едином формате
-- расширения и касты
-- тестовые инструменты (mock, fixtures, record/playback)
-- интеграция с Laravel и auto‑detect контейнера
-
-## Требования
-- PHP 8.4+
-- PSR‑18/PSR‑17 для `HttpTransport`
-- PSR‑16 для внешнего кеша и общего счётчика rate-limit (строгая межпроцессная квота не гарантируется)
-
-## Установка
 ```bash
 composer require "brahmic/apisutra:^0.2@alpha"
+php vendor/brahmic/apisutra/docs/example/sdk/run.php
 ```
 
-## Быстрый старт
-```php
-use Brahmic\ApiSutra\Attributes\Http\Get;
-use Brahmic\ApiSutra\Attributes\Request\Query;
-use Brahmic\ApiSutra\Attributes\Response\Returns;
-use Brahmic\ApiSutra\Config\ClientConfig;
-use Brahmic\ApiSutra\Contracts\Interfaces\Core\TransportInterface;
-use Brahmic\ApiSutra\Core\AbstractClient;
-use Brahmic\ApiSutra\Core\AbstractRequest;
-use Brahmic\ApiSutra\DataTransfer\AbstractResponseDto;
+Команда запускает [учебный SDK](docs/example/sdk/README.md) с локальными ответами.
+[Quickstart](docs/guides/quickstart.md) объясняет его конфигурацию, транспорт, запрос и DTO.
+Для настоящего HTTP требуется [транспорт с его зависимостями](docs/reference/execution/transport.md).
 
-final class DemoClient extends AbstractClient
-{
-    public function __construct(TransportInterface $transport)
-    {
-        parent::__construct(
-            new ClientConfig(baseUrl: 'https://api.example'),
-            $transport,
-        );
-    }
-}
+## Выбрать задачу
 
-final readonly class UserDto extends AbstractResponseDto
-{
-    public function __construct(
-        public int $id,
-        public string $name,
-    ) {}
-}
+- [Создать новый SDK](docs/start/create-sdk.md) — от анализа API до готовой операции и покрытия.
+- [Добавить операцию](docs/start/add-operation.md) в существующий SDK.
+- [Описать DTO](docs/start/describe-dto.md) атрибутами или внешними правилами.
+- [Использовать готовый SDK](docs/start/use-sdk.md) в приложении.
+- [Разобрать ошибку](docs/start/diagnose.md).
 
-#[Get('/users')]
-#[Returns(UserDto::class, unwrap: 'data')]
-final class GetUser extends AbstractRequest
-{
-    public function __construct(
-        #[Query('id')]
-        public int $id,
-    ) {}
-}
+Все маршруты, практические руководства и справочники — в [документации](docs/README.md).
+Задание ИИ-агенту можно оформить через [короткую точку входа](docs/start/agent.md):
+она использует те же маршруты и контракты.
 
-$client = new DemoClient($transport);
-$request = new GetUser(1);
-$request->setClient($client);
+## Возможности
 
-$user = $request->send()->dataOrFail();
-```
+- [Декларативные HTTP-запросы](docs/reference/request/declaration.md), ресурсы и версии сервисов.
+- [Plain DTO и внешние правила](docs/reference/dto/field-rules.md): строгие типы,
+  вложенные формы, сохранение неизвестных данных в выбранном поле, например `_extra`.
+- [Атрибуты DTO](docs/reference/attributes/hydration.md), casts, коллекции и профили.
+- [Auth](docs/reference/auth/README.md), [retry и квоты](docs/reference/execution/README.md),
+  кеш ответов, общий дедлайн, пагинация, batch и pool.
+- [Ожидание операции провайдера](docs/reference/execution/continuation-state.md)
+  с явными Pending/Ready/Failed; promise API не гарантирует неблокирующий I/O.
+- [Файлы](docs/reference/files/README.md), [расширения](docs/reference/extensions/README.md),
+  [mock и фикстуры](docs/reference/testing/README.md), [Laravel](docs/guides/integration/laravel.md).
 
-Laravel: транспорт может быть подставлен автоматически через контейнер
-при наличии PSR‑18 клиента.
+## Версии и разработка ApiSutra
 
-## Тесты
+Перед обновлением прочитайте [миграцию](docs/migration/README.md) и
+[историю изменений](CHANEGLOG.md). Лицензия — [MIT](LICENSE).
 
-Из корня репозитория пакета:
-
-```bash
-composer install
-composer test
-composer lint
-composer analyse
-composer check-docs
-composer check-package
-```
-
-Для запуска одного файла:
-
-```bash
-vendor/bin/pest tests/Unit/Core/ValidatorTest.php
-```
-
-Тестовые зависимости включают Pest и компоненты Illuminate для проверки
-Laravel-интеграции. Внешнее приложение и база данных для запуска не нужны.
-
-GitHub Actions запускает тесты на PHP 8.4 и 8.5 при каждом push и pull request.
-Проверку также можно запустить вручную во вкладке Actions. Бейдж Tests показывает
-результат проверки push в ветке `master`.
-
-Бейдж Test count объединяет JUnit-отчёты основного и Redis-прогона на PHP 8.4
-с зависимостями из `composer.lock`. Каждый тест считается один раз по классу и
-имени сценария, включая dataset. Пропуск в основном прогоне считается покрытым,
-если этот тест прошёл в Redis-прогоне; ошибка в любом из отчётов сохраняется.
-Другие сочетания PHP и зависимостей не увеличивают число; отдельная Laravel-проверка
-также не входит в него. Пропуски в обязательном Redis-задании завершают его с ошибкой.
-При падениях или пропусках бейдж показывает их количество, при отсутствии отчёта —
-`unavailable`. Данные обновляются после push или ручного запуска в `master` и
-публикуются в служебной ветке `badges` через `GITHUB_TOKEN` с правом `contents: write`
-только у задания публикации. Ветка создаётся автоматически при первом запуске;
-до него бейдж с количеством недоступен. Shields.io может обновлять картинку с задержкой.
-
-## Документация
-
-- [Docs](./docs/README.md)
-- [Guides](./docs/guides/README.md)
-- [Примеры](./docs/example/)
-- [Technical](./docs/technical/README.md)
-- [Glossary](./docs/glossary/README.md)
-
-## Для провайдеров
-- [Анализ провайдера](./docs/guides/provider-analysis.md)
-- [Методология провайдера](./docs/guides/provider-methodology.md)
-- [Мегаклиент](./docs/guides/megaclient.md)
+Для изменения самого пакета откройте
+[CONTRIBUTING в репозитории](https://github.com/brahmic/apisutra/blob/master/CONTRIBUTING.md).
+Инструкции по src, тестам, CI и выпуску находятся отдельно от документации пользователя.

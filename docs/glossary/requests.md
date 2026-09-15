@@ -1,54 +1,22 @@
 # Запросы
 
-## HttpMethod
-Namespace: `Brahmic\ApiSutra\Enums\Http\HttpMethod`.
-Enum HTTP‑методов: GET, POST, PUT, PATCH, DELETE. Используется в RequestInterface и PreparedRequest.
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="httpmethod"></a> HttpMethod | HTTP-метод операции: GET, POST, PUT, PATCH или DELETE. | [Контракт](../reference/request/declaration.md) |
+| <a id="requestinterface"></a> RequestInterface | Публичный контракт SDK-запроса, реализованный AbstractRequest. | [Контракт](../reference/request/declaration.md) |
+| <a id="abstractrequest"></a> AbstractRequest | Базовый класс для всех запросов. | [Контракт](../reference/request/declaration.md) |
+| <a id="body-dto"></a> Body DTO | В body можно передавать DTO (input‑контракт). | [Контракт](../reference/request/declaration.md) |
+| <a id="abstractresource"></a> AbstractResource | Базовый класс ресурса API. | [Контракт](../reference/client/resources.md) |
+| <a id="асинхронность-sdk-sendasync"></a> Асинхронность SDK (sendAsync) | Promise API выполнения SDK; штатный pipeline и HttpTransport не гарантируют неблокирующий I/O. | [Контракт](../reference/execution/transport.md) |
+| <a id="sendasync"></a> sendAsync() | Вызов send(SendMode::Async), возвращающий ResultHandle; не гарантирует fire-and-forget. | [Контракт](../reference/execution/transport.md) |
+| <a id="sendmode"></a> SendMode | Выбор синхронной отправки или интерфейса с promise; сам по себе не гарантирует параллельный I/O. | [Контракт](../reference/execution/transport.md) |
+| <a id="отложенная-готовность-результата-polling"></a> Отложенная готовность результата (polling) | Сценарий, где провайдер возвращает промежуточное состояние, а финальные данные становятся доступны позже. | [Контракт](../reference/execution/continuation-await.md) |
+| <a id="promiseinterface"></a> PromiseInterface | Контракт Guzzle promise, используемый API результатов; сам тип не определяет конкурентность транспорта. | [Контракт](../reference/execution/transport.md) |
+| <a id="compositerequestinterface"></a> CompositeRequestInterface | Интерфейс для композитных (виртуальных) запросов. | [Контракт](../reference/request/composition.md) |
+| <a id="dependsonrequestinterface"></a> DependsOnRequestInterface | Интерфейс для запросов с зависимостями. | [Контракт](../reference/request/composition.md) |
+| <a id="preparedrequest"></a> PreparedRequest | Подготовленный HTTP-запрос с URL, заголовками, одним источником тела и опциями отправки. | [Контракт](../reference/execution/transport.md) |
+| <a id="resolveendpoint"></a> resolveEndpoint() | Метод AbstractRequest для динамического определения endpoint. | [Контракт](../reference/serialization/uri-query.md) |
+| <a id="resolvebaseurl"></a> resolveBaseUrl() | Метод AbstractRequest для переопределения базового URL. | [Контракт](../reference/serialization/uri-query.md) |
+| <a id="withbaseurl"></a> withBaseUrl() | Создаёт исполнение с переопределённым baseUrl; применяется контракт изоляции назначения. | [Контракт](../reference/serialization/uri-query.md) |
 
-## RequestInterface
-Базовый интерфейс запроса. Методы: getMethod(), getEndpoint(), getResponseType(). Реализуется AbstractRequest.
-
-## AbstractRequest
-Базовый класс для всех запросов. Декларативное описание через атрибуты. Методы выполнения: send(), sendAsync(), resolved(), resolvedAsync(), dataOrFail(). send()/sendAsync() возвращают ResultHandle. Поддерживает resolveClient/resolveEndpoint/resolveBaseUrl, runtime‑модификаторы (без кеша/retry/auth и т.п.), lifecycle hooks (before/after send/hydrate) и helper‑методы getMethod/getEndpoint/getResponseType.
-
-## Body DTO
-В body можно передавать DTO (input‑контракт). DTO сериализуется через `#[To]` и `Cast`, а транспортные параметры (query/path/header/file) остаются в Request. Для простых запросов можно оставлять примитивные `#[Body]` поля без DTO.
-
-## AbstractResource
-Базовый класс ресурса API. Группирует связанные endpoints и возвращает запросы/подресурсы. Используется как навигация: `$client->users()->get(1)`. Методы: `resource()` для вложенных ресурсов и `request()` для привязки клиента к запросу.
-
-## Асинхронность SDK (sendAsync)
-Термин для неблокирующего выполнения запроса на стороне SDK. Возвращается ResultHandle, а для промиса доступны rawAsync()/resolvedAsync(). Не меняет семантику ответа провайдера: это только про способ выполнения в SDK.
-
-## sendAsync()
-Метод AbstractRequest. Асинхронное выполнение запроса. Возвращает ResultHandle (alias send(mode: SendMode::Async)). Для fire-and-forget, параллельных запросов, интеграции с async runtime.
-
-## SendMode
-Namespace: `Brahmic\ApiSutra\Enums\Execution\SendMode`.
-Enum режима отправки. Sync — обычный sync‑путь, Async — non‑blocking транспортный путь. Используется в send(mode: SendMode::Async).
-
-## Отложенная готовность результата (polling)
-Сценарий, где провайдер возвращает промежуточное состояние, а финальные данные
-становятся доступны позже. `await()` использует poll-запрос и явный критерий
-Pending/Ready/Failed; HTTP retry и `sendAsync()` решают другие задачи.
-См. [Provider Async Await](../guides/provider-async-await.md).
-
-## PromiseInterface
-Интерфейс промиса (Guzzle Promises). Используется в ResultHandle::rawAsync() и resolvedAsync() для асинхронных операций.
-
-## CompositeRequestInterface
-Интерфейс для композитных (виртуальных) запросов. Не имеет собственного endpoint. Методы: requests() — возвращает коллекцию вложенных запросов, aggregate(ResultCollection, PipelineContext) — объединяет результаты в один DTO (опционален, дефолтная реализация в AbstractRequest).
-
-## DependsOnRequestInterface
-Интерфейс для запросов с зависимостями. Имеет собственный endpoint, но перед его вызовом выполняются запросы-зависимости. Определяет методы dependencies() для списка зависимостей и processDependencies(ResultCollection, PipelineContext) для обработки их результатов.
-
-## PreparedRequest
-Value Object, содержащий все данные для выполнения HTTP-запроса: метод, URL, query, заголовки, body, файлы и опции сериализации. Создаётся ядром на основе класса запроса. Используется и для выполнения, и для debug.
-
-## resolveEndpoint()
-Метод AbstractRequest для динамического определения endpoint. Приоритет: resolveEndpoint() → атрибут #[Get('/path')]. Используется когда путь зависит от логики (условия, версии API).
-
-## resolveBaseUrl()
-Метод AbstractRequest для переопределения базового URL. Приоритет: withBaseUrl() → resolveBaseUrl() → ClientConfig::baseUrl. Для запросов на другой домен (CDN, microservices).
-
-## withBaseUrl()
-Метод AbstractRequest. Runtime переопределение baseUrl для конкретного вызова. Возвращает clone запроса с изменённым baseUrl.
+[Все термины](README.md).

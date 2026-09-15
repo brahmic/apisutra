@@ -40,7 +40,11 @@
         ],
         "lint": "phpcs --report=summary",
         "analyse": "phpstan analyse --no-progress --memory-limit=1G",
-        "check-docs": "python3 tests/Support/check-docs.py",
+        "analyse-docs": "phpstan analyse -c tests/Support/docs-phpstan.neon --no-progress --memory-limit=1G",
+        "check-docs": [
+            "python3 tests/Support/check-docs.py",
+            "python3 tests/Support/test-check-docs.py"
+        ],
         "check-package": "python3 tests/Support/check-package.py"
     },
     "config": {
@@ -76,6 +80,8 @@
             "/.workflow",
             "/.agents",
             "/AGENTS.md",
+            "/CONTRIBUTING.md",
+            "/development",
             "/tests",
             "/.github",
             "/.phpunit.cache",

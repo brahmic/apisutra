@@ -1,43 +1,17 @@
 # Пагинация
 
-## PaginableInterface
-Интерфейс для запросов с поддержкой пагинации. Методы: withPage(), withLimit(), withCursor() (опц.) возвращают `RequestExecutionInterface`, extractMeta() извлекает мету из ответа.
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="paginableinterface"></a> PaginableInterface | Интерфейс для запросов с поддержкой пагинации. | [Контракт](../reference/execution/pagination.md) |
+| <a id="pagination-атрибут"></a> Pagination (атрибут) | Атрибут конфигурации пагинации на запросе: пути данных и метаданных, параметры страницы, тип и коллекция элементов. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationconfig"></a> PaginationConfig | Конфиг пагинации на уровне клиента. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationrule"></a> PaginationRule | Value Object правил пагинации. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationmode"></a> PaginationMode | Enum режима пагинации. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationmeta"></a> PaginationMeta | Implements ResultMeta. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationmetaresolverinterface"></a> PaginationMetaResolverInterface | Контракт для извлечения метаданных пагинации из ответа провайдера. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationmetaoverrideinterface"></a> PaginationMetaOverrideInterface | Интерфейс для запросов, которые сами извлекают мету и хотят переопределить стандартный резолв. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginationitemscontainerinterface"></a> PaginationItemsContainerInterface | Контракт контейнера с items, нужен для DTO‑обёрток пагинированных ответов. | [Контракт](../reference/execution/pagination.md) |
+| <a id="abstractpaginationcontainerdto"></a> AbstractPaginationContainerDto | Базовый DTO‑контейнер с items() / withItems() для пагинации. | [Контракт](../reference/execution/pagination.md) |
+| <a id="paginatedresult"></a> PaginatedResult | Результат пагинации с aggregated items/pages и метой. | [Контракт](../reference/execution/pagination.md) |
 
-## Pagination (атрибут)
-Атрибут конфигурации пагинации на запросе: пути данных и метаданных, параметры страницы,
-тип и коллекция элементов. Переопределяет defaults из ClientConfig;
-полный перечень — в [руководстве](../guides/pagination.md).
-
-## PaginationConfig
-Конфиг пагинации на уровне клиента. Дополнительно поддерживает:
-itemsType, itemsCollection, itemsCollectionFactory, metaResolver, maxPages.
-С внешним набором гидратор клиента применяет itemsType и в items-only режиме;
-без набора там сохраняется raw-результат. См. [входы гидратации](../guides/hydration-rules.md#диагностика-и-входы).
-
-## PaginationRule
-Value Object правил пагинации. Режимы задаются через PaginationMode. Поле failStrategy определяет поведение при ошибках. По умолчанию задаётся в ClientConfig::paginationRule и может быть переопределён через RequestOptions::withPaginationRule() или chain‑метод rules().
-
-## PaginationMode
-Enum режима пагинации. Значения: Single (одна страница), All (все страницы), Pages (N страниц), Range (диапазон). Используется в PaginationRule.
-
-## PaginationMeta
-Implements ResultMeta. Value Object с метаданными пагинации. Содержит: total, currentPage, perPage, hasMore, nextCursor. Извлекается из ответа API через атрибут metaPath или метод extractMeta().
-
-## PaginationMetaResolverInterface
-Контракт для извлечения метаданных пагинации из ответа провайдера.
-Можно задать в PaginationConfig или атрибуте Pagination.
-
-## PaginationMetaOverrideInterface
-Интерфейс для запросов, которые сами извлекают мету и хотят переопределить стандартный резолв.
-
-## PaginationItemsContainerInterface
-Контракт контейнера с items, нужен для DTO‑обёрток пагинированных ответов.
-
-## AbstractPaginationContainerDto
-Базовый DTO‑контейнер с items() / withItems() для пагинации.
-
-## Paginator
-Сервис для массовой загрузки страниц. Методы: all() — все страницы, pages(n) — первые N, range(from, to) — диапазон. Поддерживает ленивую итерацию через foreach. Мутабельный builder: `perPage()/failStrategy()/range()` меняют внутреннее состояние.
-
-## PaginatedResult
-Результат пагинации с aggregated items/pages и метой. Методы: items(), pages(), meta().
+[Все термины](README.md).

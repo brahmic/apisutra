@@ -143,6 +143,7 @@ jobs:
       - run: composer dump-autoload --optimize --strict-psr
       - run: composer lint
       - run: composer analyse
+      - run: composer analyse-docs
       - run: composer check-docs
       - run: python3 .github/scripts/test_test_count_badge.py
       - run: node --test .github/scripts/publish-test-count.test.cjs

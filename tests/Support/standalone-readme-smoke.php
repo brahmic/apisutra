@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-use Brahmic\ApiSutra\Testing\MockResponse;
-use Brahmic\ApiSutra\Transport\MockTransport;
-
-$checkout = $argv[1] ?? '';
-require $checkout . '/vendor/autoload.php';
-$readme = file_get_contents($checkout . '/README.md');
-if ($readme === false || preg_match('/```php\R(.*?)\R```/s', $readme, $match) !== 1) {
-    throw new RuntimeException('Пример README не найден');
+$checkout = $argv[1] ?? dirname(__DIR__, 2);
+// Выполняется опубликованный пример из проверяемого дистрибутива.
+ob_start();
+require $checkout . '/docs/example/sdk/run.php';
+$output = json_decode((string) ob_get_clean(), true, flags: JSON_THROW_ON_ERROR);
+$expected = [
+    'id' => 7,
+    'title' => 'Первая запись',
+    'extra' => ['future_flag' => false],
+    'failed' => true,
+    'status' => 404,
+];
+if ($output !== $expected) {
+    throw new RuntimeException('Опубликованный SDK вернул неверные данные или ошибку');
 }
-$transport = new MockTransport();
-$transport->fake(['*' => MockResponse::success(['data' => ['id' => 1, 'name' => 'Alice']])]);
-// Исполняется первый PHP-пример именно из проверяемого дистрибутива.
-eval($match[1]);
-if (!$user instanceof UserDto || $user->id !== 1 || $user->name !== 'Alice') {
-    throw new RuntimeException('Пример README не вернул ожидаемый DTO');
-}
-echo "Standalone README example — OK.\n";
+echo "Standalone published SDK — OK.\n";

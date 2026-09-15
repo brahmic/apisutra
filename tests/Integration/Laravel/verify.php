@@ -11,13 +11,19 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Http\Request;
+use Brahmic\ApiSutra\Testing\MockResponse;
+use Brahmic\ApiSutra\Transport\MockTransport;
+use Example\Records\DemoClient;
+use Example\Records\Laravel\DemoServiceProvider;
+use Example\Records\Resources\Records\Get\GetRecordRequest;
 use Integration\First\Client;
 use Integration\First\ItemsRequest;
 use Integration\Second\Client as SecondClient;
 use Integration\Second\ItemsRequest as SecondRequest;
 use Integration\ProbeJob;
 
-require __DIR__ . '/../../../.laravel-integration/vendor/autoload.php';
+$loader = require __DIR__ . '/../../../.laravel-integration/vendor/autoload.php';
+$loader->addPsr4('Example\\Records\\', __DIR__ . '/../../../docs/example/sdk/src/');
 
 function check(bool $condition, string $message): void
 {
@@ -57,6 +63,20 @@ foreach ([false, true] as $cached) {
     $app->make(Dispatcher::class)->dispatchSync(new ProbeJob('30'));
     check($app->make(ItemsRequest::class)->limit === '20', 'Worker сохранил состояние задания');
     check($console->call('about', ['--only' => 'environment']) === 0, 'Artisan не запускается');
+    // Проверяем опубликованный binding SDK с настоящим контейнером Laravel.
+    $exampleTransport = new MockTransport();
+    $exampleTransport->preventStrayRequests();
+    $exampleTransport->fake([GetRecordRequest::class => MockResponse::success([
+        'data' => ['record_id' => 7, 'title' => 'Laravel', 'new_field' => false],
+    ])]);
+    $app->instance(TransportInterface::class, $exampleTransport);
+    $app['config']->set('records.base_url', 'https://laravel.example.test/v2');
+    $app->register(DemoServiceProvider::class);
+    $demo = $app->make(DemoClient::class);
+    check($demo->getConfig()->baseUrl === 'https://laravel.example.test/v2', 'Пример потерял конфигурацию SDK');
+    $record = $demo->records()->get(7)->dataOrFail();
+    check($record->id === 7 && $record->_extra === ['new_field' => false], 'Binding примера потерял транспорт или правила');
+    check($app->make(DemoClient::class) === $demo, 'Binding примера не singleton');
     if (!$cached) {
         check($console->call('config:cache') === 0, 'config:cache не прошёл');
     } else {

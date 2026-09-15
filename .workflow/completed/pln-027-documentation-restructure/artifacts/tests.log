@@ -1,0 +1,606 @@
+.........⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯sssssssssssssssss⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯⨯....................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............⨯⨯..............................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  ...................................................................
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:23
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:23
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:23
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:23
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:58
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:72
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\ExternalUrlTransportTest > it…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Integration/ExternalUrlTransportTest.php:86
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:21
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:21
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:21
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:33
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:33
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:33
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:33
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:44
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:55
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:70
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:82
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\StreamingFileTransportTest >…   RuntimeException
+  HTTP-стенд не сообщил адрес
+
+  at tests/Support/LocalFileServer.php:27
+     23▕         $this->pipes = $pipes;
+     24▕         stream_set_timeout($pipes[1], 5);
+     25▕         $url = fgets($pipes[1]);
+     26▕         if ($url === false) {
+  ➜  27▕             throw new RuntimeException('HTTP-стенд не сообщил адрес');
+     28▕         }
+     29▕         $this->url = trim($url);
+     30▕     }
+     31▕
+
+  1   tests/Support/LocalFileServer.php:27
+  2   tests/Integration/StreamingFileTransportTest.php:93
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\TransportTimeoutIntegrationTe…  RuntimeException
+  Локальный HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalTimeoutServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('Локальный HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->httpUrl = 'http://' . $addresses['http'];
+     33▕         $this->tlsUrl = 'https://' . $addresses['tls'];
+
+  1   tests/Support/LocalTimeoutServer.php:29
+  2   tests/Integration/TransportTimeoutIntegrationTest.php:27
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\TransportTimeoutIntegrationTe…  RuntimeException
+  Локальный HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalTimeoutServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('Локальный HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->httpUrl = 'http://' . $addresses['http'];
+     33▕         $this->tlsUrl = 'https://' . $addresses['tls'];
+
+  1   tests/Support/LocalTimeoutServer.php:29
+  2   tests/Integration/TransportTimeoutIntegrationTest.php:27
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\TransportTimeoutIntegrationTe…  RuntimeException
+  Локальный HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalTimeoutServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('Локальный HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->httpUrl = 'http://' . $addresses['http'];
+     33▕         $this->tlsUrl = 'https://' . $addresses['tls'];
+
+  1   tests/Support/LocalTimeoutServer.php:29
+  2   tests/Integration/TransportTimeoutIntegrationTest.php:27
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\TransportTimeoutIntegrationTe…  RuntimeException
+  Локальный HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalTimeoutServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('Локальный HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->httpUrl = 'http://' . $addresses['http'];
+     33▕         $this->tlsUrl = 'https://' . $addresses['tls'];
+
+  1   tests/Support/LocalTimeoutServer.php:29
+  2   tests/Integration/TransportTimeoutIntegrationTest.php:43
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\TransportTimeoutIntegrationTe…  RuntimeException
+  Локальный HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalTimeoutServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('Локальный HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->httpUrl = 'http://' . $addresses['http'];
+     33▕         $this->tlsUrl = 'https://' . $addresses['tls'];
+
+  1   tests/Support/LocalTimeoutServer.php:29
+  2   tests/Integration/TransportTimeoutIntegrationTest.php:65
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Integration\TransportTimeoutIntegrationTe…  RuntimeException
+  Локальный HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalTimeoutServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('Локальный HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->httpUrl = 'http://' . $addresses['http'];
+     33▕         $this->tlsUrl = 'https://' . $addresses['tls'];
+
+  1   tests/Support/LocalTimeoutServer.php:29
+  2   tests/Integration/TransportTimeoutIntegrationTest.php:99
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Core\PreparedRequestBodyTest > it шт…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Unit/Core/PreparedRequestBodyTest.php:136
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Unit\Core\PreparedRequestBodyTest > it шт…  RuntimeException
+  HTTP-стенд не сообщил адреса
+
+  at tests/Support/LocalUrlServer.php:29
+     25▕         stream_set_timeout($pipes[1], 5);
+     26▕         $line = fgets($pipes[1]);
+     27▕         if ($line === false) {
+     28▕             $this->close();
+  ➜  29▕             throw new RuntimeException('HTTP-стенд не сообщил адреса');
+     30▕         }
+     31▕         $addresses = json_decode($line, true, flags: JSON_THROW_ON_ERROR);
+     32▕         $this->url = 'http://' . $addresses[0];
+     33▕         $this->otherUrl = 'http://' . $addresses[1];
+
+  1   tests/Support/LocalUrlServer.php:29
+  2   tests/Unit/Core/PreparedRequestBodyTest.php:136
+
+
+  Tests:    32 failed, 17 skipped, 1995 passed (7199 assertions)
+  Duration: 5.42s

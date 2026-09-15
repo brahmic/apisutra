@@ -74,6 +74,6 @@
 запуск PHP-тестов ради текста не требуется.
 
 Возможности fake, record/playback и проверок контрактов описаны в
-[гайде тестирования](../docs/guides/testing.md). Live-тесты требуют условий
+[гайде тестирования](../docs/guides/testing/unit.md). Live-тесты требуют условий
 конкретного провайдера и отдельного запуска; см.
-[live-тестирование](../docs/guides/live-testing.md) и [правила провайдеров](providers.md).
+[live-тестирование](../docs/reference/testing/live.md) и [правила провайдеров](providers.md).

@@ -1,96 +1,32 @@
 # Настройки выполнения
 
-## Кеширование
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="cache-атрибут"></a> Cache (атрибут) | Атрибут конфигурации кеширования на уровне запроса. | [Контракт](../reference/execution/cache.md) |
+| <a id="withoutcache"></a> withoutCache() | Метод AbstractRequest. | [Контракт](../reference/execution/cache.md) |
+| <a id="withcacheint-ttl"></a> withCache(?int $ttl) | Метод AbstractRequest. | [Контракт](../reference/execution/cache.md) |
+| <a id="withcachewriteonlyint-ttl"></a> withCacheWriteOnly(?int $ttl) | Метод AbstractRequest. | [Контракт](../reference/execution/cache.md) |
+| <a id="withcachereadonlyint-ttl"></a> withCacheReadOnly(?int $ttl) | Метод AbstractRequest. | [Контракт](../reference/execution/cache.md) |
+| <a id="clearcache"></a> clearCache() | Метод AbstractRequest и AbstractClient. | [Контракт](../reference/execution/cache.md) |
+| <a id="timeout-атрибут"></a> Timeout (атрибут) | Атрибут конфигурации таймаута на уровне запроса. | [Контракт](../reference/execution/deadlines.md) |
+| <a id="withtimeoutint-seconds"></a> withTimeout(int $seconds) | Метод AbstractRequest. | [Контракт](../reference/execution/deadlines.md) |
+| <a id="withdelayint-ms"></a> withDelay(int $ms) | Метод AbstractRequest. | [Контракт](../reference/execution/deadlines.md) |
+| <a id="withoutdelay"></a> withoutDelay() | Метод AbstractRequest. | [Контракт](../reference/execution/deadlines.md) |
+| <a id="retry-атрибут"></a> Retry (атрибут) | Атрибут конфигурации retry на уровне запроса. | [Контракт](../reference/execution/retry.md) |
+| <a id="retryon"></a> retryOn | Список HTTP‑статусов для retry. | [Контракт](../reference/execution/retry.md) |
+| <a id="retryhandlerinterface"></a> RetryHandlerInterface | Контракт обработчика retry. | [Контракт](../reference/execution/retry.md) |
+| <a id="withretryint-attempts"></a> withRetry(int $attempts) | Метод AbstractRequest. | [Контракт](../reference/execution/retry.md) |
+| <a id="withoutretry"></a> withoutRetry() | Метод AbstractRequest. | [Контракт](../reference/execution/retry.md) |
+| <a id="ratelimit-атрибут"></a> RateLimit (атрибут) | Атрибут конфигурации rate‑limit на уровне запроса. | [Контракт](../reference/execution/rate-limit.md) |
+| <a id="ratelimitbehavior"></a> RateLimitBehavior | Действие при исчерпании квоты: дождаться разрешения или завершить запрос ошибкой. | [Контракт](../reference/execution/rate-limit.md) |
+| <a id="withratelimitint-limit-int-period"></a> withRateLimit(int $limit, int $period) | Метод AbstractRequest. | [Контракт](../reference/execution/rate-limit.md) |
+| <a id="withoutratelimit"></a> withoutRateLimit() | Метод AbstractRequest. | [Контракт](../reference/execution/rate-limit.md) |
+| <a id="ratelimiter"></a> RateLimiter | Внутренний компонент для подсчёта запросов. | [Контракт](../reference/execution/rate-limit.md) |
+| <a id="executionmode"></a> ExecutionMode | Порядок исполнения набора запросов: последовательный или параллельный. | [Контракт](../reference/execution/batch-pool.md) |
+| <a id="failstrategy"></a> FailStrategy | Реакция batch на ошибку элемента: остановить весь набор, вернуть частичный результат или игнорировать ошибки. | [Контракт](../reference/execution/batch-pool.md) |
+| <a id="execution-атрибут"></a> Execution (атрибут) | Атрибут конфигурации выполнения вложенных запросов. | [Контракт](../reference/execution/batch-pool.md) |
+| <a id="idempotent-атрибут"></a> Idempotent (атрибут) | Атрибут для мутирующих запросов. | [Контракт](../reference/execution/retry.md) |
+| <a id="withidempotencykey"></a> withIdempotencyKey() | Метод AbstractRequest. | [Контракт](../reference/execution/retry.md) |
+| <a id="idempotencyheader"></a> idempotencyHeader | Параметр ClientConfig. | [Контракт](../reference/execution/retry.md) |
 
-### Cache (атрибут)
-Атрибут конфигурации кеширования на уровне запроса. Параметры: mode (CacheMode), ttl (время жизни). TTL по умолчанию берётся из ClientConfig.
-
-### withoutCache()
-Метод AbstractRequest. Выполняет запрос без чтения и записи кеша. Используется для получения свежих данных.
-
-### withCache(?int $ttl)
-Метод AbstractRequest. Включает кеширование или переопределяет TTL. TTL опционален — по умолчанию из ClientConfig.
-
-### withCacheWriteOnly(?int $ttl)
-Метод AbstractRequest. Записывает результат в кеш без чтения.
-
-### withCacheReadOnly(?int $ttl)
-Метод AbstractRequest. Читает из кеша без записи.
-
-### clearCache()
-Метод AbstractRequest и AbstractClient. На запросе — удаляет кеш конкретного запроса. На клиенте — очищает весь кеш SDK.
-
-## Таймауты
-
-### Timeout (атрибут)
-Атрибут конфигурации таймаута на уровне запроса. Переопределяет значение из ClientConfig для конкретного запроса.
-
-### withTimeout(int $seconds)
-Метод AbstractRequest. Переопределяет таймаут в рантайме для конкретного вызова.
-
-## Delay
-
-### withDelay(int $ms)
-Метод AbstractRequest. Устанавливает задержку перед выполнением запроса.
-
-### withoutDelay()
-Метод AbstractRequest. Отключает задержку для конкретного вызова.
-
-## Retry
-
-### Retry (атрибут)
-Атрибут конфигурации retry на уровне запроса. Параметры: attempts, delay, enabled, on. Переопределяет defaults из ClientConfig.
-
-### retryOn
-Список HTTP‑статусов для retry. Значения по умолчанию: `[408, 429, 500, 502, 503, 504]`.
-
-### RetryHandlerInterface
-Контракт обработчика retry. Управляет повторами по RetryConfig и shouldRetry(), повторяет только транспортный участок pipeline.
-
-### withRetry(int $attempts)
-Метод AbstractRequest. Включает или переопределяет retry в рантайме.
-
-### withoutRetry()
-Метод AbstractRequest. Отключает retry для конкретного вызова.
-
-## Rate Limiting
-
-### RateLimit (атрибут)
-Атрибут конфигурации rate‑limit на уровне запроса. Параметры: limit, period. Для endpoint со своими лимитами.
-
-### RateLimitBehavior
-Namespace: `Brahmic\ApiSutra\Enums\RateLimiting\RateLimitBehavior`.
-Enum поведения при достижении лимита. Wait — ждать освобождения слота (default). Throw — сразу ошибка.
-
-### withRateLimit(int $limit, int $period)
-Метод AbstractRequest. Устанавливает rate‑limit в рантайме.
-
-### withoutRateLimit()
-Метод AbstractRequest. Отключает throttling для конкретного вызова.
-
-### RateLimiter
-Внутренний компонент для подсчёта запросов. По умолчанию in-memory, опционально внешний store через PSR-16.
-
-## Конфигурация выполнения
-
-### ExecutionMode
-Namespace: `Brahmic\ApiSutra\Enums\Execution\ExecutionMode`.
-Enum режима выполнения вложенных и зависимых запросов. Sequential — последовательное выполнение. Parallel — параллельное выполнение.
-
-### FailStrategy
-Namespace: `Brahmic\ApiSutra\Enums\Execution\FailStrategy`.
-Enum стратегии обработки ошибок. FailAll — любая ошибка приводит к провалу всего запроса. Partial — успешные результаты возвращаются вместе с ошибками. IgnoreErrors — ошибки молча игнорируются.
-
-### Execution (атрибут)
-Атрибут конфигурации выполнения вложенных запросов. Принимает ExecutionMode и FailStrategy. Применяется к CompositeRequestInterface. Для DependsOnRequestInterface режим всегда Sequential, учитывается только failStrategy. Для простых запросов игнорируется.
-
-## Idempotency
-
-### Idempotent (атрибут)
-Атрибут для мутирующих запросов. SDK автоматически генерирует и добавляет Idempotency-Key header. Защита от дубликатов при retry. Параметр header для кастомного имени заголовка.
-
-### withIdempotencyKey()
-Метод AbstractRequest. Устанавливает кастомный idempotency key вместо автогенерации.
-
-### idempotencyHeader
-Параметр ClientConfig. Имя заголовка для idempotency key. По умолчанию 'Idempotency-Key'.
+[Все термины](README.md).

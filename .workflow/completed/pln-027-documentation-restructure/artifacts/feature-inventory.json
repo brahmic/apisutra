@@ -1,0 +1,1070 @@
+{
+  "entries": [
+    {
+      "portion": "A",
+      "feature": "Клиент, config, with/null и явная сборка",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/configuration.md",
+      "source": [
+        "src/Config/ClientConfig.php",
+        "src/Core/AbstractClient.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/ClientConfigTest.php",
+        "tests/Unit/Core/ContainerProviderRequestResolverTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Discovery, longest namespace, ownership и DI",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/discovery.md",
+      "source": [
+        "src/Resolver/ClientRegistry.php",
+        "src/Resolver/ClientResolver.php",
+        "src/Resolver/ClientDiscoveryService.php"
+      ],
+      "tests": [
+        "tests/Unit/Resolver/ClientRegistryTest.php",
+        "tests/Unit/Resolver/DiscoveryFullFlowTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Ресурсы и привязка запросов",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/resources.md",
+      "source": [
+        "src/Core/AbstractResource.php"
+      ],
+      "tests": [
+        "tests/Unit/Resolver/DiscoveryFullFlowTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Декларация и runtime-опции запроса",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/request/declaration.md",
+      "source": [
+        "src/Core/AbstractRequest.php",
+        "src/Request/RequestExecution.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/SerializerRequestDefaultsTest.php",
+        "tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Подготовка частей запроса и RequestDefaults",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/serialization/request-parts.md",
+      "source": [
+        "src/Serialization/RequestPartsCollector.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/SerializerRequestDefaultsTest.php",
+        "tests/Unit/Serialization/SerializerTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "URI, query, origin и готовые URL",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/serialization/uri-query.md",
+      "source": [
+        "src/Serialization/RequestUrlBuilder.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/UriPipelineTest.php",
+        "tests/Unit/Serialization/RequestUrlContractTest.php",
+        "tests/Unit/Serialization/ExternalUrlContractTest.php",
+        "tests/Integration/ExternalUrlTransportTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "JSON/body/BodyRoot и ошибка кодирования",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/serialization/body.md",
+      "source": [
+        "src/Serialization/Serializer.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/SerializerBodyRootTest.php",
+        "tests/Unit/Serialization/StrictJsonEncodingTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Транспорт, promise, capabilities и тело PreparedRequest",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/transport.md",
+      "source": [
+        "src/Transport/HttpTransport.php",
+        "src/VO/Http/PreparedRequest.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/HttpTransportTest.php",
+        "tests/Unit/Core/PreparedRequestBodyTest.php",
+        "tests/Unit/Pipeline/PreparedBodyContractTest.php",
+        "tests/Integration/TransportTimeoutIntegrationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Результаты raw/resolved/dataOrFail и фабрики",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/results/handles.md",
+      "source": [
+        "src/Result/ResultHandle.php",
+        "src/Result/ExecutionResult.php",
+        "src/Result/ResolvedResult.php"
+      ],
+      "tests": [
+        "tests/Unit/Pipeline/SuccessfulResponseContractTest.php",
+        "tests/Unit/Core/ResultFactoryTest.php",
+        "tests/Unit/Core/ClientResponseFactoryTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "RawResponse и разные MIME",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/attributes/response.md",
+      "source": [
+        "src/Attributes/Response/RawResponse.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/RawResponseTest.php",
+        "tests/Unit/Pipeline/SuccessfulResponseContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "A",
+      "feature": "Ошибки, маппинг, partial и typed context",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/results/errors.md",
+      "source": [
+        "src/Result/ExecutionResult.php",
+        "src/VO/Errors/ClientError.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/ErrorPolicyTest.php",
+        "tests/Unit/Result/ResolvedResultErrorContextTest.php",
+        "tests/Unit/Result/TraceErrorContextContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Модели DTO, constructor-first и inherited properties",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/models.md",
+      "source": [
+        "src/Serialization/Hydrator.php",
+        "src/DataTransfer/AbstractDto.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/HydratorTest.php",
+        "tests/Unit/Serialization/HydrationCompatibilityTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "HydrationRules, descriptors и конфликт деклараций",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/field-rules.md",
+      "source": [
+        "src/Serialization/Rules/HydrationRules.php",
+        "src/Serialization/Rules/DtoRules.php",
+        "src/Serialization/Rules/FieldRule.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationConfigurationTest.php",
+        "tests/Unit/Serialization/ExternalHydrationRulesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Профили, From/fallback и даты",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/profiles.md",
+      "source": [
+        "src/Serialization/DtoHydrationProfileResolver.php",
+        "src/Config/DateTimeHydrationPolicy.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/DateTimePolicyTest.php",
+        "tests/Unit/Serialization/HydrationCastSourcesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Legacy/Strict, union и большие целые",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/scalars.md",
+      "source": [
+        "src/Serialization/HydrationValueValidator.php",
+        "src/Casts/IntegerCast.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationScalarTest.php",
+        "tests/Unit/Serialization/BigIntegerIntegrationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Missing, null, defaults и provider Present",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/defaults.md",
+      "source": [
+        "src/Serialization/Rules/DefaultSpec.php",
+        "src/Serialization/Hydrator.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/DefaultValueProviderContractTest.php",
+        "tests/Unit/Serialization/HydrationErrorContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Одиночный Nested, list, each, формы и required",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/shapes.md",
+      "source": [
+        "src/Serialization/Rules/ValueShape.php",
+        "src/Serialization/Hydrator.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/NestedObjectHydrationTest.php",
+        "tests/Unit/Serialization/ExternalHydrationRulesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Discriminator Value/Key, KeepRaw/Skip/Error",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/variants.md",
+      "source": [
+        "src/Serialization/Rules/ValueShape.php",
+        "src/Attributes/DataTransfer/Nested.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/NestedDiscriminatorModeTest.php",
+        "tests/Unit/Serialization/ExternalHydrationRulesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Остаток источника, fallback, коллизия _extra, рекурсивная проекция",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/extras.md",
+      "source": [
+        "src/Serialization/Rules/DtoRules.php",
+        "src/Serialization/Hydrator.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationExtrasTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Вложенные casts/providers с текущим scope",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/scope.md",
+      "source": [
+        "src/Serialization/Rules/HydrationScope.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationScopeTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Пути DTO/sourcePath и safe log",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/diagnostics.md",
+      "source": [
+        "src/Exceptions/Serialization/HydrationException.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationOriginTest.php",
+        "tests/Unit/Serialization/HydrationErrorContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Типизированные коллекции и missing fallback",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/collections.md",
+      "source": [
+        "src/Collections/AbstractTypedCollection.php",
+        "src/Collections/AbstractCollection.php"
+      ],
+      "tests": [
+        "tests/Unit/Collections/TypedCollectionTest.php",
+        "tests/Unit/Serialization/CollectionIntegrationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Изоляция object defaults/атрибутов, повторы и cache on/off",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/lifecycle.md",
+      "source": [
+        "src/Attributes/AttributeMetadataCache.php",
+        "src/Serialization/Hydrator.php",
+        "src/Serialization/DtoSerializer.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/MetadataValueIsolationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "DX/wire, enum, даты и profile hierarchy",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/serialization/dto-output.md",
+      "source": [
+        "src/Serialization/DtoSerializer.php",
+        "src/Serialization/SerializationValueResolver.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/DtoSerializerTest.php",
+        "tests/Unit/Serialization/DateTimePolicyTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Receiver в ручных/nested DTO, cast/opaque/query границы",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/serialization/receiver-output.md",
+      "source": [
+        "src/Serialization/Serializer.php",
+        "src/Serialization/DtoSerializer.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationWireTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Источники cast registry vs hydration/profile и JsonCast",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/serialization/casts.md",
+      "source": [
+        "src/Casts/CastRegistry.php",
+        "src/Casts/JsonCast.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/HydrationCastSourcesTest.php",
+        "tests/Unit/Pipeline/JsonErrorContractsTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "B",
+      "feature": "Один набор: Returns, cached response, pagination, composite, await",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/dto/field-rules.md",
+      "source": [
+        "src/Core/AbstractClient.php",
+        "src/Serialization/Hydrator.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/ExternalHydrationEntriesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Authenticator, auth scope и политика доступа",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/auth/strategies.md",
+      "source": [
+        "src/Contracts/Interfaces/Auth/AuthenticatorInterface.php"
+      ],
+      "tests": [
+        "tests/Unit/Auth/AuthPolicyScopeTest.php",
+        "tests/Unit/Auth/AuthScopeResetTest.php",
+        "tests/Unit/Auth/AuthorizationSchemeAuthenticatorTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Token cache, refresh lock, восстановление после 401",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/auth/tokens.md",
+      "source": [
+        "src/Auth/TokenAuthenticator.php"
+      ],
+      "tests": [
+        "tests/Unit/Auth/AuthRecoveryContractTest.php",
+        "tests/Unit/Auth/AuthRefreshLockTest.php",
+        "tests/Unit/Auth/TokenIsolationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Credentials enrichment, merge и изоляция назначения",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/auth/credentials.md",
+      "source": [
+        "src/Config/CredentialsEnrichmentConfig.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/CredentialsEnrichmentTest.php",
+        "tests/Unit/Serialization/ExternalUrlContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Retry, Retry-After, идемпотентность и replay",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/retry.md",
+      "source": [
+        "src/Config/RetryConfig.php",
+        "src/Retry/RetryHandler.php"
+      ],
+      "tests": [
+        "tests/Unit/Retry/SafeRetryContractTest.php",
+        "tests/Unit/Retry/RetryAfterContractTest.php",
+        "tests/Unit/Retry/StreamReplayContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Совместные квоты и backend",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/rate-limit.md",
+      "source": [
+        "src/Config/RateLimitConfig.php",
+        "src/RateLimiting/RateLimiter.php"
+      ],
+      "tests": [
+        "tests/Unit/RateLimit/JointQuotaTest.php",
+        "tests/Unit/RateLimit/RateLimitExecutionTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Кеш raw HTTP-ответов, identity и overrides",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/cache.md",
+      "source": [
+        "src/Config/CacheConfig.php",
+        "src/Pipeline/Cache/CacheManager.php"
+      ],
+      "tests": [
+        "tests/Unit/Cache/AutomaticCacheIdentityTest.php",
+        "tests/Unit/Cache/CacheIsolationTest.php",
+        "tests/Unit/Cache/CacheManagerOverridesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Timeout, delay и общий deadline",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/deadlines.md",
+      "source": [
+        "src/VO/Http/TransportOptions.php"
+      ],
+      "tests": [
+        "tests/Integration/TransportTimeoutIntegrationTest.php",
+        "tests/Unit/Retry/RetrySenderTotalTimeoutTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Пагинация, metadata, items-only и guards",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/pagination.md",
+      "source": [
+        "src/Config/PaginationConfig.php",
+        "src/Pagination/PaginationRule.php"
+      ],
+      "tests": [
+        "tests/Unit/Pagination/PaginationFailureContractTest.php",
+        "tests/Unit/Pagination/PaginatorGuardTest.php",
+        "tests/Unit/Serialization/ExternalHydrationEntriesTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Batch/pool, ошибки и наследование контекста",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/batch-pool.md",
+      "source": [
+        "src/Execution/BatchExecutor.php",
+        "src/Execution/PoolExecutor.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/BatchFailureContractTest.php",
+        "tests/Integration/CoreFlowIntegrationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Pending/Ready/Failed, context и режимы",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/continuation-state.md",
+      "source": [
+        "src/Continuation/ContinuationContext.php",
+        "src/Continuation/ContinuationState.php",
+        "src/Continuation/FinalPathStateResolver.php"
+      ],
+      "tests": [
+        "tests/Unit/Result/ContinuationReadinessTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Await, token-only, лимиты, Outcome и cached awaitAs",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/execution/continuation-await.md",
+      "source": [
+        "src/Continuation/ContinuationService.php",
+        "src/Continuation/ContinuationOutcome.php"
+      ],
+      "tests": [
+        "tests/Unit/Result/ResultHandleContinuationAwaitTest.php",
+        "tests/Unit/Result/ContinuationReadinessTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Upload, stream replay и ограничения файлов",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/files/uploads.md",
+      "source": [
+        "src/VO/Files/FileInput.php"
+      ],
+      "tests": [
+        "tests/Unit/Serialization/SerializerFilesTest.php",
+        "tests/Integration/StreamingFileTransportTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Download, destination, Base64 и владение файлами",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/files/downloads.md",
+      "source": [
+        "src/VO/Files/FileResponse.php",
+        "src/VO/Files/Base64File.php"
+      ],
+      "tests": [
+        "tests/Integration/StreamingFileTransportTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "C",
+      "feature": "Архивы, драйверы и временные файлы",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/files/archives.md",
+      "source": [
+        "src/Config/ArchiveConfig.php",
+        "src/Extensions/Archive/Response/ArchiveResponse.php"
+      ],
+      "tests": [
+        "tests/Unit/Archive/ArchiveResponseTest.php",
+        "tests/Unit/Archive/ArchiveTempFileManagerTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Composite, зависимости, RequestRole и результаты",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/request/composition.md",
+      "source": [
+        "src/Contracts/Interfaces/Core/CompositeRequestInterface.php",
+        "src/Contracts/Interfaces/Core/DependsOnRequestInterface.php"
+      ],
+      "tests": [
+        "tests/Integration/CoreFlowIntegrationTest.php",
+        "tests/Unit/Pipeline/PipelineIntegrationTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Публичные hooks и boundaries",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/extensions/hooks.md",
+      "source": [
+        "src/Hooks/HookRegistry.php",
+        "src/Contracts/Interfaces/Hooks/HookInterface.php"
+      ],
+      "tests": [
+        "tests/Unit/Hooks/HookRunnerTest.php",
+        "tests/Unit/Pipeline/PipelineHookExceptionsTest.php",
+        "tests/Unit/Pipeline/BeforeHydrateHookDataTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Extensions, MIME handler, lifecycle и конфликты",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/extensions/extensions.md",
+      "source": [
+        "src/Extensions/ExtensionRegistry.php",
+        "src/Contracts/Interfaces/Response/ResponseHandlerInterface.php"
+      ],
+      "tests": [
+        "tests/Unit/Extensions/ExtensionRegistryPriorityTest.php",
+        "tests/Unit/Extensions/ExtensionResponseHandlerTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Атрибуты: сигнатуры, targets и defaults",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/attributes/README.md",
+      "source": [
+        "src/Attributes/AttributeRegistry.php"
+      ],
+      "tests": [
+        "tests/Unit/Attributes/AttributeRegistryTest.php",
+        "tests/Unit/Attributes/DataTransfer/AboutAttributeTest.php",
+        "tests/Unit/Serialization/SerializerRequestDefaultsTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Валидация, фабрики и standalone без приложения",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/validation.md",
+      "source": [
+        "src/VO/Validation/Validator.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/ScopedValidationTest.php",
+        "tests/Unit/Core/ValidatorTest.php",
+        "tests/Unit/Pipeline/PipelineValidationOrderTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Laravel provider, bindings, payload factory и workers",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/integrations/laravel.md",
+      "source": [
+        "src/Laravel/SdkServiceProvider.php"
+      ],
+      "tests": [
+        "tests/Integration/Laravel/verify.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Redis, общая квота, время и доступность",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/integrations/redis.md",
+      "source": [
+        "src/RateLimiting/Backends/PhpRedisRateLimitBackend.php"
+      ],
+      "tests": [
+        "tests/Integration/Redis/RedisRateLimitTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Fake, sequence, assertions и oneOf helper",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/testing/mocking.md",
+      "source": [
+        "src/Transport/MockTransport.php",
+        "src/Testing/RequestContractTestHelper.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/MockTransportTest.php",
+        "tests/Unit/Testing/RequestContractTestHelperTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Recording/playback и redaction фикстур",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/testing/fixtures.md",
+      "source": [
+        "src/Transport/RecordingTransport.php",
+        "src/Testing/Fixture.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/TransportTestingTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Live helpers и граница provider tooling",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/testing/live.md",
+      "source": [
+        "src/Testing/LiveEnvLoader.php",
+        "src/Testing/LivePolling.php",
+        "src/Testing/LiveResultAssertions.php"
+      ],
+      "tests": [
+        "tests/Unit/Testing/LiveEnvLoaderTest.php",
+        "tests/Unit/Testing/LivePollingTest.php",
+        "tests/Unit/Testing/LiveResultAssertionsTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Статические provider catalogs и request-bound каталог",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/catalogs.md",
+      "source": [
+        "src/Contracts/Interfaces/Catalog/ProviderCatalogRegistryInterface.php"
+      ],
+      "tests": [
+        "tests/Unit/Catalog/ProviderCatalogRegistryTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Read-only Operation Inventory и sdkCallPaths",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/operation-inventory.md",
+      "source": [
+        "src/OperationInventory/OperationInventoryBuilder.php",
+        "src/OperationInventory/SdkCallPathResolver.php"
+      ],
+      "tests": [
+        "tests/Unit/OperationInventory/OperationInventoryBuilderTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Производный ResponseDtoCatalog, multi-service и export",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/response-dto-catalog.md",
+      "source": [
+        "src/OperationInventory/Catalog/ResponseDtoCatalog.php",
+        "src/OperationInventory/Catalog/MultiServiceResponseDtoCatalogFactory.php"
+      ],
+      "tests": [
+        "tests/Unit/OperationInventory/Catalog/MultiServiceResponseDtoCatalogFactoryTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Версии: explicit и compat-default",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/client/versioning.md",
+      "source": [
+        "src/Versioning/VersionedResourceTrait.php"
+      ],
+      "tests": [
+        "tests/Unit/Versioning/VersionedResourceTraitTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    },
+    {
+      "portion": "D",
+      "feature": "Trace, audit, redaction и ограничение объёма логов",
+      "audience": "пользователь пакета / автор SDK",
+      "owner": "docs/reference/results/observability.md",
+      "source": [
+        "src/Result/ExecutionResult.php"
+      ],
+      "tests": [
+        "tests/Unit/Core/ExecutionResultRequestDebugTest.php",
+        "tests/Unit/Result/TraceErrorContextContractTest.php"
+      ],
+      "status": "сверено по текущему коду и существующим сценариям"
+    }
+  ],
+  "sha256": {
+    "docs/reference/attributes/README.md": "36f6636736d4ef24292590ad51e6f424884076a9f24ed0cece066d3b40abb93c",
+    "docs/reference/attributes/response.md": "e92aeb77d00fc588a09435a3776c760eca9a5584f04158c38fe94879a02dc903",
+    "docs/reference/auth/credentials.md": "15c4b97cdf52051aadb60aeb2d2916a43afca52dbaa02b84e372bb801da9ba5d",
+    "docs/reference/auth/strategies.md": "0ea23bb22ca80038c865d504c84c59a9d99eb13906d60f135f707e09236e3660",
+    "docs/reference/auth/tokens.md": "1456ff3ca3fe3268b331c0ba121ee19ddf8dc199aa7e1e3ab4e962bb67460924",
+    "docs/reference/client/catalogs.md": "f6dd75feff57829793abcfd5fea3638345dececbb27420e2450b7f2498e574e0",
+    "docs/reference/client/configuration.md": "084148bd893e1e3816317ed5e510955b74fcd51fd3c51808e53504429118ab6a",
+    "docs/reference/client/discovery.md": "0a78602c2505729fa9ead7467efe315ca4ff24b2a294a49ea72bffa12f0a943a",
+    "docs/reference/client/operation-inventory.md": "2ff26bdf57e29546116a190957a1bded5ff1cc21f8e895ebb420ed490bf1c862",
+    "docs/reference/client/resources.md": "eaa7e6971966582a623e928ecbba3cd21f633021af5f7ad8ae94fd398d4e99a2",
+    "docs/reference/client/response-dto-catalog.md": "f5c27598014f511a7e420e07134dcbfa5418156a89f6b0729d4193307fbeb470",
+    "docs/reference/client/validation.md": "60c13c662b1efd9092fe820f6b1b484faebcfa0fb07883f2570af0427096a572",
+    "docs/reference/client/versioning.md": "288276f217fada397a6c74fbfa343baa34ead0f8ab9f944ed098c4f30ad62e83",
+    "docs/reference/dto/collections.md": "154e2307aefd093adec64583f4f681f3d5f3cdce92b5cbf9f3e28cc2baecb7b4",
+    "docs/reference/dto/defaults.md": "7751678499cba6efcbb649a7ae0a41ba27ae22ada93cfaea592ebc2d268734a6",
+    "docs/reference/dto/diagnostics.md": "ed7ca65c14417efe55319d53b84c9abf118294003a25c039e65ce4a5d9773157",
+    "docs/reference/dto/extras.md": "714447ea4f67ea653e7ff4c039e46ce8c63d3536e95e5805651de14316ff3e7f",
+    "docs/reference/dto/field-rules.md": "a9f94ac32f9bedd0bb0bb3a9d65372d4e1373f288e4e77cbcf26ae7d5ee40bcb",
+    "docs/reference/dto/lifecycle.md": "4fbbcc29e6200cb510207d8f7b4986e11a799d137e5bd75891dbf1db8242edf6",
+    "docs/reference/dto/models.md": "bdcd18431c32cb2b4d897f598d6669b7d4660d943bcf166f663e861286e70787",
+    "docs/reference/dto/profiles.md": "99722c41c9c46be854371a62ee5571475ba77dd3ae99b5df722ccd25da64f09b",
+    "docs/reference/dto/scalars.md": "af66af57ba0c4babe3ba8d66f990c53b3f4620df782db270cde20cb708ba6782",
+    "docs/reference/dto/scope.md": "431ca467b150d098660db0ff94f614ebce673cbb1b0f13763306b3f323a4c09d",
+    "docs/reference/dto/shapes.md": "3ce86b5475c0e6ff101b4f0654d4fccf0fb64c08111a5289792e0b99e549b1b2",
+    "docs/reference/dto/variants.md": "709f12ef7a859801cc8b99422de2b23754c802ac7f2d9e152eef2a24ab4b56d4",
+    "docs/reference/execution/batch-pool.md": "8b49a83f68df1205041e23f2cdc0a1f500b75083616a7c994e2f590890fcc856",
+    "docs/reference/execution/cache.md": "73cc1daa25762f2e36bf212f4c41eb3d34adcf23c64311ed4db59383a783a157",
+    "docs/reference/execution/continuation-await.md": "548edab59eaeb54b4d452edc2db4827ad47b6b79f8d1d223470e5ab85c2cd1ff",
+    "docs/reference/execution/continuation-state.md": "86b56b2878ff04ca9e748dcd0779ab54d7a6a9797c11a409d8d53f2ecc0dfea8",
+    "docs/reference/execution/deadlines.md": "0e12abc57efd9debe61f4b08dc2a72e346364fe9d9c32ec905b3aed1ab571e64",
+    "docs/reference/execution/pagination.md": "f7d91211685f0a841a3fb02f1f01338568bace1e4dec6dc0a75126886f18f22a",
+    "docs/reference/execution/rate-limit.md": "90c025735cebf8ab47d1cf44603937eeb78560ca019865c4fcd4921cf8b1b9ab",
+    "docs/reference/execution/retry.md": "46f8994f33e21e8248af0850002d2b6f9f01ef45bbdd2c51f1305bce44f6f566",
+    "docs/reference/execution/transport.md": "10d925b3ad8d9f409dfbf846048de049d24ee0a2bc655e59ebd5396053108e4e",
+    "docs/reference/extensions/extensions.md": "88acc8becb3d7db76aa5ae902540655ec4b30588d9c48f0fc2408a4fb78d6f16",
+    "docs/reference/extensions/hooks.md": "e1a078d0ec06060a017e8e88f0463d6e49b27a1053d8a35b14371c0d6dfdadfb",
+    "docs/reference/files/archives.md": "30284b138a006f8aa23d15401caf469349608e2cd8fab8fa1317b11f81a535f0",
+    "docs/reference/files/downloads.md": "191874bb5004940bc38ef88870eb498a80beaa4dd3b14d53c08aae558f8c6de3",
+    "docs/reference/files/uploads.md": "d310c769b1c7f07445317230ac01077e2f1b156bbb0557341914f1bed5c2d449",
+    "docs/reference/integrations/laravel.md": "3caee59646afcde31e126e361cd76707daf436ef6ebcc13790f9621e1c2844b0",
+    "docs/reference/integrations/redis.md": "610561d7dc432ae221e0e2ec21c24e9d7280f7f967bef532dc88fd8757f42c4b",
+    "docs/reference/request/composition.md": "23acc0ebe7a85384dfa62d76fd98fd20f756c2be5571c5bddb010a77ed20c46c",
+    "docs/reference/request/declaration.md": "baac0edb78909f8d5b012cf3764db2e5580061461728cc4b3efebcc33d8996c0",
+    "docs/reference/results/errors.md": "e19545027bff3347bda32ce84effc14d478ffe44381209179dc8c9a6d4ec3398",
+    "docs/reference/results/handles.md": "42775671282977b6e637d7c2e657ad9acb17896e186b790858b051003a6aae31",
+    "docs/reference/results/observability.md": "5949cdb4f511d16deb3af85472e983089aabb5251dac3b1098523c99a3c9effb",
+    "docs/reference/serialization/body.md": "82a3f1a91d89fbe3c67631c1430ba948ba3870ff765d6d3a7649260c99d28933",
+    "docs/reference/serialization/casts.md": "f97d30e9b3658fa5f9c70dedc2851d760f5b4c5383f40e9c9d9b3f3e3582a19c",
+    "docs/reference/serialization/dto-output.md": "86a3221bc9848ef82fc373b6a4f0ae84938006ca9ed5700183b35af3e4eaafe6",
+    "docs/reference/serialization/receiver-output.md": "7d56fefa8c5dade64a6cf91ac9b066c80da3f3350e1e92ce68ba3d7eb93d4b14",
+    "docs/reference/serialization/request-parts.md": "08775085134d0b3470ed86d9a340a037376c3ad810293161afc0a183fa22bf7e",
+    "docs/reference/serialization/uri-query.md": "c4e7aa1d3770e7d28d2f43904a5356fd25bb365ec14a38800faaebb55d5d1312",
+    "docs/reference/testing/fixtures.md": "bf6b6b46c749e392bd6cf98343308b54af7e48360fa25f2ee38e2e52531b9cdb",
+    "docs/reference/testing/live.md": "d5f17dfa69c3fa9a775cc20cbe1ef0c85cc15d1adb80085ad368c4dc18137210",
+    "docs/reference/testing/mocking.md": "3ec8fad50a4bafa0e203e601f922b21a5fe5ef8c9fe2748e0959cca80b028035",
+    "src/Attributes/AttributeMetadataCache.php": "f12b5cad315fa665eb7e675bfad521bc24a8ffe33a54e3251953e3dacd8ef2cd",
+    "src/Attributes/AttributeRegistry.php": "91ba6e644d07407b2ef40fb077082a4ee5a8dc4e972e2de5ef61f51ed745247d",
+    "src/Attributes/DataTransfer/Nested.php": "7c07804d7d57e31a89d1f2d3098bbc4ae683beacd6ca86116ba948936299f3c3",
+    "src/Attributes/Response/RawResponse.php": "20ce9fb04d37dbce56701d866f283b75b7d80ef6c0e68490095c4105b89fbc62",
+    "src/Auth/TokenAuthenticator.php": "1de6cc182aa54d15dfc639b4d80c635d4424b04c0de5d9e7fe3d240a40f5f67f",
+    "src/Casts/CastRegistry.php": "e0bbab1ac5fb5ac7e41f04321da972be23dc567a4ee0ee737a58824812a8b627",
+    "src/Casts/IntegerCast.php": "a79a1267e7964fe5ca6dd2c735e6b6468db503c104864265360be7de11502a10",
+    "src/Casts/JsonCast.php": "8aecbaa51eef2e17e4bc48b562dd90a485d6133105399936cb80a432beae2878",
+    "src/Collections/AbstractCollection.php": "ddec6295e8e4016231392c94b2a2b6b57cff93f1c2b4db0ee5f55fe76a843889",
+    "src/Collections/AbstractTypedCollection.php": "92f08d4df5896444f26d051007502c4dded39c8b3ed9a1e39c937414af575ac4",
+    "src/Config/ArchiveConfig.php": "fe254e23ea924364f76e25e2441fd53d11d4b31600b76d36c206f39b5f0802cb",
+    "src/Config/CacheConfig.php": "2003ee771c0c1c7961108cf84291a0d6f5986c95d1ba2d4cebb7b13481e6f9a3",
+    "src/Config/ClientConfig.php": "50f32e1ef7e3a913b34bd4f9166ebeded92ca47c41413317b72f95df521d49b1",
+    "src/Config/CredentialsEnrichmentConfig.php": "0bf0c75e9d42ec61f35a486261732d1dad8e65f86af25b5c704bc98ea163060e",
+    "src/Config/DateTimeHydrationPolicy.php": "d551ac28e768dde20c31d1f8e55a73f64d0c5579bef04da21bf32c6692cd4262",
+    "src/Config/PaginationConfig.php": "778389b94976d26d00d0e5f5fe41033cfadd4cf2b982e2a897a70f6b995e45a3",
+    "src/Config/RateLimitConfig.php": "6dce9f6f9d7daec275fc802b8b50088d3d86815a8d1d20286f58bd0fde4e7e73",
+    "src/Config/RetryConfig.php": "95dbe912397dff3811ec0d8ae2671d5476e0c0d418c4591be367666d9b2b0311",
+    "src/Continuation/ContinuationContext.php": "857b3038cd86883a66cbdee86060a5e68743bf0d6833251a60fb1b822150d9f4",
+    "src/Continuation/ContinuationOutcome.php": "3068348c4915394e99a062e5dfb78479ef969ee2f9f287ca9d7e976f5bf37e2e",
+    "src/Continuation/ContinuationService.php": "068b47b46a4697ac07a27a76ec8240e1ce89472a72f09b657c050c7ab7604873",
+    "src/Continuation/ContinuationState.php": "55ab508449ee68c32837ddc75fc4cf0ad18f81968b59e3e560c2ba7e558fa1a2",
+    "src/Continuation/FinalPathStateResolver.php": "9da79792c56631af0c437f5f75b0d6410dab64aab0673132ad37b59536d66d28",
+    "src/Contracts/Interfaces/Auth/AuthenticatorInterface.php": "3f532c405978347a94959bb200cd6f71aa827834e0fef76d898602ba76a95381",
+    "src/Contracts/Interfaces/Catalog/ProviderCatalogRegistryInterface.php": "65a50160df2e014c35df552fbeb88237845d2f54634966697e3fe5e8ac45dadc",
+    "src/Contracts/Interfaces/Core/CompositeRequestInterface.php": "8149967b944dcc6a791c7248fe7bbede2c39d350b93ec64693a7cf3e717fb10c",
+    "src/Contracts/Interfaces/Core/DependsOnRequestInterface.php": "1685f734f7af34b7b34d0fded245d51c33fe05fa01740898b89800ab4b3f8b2b",
+    "src/Contracts/Interfaces/Hooks/HookInterface.php": "a806ffbd1663a6fa0c59d17a7b6386c92428e8d26ce5b9f2b388990539f3a992",
+    "src/Contracts/Interfaces/Response/ResponseHandlerInterface.php": "1152faf06c724c317a46c97d47a3c733f763a85cea129ce32277ee807d4a3717",
+    "src/Core/AbstractClient.php": "75b7468be20247662161a975adb5e41c82ee14d8c67f74deee46f68c94ee8ce4",
+    "src/Core/AbstractRequest.php": "eed0863d167d887a1d6193f7bb5d5c5bf766d8e69f56158f33073d33c0907412",
+    "src/Core/AbstractResource.php": "a10345ec1d6c0bbd0fc759f4f4f5118982400be1a91bed02ce9ecd4bd1bf6c09",
+    "src/DataTransfer/AbstractDto.php": "4351f3dc44adf28e4cfd429b919d984b289388b7161c0f812832a559077de1d4",
+    "src/Exceptions/Serialization/HydrationException.php": "a8f981f845c53311405aee670e8b09cafca811335347b4c365fcb25e922b02a9",
+    "src/Execution/BatchExecutor.php": "536f98ebac8a40cf91ec41698d6242f1a2dc695b0f3535fabed062f7c529804e",
+    "src/Execution/PoolExecutor.php": "9b02aec44d406a769b66de080887c52064071006fc8a5357869905ffe9f7fbc7",
+    "src/Extensions/Archive/Response/ArchiveResponse.php": "1e1f5aabda99acbbdb9fcc4df90d49cce9cae0cb640d6b09d1a78146ad88db69",
+    "src/Extensions/ExtensionRegistry.php": "8e850e82f4e331ad31dd01d3886c9973fd26e3c593d92db674d0e4e84dbe7384",
+    "src/Hooks/HookRegistry.php": "340a7a16541fef3a2656601240cab60c5269003ba0487cd4552f9cce7403ce45",
+    "src/Laravel/SdkServiceProvider.php": "0a1f94a0a7d3c05e3a60bec674a23db63bbc575d3d97373bc9593b6fcbc75b73",
+    "src/OperationInventory/Catalog/MultiServiceResponseDtoCatalogFactory.php": "94ee3bb2361192196d0f6a3aec84410053f24a7a41f0db60290b58ba95e405c2",
+    "src/OperationInventory/Catalog/ResponseDtoCatalog.php": "1411a27b0869d84401512cdfe733d91866f66154030fad1a962fac7aef6aa399",
+    "src/OperationInventory/OperationInventoryBuilder.php": "ee1462b0fa871ecf233e057c317154833dff5eb4b7fa8d0013badd26d1dcdbe3",
+    "src/OperationInventory/SdkCallPathResolver.php": "5f1cc44cc00b6a74771bd7c532992593edd44ed4cf25a488bffb03e3c7a620a7",
+    "src/Pagination/PaginationRule.php": "764afcdd7e63af25cc96a9f06836573e742e1add67d587498c7664b9f9a438d8",
+    "src/Pipeline/Cache/CacheManager.php": "f73b353f2603a4f18e8e0ba8fb216310967c8b1dcf50cc1ac54a8aa48a8c06fc",
+    "src/RateLimiting/Backends/PhpRedisRateLimitBackend.php": "09f8ae0ed5ce88a8a7280e4b7aa87b8fc72653b27f55c0a8c6bcc10405366060",
+    "src/RateLimiting/RateLimiter.php": "781445ad4452ff73b620f7794210db1e0e795f93a1acfd7901c696039a6c772b",
+    "src/Request/RequestExecution.php": "d703267368246119d5c7ec54276d0375f74ca6216f410c8614b3b59073e711ae",
+    "src/Resolver/ClientDiscoveryService.php": "fc84b23263a2c27023d4dd13758f29f0412f5f573111fd84f5e88731d482eef4",
+    "src/Resolver/ClientRegistry.php": "eb8796e1a0767adfb9c752ec201424f08dd09853e14a83d0371c683aaaff3212",
+    "src/Resolver/ClientResolver.php": "587b8c0f94eb5e7ef0e2e5320686de0dc8710e93db0bfb76923e17b6085a6a2c",
+    "src/Result/ExecutionResult.php": "a7d789e7abaf97fe9ff21a60f674e4c679ef7617a835769d73b94f0001eb12c3",
+    "src/Result/ResolvedResult.php": "60d4a873ee0f66b7e9261351202bf11fbc0ae9f621730d8aba70ddd1bdf671d4",
+    "src/Result/ResultHandle.php": "c16f79de3e62911914b282aeb87dcd90e7d750257461c3c3b47d095b4639cfda",
+    "src/Retry/RetryHandler.php": "4b7fbfa256cf4d782d025804e98f22cb4c0771360c2d54721883a20200e4d3d1",
+    "src/Serialization/DtoHydrationProfileResolver.php": "54d2236d1fef154c66804640ad954358c5145c9c2e00a82af85c76994e867cda",
+    "src/Serialization/DtoSerializer.php": "c0d107d736dc70aee9f7b3c08f3a672d46453a73fa3b8c29c9bba85894bd2455",
+    "src/Serialization/HydrationValueValidator.php": "8881285ace982238e45a511f755a4ef208bec3e15e0b08055c4860c8833bfba0",
+    "src/Serialization/Hydrator.php": "366b3da06f8040500d3b5c638475b20cdddb02be91ca70f7d4d620cdca64dedf",
+    "src/Serialization/RequestPartsCollector.php": "ea54c72ea0a45ae9b1e9c9fa386aa22025a1faeeb6b1f8a1f1c82101acbdd15e",
+    "src/Serialization/RequestUrlBuilder.php": "69bd5078c57131596a04babbbe83ad3b833fa20b950441af9654f678e058ed32",
+    "src/Serialization/Rules/DefaultSpec.php": "bee6de4d0a58b046482e287a8537f2a88cd7c1c0c1b22dbe2ccd52f07bedcfaa",
+    "src/Serialization/Rules/DtoRules.php": "5e64ae039b84805166d888e76d5a2bd143210ab1276155e232deccb5eeb7c5a8",
+    "src/Serialization/Rules/FieldRule.php": "25f8843400982bf0a54ede0cf47553a736a228b5531b8c2ebdd3cdf3d8f20c72",
+    "src/Serialization/Rules/HydrationRules.php": "0bcadf13633ba484db39abf56533eee5212b95b87c74821f83d51b957edfb0ee",
+    "src/Serialization/Rules/HydrationScope.php": "ae648f23c072c664707893f9ffd2463bfcb05b2511139dfc3af1e06fa86d3b3e",
+    "src/Serialization/Rules/ValueShape.php": "d8cf4de2048a91dfed1499321c70699e2128b2543d6261c5ae1636460006439c",
+    "src/Serialization/SerializationValueResolver.php": "87e422e505a19401afe98a979a906659007addf3d81acf68386566aa59f13df3",
+    "src/Serialization/Serializer.php": "cd56259c3a544475282af9bc705bf8f017afbfc13b2a14efc4f8880472e0dc78",
+    "src/Testing/Fixture.php": "d6e2b94387d655764b637903527b80ad145e6ab69babfeb46ecf9cf373af0f12",
+    "src/Testing/LiveEnvLoader.php": "107658cb05e44af36542df938735457d33e795423f5f9fe13bf16a25b77f5829",
+    "src/Testing/LivePolling.php": "30e1f40574a8c043b86472027cb212375b38fc75f2558505d20bfe3bd8bfb326",
+    "src/Testing/LiveResultAssertions.php": "8998f623a33b791ece199f93e4aa44bd2e25ca7cf8d84b78f80108af9a8a98b4",
+    "src/Testing/RequestContractTestHelper.php": "bcbbc89bf7f256f2633e9f2be5475c9a14a42b82fa41e68b99431d36b336ff3b",
+    "src/Transport/HttpTransport.php": "e601e5234190425916c5e08d66c6f09ea60cda6ef9c4214e757051080781b658",
+    "src/Transport/MockTransport.php": "01bada4b943bf6f79e9442a56e5056f5cf520c40c821032396efd102083a3da3",
+    "src/Transport/RecordingTransport.php": "e260522e799ea0e3f4014678afc6881866753d07a6e88f44aae8897ee493608d",
+    "src/VO/Errors/ClientError.php": "eab9b401547e58a13a46312ea8cd5e053d2193af21a5078653b6d1d8cbb1c005",
+    "src/VO/Files/Base64File.php": "61a2c4eb5f585b0bd5e5f38a456743924950ca99129e98015604cce6b73d5517",
+    "src/VO/Files/FileInput.php": "1a329570a357784511a7b75b457d573038125a81f57584bb68dcde1e004dd4b1",
+    "src/VO/Files/FileResponse.php": "283d92f04f82bb2b02b399aafab54e6d5910aea347a8562e2abf11efe5dd47ae",
+    "src/VO/Http/PreparedRequest.php": "7ed9e877fc386cbc2a03af3526f02f5aa5d0cb84a8c6fd04d0f85ac035ea889f",
+    "src/VO/Http/TransportOptions.php": "e1dad8931ebf6c4062b1618dd4773056885993906d38037799e229cbf57d7e4e",
+    "src/VO/Validation/Validator.php": "81c405276ddc5069b32e38f089c10f7f709726e2a9137889875b187201ff19fb",
+    "src/Versioning/VersionedResourceTrait.php": "12e8dac92f559c6fccb0c90635e4d584196ee8da1f5aae0d3bf693ac94c10ab1",
+    "tests/Integration/CoreFlowIntegrationTest.php": "a13258b669c4b353b1cb50f606a549b247410d4fda21ff196939f72e236fd4f6",
+    "tests/Integration/ExternalUrlTransportTest.php": "3f350d5b7ce4840d7727acada4e2193885896962e451c7c8c3270832b831ee24",
+    "tests/Integration/Laravel/verify.php": "657489c4b390d6ae20d56998ec3033463209b1be5924f798e5fcc4de28b55263",
+    "tests/Integration/Redis/RedisRateLimitTest.php": "fd9d4289cf9559e07b0a21ffddb476c8702b757da92150890536e2b21a6216fd",
+    "tests/Integration/StreamingFileTransportTest.php": "a43d165c0881e39795713e171a0270c4b945506bda54ea5c9b3edf5db6c82627",
+    "tests/Integration/TransportTimeoutIntegrationTest.php": "0555d99eec4633d5dfeb21bd6d943b42b663ea94717eedf273931dbbed74190a",
+    "tests/Unit/Archive/ArchiveResponseTest.php": "01709140b86a42c9bbd5ce9ad0a282c9ab9561f19df3f0ee46ea2975999cfb02",
+    "tests/Unit/Archive/ArchiveTempFileManagerTest.php": "a43da65fd626aa0788353f75055897a63dd9a136a81f13081e51d4d94f5286d2",
+    "tests/Unit/Attributes/AttributeRegistryTest.php": "341a4516f57ae64b189f5e89588b2c22ad9b9042e7c81b0d7b083885891ff222",
+    "tests/Unit/Attributes/DataTransfer/AboutAttributeTest.php": "99153720b5e5133557378eaa3508539ae9c3be864240c0e5420c974d06bb9c2b",
+    "tests/Unit/Auth/AuthPolicyScopeTest.php": "7de36ee61756e5545687f0eede696c3f53dcb8b19683c1561b11d56484f58e0a",
+    "tests/Unit/Auth/AuthRecoveryContractTest.php": "46291647d219270fe5cf5c749e7d6aabcc9ba23b61c8d261e00e641b107d756e",
+    "tests/Unit/Auth/AuthRefreshLockTest.php": "db5d0398342859a680a557a496300ccfa6f1123aecb42d0b4de81f05ef331691",
+    "tests/Unit/Auth/AuthScopeResetTest.php": "1e37ead985baa4ab6df44cc77cd4226e0ca7d28e165b0b89f6969c178b7d63ab",
+    "tests/Unit/Auth/AuthorizationSchemeAuthenticatorTest.php": "94978056aff8e19426a34212babe1f4f60bd9944af0e9c7e23adb5d0727f92fa",
+    "tests/Unit/Auth/TokenIsolationTest.php": "3ba6c67ba9cdbaf72723c4a93a2d58add69c2cdd4f757e8e02644b4822f4f90b",
+    "tests/Unit/Cache/AutomaticCacheIdentityTest.php": "d80bd529d8534004726f254c513be59623f610f82108c6977ff1dc945dadd3af",
+    "tests/Unit/Cache/CacheIsolationTest.php": "d9fe90c71b0a8902f2a9126b40f291bb9f514d4e41b1da058ec5443a09d75ad5",
+    "tests/Unit/Cache/CacheManagerOverridesTest.php": "c76db3da08dfff83f33e85aaa052225071a5f67fc67043dd270725334e36dabe",
+    "tests/Unit/Catalog/ProviderCatalogRegistryTest.php": "62e2fe549e5e36fb4c3f7a04cf2d7b5781f2dbe7b5eb4ad629c3e0c3806625fa",
+    "tests/Unit/Collections/TypedCollectionTest.php": "49fae49bf35318f4bc9cef872b8792521f8d1a301de16da8ec504a8fb9cbf73e",
+    "tests/Unit/Core/BatchFailureContractTest.php": "c90807da6fdc1c63466e33fe3ccbd9563a0a3c3227b3baeb5bae6af82a5fb00f",
+    "tests/Unit/Core/ClientConfigTest.php": "406266d4657eae8015463982a0cb8270aa8dd64f0d0369cf21901e30d428f889",
+    "tests/Unit/Core/ClientResponseFactoryTest.php": "bee32f13220e3ceeb6cfa23f32433fbf8772936b344163f3ba53b068db2c952f",
+    "tests/Unit/Core/ContainerProviderRequestResolverTest.php": "e892b9d6c054287baf4b41d0c78432d9b1bc0f0520856922948cbf05a0b482bc",
+    "tests/Unit/Core/ErrorPolicyTest.php": "2ef606296e3f8a8595bf9e5bd98d214a6b3c6005a3d94c885d4f9aef23a6f2c7",
+    "tests/Unit/Core/ExecutionResultRequestDebugTest.php": "fb47ae4ca2bec6dee61d3b07943b536de2493b58c12ff5f3b3b51769415aa1e4",
+    "tests/Unit/Core/HttpTransportTest.php": "464d743b7d19d5d4cc9c5cadf7643fa6806798c5b85cfb93a6317794bf81d104",
+    "tests/Unit/Core/MockTransportTest.php": "61561752ef9eca20ecea077f1f38b389963bc1f4c3329c9ccbea0497b4053ad2",
+    "tests/Unit/Core/PreparedRequestBodyTest.php": "56bdbf5850922b382b130311fab1d89b1d92e504bb63c82417a42be9a711f347",
+    "tests/Unit/Core/ResultFactoryTest.php": "3e84bf604e1a01a6865edf5985befcca07a35ecfdc8ac2c4d5b48ba1a5d53fb2",
+    "tests/Unit/Core/ScopedValidationTest.php": "f79b7359cdffd175e1a32fd3456893040b834cb94fc11698587ba8d038fbb609",
+    "tests/Unit/Core/TransportTestingTest.php": "c0860171092062ffa7a166b50a9832376b0b9dd61f5dbd064f6f82f01ad3bf4f",
+    "tests/Unit/Core/ValidatorTest.php": "3af660798c6145890caf1c60824c2333404c52ca1ee2a3b2de5b63cd3cb63c71",
+    "tests/Unit/Extensions/ExtensionRegistryPriorityTest.php": "ae6d30582dd9b2f89fbeb6a1e203cba8fd25e1f3a045a58bca7708b14551ca9f",
+    "tests/Unit/Extensions/ExtensionResponseHandlerTest.php": "2a039100c1deea405f79335551e7da76a4800d42abe3d621e989108c6fcc5407",
+    "tests/Unit/Hooks/HookRunnerTest.php": "309be1ed4723a9dec68d26c11d39de8db53962ef8def4957c80e3f4d8ba29e6a",
+    "tests/Unit/OperationInventory/Catalog/MultiServiceResponseDtoCatalogFactoryTest.php": "7962672e8400995da0f1ffce96fbf0ebe79ffb9ebd1df089e2b1b999cdc33274",
+    "tests/Unit/OperationInventory/OperationInventoryBuilderTest.php": "803b36e7c4670cd93e769b76c93763e5455b7407072c30f114f834e384fb1718",
+    "tests/Unit/Pagination/PaginationFailureContractTest.php": "b966ed20deece1676c50074caf41473f85be457367c29be2e2c7ddef74063f22",
+    "tests/Unit/Pagination/PaginatorGuardTest.php": "fb4318010319e1b235854145b0695be0438f08882d7eae7c01409af856eecd7f",
+    "tests/Unit/Pipeline/BeforeHydrateHookDataTest.php": "2d2e3d970497cea336113197be334eaf29e8d2c009677cc013bfa6ee83ad1727",
+    "tests/Unit/Pipeline/JsonErrorContractsTest.php": "45b26d6de9272164579d8d3dbd663475b1014dab3cd8b7326d369d781ddc2a97",
+    "tests/Unit/Pipeline/PipelineHookExceptionsTest.php": "bb20ebb296928ba0af6e28d4fbad3158a5b24f25b35f89b1d2dbfa46cc4422f9",
+    "tests/Unit/Pipeline/PipelineIntegrationTest.php": "c22c695d049740fd37d14466506887c89413139b799d188fec73c33c464ab428",
+    "tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php": "0bdc9d7c62f37c672de44134bcdfa23184180a1c6aec59a548f187b3a5f2b781",
+    "tests/Unit/Pipeline/PipelineValidationOrderTest.php": "2288823aeeec019af0778212d55ab2e3e34a2604a5dba3033186c540a41799ba",
+    "tests/Unit/Pipeline/PreparedBodyContractTest.php": "56aea0464ae1bb5c42b6091b2bdfc091ca1470f440fa54e4f9cc6b4b00d82038",
+    "tests/Unit/Pipeline/SuccessfulResponseContractTest.php": "44dc6c9e4ede5ec10fa130deccbeee4c2fadfeb6ca61b666ef4482433a08b57e",
+    "tests/Unit/RateLimit/JointQuotaTest.php": "6f81e5c53724ceb1ff92de1b4d973f81c75dc40abf4b6d118a0d68d12fc0b1fe",
+    "tests/Unit/RateLimit/RateLimitExecutionTest.php": "fffeda81c2f6d3b545dc27b38dd5df28dd4b1c3986c4ee421373bf51a6f6469e",
+    "tests/Unit/Resolver/ClientRegistryTest.php": "7ca5c2df7fa79af6911d9fa7c94d7a6b834afa10127e75f40cd45e7dbfb67e93",
+    "tests/Unit/Resolver/DiscoveryFullFlowTest.php": "a503863ff36fd494923c98b52e73bc535c2b17fc20d814a0c573200a5770a8be",
+    "tests/Unit/Result/ContinuationReadinessTest.php": "8bedf1a1f27d9ddadec99e3b43398f0f6f932e6ee4d755920f17c7c5faa7384d",
+    "tests/Unit/Result/ResolvedResultErrorContextTest.php": "edd59a4717f11f68ccfbdd73a3c6e537686567146eae2ad5d074e39605752bc0",
+    "tests/Unit/Result/ResultHandleContinuationAwaitTest.php": "303abb0f3fb6bfd136b923621758c84fef238f76276076d2306bdeedebeb2b33",
+    "tests/Unit/Result/TraceErrorContextContractTest.php": "45a50c7580b60c1425a6827792acb943a5dad3e98c66b6b4f38ef1660f079f48",
+    "tests/Unit/Retry/RetryAfterContractTest.php": "3cf3bcc03b14ee716ad433ebb578b1a3335b996358a7a09177028c8c67de7577",
+    "tests/Unit/Retry/RetrySenderTotalTimeoutTest.php": "9a72685bf6b1b2292a27e6eafab5835da052dce2507b19a35c0f3be607469cd0",
+    "tests/Unit/Retry/SafeRetryContractTest.php": "3b48fc20d90df92ee9556922d8b96a61657797d691c2a5b307a1e98b0c7ebb30",
+    "tests/Unit/Retry/StreamReplayContractTest.php": "2d9133a4d53aa309faaae63e70189547976df4bed8ca00aa5ceb42be9a18542c",
+    "tests/Unit/Serialization/BigIntegerIntegrationTest.php": "1feb9f5ff4e269eadb295150f14415162f86226148e7ab685d590824e6318351",
+    "tests/Unit/Serialization/CollectionIntegrationTest.php": "2840cdc67c4d8f7430ad3aad52fcec24910b81c6bebdaacdcbfbf47da38c15bd",
+    "tests/Unit/Serialization/CredentialsEnrichmentTest.php": "5b73d27ff6d8e560309252c80783805e14ef0aa015c1dd27816498733fb56cbf",
+    "tests/Unit/Serialization/DateTimePolicyTest.php": "ce226d3aef561113aa3465046a872adc346011c8afe941d5157d8c18ec432d2a",
+    "tests/Unit/Serialization/DefaultValueProviderContractTest.php": "4e5d5cb229f6e565f4e9cafc66c1e58f6658f75a01bed422e2570d94b8df9543",
+    "tests/Unit/Serialization/DtoSerializerTest.php": "edb3212fd728194a205e05eadef96bb44c6ad98bfd045f1b60ea1767df658ec6",
+    "tests/Unit/Serialization/ExternalHydrationConfigurationTest.php": "89011625a8df57c249bc7acf343bbd5118e014ae4ed948ec8b4b4225a5c99d4f",
+    "tests/Unit/Serialization/ExternalHydrationEntriesTest.php": "f1d73d4abe13622e1680a0b5eb552aabfc47fd63c0ea89e05209df03e7811298",
+    "tests/Unit/Serialization/ExternalHydrationExtrasTest.php": "96c0a5dbde37f394bb8cee1232ed5511cbcacbb2f8ebe98b83356d67e8a1e293",
+    "tests/Unit/Serialization/ExternalHydrationOriginTest.php": "ff583fbbad99a5605f6e7523786595a7cc4133988d4bd8edc8441f3e7dcf7f82",
+    "tests/Unit/Serialization/ExternalHydrationRulesTest.php": "5c17711ebc24f193a669c14d952e7c17d626fb78601276497c691b7c544b9e91",
+    "tests/Unit/Serialization/ExternalHydrationScalarTest.php": "e3f3e2ed815bc0217f80019da714d4b66b072a2adf075bca76bd6188631ec177",
+    "tests/Unit/Serialization/ExternalHydrationScopeTest.php": "b65fdd01b9394c75d37437f7e161975d496fdd7253c6a7ab36c47d7c715e0b3b",
+    "tests/Unit/Serialization/ExternalHydrationWireTest.php": "12eeb8a325211e1bae3d42e1b65633778442b2d85a65284e785ae9166a63aac7",
+    "tests/Unit/Serialization/ExternalUrlContractTest.php": "9ae131d1f94077110123e60e01d71acfa5e9369ccdf7ea028ef26c89b210f782",
+    "tests/Unit/Serialization/HydrationCastSourcesTest.php": "bcb9059fa536330efa8453810e268bf157db6defe991c67d865e8c8eb7e770d7",
+    "tests/Unit/Serialization/HydrationCompatibilityTest.php": "f3fa51f69ca5a8a787f7d5a88f9b6c5de7f1d0e3591d39b6bbcbc45a72da6b54",
+    "tests/Unit/Serialization/HydrationErrorContractTest.php": "11ae971ecd1149b4117abb513b905892fd5bedc18eb543bdc2968f13381716b3",
+    "tests/Unit/Serialization/HydratorTest.php": "d73540911b7d1d0230ffd50f79c8260c1d3abda73b01cea25485920dd91f42ca",
+    "tests/Unit/Serialization/MetadataValueIsolationTest.php": "b12a969b5645ade72bb32db4dd9e5b3541913818599ddad541f0da56689fbd80",
+    "tests/Unit/Serialization/NestedDiscriminatorModeTest.php": "ce0d5a0b97d8262ad0d5c7bf5324efd0b9a4626f2034d5f2d5649dd1096a0205",
+    "tests/Unit/Serialization/NestedObjectHydrationTest.php": "dd85448c4e81c9e8302de4e7fa181320637770abd83db3590c14d2ffca0d5ed6",
+    "tests/Unit/Serialization/RawResponseTest.php": "6601b57d487b11c440b363ad91638bc6b758a6c2d372d27c89e4d2e358c9ad3b",
+    "tests/Unit/Serialization/RequestUrlContractTest.php": "3f41e8856269a0c42e2f774ca21d318510cbba096986362763ecad2b52d5f555",
+    "tests/Unit/Serialization/SerializerBodyRootTest.php": "581a772f2079a664aa2a62fa749a95f1f6a2457b4c584c0a8b28d32ccc0ad804",
+    "tests/Unit/Serialization/SerializerFilesTest.php": "696dbf841003a240af9a8e152beaf8410c70a19f277d5f764679198b643b31f8",
+    "tests/Unit/Serialization/SerializerRequestDefaultsTest.php": "429f074d7e6dbcfa13cfcf9289a865cede1e50b96fff8c0d23304fb538efc9e6",
+    "tests/Unit/Serialization/SerializerTest.php": "dfc4c6129ec095ddf045f5745e14f02cb1fa12941e2194138ced0d9b14fff52c",
+    "tests/Unit/Serialization/StrictJsonEncodingTest.php": "dd733dd8d094741087160ef1d6f30e465896fcf9dc2fd90a2ff92b1b962b6f81",
+    "tests/Unit/Serialization/UriPipelineTest.php": "1b988edac96dc5424f566ccaaedb06331a42f135730ab7a3e2105a0740b62847",
+    "tests/Unit/Testing/LiveEnvLoaderTest.php": "02ec1c762cb68e7e4505369e412fa54a5d43caf1e3fc3b87ae53267158ab1ca4",
+    "tests/Unit/Testing/LivePollingTest.php": "85881f863abb6bdf11cb5ff3a69d34046626c4799ef3ef5605dee2bd4632fe4f",
+    "tests/Unit/Testing/LiveResultAssertionsTest.php": "ec5c9fb631b4c3a8f3f93ab52aa0b4602a0e5d19105adfd07ba6cb67e996ce9e",
+    "tests/Unit/Testing/RequestContractTestHelperTest.php": "11f2fba8e10c0549f395304148c647b99bf0ec1cf7a344d1576e7b837d4437db",
+    "tests/Unit/Versioning/VersionedResourceTraitTest.php": "eeda75925476b96bad87c910867db8ba4cffe3d7cc45e5834640c6e4f412a4cc"
+  }
+}

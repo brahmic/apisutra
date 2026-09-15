@@ -1,0 +1,192 @@
+[
+  {
+    "path": "docs/example/continuation/run.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/continuation/run.php"
+  },
+  {
+    "path": "docs/example/sdk/bootstrap.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/bootstrap.php"
+  },
+  {
+    "path": "docs/example/sdk/run.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/run.php"
+  },
+  {
+    "path": "docs/example/hydration-rules/run.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/hydration-rules/run.php"
+  },
+  {
+    "path": "docs/example/continuation/src/PollRequest.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/continuation/src/PollRequest.php"
+  },
+  {
+    "path": "docs/example/continuation/src/OperationStateResolver.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/continuation/src/OperationStateResolver.php"
+  },
+  {
+    "path": "docs/example/continuation/src/StartRequest.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/continuation/src/StartRequest.php"
+  },
+  {
+    "path": "docs/example/continuation/src/FinalDto.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/continuation/src/FinalDto.php"
+  },
+  {
+    "path": "docs/example/continuation/src/TokenExtractor.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/continuation/src/TokenExtractor.php"
+  },
+  {
+    "path": "docs/example/sdk/src/DemoClient.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/DemoClient.php"
+  },
+  {
+    "path": "docs/example/sdk/src/Laravel/DemoServiceProvider.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/Laravel/DemoServiceProvider.php"
+  },
+  {
+    "path": "docs/example/sdk/src/Config/HydrationRulesFactory.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/Config/HydrationRulesFactory.php"
+  },
+  {
+    "path": "docs/example/sdk/src/Config/ClientConfigFactory.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/Config/ClientConfigFactory.php"
+  },
+  {
+    "path": "docs/example/sdk/src/AttributeExample/RecordDto.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/AttributeExample/RecordDto.php"
+  },
+  {
+    "path": "docs/example/sdk/src/Resources/Records/RecordsResource.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/Resources/Records/RecordsResource.php"
+  },
+  {
+    "path": "docs/example/sdk/src/Resources/Records/Get/GetRecordRequest.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/Resources/Records/Get/GetRecordRequest.php"
+  },
+  {
+    "path": "docs/example/sdk/src/Resources/Records/Get/GetRecordResponseDto.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/sdk/src/Resources/Records/Get/GetRecordResponseDto.php"
+  },
+  {
+    "path": "docs/example/hydration-rules/src/EntryDto.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/hydration-rules/src/EntryDto.php"
+  },
+  {
+    "path": "docs/example/hydration-rules/src/ReportDto.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/hydration-rules/src/ReportDto.php"
+  },
+  {
+    "path": "docs/example/hydration-rules/src/EntryCast.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in docs/example/hydration-rules/src/EntryCast.php"
+  },
+  {
+    "path": "tests/Integration/Laravel/verify.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Integration/Laravel/verify.php"
+  },
+  {
+    "path": "tests/Support/check-docs-api.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/check-docs-api.php"
+  },
+  {
+    "path": "tests/Support/standalone-validation-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-validation-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-auth-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-auth-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-hydration-rules-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-hydration-rules-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-rate-limit-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-rate-limit-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-documentation-continuation-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-documentation-continuation-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-external-url-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-external-url-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-readme-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-readme-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-json-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-json-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-uri-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-uri-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-streaming-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-streaming-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-timeout-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-timeout-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-execution-contracts-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-execution-contracts-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-contracts-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-contracts-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-retry-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-retry-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-smoke.php"
+  },
+  {
+    "path": "tests/Support/standalone-body-smoke.php",
+    "exit_code": 0,
+    "output": "No syntax errors detected in tests/Support/standalone-body-smoke.php"
+  }
+]

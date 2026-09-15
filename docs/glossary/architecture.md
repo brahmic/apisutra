@@ -1,81 +1,24 @@
 # Архитектура SDK-пакета
 
-## Терминология мультисервисности
+<a id="терминология-мультисервисности"></a>
 
-### Provider
-SDK‑клиент под конкретное внешнее API вендора. Может включать один
-или несколько сервис‑клиентов, если у вендора несколько API‑сервисов.
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="provider"></a> Provider | SDK‑клиент под конкретное внешнее API вендора. | [Контракт](../reference/client/resources.md) |
+| <a id="vendor"></a> Vendor | Поставщик, у которого может быть несколько независимых API‑продуктов (Realty, Tax и т.д.). | [Контракт](../reference/client/resources.md) |
+| <a id="service"></a> Service | Логически отдельный клиент с собственными глобальными настройками (`baseUrl`, `auth`, `pagination`, `serialization`). | [Контракт](../reference/client/resources.md) |
+| <a id="resource"></a> Resource | Группировка запросов внутри одного сервиса (например, entity, drive, rosreestr). | [Контракт](../reference/client/resources.md) |
+| <a id="baserequest-per-sdk-пакет"></a> BaseRequest (per SDK-пакет) | Необязательная общая база запросов SDK; клиент можно привязать явно либо найти через зарегистрированный resolver. | [Контракт](../reference/client/construction.md) |
+| <a id="resolveclient"></a> resolveClient() | Защищённый метод AbstractRequest для получения привязанного клиента или разрешения через контейнер. | [Контракт](../reference/client/discovery.md) |
+| <a id="request--client-связь"></a> Request → Client связь | Запрос использует явно переданного клиента либо зарегистрированный механизм разрешения; ресурсы привязывают клиента при создании запроса. | [Контракт](../reference/client/discovery.md) |
+| <a id="requestoptions"></a> RequestOptions | Неизменяемые настройки отдельного исполнения запроса. | [Контракт](../reference/request/declaration.md) |
+| <a id="paginationoptions"></a> PaginationOptions | Неизменяемые runtime-настройки страницы, лимита и курсора. | [Контракт](../reference/execution/pagination.md) |
+| <a id="requestexecution"></a> RequestExecution | Обёртка запроса с runtime-опциями; возвращается методами with*(). | [Контракт](../reference/request/declaration.md) |
+| <a id="operationinventory"></a> OperationInventory | Read-only introspection-слой над request-классами SDK. | [Контракт](../reference/client/operation-inventory.md) |
+| <a id="responsedtocatalog"></a> ResponseDtoCatalog | Тонкий derived introspection-слой поверх `OperationInventory`, отвечающий на вопрос «какие DTO реально возвращает SDK». | [Контракт](../reference/client/response-dto-catalog.md) |
+| <a id="compositeoperationinventory"></a> CompositeOperationInventory | Агрегатор поверх нескольких готовых `OperationInventoryInterface`. | [Контракт](../reference/client/operation-inventory.md) |
+| <a id="multiserviceresponsedtocatalogfactory"></a> MultiServiceResponseDtoCatalogFactory | Фабрика multi-service `ResponseDtoCatalog`. | [Контракт](../reference/client/response-dto-catalog.md) |
+| <a id="servicelabelresolverinterface"></a> ServiceLabelResolverInterface | Презентационный резолвер: даёт человекочитаемый label для сервис-клиента (`KonturRealtyClient` → `"Realty"`). | [Контракт](../reference/client/response-dto-catalog.md) |
+| <a id="responsedtocatalogproviderinterface"></a> ResponseDtoCatalogProviderInterface | Унифицированный контракт «отдай мне каталог response DTO». | [Контракт](../reference/client/response-dto-catalog.md) |
 
-### Vendor
-Поставщик, у которого может быть несколько независимых API‑продуктов
-(Realty, Tax и т.д.).
-
-### Service
-Логически отдельный клиент с собственными глобальными настройками
-(`baseUrl`, `auth`, `pagination`, `serialization`).
-
-### Resource
-Группировка запросов внутри одного сервиса (например, entity, drive, rosreestr).
-
-## BaseRequest (per SDK-пакет)
-Базовый класс запросов конкретного SDK-пакета. Extends AbstractRequest. Определяет метод resolveClient() который резолвит соответствующий Client через DI-контейнер. Все запросы пакета наследуются от него.
-
-## resolveClient()
-Метод в базовом Request SDK-пакета. Возвращает Client через DI-контейнер. Позволяет `(new GetUser(1))->send()` без явной передачи Client. Переопределяется в каждом SDK-пакете.
-
-## Request → Client связь
-Архитектурное решение: Request знает свой Client через наследование + DI. Не требуется static resolver, сканирование директорий или явная передача Client. N клиентов в одном приложении изолированы через разные базовые классы.
-
-## RequestSpec
-Декларативная часть запроса (атрибуты и метаданные). Кэшируется по классу запроса. Используется для получения метода, endpoint, responseType и конфигурационных атрибутов без рефлексии на каждый вызов.
-
-## RequestOptions
-Runtime‑настройки запроса (override‑ы). Иммутабельный VO, модифицируется через `with*` и передаёт в pipeline значения cache/retry/timeout/headers/trace/role и пр.
-
-## PaginationOptions
-Runtime‑настройки пагинации (page/limit/cursor). Отдельный иммутабельный VO с флагами `has*`, используется в `RequestExecution` и передаётся в pipeline отдельно от `RequestOptions`.
-
-## RequestExecution
-Обёртка над запросом и `RequestOptions`, также содержит `PaginationOptions`. Возвращается из `with*()` и используется для отправки (`send()/sendAsync()`).
-Правило DX: кастомные методы запроса вызываются **до** `with*`.
-
-## OperationInventory
-Read-only introspection-слой над request-классами SDK. Строится через
-`OperationInventoryBuilder` и отдаёт `OperationDescriptorView` по каждому
-request-у: `httpMethod`, `endpoint`, `responseType`, `continuationFinalType`,
-`pollRequestClass`, `resourcePath`/`resourceLabel`, `sdkCallPaths` и т.п.
-
-## ResponseDtoCatalog
-Тонкий derived introspection-слой поверх `OperationInventory`, отвечающий на
-вопрос «какие DTO реально возвращает SDK». Агрегирует sync (`Returns`),
-async-final (`ContinuationResult::finalType`) и download (`#[Download]` →
-`FileResponse`) ответы. Сам про форматирование ничего не знает — экспорт
-вынесен в `ResponseDtoCatalogExporterInterface` (built-in Markdown
-exporter поставляется из коробки) и `ResponseDtoCatalogWriter`.
-
-## CompositeOperationInventory
-Агрегатор поверх нескольких готовых `OperationInventoryInterface`. Используется
-для multi-service сценария (мегаклиент): каждый сервис продолжает строить свой
-inventory обычным способом, а composite только объединяет их. `forRequest()` —
-первое совпадение по порядку, `all()` — конкатенация без пересортировки. Не
-делает повторного сканирования request-классов.
-
-## MultiServiceResponseDtoCatalogFactory
-Фабрика multi-service `ResponseDtoCatalog`. Собирает inventory со всех
-сервис-клиентов мегаклиента, складывает в `CompositeOperationInventory` и
-размечает каждый `ResponseDtoUsage` через `MapServiceClassResolver`
-(implements `ServiceClassResolverInterface`). Так `serviceClass` становится
-частью данных каталога, а не view-слоя.
-
-## ServiceLabelResolverInterface
-Презентационный резолвер: даёт человекочитаемый label для сервис-клиента
-(`KonturRealtyClient` → `"Realty"`). Используется ТОЛЬКО exporter-ами; в
-`ResponseDtoUsage` хранится сырой FQCN. Дефолтная реализация —
-`ShortClassServiceLabelResolver`.
-
-## ResponseDtoCatalogProviderInterface
-Унифицированный контракт «отдай мне каталог response DTO». Имплементируется
-`AbstractClient` и мегаклиентом через `ProvidesMultiServiceResponseDtoCatalogTrait`.
-Позволяет SDK единообразно обходить смешанный набор провайдеров и feed-ить их
-в `MultiServiceResponseDtoCatalogFactory::merge(...)` для получения сводного
-каталога.
+[Все термины](README.md).

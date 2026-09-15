@@ -1,31 +1,16 @@
 # Extensions
 
-## ExtensionInterface
-Контракт расширения SDK. Методы: getName(), register(), boot(), checkDependencies(), isEnabled(). checkDependencies вызывается перед register; boot — lazy при первом использовании.
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="extensioninterface"></a> ExtensionInterface | Контракт расширения SDK. | [Контракт](../reference/extensions/extensions.md) |
+| <a id="extensionregistry"></a> ExtensionRegistry | Хранилище расширений per-client. | [Контракт](../reference/extensions/extensions.md) |
+| <a id="extensioncontext"></a> ExtensionContext | Контекст для регистрации компонентов расширения. | [Контракт](../reference/extensions/extensions.md) |
+| <a id="responsehandlerinterface"></a> ResponseHandlerInterface | Интерфейс обработчика response по MIME. | [Контракт](../reference/extensions/extensions.md) |
+| <a id="archiveextension"></a> ArchiveExtension | Built-in расширение для работы с архивами (ZIP, TAR). | [Контракт](../reference/files/archives.md) |
+| <a id="archiveresponse"></a> ArchiveResponse | Response-обёртка для архивов. | [Контракт](../reference/files/archives.md) |
+| <a id="archiveentry"></a> ArchiveEntry | Value Object файла в архиве. | [Контракт](../reference/files/archives.md) |
+| <a id="tempdirectoryproviderinterface"></a> TempDirectoryProviderInterface | Внутренний контракт для создания/очистки temp‑файлов архивов. | [Контракт](../reference/files/archives.md) |
+| <a id="extensionconflictexception"></a> ExtensionConflictException | Исключение при попытке зарегистрировать handler на уже занятый MIME без флага override: true. | [Контракт](../reference/results/errors.md) |
+| <a id="extensiondisabledexception"></a> ExtensionDisabledException | Исключение при попытке использовать отключённое расширение (failed checkDependencies). | [Контракт](../reference/results/errors.md) |
 
-## ExtensionRegistry
-Хранилище расширений per-client. Методы: register(), get(), has(), all(). Изоляция между разными Client — расширения не конфликтуют глобально.
-
-## ExtensionContext
-Контекст для регистрации компонентов расширения. Методы: registerCast(), registerHook(), registerResponseHandler(), registerAttributeHandler(). Параметр override для явной замены существующих handlers.
-
-## ResponseHandlerInterface
-Интерфейс обработчика response по MIME. Методы: supports(), handle(). Используется Extensions для специализированной обработки (архивы, XML, etc.).
-
-## ArchiveExtension
-Built-in расширение для работы с архивами (ZIP, TAR). Регистрирует handlers для archive MIME types. Lazy boot с проверкой наличия `ext-zip`/`ext-phar`.
-
-## ArchiveResponse
-Response-обёртка для архивов. Методы: list(), has(), get(), first(), find(), each(), extractAll(), getFormat(). Использует temp‑файл для открытия архива, очистка гарантируется при ошибках. Работа с файлами через ArchiveEntry.
-
-## ArchiveEntry
-Value Object файла в архиве. Свойства: name, size, compressedSize, isDirectory, modifiedAt. Методы: contents(), stream(), saveTo(). Читает из архива, открытого через temp‑файл.
-
-## TempDirectoryProviderInterface
-Внутренний контракт для создания/очистки temp‑файлов архивов. Используется для кастомного driver через DI.
-
-## ExtensionConflictException
-Исключение при попытке зарегистрировать handler на уже занятый MIME без флага override: true.
-
-## ExtensionDisabledException
-Исключение при попытке использовать отключённое расширение (failed checkDependencies).
+[Все термины](README.md).

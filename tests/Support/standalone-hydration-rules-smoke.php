@@ -31,12 +31,9 @@ spl_autoload_register(static function (string $class): void {
 }, prepend: true);
 
 // Исполняем именно опубликованные модели, builders и scoped cast.
-$guide = file_get_contents($checkout . '/docs/guides/hydration-rules.md');
-preg_match_all('/```php\n(.*?)\n```/s', $guide, $matches);
-if (count($matches[1]) !== 2) {
-    throw new RuntimeException('Изменилась структура проверяемого примера');
-}
-eval("declare(strict_types=1);\n" . implode("\n", $matches[1]));
+ob_start();
+require $checkout . '/docs/example/hydration-rules/run.php';
+ob_end_clean();
 $observations = [
     'graph' => [$dto->owner->id, $dto->owner->_extra, $dto->items[0]->id, $dto->ids, $dto->count],
     'extras' => $dto->_extra,

@@ -1,0 +1,1544 @@
+{
+  "commit": "6a649f5e247adba3ecc0c82f1ba68cb74c018aba",
+  "php_version": "8.4.15",
+  "summary": {
+    "documents": 90,
+    "lines": 14329,
+    "over_300_lines": 14,
+    "over_400_lines": 6
+  },
+  "files": [
+    {
+      "path": "CHANEGLOG.md",
+      "lines": 476,
+      "bytes": 51291,
+      "sha256": "efe88f6a1437291a3902cf2dd7fed1a4fc4fb71fa67343e69c3b330e5a2ad252",
+      "sections": [
+        "Unreleased",
+        "v0.2.0-alpha.1 — 2026-09-13"
+      ]
+    },
+    {
+      "path": "README.md",
+      "lines": 146,
+      "bytes": 7162,
+      "sha256": "a92987bb27ff7b8a03cbe21a302800289d2ff24edf9fa84acbf7ae222afe970b",
+      "sections": [
+        "Ключевая идея",
+        "Возможности",
+        "Требования",
+        "Установка",
+        "Быстрый старт",
+        "Тесты",
+        "Документация",
+        "Для провайдеров"
+      ]
+    },
+    {
+      "path": "docs/README.md",
+      "lines": 84,
+      "bytes": 7150,
+      "sha256": "13aa113edfaeafb84d5a7feadfd24fa53f936af7510f1e787cbaaf5d2297e897",
+      "sections": [
+        "Ключевая идея",
+        "Что такое провайдер",
+        "Для кого и зачем",
+        "Что есть «из коробки»",
+        "Границы и требования",
+        "Как читать документацию",
+        "Основные разделы",
+        "Правила структуры"
+      ]
+    },
+    {
+      "path": "docs/example/documentation-guide.md",
+      "lines": 267,
+      "bytes": 8236,
+      "sha256": "bab7fd49501ce882c5fa5ce0c26d3bc2bbeb6d572d822f65062b8f5548babb3e",
+      "sections": [
+        "Триада документации",
+        "1. Glossary — единый справочник терминов",
+        "2. Features — что система делает",
+        "Обзор",
+        "Использование",
+        "Варианты / Режимы",
+        "Резюме",
+        "См. также",
+        "3. Architecture — как устроено внутри",
+        "Назначение",
+        "Интерфейс / Контракт",
+        "Связи",
+        "Диаграмма (если применимо)",
+        "Принципы",
+        "Порядок создания документации",
+        "Критерии полноты",
+        "Масштабирование"
+      ]
+    },
+    {
+      "path": "docs/example/request-use-cases.md",
+      "lines": 317,
+      "bytes": 8507,
+      "sha256": "826793e7252b9005ea16ccba07fa7bd56da66026921ba7fc80fcb3040406fb4f",
+      "sections": [
+        "1) Быстрый путь (resolved)",
+        "2) Низкоуровневый доступ (ResultHandle)",
+        "3) Пагинация",
+        "4) Файлы",
+        "5) Архивы",
+        "6) Частичный результат",
+        "7) Доступ к raw ответу провайдера",
+        "8) Клиентский результат (MClientResult)",
+        "9) Клиентский ответ (ClientResponse)",
+        "10) Default pagination rule в ClientConfig",
+        "11) Асинхронность через SendMode",
+        "12) Кастомный результат клиента (Factory)",
+        "13) Кастомный ответ клиента (Factory)"
+      ]
+    },
+    {
+      "path": "docs/glossary.md",
+      "lines": 4,
+      "bytes": 207,
+      "sha256": "9ecd4e808ab727ff185573941ece3ed60a41e27297ead536d15a2d9f869564da",
+      "sections": []
+    },
+    {
+      "path": "docs/glossary/README.md",
+      "lines": 371,
+      "bytes": 19943,
+      "sha256": "98f37ad29c634c17a025722605aa5561f6abd08a2afaba2a5f3277c12e14c258",
+      "sections": [
+        "Содержание"
+      ]
+    },
+    {
+      "path": "docs/glossary/architecture.md",
+      "lines": 81,
+      "bytes": 6203,
+      "sha256": "19cf45c0df2e54bba6197baa1a7abb2325bc1a7d1fdbc25a82e0476ab0dcdeb6",
+      "sections": [
+        "Терминология мультисервисности",
+        "BaseRequest (per SDK-пакет)",
+        "resolveClient()",
+        "Request → Client связь",
+        "RequestSpec",
+        "RequestOptions",
+        "PaginationOptions",
+        "RequestExecution",
+        "OperationInventory",
+        "ResponseDtoCatalog",
+        "CompositeOperationInventory",
+        "MultiServiceResponseDtoCatalogFactory",
+        "ServiceLabelResolverInterface",
+        "ResponseDtoCatalogProviderInterface"
+      ]
+    },
+    {
+      "path": "docs/glossary/attributes.md",
+      "lines": 78,
+      "bytes": 6612,
+      "sha256": "622f8c600101cbfcbb221c5e2e1bc8ea7aa0413696f28f78212cd254aced142d",
+      "sections": [
+        "Механизм атрибутов",
+        "Атрибуты запросов"
+      ]
+    },
+    {
+      "path": "docs/glossary/auth.md",
+      "lines": 43,
+      "bytes": 2789,
+      "sha256": "8922be1fd0998aef36b762c8a0033f0d5bcfc799456fe19964a488dc21178534",
+      "sections": [
+        "AuthenticatorInterface",
+        "ApiKeyAuthenticator",
+        "BasicAuthenticator",
+        "BearerAuthenticator",
+        "AuthorizationSchemeAuthenticator",
+        "AuthorizationParamsProviderInterface",
+        "AuthorizationParamsFormatterInterface",
+        "TokenAuthenticator",
+        "HmacAuthenticator",
+        "NoAuth (атрибут)",
+        "withoutAuth()",
+        "CacheAwareInterface",
+        "Примеры"
+      ]
+    },
+    {
+      "path": "docs/glossary/client.md",
+      "lines": 136,
+      "bytes": 12297,
+      "sha256": "9665726ea8508c65e0447f95173b96da5eca9fc3fcf844596581f5a6f949c646",
+      "sections": [
+        "AbstractClient",
+        "ClientInterface",
+        "ClientConfig",
+        "delay",
+        "throwOnErrors",
+        "ArchiveConfig",
+        "RetryConfig",
+        "CacheConfig",
+        "CacheMode",
+        "RateLimitConfig",
+        "BackoffStrategy",
+        "PoolConfig",
+        "PoolExecutor",
+        "ConcurrencyResolverInterface",
+        "NamingStrategy",
+        "requestPartsEnumOutput",
+        "requestPartsStrictEnums",
+        "DtoSerializationProfileInterface",
+        "wireBodySerializationPolicy",
+        "EnumOutput",
+        "requestDateTime",
+        "DtoHydrationProfileInterface",
+        "DtoHydrate",
+        "DateTimeInvalidBehavior",
+        "Environment",
+        "ErrorCode",
+        "Auto-discovery клиентов",
+        "ClientRegistry",
+        "ClientResolverInterface",
+        "ClientResolver",
+        "DiscoveryOptions",
+        "DiscoveryCacheMode",
+        "ClientDiscoveryService",
+        "ClientDiscoveryCache",
+        "RequestNamespaceDetector",
+        "RequestScanner",
+        "ClassMapProvider"
+      ]
+    },
+    {
+      "path": "docs/glossary/collections.md",
+      "lines": 30,
+      "bytes": 2641,
+      "sha256": "0073202dbd428be238211b0c3e446689ac4f4c8b882f9d63dd0a66c21c85f842",
+      "sections": [
+        "Коллекции",
+        "Batch"
+      ]
+    },
+    {
+      "path": "docs/glossary/dto.md",
+      "lines": 191,
+      "bytes": 13724,
+      "sha256": "4ff0cff832346790844b7da220bc6cd554ed8e6b30703c11d664958a7227c12f",
+      "sections": [
+        "DtoInterface",
+        "ResponseDtoInterface",
+        "AbstractDto",
+        "DtoHydrationProfileInterface",
+        "DtoHydrationPolicy",
+        "DtoHydrationProfile (атрибут)",
+        "DtoHydrate (атрибут)",
+        "DtoSerializationProfileInterface",
+        "DtoSerializationPolicy",
+        "DtoSerializationProfile (атрибут)",
+        "DtoSerialize (атрибут)",
+        "AbstractResponseDto",
+        "ValidatableInterface",
+        "CustomValidatableRequestInterface",
+        "ValidatorInterface",
+        "ValidationResult",
+        "ValidatesAttributes",
+        "Nested (атрибут)",
+        "From (атрибут)",
+        "To (атрибут)",
+        "DefaultValue (атрибут)",
+        "DefaultValueProviderInterface",
+        "ValueState (enum)",
+        "Cast (атрибут)",
+        "DateTimeFrom (атрибут)",
+        "DateTimeTo (атрибут)",
+        "EmptyStringAsNull (атрибут)",
+        "CastInterface",
+        "CastRegistry",
+        "Hydrator",
+        "DtoSerializer",
+        "computed()",
+        "HydrationRules",
+        "DtoRules",
+        "FieldRule",
+        "ValueShape",
+        "RulePolicy",
+        "ScalarPolicy",
+        "ScalarType",
+        "InputShape",
+        "HandlerSpec",
+        "DefaultSpec",
+        "HydrationScope",
+        "ScopedCastInterface",
+        "ScopedDefaultValueProviderInterface",
+        "SourcePathKind"
+      ]
+    },
+    {
+      "path": "docs/glossary/execution.md",
+      "lines": 96,
+      "bytes": 5510,
+      "sha256": "ed4c4ec3e35676965560d716c5a0b67152010f90a1a6bdbb48af96a1add160a9",
+      "sections": [
+        "Кеширование",
+        "Таймауты",
+        "Delay",
+        "Retry",
+        "Rate Limiting",
+        "Конфигурация выполнения",
+        "Idempotency"
+      ]
+    },
+    {
+      "path": "docs/glossary/extensions.md",
+      "lines": 31,
+      "bytes": 2496,
+      "sha256": "c9b4e9479b3c290b28d72892be5110a173e9b08e1ea8bd35051142d631e180b0",
+      "sections": [
+        "ExtensionInterface",
+        "ExtensionRegistry",
+        "ExtensionContext",
+        "ResponseHandlerInterface",
+        "ArchiveExtension",
+        "ArchiveResponse",
+        "ArchiveEntry",
+        "TempDirectoryProviderInterface",
+        "ExtensionConflictException",
+        "ExtensionDisabledException"
+      ]
+    },
+    {
+      "path": "docs/glossary/files.md",
+      "lines": 25,
+      "bytes": 1885,
+      "sha256": "0f011a697f88c017016b03b64583e2e78889508e4001cdf62129e346f0b25721",
+      "sections": [
+        "File (атрибут)",
+        "FileInput",
+        "FileFormat",
+        "Download (атрибут)",
+        "FileResponse",
+        "Base64File",
+        "saveTo()"
+      ]
+    },
+    {
+      "path": "docs/glossary/laravel.md",
+      "lines": 34,
+      "bytes": 3196,
+      "sha256": "82d913cf07fb9130733222bc4251acf6aa100809843df6cc7a35cbc1e872abbd",
+      "sections": [
+        "RequestFactoryInterface",
+        "SdkServiceProvider",
+        "ContainerProviderInterface",
+        "ContainerProviderRegistry",
+        "LaravelContainerProvider",
+        "NullContainerProvider",
+        "ClientResponseAdapterInterface",
+        "ClientResponseAdapter"
+      ]
+    },
+    {
+      "path": "docs/glossary/pagination.md",
+      "lines": 43,
+      "bytes": 3437,
+      "sha256": "127aac2d5a68ca7dc131eff6f71b1196cb59c24018e0842679016117a74457de",
+      "sections": [
+        "PaginableInterface",
+        "Pagination (атрибут)",
+        "PaginationConfig",
+        "PaginationRule",
+        "PaginationMode",
+        "PaginationMeta",
+        "PaginationMetaResolverInterface",
+        "PaginationMetaOverrideInterface",
+        "PaginationItemsContainerInterface",
+        "AbstractPaginationContainerDto",
+        "Paginator",
+        "PaginatedResult"
+      ]
+    },
+    {
+      "path": "docs/glossary/pipeline.md",
+      "lines": 65,
+      "bytes": 5908,
+      "sha256": "8c23f03350e0d476375dbed89d4b48667ff80c1247df3dcf612580ba0c0cee8f",
+      "sections": [
+        "Pipeline и контекст",
+        "Хуки и обработчики",
+        "Логирование и Audit",
+        "Debug"
+      ]
+    },
+    {
+      "path": "docs/glossary/requests.md",
+      "lines": 54,
+      "bytes": 5448,
+      "sha256": "7d3d78a36d2cbede3219d868e4215fd4218deb6ff89071ea25ce5ce6320dc312",
+      "sections": [
+        "HttpMethod",
+        "RequestInterface",
+        "AbstractRequest",
+        "Body DTO",
+        "AbstractResource",
+        "Асинхронность SDK (sendAsync)",
+        "sendAsync()",
+        "SendMode",
+        "Отложенная готовность результата (polling)",
+        "PromiseInterface",
+        "CompositeRequestInterface",
+        "DependsOnRequestInterface",
+        "PreparedRequest",
+        "resolveEndpoint()",
+        "resolveBaseUrl()",
+        "withBaseUrl()"
+      ]
+    },
+    {
+      "path": "docs/glossary/results.md",
+      "lines": 257,
+      "bytes": 19589,
+      "sha256": "13f244059e227edffc6fb53f9ca6cd06f1274dce05c37622838f78da7eae9b27",
+      "sections": [
+        "Результаты и ответы",
+        "Ошибки",
+        "Исключения"
+      ]
+    },
+    {
+      "path": "docs/glossary/testing.md",
+      "lines": 49,
+      "bytes": 5150,
+      "sha256": "7634e3530dbb5cc75ca68f955322ea54b25125de5778d37cc2f238eb01a80a9a",
+      "sections": [
+        "TransportInterface",
+        "HttpTransport",
+        "MockTransport",
+        "MockClient",
+        "MockConfig",
+        "fake()",
+        "MockResponse",
+        "assertSent()",
+        "assertNothingSent()",
+        "preventStrayRequests()",
+        "record() / playback()",
+        "Fixture",
+        "LiveEnvLoader",
+        "LivePolling",
+        "LiveResultAssertions",
+        "Pool (пул запросов)"
+      ]
+    },
+    {
+      "path": "docs/guides/README.md",
+      "lines": 97,
+      "bytes": 6913,
+      "sha256": "7af5c63216d8c1ec70630636d96521f20112f316bdf256cf5f94e40490f2bd18",
+      "sections": [
+        "Какой маршрут выбрать",
+        "Как устроена детализация",
+        "Важный принцип сериализации",
+        "Что вы получите",
+        "Примеры кода",
+        "Содержание"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/README.md",
+      "lines": 16,
+      "bytes": 1281,
+      "sha256": "24af11a04415c507d3b80a139b60e874a2fbbf3d18c57d0ae16788960165922f",
+      "sections": [
+        "Группы",
+        "Правила"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/behavior.md",
+      "lines": 169,
+      "bytes": 7199,
+      "sha256": "623d9e47ac7e85c1361f91410df63523d4e85be3f29e38002d55679425219f83",
+      "sections": [
+        "Когда использовать",
+        "Cache",
+        "Retry",
+        "Timeout",
+        "RateLimit",
+        "Execution",
+        "Idempotent",
+        "NoAuth",
+        "Pagination"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/data-transfer.md",
+      "lines": 346,
+      "bytes": 20375,
+      "sha256": "6994109e68b863c5ce666c6a86b766eaa834c1edeabad9409b05fe93715bbe20",
+      "sections": [
+        "Когда использовать",
+        "Cast",
+        "About",
+        "DateTimeFrom / DateTimeTo",
+        "EmptyStringAsNull",
+        "Map",
+        "From",
+        "To",
+        "Что когда использовать",
+        "Nested",
+        "DefaultValue",
+        "Label",
+        "Validate",
+        "Сочетание с внешними правилами"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/hooks.md",
+      "lines": 39,
+      "bytes": 1471,
+      "sha256": "8efb65277cc0277e205dc8c4f4fff02d064f39d43976cc606805151073303194",
+      "sections": [
+        "Когда использовать",
+        "BeforeSend",
+        "AfterResponse",
+        "BeforeHydrate",
+        "AfterHydrate"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/http.md",
+      "lines": 49,
+      "bytes": 1649,
+      "sha256": "1273e90c94fdb8a2ac2af47410a0e194b9ba12f2f2d6b5bc33d8a6912d3f7d0a",
+      "sections": [
+        "Когда использовать",
+        "Get",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete",
+        "Примечания"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/request.md",
+      "lines": 253,
+      "bytes": 9097,
+      "sha256": "4bc7f12ed50117f93872fedb234084ebd786c63022ed3dfa1da19d913f096373",
+      "sections": [
+        "Когда использовать",
+        "Query",
+        "Body",
+        "BodyRoot",
+        "Path",
+        "Header",
+        "File",
+        "Ignore",
+        "RequestDefaults",
+        "OperationDescriptor",
+        "RequestOneOf",
+        "RequestDiscriminator",
+        "AuthScope"
+      ]
+    },
+    {
+      "path": "docs/guides/attributes/response.md",
+      "lines": 142,
+      "bytes": 8764,
+      "sha256": "48d1f52c056b4b2918d4336508771031c6582f180c8fdb5150097afdaf4d3e45",
+      "sections": [
+        "Когда использовать",
+        "Returns",
+        "ContinuationResult",
+        "RawResponse",
+        "Download"
+      ]
+    },
+    {
+      "path": "docs/guides/auth.md",
+      "lines": 499,
+      "bytes": 26158,
+      "sha256": "dc9c2d9b1cce08dfd17ba8b195698a64ab3ab2bf53cea4d5c3a0fa7882f993ce",
+      "sections": [
+        "Базовый authenticator",
+        "API key в query",
+        "API key в header",
+        "Bearer token",
+        "Basic Auth",
+        "HMAC‑подпись",
+        "AuthorizationSchemeAuthenticator",
+        "TokenAuthenticator + refresh",
+        "Authorization: scheme + параметры",
+        "Несколько scope",
+        "Управление на уровне запроса",
+        "Приоритеты выбора auth",
+        "Сброс runtime scope",
+        "Политика доступа",
+        "Встроенные аутентификаторы",
+        "Refresh и 401",
+        "Кеш для токенов",
+        "Где детали",
+        "Identity для HTTP-кеша",
+        "Бюджет авторизации и refresh",
+        "Восстановление после 401 и миграция"
+      ]
+    },
+    {
+      "path": "docs/guides/batch.md",
+      "lines": 95,
+      "bytes": 3834,
+      "sha256": "b09a312238810a4742dcabd72cf609113e0e0f29bbd38838fbb756d8e9b751b1",
+      "sections": [
+        "Когда использовать",
+        "Базовое использование",
+        "Конфигурация через BatchConfig",
+        "Какие элементы допустимы в batch",
+        "Режимы выполнения",
+        "FailStrategy",
+        "Результат Batch",
+        "Async‑вариант",
+        "Pool vs Batch"
+      ]
+    },
+    {
+      "path": "docs/guides/casts.md",
+      "lines": 178,
+      "bytes": 13483,
+      "sha256": "4fcd061a294e85af65c09f06e83f49ab3037926f35dc2b0b3d494bc77b5d4b1c",
+      "sections": [
+        "Объектные аргументы атрибутов",
+        "Приоритет применения",
+        "Встроенные касты",
+        "Boolean в текстовых полях",
+        "Регистрация кастов",
+        "Атрибут #[Cast]",
+        "Примеры поведения",
+        "Где применяется",
+        "Casts внешнего набора и scope"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/README.md",
+      "lines": 28,
+      "bytes": 1435,
+      "sha256": "94f0183f7361489cf64f29c639b3e893e40c50e8cb09c3246ef5cc11927d92ee",
+      "sections": [
+        "Карта разделов",
+        "Общие принципы"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/archive.md",
+      "lines": 63,
+      "bytes": 2253,
+      "sha256": "d2f95897d5c9e84848d2903622234fa5753341b95e0c1b0fbdfc3562c6e1bc3c",
+      "sections": [
+        "Базовая настройка",
+        "Параметры ArchiveConfig",
+        "Кастомный tempProvider",
+        "Зависимости"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/auth.md",
+      "lines": 135,
+      "bytes": 6621,
+      "sha256": "fc566a1be30256971ef666b6bbf585d1c5ff9a7a39caf2613f076b9bd414a362",
+      "sections": [
+        "Базовая настройка",
+        "Auth scopes",
+        "AuthPolicy",
+        "Refresh‑логика",
+        "Граница: Auth vs Credentials Enrichment",
+        "Где детали",
+        "OriginPolicy",
+        "Изоляция состояния и ожидание refresh"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/cache.md",
+      "lines": 238,
+      "bytes": 18749,
+      "sha256": "631e57f2db49a76b2e13d87ffe6335321f4aa1093935fb986c32dcd055320dc1",
+      "sections": [
+        "Настройка без prefix",
+        "Разрешение кеширования и режимы",
+        "Идентичность ответа",
+        "Очистка",
+        "Переход с предыдущего поведения",
+        "Auth-токены и необязательная служба блокировок"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/container-provider.md",
+      "lines": 82,
+      "bytes": 4937,
+      "sha256": "30d7d2819d8660962b681c2e3e777820e8193f21e168f0571258dffdc54c1020",
+      "sections": [
+        "Как работает по умолчанию",
+        "Если Laravel не используется",
+        "Переопределение через ClientConfig",
+        "Глобальная настройка (bootstrap)",
+        "Зачем это нужно"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/extensions.md",
+      "lines": 60,
+      "bytes": 2257,
+      "sha256": "5324abfc30fa11cb64fad586569d055c07710b3e9b274f8a4a25d1d7f8903708",
+      "sections": [
+        "Для каких задач",
+        "Рекомендуемый вариант: отдельный класс",
+        "Базовая настройка"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/observability.md",
+      "lines": 94,
+      "bytes": 4450,
+      "sha256": "fdaf4c29396430aa326e50b7e4b15941d2d696f7bb0c0f9ee5a3ece5f7142897",
+      "sections": [
+        "Logger и logLevel",
+        "Debug",
+        "Redaction в requestDebug",
+        "Environment"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/pagination.md",
+      "lines": 123,
+      "bytes": 4443,
+      "sha256": "195ee5c84d8f34016a1bba52d03e4a99e97b44bbb6d93010236818e07f6a8491",
+      "sections": [
+        "Базовая настройка",
+        "Переопределение на запросе",
+        "PaginationConfig (детали)",
+        "Пример конфигурации провайдера с пагинацией",
+        "Offset‑based",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/pool.md",
+      "lines": 73,
+      "bytes": 2902,
+      "sha256": "078d3ae98d162ecb9e1464c68a074866296f750fafb88ad82f7c12cfb062e6ec",
+      "sections": [
+        "Когда использовать",
+        "Когда не подходит",
+        "Настройки",
+        "Базовая настройка",
+        "Использование",
+        "Async‑вариант",
+        "Дополнительные параметры"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/rate-limit.md",
+      "lines": 167,
+      "bytes": 14237,
+      "sha256": "a7d97594e89b3482f02e43d4ebdc2c0f45fbeeca1711f0af1fc26af972a253e8",
+      "sections": [
+        "Параметры",
+        "Участие и overrides",
+        "Backend и ключи",
+        "Ожидание и ошибки",
+        "Собственный атомарный backend",
+        "Миграция с прежнего замещения"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/responses-errors.md",
+      "lines": 309,
+      "bytes": 13863,
+      "sha256": "4ec5a099770d51f09b0d2d65931c66b2263c70e745b69fbcd8a1f4705cb443aa",
+      "sections": [
+        "Успешный ответ без DTO",
+        "throwOnErrors",
+        "ResolvedResultFactory",
+        "ErrorContextFactory",
+        "ContinuationTokenExtractor",
+        "Provider ResultMetaExtractor",
+        "Provider Async Await defaults",
+        "ClientResponseFactory / ErrorMapper",
+        "ResolvedResult: DX‑методы ошибок"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/retry.md",
+      "lines": 58,
+      "bytes": 3158,
+      "sha256": "f13ba866972278fcf1899bea321b928ca35a9355b920627d5d2871cabb904ff8",
+      "sections": [
+        "Базовая настройка",
+        "Параметры RetryConfig",
+        "Переопределение на запросе",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/serialization.md",
+      "lines": 220,
+      "bytes": 10189,
+      "sha256": "fc16058bb6414a1d952cd80a78b02838c4afb2e56820ae6ce13aa7e8b7b7a755",
+      "sections": [
+        "NamingStrategy",
+        "QueryArrayFormat",
+        "Текстовый boolean",
+        "Casts",
+        "Request DateTime",
+        "DtoSerializationProfile",
+        "Request-level enum serialization",
+        "Где детали",
+        "HydrationRules"
+      ]
+    },
+    {
+      "path": "docs/guides/client-config/timeouts-delay.md",
+      "lines": 140,
+      "bytes": 10127,
+      "sha256": "7e6db3f167c963790f44a34b1aaeb4fb503631642761f8d19d451148b2e5a4a5",
+      "sections": [
+        "Таймаут одной HTTP-попытки",
+        "Необязательный общий бюджет",
+        "Общий дедлайн нескольких вызовов",
+        "Граница гарантии и транспорт",
+        "Задержка"
+      ]
+    },
+    {
+      "path": "docs/guides/client-discovery.md",
+      "lines": 98,
+      "bytes": 4925,
+      "sha256": "069d845cecd8fe39ab30889a24fe528fcf3321d64c487abdba7609b899855948",
+      "sections": [
+        "Компоненты",
+        "Как работает resolve",
+        "Ручная регистрация (простая)",
+        "Auto‑discovery",
+        "Мультисервисные клиенты",
+        "Auto‑resolve в запросах",
+        "Рекомендации"
+      ]
+    },
+    {
+      "path": "docs/guides/collections.md",
+      "lines": 116,
+      "bytes": 4671,
+      "sha256": "fe14b4bc7b9f1d623e1dcc91c559b1d474604c10a899dac20bcde425e865cea4",
+      "sections": [
+        "Зачем",
+        "AbstractTypedCollection",
+        "Интеграция с DTO",
+        "RawCollection (escape‑hatch)",
+        "Сериализация",
+        "Приоритеты",
+        "Ключи и индексация"
+      ]
+    },
+    {
+      "path": "docs/guides/continuation-token.md",
+      "lines": 83,
+      "bytes": 3751,
+      "sha256": "df8aae2a517937c87d1c90b8a74cc351f97338628ed7560f7518ae7ac7968d7a",
+      "sections": [
+        "Что это такое",
+        "Базовый пример",
+        "Использование в прикладном коде",
+        "Рекомендации для провайдерного SDK"
+      ]
+    },
+    {
+      "path": "docs/guides/dto.md",
+      "lines": 452,
+      "bytes": 23544,
+      "sha256": "d30cf0fc549d7c99cb99e96a1a649cd7e834868441e5e293b6a98655a7322a34",
+      "sections": [
+        "Каноническая сериализация DTO",
+        "Базовый DTO",
+        "Автокаст по declared type",
+        "Inheritance и hydration",
+        "Значения по умолчанию и изоляция объектов",
+        "Обязательные поля и ошибки гидратации",
+        "Маппинг полей",
+        "Вложенные DTO",
+        "Коллекции",
+        "Cast, DateTimeFrom/To и DefaultValue",
+        "Empty string normalization",
+        "Валидация",
+        "computed() для Response DTO",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/errors.md",
+      "lines": 411,
+      "bytes": 30489,
+      "sha256": "63fa3f959cd2866baaa909250152198cb65d9e213b95e345b9695fdebbfeb4da",
+      "sections": [
+        "ExecutionResult",
+        "ResultHandle",
+        "ResolvedResult: удобное чтение ошибок",
+        "Локальный rate-limit и HTTP 429",
+        "throwOnErrors",
+        "Политика ошибок",
+        "ClientResponse и маппинг ошибок",
+        "Control‑flow исключения",
+        "Ошибки ожидания continuation",
+        "Где детали",
+        "Классификация ошибок JSON и исполнения",
+        "Исчерпание общего бюджета",
+        "SourcePath внешнего набора"
+      ]
+    },
+    {
+      "path": "docs/guides/extensions.md",
+      "lines": 76,
+      "bytes": 3053,
+      "sha256": "4299ed12a07eeaa47506e8125b3ac49e377eab4a6a9ce5a4a839cab80b71fa05",
+      "sections": [
+        "Жизненный цикл",
+        "Что можно регистрировать",
+        "Response handlers и приоритет",
+        "Конфликты и override",
+        "Пример расширения",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/external-urls.md",
+      "lines": 110,
+      "bytes": 8770,
+      "sha256": "119475a6950f5049e33f8b7a78e536e713e24f862efdca5f1e1650cafd4a22f8",
+      "sections": [
+        "Правила готового адреса",
+        "Авторизация и zero-config",
+        "Кеш, redirects и диагностика",
+        "Свой транспорт и миграция"
+      ]
+    },
+    {
+      "path": "docs/guides/files.md",
+      "lines": 291,
+      "bytes": 17621,
+      "sha256": "3e2f4a1f9f18fb3b74dd0572dc393e494cbe33f979d45d3c1578300a2b7313bc",
+      "sections": [
+        "Загрузка файлов",
+        "Скачивание файлов",
+        "Base64 в ответе",
+        "Архивы",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/hooks.md",
+      "lines": 70,
+      "bytes": 3140,
+      "sha256": "6595f5d99be7c14c4e99a18341f076631e568d312edc033c40bd31e13fca9325",
+      "sections": [
+        "Типы хуков",
+        "HookRegistry: регистрация",
+        "Порядок исполнения",
+        "BeforeHydrate: изменение данных",
+        "Где атрибуты"
+      ]
+    },
+    {
+      "path": "docs/guides/hydration-rules.md",
+      "lines": 351,
+      "bytes": 27360,
+      "sha256": "4f3218e1d27fc9672980d1483f7df985d4844ee3e8d812afda13b0ff12788dee",
+      "sections": [
+        "Сквозной пример",
+        "Правила и проверка конфигурации",
+        "Policy и строгие типы",
+        "Формы, присутствие и defaults",
+        "Discriminator",
+        "Scoped cast и provider",
+        "Дополнительные поля",
+        "Receiver в исходящих запросах",
+        "Диагностика и входы",
+        "Переход существующего SDK"
+      ]
+    },
+    {
+      "path": "docs/guides/laravel.md",
+      "lines": 176,
+      "bytes": 10028,
+      "sha256": "b0460f95307c4d4dd17204705cb6ae257da777ca43383dda7395a7bea5c3835c",
+      "sections": [
+        "Что регистрируется",
+        "DI запросов",
+        "RequestFactory и payload‑ключи",
+        "Auto‑discovery клиентов",
+        "Мультисервисные клиенты",
+        "ClientResponseAdapter",
+        "ClientConfig::fromLaravel",
+        "Рекомендация: Laravel-конфиги для provider SDK",
+        "Transport по умолчанию",
+        "Валидация и несколько клиентов",
+        "Проверяемые контексты",
+        "Общие квоты между workers"
+      ]
+    },
+    {
+      "path": "docs/guides/live-testing.md",
+      "lines": 375,
+      "bytes": 20541,
+      "sha256": "12d20e87693e939171ceb6f175d9339e2e5ace6dc68913dc305ab3178f51978c",
+      "sections": [
+        "Уровни применимости",
+        "Что даёт core, а что строит SDK",
+        "Когда нужны live-тесты",
+        "Принципы",
+        "Когда включать какой функционал",
+        "Структура",
+        "Support-слой",
+        "Env-конвенция",
+        "ApiSutra helper-методы",
+        "Разделение данных: env vs фикстуры",
+        "Кеширование",
+        "Response dumping",
+        "Группировка тестов",
+        "Negative-тесты",
+        "Контроль стоимости",
+        "Makefile DX",
+        ".gitignore",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/logging.md",
+      "lines": 127,
+      "bytes": 7519,
+      "sha256": "d30c9ecc45e2542fc333928123aafa3b598bd61e5051efa77e8c7fe4728d87b1",
+      "sections": [
+        "TraceId",
+        "Audit‑лог",
+        "Debug‑payload",
+        "Логи (PSR‑3)",
+        "Где ещё смотреть",
+        "Маскирование безопасного экспорта",
+        "Размер safe debug/log"
+      ]
+    },
+    {
+      "path": "docs/guides/megaclient.md",
+      "lines": 252,
+      "bytes": 12316,
+      "sha256": "a7a5f1f73669c9d489267c5430cfaac955fb8902f77ef5aa1baa66247f7dbd36",
+      "sections": [
+        "Терминология",
+        "Когда использовать",
+        "Когда не нужно",
+        "Контракт мегаклиента",
+        "Сервисный клиент (отдельный конфиг)",
+        "Zero‑config регистрация сервисов",
+        "Опциональный override namespace‑ов",
+        "Laravel‑интеграция",
+        "Версии сервисов (опционально)",
+        "Каталог response DTO по мегаклиенту",
+        "Рекомендации и ограничения"
+      ]
+    },
+    {
+      "path": "docs/guides/migration.md",
+      "lines": 88,
+      "bytes": 15271,
+      "sha256": "6c58f57fa6dab88672f70c3891a7490c768f31dce857409d3d467bdb69eab912",
+      "sections": [
+        "После v0.2.0-alpha.1: ожидание и кеш метаданных",
+        "После v0.2.0-alpha.1: внешние правила DTO",
+        "Транспорт, форматы ответа и дедлайн",
+        "Зависимости и границы"
+      ]
+    },
+    {
+      "path": "docs/guides/naming-strategy.md",
+      "lines": 41,
+      "bytes": 2109,
+      "sha256": "6c1cb05a65192953e6b03b21ddf909afc1e0ef86053a4bff6e584ee0947249f7",
+      "sections": [
+        "Доступные режимы",
+        "Где применяется",
+        "Как переопределять",
+        "Пример",
+        "Рекомендации"
+      ]
+    },
+    {
+      "path": "docs/guides/operation-inventory.md",
+      "lines": 384,
+      "bytes": 17000,
+      "sha256": "a82fd555f826f3bf074bec49604f6ea21d8f4af65c3063dfef6a9b2c86038ad9",
+      "sections": [
+        "Зачем это нужно",
+        "Что это такое",
+        "Базовый API",
+        "Доступ",
+        "Пример",
+        "Как строятся sdkCallPaths",
+        "Поддерживаемые паттерны",
+        "Что не поддерживается",
+        "Важные ограничения",
+        "Когда использовать inventory, а когда catalog",
+        "ResponseDtoCatalog"
+      ]
+    },
+    {
+      "path": "docs/guides/pagination.md",
+      "lines": 220,
+      "bytes": 8619,
+      "sha256": "cdbf58ff16f313cd8cbb1a4e59c7a4ca215a223b35162e47b251c6aed5f3dcad",
+      "sections": [
+        "Базовая структура",
+        "Выполнение",
+        "Настройка схемы пагинации",
+        "Правила исполнения (PaginationRule)",
+        "PaginationMeta и резолв",
+        "Контейнер с meta + items",
+        "PaginatedResult",
+        "Guard и лимиты",
+        "Где детали",
+        "Ошибки, защитная остановка и миграция",
+        "Внешние правила DTO"
+      ]
+    },
+    {
+      "path": "docs/guides/provider-analysis.md",
+      "lines": 91,
+      "bytes": 5020,
+      "sha256": "223d8aef50ea98229292809a1f2577239e9d0868a3c5c0e6c8d200ace42b917b",
+      "sections": [
+        "1) Базовые параметры",
+        "2) Аутентификация",
+        "3) Пагинация",
+        "4) Rate Limit и Retry",
+        "5) Ошибки и маппинг",
+        "6) DTO и сериализация",
+        "7) Файлы и архивы",
+        "8) Структура, DTO и enums",
+        "Пример чек‑листа анализа",
+        "Итоговый артефакт",
+        "Дальше"
+      ]
+    },
+    {
+      "path": "docs/guides/provider-async-await.md",
+      "lines": 239,
+      "bytes": 12654,
+      "sha256": "cdcb05e0d6e0e2b9c3b8514087e3fd5078da870009e2329551b94a5899401b8e",
+      "sections": [
+        "Что решает этот подход",
+        "Базовые элементы",
+        "Конфигурация клиента",
+        "Собственный критерий готовности",
+        "DX в прикладном коде",
+        "Лимит, кеш и диагностика",
+        "Инварианты и ошибки конфигурации",
+        "Миграция с эвристического ожидания",
+        "Внешние правила финального DTO"
+      ]
+    },
+    {
+      "path": "docs/guides/provider-catalogs.md",
+      "lines": 148,
+      "bytes": 6156,
+      "sha256": "28346b58d752ff896a87d600498131033e00f75f9f4494803f0d099f3586adb2",
+      "sections": [
+        "Зачем это нужно",
+        "Что это такое",
+        "Чем отличаются от runtime meta",
+        "Базовые контракты",
+        "Инварианты",
+        "Wiring",
+        "Граница v1",
+        "Пример provider-side реализации",
+        "Когда нужен request-bound catalog",
+        "Что это НЕ заменяет",
+        "Когда НЕ надо использовать catalog"
+      ]
+    },
+    {
+      "path": "docs/guides/provider-checklist.md",
+      "lines": 133,
+      "bytes": 25992,
+      "sha256": "028ffe7292749d8c26d73e3e3c4ef5e1e1aa3f6cd9f0f56f8475a4fbbf4bce8f",
+      "sections": [
+        "Блок 1: Архитектура и модель",
+        "Блок 2: DTO — свойства, атрибуты, хуки",
+        "Блок 3: Протокол и конфигурация",
+        "Блок 4: Аутентификация и окружение",
+        "Блок 5: Ошибки, результаты, пагинация",
+        "Блок 6: Тестирование",
+        "Краткий итоговый чеклист (для финальной проверки)"
+      ]
+    },
+    {
+      "path": "docs/guides/provider-methodology.md",
+      "lines": 700,
+      "bytes": 47543,
+      "sha256": "bb11b8bf816cc1922b954fe7bb5820b7d9b02e53cf2ab0d7361c370203dc85b1",
+      "sections": [
+        "Входной артефакт",
+        "1) Карта решений → единая модель",
+        "2) Базовые классы вместо копипаста",
+        "2.1) Структура и владение сущностями",
+        "3) Где задавать правила",
+        "3.0) Provider credentials: рекомендуемый подход",
+        "3.1) Нюансы протокола (фиксируйте заранее)",
+        "3.2) Аутентификация (детализация)",
+        "3.3) Sandbox и тестирование API",
+        "3.4) Мультисервисность и мегаклиент",
+        "3.5) Версионирование сервисов",
+        "4) Ошибки и статусы",
+        "5) Пагинация как стандарт",
+        "5.1) Практики из примеров",
+        "6) Минимальный набор тестов",
+        "Итоговый чек‑лист"
+      ]
+    },
+    {
+      "path": "docs/guides/quickstart.md",
+      "lines": 81,
+      "bytes": 2705,
+      "sha256": "9ef24f0143684e8972f03170095119e629848b8519e4f3fe3a6d60adbfdcad92",
+      "sections": [
+        "1) Конфигурация клиента",
+        "2) Клиент",
+        "3) DTO ответа",
+        "4) Запрос",
+        "5) Выполнение",
+        "Примечания",
+        "Дальше"
+      ]
+    },
+    {
+      "path": "docs/guides/redis-rate-limit.md",
+      "lines": 111,
+      "bytes": 8748,
+      "sha256": "3235fa441c7f467ffa69dc6eb7a4a1549ed92eb8a92eb4076154d73fc4d0be1f",
+      "sections": [
+        "Подключение",
+        "Выделенное соединение и время",
+        "Гарантии и доступность",
+        "Laravel",
+        "Проверки"
+      ]
+    },
+    {
+      "path": "docs/guides/request-pipeline.md",
+      "lines": 115,
+      "bytes": 5356,
+      "sha256": "d4274515741e22925a32c44016c4ec61698a5f5b8c0df31dcc52979e25cbf798",
+      "sections": [
+        "CompositeRequest",
+        "DependsOnRequest",
+        "Роль RequestRole",
+        "Замена подготовленного HTTP-тела"
+      ]
+    },
+    {
+      "path": "docs/guides/requests.md",
+      "lines": 276,
+      "bytes": 12227,
+      "sha256": "fc6c6e5235f3e9f3e45076bae33b496c36fc4111156cc57100767619c77e73d9",
+      "sections": [
+        "Базовая структура",
+        "Источники данных",
+        "Body DTO для повторяющихся payload",
+        "Много полей в body без бойлерплейта",
+        "Корневой body для JSON Patch / bulk",
+        "OneOf и discriminator для polymorphic body",
+        "Сериализация",
+        "Поведение запроса",
+        "Кеширование",
+        "Авторизация",
+        "Provider credentials enrichment",
+        "Пагинация",
+        "Runtime‑опции (частые)",
+        "Отправка и результат",
+        "Где детали",
+        "Полный URL для отдельного исполнения",
+        "Назначение скачиваемого файла"
+      ]
+    },
+    {
+      "path": "docs/guides/resources.md",
+      "lines": 104,
+      "bytes": 4062,
+      "sha256": "07444128f30dcc888ac62962c532d13b8b76bd214a8243a5060113a69adbeb70",
+      "sections": [
+        "Когда использовать",
+        "Базовая идея",
+        "Пример структуры",
+        "Пример с вложенным ресурсом и контекстом",
+        "Что важно помнить",
+        "Где это используется"
+      ]
+    },
+    {
+      "path": "docs/guides/retries-rate-limit.md",
+      "lines": 253,
+      "bytes": 17550,
+      "sha256": "9e927fa0dc1ad119aa8e5250d165dab084b93f33b208d1b498160f2ebf96df35",
+      "sections": [
+        "Retry (уровень клиента)",
+        "Retry для конкретного запроса",
+        "Delay",
+        "Rate Limit (уровень клиента)",
+        "Rate Limit для конкретного запроса",
+        "Идемпотентность",
+        "Где детали",
+        "Файловые операции",
+        "Отказ ожидания auth refresh"
+      ]
+    },
+    {
+      "path": "docs/guides/serialization.md",
+      "lines": 451,
+      "bytes": 26327,
+      "sha256": "ee262e657767077bb3b860ae08e1990f3b3d700f587afd50d1c7730c00334951",
+      "sections": [
+        "Порядок этапов",
+        "Request parts enrichment (до finalize payload)",
+        "Базовые правила (convention)",
+        "URI и path",
+        "Query",
+        "Body и nested",
+        "Root body (JSON Patch / bulk)",
+        "Path",
+        "Как выбирается endpoint и baseUrl",
+        "DTO‑сериализация для body",
+        "DateTime‑сериализация",
+        "Enum-сериализация",
+        "Где детали",
+        "Большие целые в ответах",
+        "Ошибки кодирования JSON",
+        "Совместимость при обновлении URI/query",
+        "Потоковое файловое тело",
+        "Внешний набор и receiver"
+      ]
+    },
+    {
+      "path": "docs/guides/testing.md",
+      "lines": 345,
+      "bytes": 20510,
+      "sha256": "33b66e18b128ff3ecebc7dde09cabe486214306e9983f2b6ac02687f1f3b15f2",
+      "sections": [
+        "Как читать этот гайд",
+        "Быстрый fake",
+        "Файловые ответы",
+        "Последовательности ответов",
+        "Динамические ответы",
+        "Ассерты",
+        "Фикстуры (record/playback)",
+        "Глобальный MockClient",
+        "Helper для oneOf-контрактов",
+        "Проверка валидации",
+        "Проверка контрактов DTO",
+        "Live-тестирование (real-request)",
+        "Где детали",
+        "Ошибки recording и миграция",
+        "Проверки самого пакета",
+        "Redis rate-limit"
+      ]
+    },
+    {
+      "path": "docs/guides/transport.md",
+      "lines": 256,
+      "bytes": 18849,
+      "sha256": "eea0af6e1b027fd5e7e98f5f27a05b15857e5d0f1352e6144e91ab3c1b7090e1",
+      "sections": [
+        "Замена и очистка тела PreparedRequest",
+        "Потоковые файлы",
+        "Контракт",
+        "HttpTransport (PSR‑18/PSR‑17)",
+        "TransportResolver для high-level make API",
+        "MockTransport и RecordingTransport",
+        "PreparedRequest и ProviderResponse",
+        "Где детали",
+        "Изоляция назначения"
+      ]
+    },
+    {
+      "path": "docs/guides/troubleshooting.md",
+      "lines": 58,
+      "bytes": 4280,
+      "sha256": "6ed909869be8211be524622c92cca9eab3a853fe2dc925d69b2109bbf54ca466",
+      "sections": [
+        "Клиент не установлен для запроса",
+        "Auth scope не найден",
+        "Auth включен, но auth не настроен",
+        "После обновления изменилось поведение union DateTime/string",
+        "Запрос не поддерживает пагинацию",
+        "DTO‑контейнер пагинации не реализует интерфейс",
+        "Файлы не скачиваются",
+        "MultipartStream недоступен",
+        "Валидация DTO не срабатывает",
+        "Незамоканный запрос в тестах",
+        "Rate Limit не разделяется между процессами"
+      ]
+    },
+    {
+      "path": "docs/guides/use-cases.md",
+      "lines": 61,
+      "bytes": 1676,
+      "sha256": "fc32e06cc453d6a456eaf3b3d2d3a8af166662facf198e6aab72b2128ba8dd61",
+      "sections": [
+        "1) Массовая загрузка (Batch)",
+        "2) Быстрый fan‑out (Pool)",
+        "3) Пагинация",
+        "4) Файлы и архивы",
+        "5) Polling (лонг‑раннинг запросы)",
+        "6) Мегаклиент (несколько сервисов)"
+      ]
+    },
+    {
+      "path": "docs/guides/validation.md",
+      "lines": 183,
+      "bytes": 10065,
+      "sha256": "e6437a1755b5d387757a38d66daa87682584aac9d4af9dfae50ef1f828bb02b8",
+      "sections": [
+        "Где применяется",
+        "Атрибуты",
+        "Как подключается валидатор",
+        "Валидация запросов",
+        "Custom preflight-валидация",
+        "Валидация DTO",
+        "Миграция и различие ошибок",
+        "Кастомные сообщения",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/guides/versioning.md",
+      "lines": 143,
+      "bytes": 6260,
+      "sha256": "72ede366f5e3e3f793a1110dd7f5ce33c72510f9456d30ea1193517d1663b527",
+      "sections": [
+        "Базовая идея",
+        "Когда нужна отдельная версия",
+        "Рекомендуемый DX",
+        "Минимальный version router",
+        "Provider‑уровневая обёртка (рекомендуется)",
+        "Что делает `VersionedResourceTrait`",
+        "Политика обратной совместимости",
+        "Граница `Shared/` и `V*`",
+        "`compat-default` и strict explicit mode",
+        "Тестовая матрица",
+        "Антипаттерны",
+        "Где ещё смотреть"
+      ]
+    },
+    {
+      "path": "docs/technical/README.md",
+      "lines": 17,
+      "bytes": 679,
+      "sha256": "01e2c54c24427975b6948280c4c3a7b8c405c5b51c183a01b09a4c9d550757eb",
+      "sections": [
+        "Содержание",
+        "См. также"
+      ]
+    },
+    {
+      "path": "docs/technical/architecture.md",
+      "lines": 70,
+      "bytes": 4950,
+      "sha256": "fd4d15c0c363d19b0e9cd0413bdf2aab114fa3e4a92024f04c013313ce12eb5e",
+      "sections": [
+        "Цели SDK",
+        "Ключевые компоненты",
+        "Принципы и границы",
+        "Потоки выполнения",
+        "Резолв клиента",
+        "Точки расширения",
+        "Внутренний слой сериализации/гидрации",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/technical/attributes.md",
+      "lines": 69,
+      "bytes": 4572,
+      "sha256": "78c5d1300bf3fef9a5fd2fe8820662b1d03e62d756b3b68f6127301a6eaf89b7",
+      "sections": [
+        "Роль атрибутов",
+        "Где используются",
+        "Резолв и кеш",
+        "Кастомные атрибуты (AttributeRegistry)",
+        "AttributeContext",
+        "StageProcessor",
+        "Ограничения",
+        "Где детали"
+      ]
+    },
+    {
+      "path": "docs/technical/caching-retry.md",
+      "lines": 35,
+      "bytes": 2224,
+      "sha256": "416cbdb9d7478e5eb09e0432300b0bb7246fbebf7b2ad2a8693c3e7100cc7d82",
+      "sections": [
+        "Кеширование",
+        "Retry",
+        "Rate limiting",
+        "Где подробности",
+        "Совместный учёт квот"
+      ]
+    },
+    {
+      "path": "docs/technical/error-handling.md",
+      "lines": 39,
+      "bytes": 2338,
+      "sha256": "84137c13902e6afd50dd635350f2db3e8781d70f714167039264d0737f20e4ea",
+      "sections": [
+        "Где могут возникнуть ошибки",
+        "Стратегии",
+        "Переопределения",
+        "Где подробности"
+      ]
+    },
+    {
+      "path": "docs/technical/execution.md",
+      "lines": 38,
+      "bytes": 2684,
+      "sha256": "51471386e2e87bd94465bf0c2e82ebf6a1409ea32e55ecc8566ab1dfc292cf57",
+      "sections": [
+        "Режимы выполнения",
+        "RequestExecution",
+        "Пагинация",
+        "Batch / Pool",
+        "Контекст дочернего выполнения",
+        "Где подробности"
+      ]
+    },
+    {
+      "path": "docs/technical/pipeline.md",
+      "lines": 41,
+      "bytes": 2563,
+      "sha256": "257153db7886feeadd7a38e6318cb25998e9609fef9296af4f661c4fe6fd7227",
+      "sections": [
+        "Идея",
+        "Основные этапы (высокий уровень)",
+        "Контекст",
+        "Хуки",
+        "Где подробности"
+      ]
+    }
+  ],
+  "source_sha256": {
+    ".agents/documentation.md": "4e8404e95f63147b5a24c74aa6fa6aced37a313c6375d52dfc1d68d1686c7c69",
+    ".agents/providers.md": "5d53d4071fcdcdfe42a3d20d0c15e53abda817c17bb17545c84a0312715f4579",
+    "composer.json": "81713ee77ec815591f9619919775cbbc7e176f7c08b5fb458fc19e1d4bbd0766",
+    ".gitattributes": "326f5b53b65c808e8ddf57f31e9d9ec092fa2b45c6fc8dac1b6cdb04f64037b7",
+    "src/Core/AbstractClient.php": "75b7468be20247662161a975adb5e41c82ee14d8c67f74deee46f68c94ee8ce4",
+    "src/Pipeline/Pipeline.php": "d5abb824612c72cbbaefc10247a1ad5673f8b4e5a2a5cce30ab149a936b62203",
+    "src/VO/Validation/Validator.php": "81c405276ddc5069b32e38f089c10f7f709726e2a9137889875b187201ff19fb",
+    "src/Serialization/Hydrator.php": "366b3da06f8040500d3b5c638475b20cdddb02be91ca70f7d4d620cdca64dedf",
+    "tests/Support/check-docs.py": "3cf707a1136ef15d1c07deaa1bc34f200a52c31efa5c54144d961e254c01b594",
+    "tests/Support/check-package.py": "01cd4df6841a3e54dfb5c80aa97cab8cc38394bf3b24555d967487c4dab2698b",
+    "tests/Support/standalone-hydration-rules-smoke.php": "187e138d43d3d332fa5d3f2aab102568d8181465bca438e792f35e9501eeb9bc"
+  },
+  "attribute_scanner_source_files": []
+}

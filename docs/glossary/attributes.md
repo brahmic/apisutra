@@ -1,78 +1,21 @@
 # Атрибуты
 
-## Механизм атрибутов
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="attributeregistry"></a> AttributeRegistry | Сервис для регистрации связки атрибут → обработчик. | [Контракт](../reference/attributes/README.md) |
+| <a id="attributecontext"></a> AttributeContext | Контекст для обработчика атрибута. | [Контракт](../reference/attributes/README.md) |
+| <a id="attributecontexttype"></a> AttributeContextType | Указывает, к чему применяется обработчик атрибута: запросу или DTO. | [Контракт](../reference/attributes/README.md) |
+| <a id="attributehandlerinterface"></a> AttributeHandlerInterface | Интерфейс обработчика кастомного атрибута. | [Контракт](../reference/attributes/README.md) |
+| <a id="get-post-put-delete"></a> Get, Post, Put, Delete | Атрибуты HTTP-методов. | [Контракт](../reference/attributes/http.md) |
+| <a id="returns"></a> Returns | Атрибут, указывающий класс DTO для десериализации ответа. | [Контракт](../reference/attributes/response.md) |
+| <a id="path-query-body-header-ignore"></a> Path, Query, Body, Header, Ignore | Атрибуты для маппинга свойств запроса в HTTP. | [Контракт](../reference/attributes/request.md) |
+| <a id="validate-атрибут"></a> Validate (атрибут) | Атрибут для валидации свойств запроса перед отправкой. | [Контракт](../reference/client/validation.md) |
+| <a id="label-атрибут"></a> Label (атрибут) | Атрибут для человекочитаемого имени поля в сообщениях валидации. | [Контракт](../reference/client/validation.md) |
+| <a id="about-атрибут"></a> About (атрибут) | Атрибут для бизнес-описания DTO-поля в документации, анализе и export tooling. | [Контракт](../reference/attributes/hydration.md) |
+| <a id="validationerror"></a> ValidationError | Value Object ошибки валидации. | [Контракт](../reference/client/validation.md) |
+| <a id="validationmessages"></a> validationMessages() | Статический метод в классе запроса для кастомных сообщений валидации. | [Контракт](../reference/client/validation.md) |
+| <a id="beforesend-afterresponse-beforehydrate-afterhydrate-атрибуты"></a> BeforeSend, AfterResponse, BeforeHydrate, AfterHydrate (атрибуты) | Атрибуты для подключения переиспользуемых классов-обработчиков к хукам жизненного цикла. | [Контракт](../reference/attributes/hooks.md) |
+| <a id="queryarrayformat"></a> QueryArrayFormat | Способ кодирования массива в query: скобки, индексы, запятая или повтор имени параметра. | [Контракт](../reference/serialization/uri-query.md) |
+| <a id="serializenulls"></a> serializeNulls | Параметр клиентского request-level конфига. | [Контракт](../reference/serialization/request-parts.md) |
 
-### AttributeRegistry
-Сервис для регистрации связки атрибут → обработчик. Использует resolver для DI. Позволяет разработчику создавать кастомные атрибуты с автоматической обработкой.
-
-### AttributeScanner
-Внутренний компонент для сканирования классов через Reflection. Извлекает атрибуты с классов и свойств.
-
-### AttributeMetadataCache
-Кеш описаний метаданных класса, сокращающий повторное сканирование. В гидраторе и
-сериализаторах объектные аргументы атрибутов пересоздаются для текущего узла:
-кеш не делает их общими между DTO и запросами. См. [механизм кеша](../technical/attributes.md#резолв-и-кеш).
-
-### AttributeMetadataCacheProviderInterface
-Интерфейс клиента, предоставляющего общий `AttributeMetadataCache` для компонентов SDK. Реализуется `AbstractClient`.
-
-### AttributeContext
-Контекст для обработчика атрибута. Содержит инстанс атрибута, цель (класс/свойство), тип контекста (Request/DTO), этап pipeline, данные для модификации.
-
-### AttributeContextType
-Namespace: `Brahmic\ApiSutra\Enums\Attributes\AttributeContextType`.
-Enum типа контекста атрибута: Request или Dto. Используется в AttributeContext.
-
-### AttributeProcessor
-Оркестратор обработки атрибутов. Сканирует класс, ищет обработчики, вызывает их с контекстом.
-
-### AttributeHandlerInterface
-Интерфейс обработчика кастомного атрибута. Метод handle получает AttributeContext.
-
-## Атрибуты запросов
-
-### Get, Post, Put, Delete
-Атрибуты HTTP-методов. Указывают endpoint и метод запроса.
-
-### Returns
-Атрибут, указывающий класс DTO для десериализации ответа.
-
-### Path, Query, Body, Header, Ignore
-Атрибуты для маппинга свойств запроса в HTTP. Path — в URL path, Query — в query string, Body — в тело (параметр nested для вложенной структуры), Header — в заголовок, Ignore — не отправлять. По умолчанию (convention): {placeholder} → path, GET → query, POST → body, private → ignore. Атрибуты поддерживают кастомные имена (#[Query('custom')]) и параметры (arrayFormat, nullable, nested).
-
-### Validate (атрибут)
-Атрибут для валидации свойств запроса перед отправкой. Принимает строку Laravel validation rules и опциональный message. Пример: #[Validate('required|regex:/^[а-яёА-ЯЁ]+/', message: 'Только кириллица')]. SDK собирает правила, вызывает Validator, при ошибке — не отправляет запрос.
-
-### Label (атрибут)
-Атрибут для человекочитаемого имени поля в сообщениях валидации. Пример: #[Label('Фамилия')]. Используется с плейсхолдером :field в сообщениях.
-
-### About (атрибут)
-Атрибут для бизнес-описания DTO-поля в документации, анализе и export tooling.
-Минимально требует только `title`; остальные поля (`description`, `example`,
-`examples`, `format`, `nullableReason`, `note`) опциональны.
-
-`About` не описывает техническую схему поля: тип, nullable, enum, nested DTO,
-external field name и casts извлекаются из PHP-типа и data-transfer атрибутов.
-
-Общее правило заполнения: не придумывать значения. Optional-поля заполняются только
-по явному контракту провайдера, документации, пользовательскому описанию или
-проверенному анализу. Если данных недостаточно, поле остаётся `null`.
-
-`example` может быть scalar, JSON-строкой или `array`. Строка остаётся буквальным
-примером и не должна автоматически парситься как JSON.
-
-### ValidationError
-Value Object ошибки валидации. Содержит: field (имя поля), rule (правило), message (сообщение), input (переданное значение).
-
-### validationMessages()
-Статический метод в классе запроса для кастомных сообщений валидации. Возвращает массив ['rule' => 'message']. Приоритет: атрибут message > метод > дефолты Laravel.
-
-### BeforeSend, AfterResponse, BeforeHydrate, AfterHydrate (атрибуты)
-Атрибуты для подключения переиспользуемых классов-обработчиков к хукам жизненного цикла. Принимают класс обработчика.
-
-### QueryArrayFormat
-Namespace: `Brahmic\ApiSutra\Enums\Http\QueryArrayFormat`.
-Enum форматов сериализации массивов в query string. Brackets — `ids[]=1&ids[]=2`, Indices — `ids[0]=1&ids[1]=2`, Comma — `ids=1,2`, Repeat — `ids=1&ids=2`. Настраивается в ClientConfig (default) или на свойстве (#[Query(arrayFormat: ...)]).
-
-### serializeNulls
-Параметр клиентского request-level конфига. Определяет отправлять ли `null`-значения для request/query поведения. Для DX DTO null policy рекомендуется через `DtoSerializationProfile`, а для wire body — через `wireBodySerializationPolicy`. Переопределяется на свойстве через `#[Query(nullable: true)]`.
+[Все термины](README.md).

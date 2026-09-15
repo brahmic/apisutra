@@ -3,6 +3,8 @@
 /.workflow export-ignore
 /.agents export-ignore
 /AGENTS.md export-ignore
+/CONTRIBUTING.md export-ignore
+/development export-ignore
 /tests export-ignore
 /.github export-ignore
 /.phpunit.cache export-ignore

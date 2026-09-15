@@ -1,0 +1,22 @@
+FILE: ...ckages/brahmic/apisutra/tests/Support/standalone-hydration-rules-smoke.php
+--------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 62 | WARNING | Line exceeds 120 characters; contains 130 characters
+--------------------------------------------------------------------------------
+
+
+FILE: ...ome/dev/www/packages/brahmic/apisutra/tests/Integration/Laravel/verify.php
+--------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 3 WARNINGS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+  1 | WARNING | A file should declare new symbols (classes, functions,
+    |         | constants, etc.) and cause no other side effects, or it should
+    |         | execute logic with side effects, but should not do both. The
+    |         | first symbol is defined on line 28 and the first side effect is
+    |         | on line 25.
+ 58 | WARNING | Line exceeds 120 characters; contains 187 characters
+ 78 | WARNING | Line exceeds 120 characters; contains 124 characters
+--------------------------------------------------------------------------------
+
+Time: 54ms; Memory: 10MB

@@ -1,84 +1,30 @@
 # Документация ApiSutra
 
-Изменения совместимости: [миграция на v0.2.0-alpha.1](guides/migration.md).
+Этот комплект предназначен для пользователя пакета: автора SDK внешнего API
+и разработчика приложения, которое использует такой SDK.
 
-Готовые ссылки и изоляция credentials: [Внешние и подписанные URL](guides/external-urls.md).
+## Начать с задачи
 
-ApiSutra — фреймворк для построения API‑клиентов на PHP. Он объединяет
-декларативные запросы и DTO через атрибуты, унифицированный pipeline
-выполнения и расширяемость через extensions. Пакет ориентирован на Laravel,
-но не требует его для работы: контейнер опционален, транспорт можно подключить
-в любом окружении.
+- [Первый запуск](guides/quickstart.md) — исполняемый пример без сети.
+- [Создать SDK](start/create-sdk.md).
+- [Добавить операцию](start/add-operation.md).
+- [Описать DTO](start/describe-dto.md).
+- [Использовать готовый SDK](start/use-sdk.md).
+- [Диагностировать проблему](start/diagnose.md).
 
-## Ключевая идея
-ApiSutra делает SDK‑уровень предсказуемым: вы описываете запросы, DTO и
-поведение декларативно, а инфраструктура (auth, cache, retry, rate‑limit,
-pagination) работает единообразно для всех клиентов. Это не HTTP‑клиент
-«сам по себе», а каркас для SDK‑клиентов и провайдеров данных, который
-минимизирует ручной glue‑код и поддерживает единый стиль интеграций.
+[Все точки входа](start/README.md) задают порядок и критерии результата.
+При передаче работы ИИ-агенту используйте [карточку задания](start/agent.md).
 
-## Что такое провайдер
-В контексте ApiSutra «провайдер» — это конкретный SDK‑клиент для внешнего API.
-Он включает набор запросов, DTO и настройки клиента, а также правила поведения
-(auth, retry, rate‑limit, pagination) и соглашения интеграции. Провайдер
-упаковывает все детали внешнего API в единый, типизированный интерфейс,
-который можно переиспользовать в разных проектах.
+## Найти подробности
 
-## Для кого и зачем
-Если вы создаёте SDK‑клиентов внешних API (провайдеров данных), ApiSutra помогает:
-- быстро описывать запросы и ответы без ручной сериализации
-- централизованно управлять auth, кешем, retry, rate‑limit и пагинацией
-- получать единый формат ошибок и результатов
-- наращивать функционал через расширения без модификации ядра
-- держать консистентность между командами и сервисами
+| Раздел | Для чего он нужен |
+| --- | --- |
+| [Руководства](guides/README.md) | Выполнить задачу с примером и проверить результат |
+| [Справочник](reference/README.md) | Узнать точные правила API, приоритеты и ограничения |
+| [Словарь](glossary/README.md) | Понять термин и перейти к его контракту |
+| [Примеры](example/README.md) | Запустить опубликованный код и изучить раскладку SDK |
+| [Миграция](migration/README.md) | Подготовить SDK к изменению версии |
 
-## Что есть «из коробки»
-- атрибуты для HTTP, request/response и DTO‑маппинга
-- [внешние правила DTO](guides/hydration-rules.md): модели без атрибутов, strict, extras и sourcePath
-- каноническая DTO DX-сериализация через `toArray()` и отдельный safe wire contract для outbound body
-- pipeline с хуками, retry, rate‑limit, кешированием и временем ожидания
-- pre-serialize enrichment request parts (provider credentials в body/query/form)
-- unified continuation token DX через pluggable extractor в `resolved()`/`ResultHandle`
-- unified provider async-await DX: `ContinuationMode`, `ContinuationResult`, `await()/awaitByToken()`
-- пагинация и коллекции результатов
-- batch и pool; фактическая конкурентность I/O зависит от транспорта
-- мегаклиент для мультисервисных интеграций
-- тестовые инструменты (fake, record/playback, fixtures)
-- интеграция с Laravel и auto‑detect контейнера
-
-## Границы и требования
-- транспорт не навязывается: используется `TransportInterface`
-- адаптер `HttpTransport` опирается на PSR‑18 и PSR‑17 при необходимости
-- в Laravel транспорт может быть подставлен автоматически через контейнер
-- контейнер опционален: клиент можно передать явно; для Validate нужна фабрика валидации
-- для внешнего кеша и одиночного приблизительного счётчика лимитов можно передать
-  PSR-16 store; строгий совместный учёт между workers предоставляет необязательный
-  [Redis backend](guides/redis-rate-limit.md).
-- multipart‑загрузка требует `guzzlehttp/psr7`
-- PHP 8.4+, акцент на неизменяемость и строгую типизацию
-
-## Как читать документацию
-- Быстрый старт: [Guides](./guides/README.md) → Quickstart
-- Каноническая DTO hydration/serialization модель: [Guides](./guides/dto.md), [Serialization](./guides/serialization.md) и [ClientConfig Serialization](./guides/client-config/serialization.md)
-- Модели без атрибутов и правила клиента: [Внешние правила гидратации](guides/hydration-rules.md)
-- Анализ провайдера: [Анализ провайдера](./guides/provider-analysis.md)
-- Методология провайдера: [Методология провайдера](./guides/provider-methodology.md)
-- Мультисервисная архитектура: [Мегаклиент](./guides/megaclient.md)
-- Стратегия версий: [Версионирование сервисов](./guides/versioning.md)
-- Архитектура и поток выполнения: [Technical](./technical/README.md)
-- Термины, сущности и ссылки: [Glossary](./glossary/README.md)
-- Прикладные сценарии: [Guides](./guides/README.md) → Use‑cases, Batch, Pagination
-- Long-running continuation token: [Guides](./guides/continuation-token.md)
-- Provider async-await: [Guides](./guides/provider-async-await.md)
-
-## Основные разделы
-
-- [Guides](./guides/README.md) — практические инструкции
-- [Примеры](./example/) — примеры выполнения запросов и оформления документации
-- [Technical](./technical/README.md) — обзор архитектуры и потоков
-- [Glossary](./glossary/README.md) — базовые определения
-
-## Правила структуры
-- Полные перечни: `guides/attributes/*` и `guides/client-config/*`.
-- Гайды содержат краткие примеры и ссылки на «базу».
-- Технические разделы — обзорные, без длинных списков параметров.
+Изменение ApiSutra, её src, тестов и CI описано в отдельном
+[руководстве разработчика пакета](https://github.com/brahmic/apisutra/blob/master/CONTRIBUTING.md).
+Подключение поддержанных casts, hooks и extensions остаётся пользовательской задачей.

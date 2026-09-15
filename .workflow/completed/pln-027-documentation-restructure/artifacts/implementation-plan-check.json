@@ -1,0 +1,12 @@
+{
+  "planning_revision": "audience-separation-2026-09-15",
+  "baseline_commit": "cddd036a0955e3379a244355fe23d3e888b1ba4a",
+  "verified_sha256": 101,
+  "mapped_source_files": 90,
+  "planned_markdown_files_without_redirects": 138,
+  "planned_user_documents": 128,
+  "planned_developer_documents": 10,
+  "plan_documents": 10,
+  "local_links": 326,
+  "errors": []
+}

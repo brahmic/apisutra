@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    phpVersion: 80400
+    paths:
+        - ../../docs/example
+    bootstrapFiles:
+        - ../../docs/example/sdk/bootstrap.php
+    tmpDir: ../../.phpstan-cache/docs
+    parallel:
+        maximumNumberOfProcesses: 1

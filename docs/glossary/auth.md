@@ -1,43 +1,18 @@
 # Аутентификация
 
-## AuthenticatorInterface
-Интерфейс стратегии аутентификации. Методы: authenticate (добавить auth к запросу), shouldRefresh (нужно ли обновить токен), getRefreshRequest (запрос для получения токена), processTokenResponse (обработать ответ с токеном).
+| Термин | Значение | Подробнее |
+| --- | --- | --- |
+| <a id="authenticatorinterface"></a> AuthenticatorInterface | Интерфейс стратегии аутентификации. | [Контракт](../reference/auth/strategies.md) |
+| <a id="apikeyauthenticator"></a> ApiKeyAuthenticator | Готовая реализация для API Key. | [Контракт](../reference/auth/strategies.md) |
+| <a id="basicauthenticator"></a> BasicAuthenticator | Готовая реализация для Basic Auth. | [Контракт](../reference/auth/strategies.md) |
+| <a id="bearerauthenticator"></a> BearerAuthenticator | Готовая реализация для статичного Bearer токена. | [Контракт](../reference/auth/strategies.md) |
+| <a id="authorizationschemeauthenticator"></a> AuthorizationSchemeAuthenticator | Готовая реализация для схем `Authorization: Scheme key="value", ...`. | [Контракт](../reference/auth/strategies.md) |
+| <a id="authorizationparamsproviderinterface"></a> AuthorizationParamsProviderInterface | Контракт для генерации параметров `Authorization` на основе PreparedRequest. | [Контракт](../reference/auth/strategies.md) |
+| <a id="authorizationparamsformatterinterface"></a> AuthorizationParamsFormatterInterface | Контракт форматтера параметров `Authorization` (quoted/comma, query-like и т.п.). | [Контракт](../reference/auth/strategies.md) |
+| <a id="tokenauthenticator"></a> TokenAuthenticator | Реализация для динамических токенов (refresh по сроку жизни). | [Контракт](../reference/auth/tokens.md) |
+| <a id="hmacauthenticator"></a> HmacAuthenticator | Реализация HMAC‑подписи запросов. | [Контракт](../reference/auth/strategies.md) |
+| <a id="noauth-атрибут"></a> NoAuth (атрибут) | Атрибут для публичных endpoints. | [Контракт](../reference/auth/strategies.md) |
+| <a id="withoutauth"></a> withoutAuth() | Метод AbstractRequest. | [Контракт](../reference/auth/strategies.md) |
+| <a id="cacheawareinterface"></a> CacheAwareInterface | Интерфейс-маркер для authenticator'ов, которым нужен кеш. | [Контракт](../reference/auth/tokens.md) |
 
-## ApiKeyAuthenticator
-Готовая реализация для API Key. Добавляет ключ в header или query параметр.
-
-## BasicAuthenticator
-Готовая реализация для Basic Auth. Добавляет Authorization header с base64(username:password).
-
-## BearerAuthenticator
-Готовая реализация для статичного Bearer токена.
-
-## AuthorizationSchemeAuthenticator
-Готовая реализация для схем `Authorization: Scheme key="value", ...`.
-Параметры могут быть статическими или вычисляться через AuthorizationParamsProviderInterface.
-Формат параметров задаётся через AuthorizationParamsFormatterInterface.
-
-## AuthorizationParamsProviderInterface
-Контракт для генерации параметров `Authorization` на основе PreparedRequest.
-
-## AuthorizationParamsFormatterInterface
-Контракт форматтера параметров `Authorization` (quoted/comma, query-like и т.п.).
-
-## TokenAuthenticator
-Реализация для динамических токенов (refresh по сроку жизни). Использует CacheAwareInterface.
-Ожидает refresh‑запрос (`refreshRequestClass`) и DTO с полями `accessToken`/`expiresIn`.
-
-## HmacAuthenticator
-Реализация HMAC‑подписи запросов. Генерирует подпись на основе тела/метода/времени.
-
-## NoAuth (атрибут)
-Атрибут для публичных endpoints. SDK пропускает аутентификацию для запросов с этим атрибутом.
-
-## withoutAuth()
-Метод AbstractRequest. Отключает аутентификацию в рантайме для конкретного вызова.
-
-## CacheAwareInterface
-Интерфейс-маркер для authenticator'ов, которым нужен кеш. SDK автоматически вызывает setCache() при инициализации клиента, инжектя кеш из ClientConfig. Метод getCacheKey() задаёт ключ хранения токена.
-
-## Примеры
-См. `docs/guides/auth.md` — есть примеры для всех встроенных аутентификаторов.
+[Все термины](README.md).

@@ -1,0 +1,771 @@
+{
+  "docs/guides/sdk/release.md": [
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/example/documentation-guide.md",
+    "docs/guides/provider-checklist.md"
+  ],
+  "docs/reference/results/handles.md": [
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md"
+  ],
+  "docs/guides/recipes/pagination.md": [
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/guides/use-cases.md"
+  ],
+  "docs/guides/recipes/files.md": [
+    "docs/example/request-use-cases.md",
+    "docs/example/request-use-cases.md",
+    "docs/guides/use-cases.md"
+  ],
+  "docs/reference/execution/transport.md": [
+    "docs/example/request-use-cases.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md",
+    "docs/guides/transport.md"
+  ],
+  "docs/reference/attributes/README.md": [
+    "docs/guides/attributes/README.md",
+    "docs/guides/attributes/README.md",
+    "docs/guides/attributes/README.md"
+  ],
+  "docs/reference/attributes/behavior.md": [
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md",
+    "docs/guides/attributes/behavior.md"
+  ],
+  "docs/reference/attributes/hydration.md": [
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md",
+    "docs/guides/attributes/data-transfer.md"
+  ],
+  "docs/reference/attributes/hooks.md": [
+    "docs/guides/attributes/hooks.md",
+    "docs/guides/attributes/hooks.md",
+    "docs/guides/attributes/hooks.md",
+    "docs/guides/attributes/hooks.md",
+    "docs/guides/attributes/hooks.md",
+    "docs/guides/attributes/hooks.md"
+  ],
+  "docs/reference/attributes/http.md": [
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md",
+    "docs/guides/attributes/http.md"
+  ],
+  "docs/reference/attributes/request.md": [
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md",
+    "docs/guides/attributes/request.md"
+  ],
+  "docs/reference/attributes/response.md": [
+    "docs/guides/attributes/response.md",
+    "docs/guides/attributes/response.md",
+    "docs/guides/attributes/response.md",
+    "docs/guides/attributes/response.md",
+    "docs/guides/attributes/response.md",
+    "docs/guides/attributes/response.md"
+  ],
+  "docs/reference/client/configuration.md": [
+    "docs/guides/client-config/README.md",
+    "docs/guides/client-config/README.md"
+  ],
+  "docs/reference/files/archives.md": [
+    "docs/guides/client-config/archive.md",
+    "docs/guides/client-config/archive.md",
+    "docs/guides/client-config/archive.md",
+    "docs/guides/client-config/archive.md",
+    "docs/guides/client-config/archive.md",
+    "docs/guides/files.md"
+  ],
+  "docs/reference/auth/strategies.md": [
+    "docs/guides/client-config/auth.md",
+    "docs/guides/client-config/auth.md",
+    "docs/guides/client-config/auth.md",
+    "docs/guides/client-config/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md"
+  ],
+  "docs/reference/auth/tokens.md": [
+    "docs/guides/client-config/auth.md",
+    "docs/guides/client-config/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/auth.md"
+  ],
+  "docs/reference/auth/credentials.md": [
+    "docs/guides/client-config/auth.md",
+    "docs/guides/client-config/auth.md",
+    "docs/guides/auth.md",
+    "docs/guides/external-urls.md",
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/reference/execution/cache.md": [
+    "docs/guides/client-config/cache.md",
+    "docs/guides/client-config/cache.md",
+    "docs/guides/client-config/cache.md",
+    "docs/guides/client-config/cache.md",
+    "docs/guides/client-config/cache.md",
+    "docs/guides/client-config/cache.md",
+    "docs/guides/client-config/cache.md"
+  ],
+  "docs/reference/client/construction.md": [
+    "docs/guides/client-config/container-provider.md",
+    "docs/guides/client-config/container-provider.md",
+    "docs/guides/client-config/container-provider.md",
+    "docs/guides/client-config/container-provider.md",
+    "docs/guides/client-config/container-provider.md",
+    "docs/guides/client-config/container-provider.md",
+    "docs/guides/megaclient.md"
+  ],
+  "docs/reference/extensions/extensions.md": [
+    "docs/guides/client-config/extensions.md",
+    "docs/guides/client-config/extensions.md",
+    "docs/guides/client-config/extensions.md",
+    "docs/guides/client-config/extensions.md",
+    "docs/guides/extensions.md",
+    "docs/guides/extensions.md",
+    "docs/guides/extensions.md",
+    "docs/guides/extensions.md",
+    "docs/guides/extensions.md"
+  ],
+  "docs/reference/results/observability.md": [
+    "docs/guides/client-config/observability.md",
+    "docs/guides/client-config/observability.md",
+    "docs/guides/client-config/observability.md",
+    "docs/guides/client-config/observability.md",
+    "docs/guides/client-config/observability.md",
+    "docs/guides/logging.md",
+    "docs/guides/logging.md",
+    "docs/guides/logging.md",
+    "docs/guides/logging.md",
+    "docs/guides/logging.md",
+    "docs/guides/logging.md",
+    "docs/guides/logging.md"
+  ],
+  "docs/reference/execution/pagination.md": [
+    "docs/guides/client-config/pagination.md",
+    "docs/guides/client-config/pagination.md",
+    "docs/guides/client-config/pagination.md",
+    "docs/guides/client-config/pagination.md",
+    "docs/guides/client-config/pagination.md",
+    "docs/guides/client-config/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md",
+    "docs/guides/pagination.md"
+  ],
+  "docs/reference/execution/batch-pool.md": [
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/client-config/pool.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/batch.md",
+    "docs/guides/use-cases.md",
+    "docs/guides/use-cases.md"
+  ],
+  "docs/reference/execution/rate-limit.md": [
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/client-config/rate-limit.md",
+    "docs/guides/retries-rate-limit.md",
+    "docs/guides/retries-rate-limit.md"
+  ],
+  "docs/reference/results/errors.md": [
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md",
+    "docs/guides/errors.md"
+  ],
+  "docs/reference/execution/continuation-await.md": [
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/continuation-token.md",
+    "docs/guides/continuation-token.md",
+    "docs/guides/continuation-token.md",
+    "docs/guides/continuation-token.md",
+    "docs/guides/continuation-token.md",
+    "docs/guides/errors.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md"
+  ],
+  "docs/reference/execution/continuation-state.md": [
+    "docs/guides/client-config/responses-errors.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md"
+  ],
+  "docs/reference/execution/retry.md": [
+    "docs/guides/client-config/retry.md",
+    "docs/guides/client-config/retry.md",
+    "docs/guides/client-config/retry.md",
+    "docs/guides/client-config/retry.md",
+    "docs/guides/retries-rate-limit.md",
+    "docs/guides/retries-rate-limit.md",
+    "docs/guides/retries-rate-limit.md",
+    "docs/guides/retries-rate-limit.md",
+    "docs/guides/retries-rate-limit.md",
+    "docs/guides/retries-rate-limit.md"
+  ],
+  "docs/reference/serialization/request-parts.md": [
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/naming-strategy.md",
+    "docs/guides/naming-strategy.md",
+    "docs/guides/naming-strategy.md",
+    "docs/guides/naming-strategy.md",
+    "docs/guides/naming-strategy.md",
+    "docs/guides/naming-strategy.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md"
+  ],
+  "docs/reference/serialization/casts.md": [
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md",
+    "docs/guides/casts.md"
+  ],
+  "docs/reference/serialization/body.md": [
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md"
+  ],
+  "docs/reference/serialization/dto-output.md": [
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/dto.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md"
+  ],
+  "docs/reference/dto/field-rules.md": [
+    "docs/guides/client-config/serialization.md",
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/reference/execution/deadlines.md": [
+    "docs/guides/client-config/timeouts-delay.md",
+    "docs/guides/client-config/timeouts-delay.md",
+    "docs/guides/client-config/timeouts-delay.md",
+    "docs/guides/client-config/timeouts-delay.md",
+    "docs/guides/client-config/timeouts-delay.md",
+    "docs/guides/client-config/timeouts-delay.md",
+    "docs/guides/retries-rate-limit.md"
+  ],
+  "docs/reference/dto/lifecycle.md": [
+    "docs/guides/casts.md",
+    "docs/guides/dto.md"
+  ],
+  "docs/reference/client/discovery.md": [
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md",
+    "docs/guides/client-discovery.md"
+  ],
+  "docs/reference/dto/collections.md": [
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/collections.md",
+    "docs/guides/dto.md"
+  ],
+  "docs/reference/dto/models.md": [
+    "docs/guides/dto.md",
+    "docs/guides/dto.md",
+    "docs/guides/dto.md"
+  ],
+  "docs/reference/dto/scalars.md": [
+    "docs/guides/dto.md",
+    "docs/guides/hydration-rules.md",
+    "docs/guides/serialization.md"
+  ],
+  "docs/reference/dto/defaults.md": [
+    "docs/guides/dto.md",
+    "docs/guides/dto.md",
+    "docs/guides/dto.md"
+  ],
+  "docs/reference/dto/profiles.md": [
+    "docs/guides/dto.md"
+  ],
+  "docs/reference/dto/shapes.md": [
+    "docs/guides/dto.md",
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/reference/client/validation.md": [
+    "docs/guides/dto.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md",
+    "docs/guides/validation.md"
+  ],
+  "docs/guides/dto/attribute-models.md": [
+    "docs/guides/dto.md"
+  ],
+  "docs/reference/dto/diagnostics.md": [
+    "docs/guides/errors.md",
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/guides/recipes/extensions.md": [
+    "docs/guides/extensions.md"
+  ],
+  "docs/reference/serialization/uri-query.md": [
+    "docs/guides/external-urls.md",
+    "docs/guides/external-urls.md",
+    "docs/guides/external-urls.md",
+    "docs/guides/external-urls.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md",
+    "docs/guides/serialization.md"
+  ],
+  "docs/reference/files/uploads.md": [
+    "docs/guides/files.md",
+    "docs/guides/files.md"
+  ],
+  "docs/reference/files/downloads.md": [
+    "docs/guides/files.md",
+    "docs/guides/files.md"
+  ],
+  "docs/reference/extensions/hooks.md": [
+    "docs/guides/hooks.md",
+    "docs/guides/hooks.md",
+    "docs/guides/hooks.md",
+    "docs/guides/hooks.md",
+    "docs/guides/hooks.md",
+    "docs/guides/hooks.md"
+  ],
+  "docs/guides/dto/plain-models.md": [
+    "docs/guides/hydration-rules.md",
+    "docs/guides/hydration-rules.md",
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/reference/dto/variants.md": [
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/reference/dto/scope.md": [
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/reference/dto/extras.md": [
+    "docs/guides/hydration-rules.md"
+  ],
+  "docs/reference/serialization/receiver-output.md": [
+    "docs/guides/hydration-rules.md",
+    "docs/guides/serialization.md"
+  ],
+  "docs/reference/integrations/laravel.md": [
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md",
+    "docs/guides/laravel.md"
+  ],
+  "docs/reference/testing/live.md": [
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/testing.md"
+  ],
+  "docs/guides/testing/live.md": [
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/live-testing.md",
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/guides/integration/multi-service.md": [
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/megaclient.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/use-cases.md"
+  ],
+  "docs/reference/client/catalogs.md": [
+    "docs/guides/megaclient.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md",
+    "docs/guides/provider-catalogs.md"
+  ],
+  "docs/migration/unreleased.md": [
+    "docs/guides/migration.md",
+    "docs/guides/migration.md",
+    "docs/guides/migration.md"
+  ],
+  "docs/migration/v0.2.0-alpha.1.md": [
+    "docs/guides/migration.md",
+    "docs/guides/migration.md"
+  ],
+  "docs/reference/client/operation-inventory.md": [
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md",
+    "docs/guides/operation-inventory.md"
+  ],
+  "docs/guides/sdk/analysis.md": [
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-analysis.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/guides/recipes/continuation.md": [
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/provider-async-await.md",
+    "docs/guides/use-cases.md"
+  ],
+  "docs/guides/sdk/coverage.md": [
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-checklist.md",
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/guides/sdk/design.md": [
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/guides/sdk/first-operation.md": [
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md",
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/guides/testing/unit.md": [
+    "docs/guides/provider-methodology.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md"
+  ],
+  "docs/start/create-sdk.md": [
+    "docs/guides/provider-methodology.md"
+  ],
+  "docs/reference/integrations/redis.md": [
+    "docs/guides/redis-rate-limit.md",
+    "docs/guides/redis-rate-limit.md",
+    "docs/guides/redis-rate-limit.md",
+    "docs/guides/redis-rate-limit.md",
+    "docs/guides/redis-rate-limit.md",
+    "docs/guides/redis-rate-limit.md"
+  ],
+  "docs/reference/request/composition.md": [
+    "docs/guides/request-pipeline.md",
+    "docs/guides/request-pipeline.md",
+    "docs/guides/request-pipeline.md",
+    "docs/guides/request-pipeline.md",
+    "docs/guides/request-pipeline.md"
+  ],
+  "docs/reference/request/declaration.md": [
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md",
+    "docs/guides/requests.md"
+  ],
+  "docs/reference/client/resources.md": [
+    "docs/guides/resources.md",
+    "docs/guides/resources.md",
+    "docs/guides/resources.md",
+    "docs/guides/resources.md",
+    "docs/guides/resources.md",
+    "docs/guides/resources.md",
+    "docs/guides/resources.md"
+  ],
+  "docs/reference/testing/mocking.md": [
+    "docs/guides/testing.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md",
+    "docs/guides/testing.md"
+  ],
+  "docs/reference/testing/fixtures.md": [
+    "docs/guides/testing.md",
+    "docs/guides/testing.md"
+  ],
+  "development/testing.md": [
+    "docs/guides/testing.md",
+    "docs/guides/testing.md"
+  ],
+  "docs/guides/troubleshooting.md": [
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md",
+    "docs/guides/troubleshooting.md"
+  ],
+  "docs/start/README.md": [
+    "docs/guides/use-cases.md"
+  ],
+  "docs/reference/client/versioning.md": [
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md",
+    "docs/guides/versioning.md"
+  ],
+  "development/architecture.md": [
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture.md"
+  ],
+  "development/attributes.md": [
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md",
+    "docs/technical/attributes.md"
+  ],
+  "development/caching-retry.md": [
+    "docs/technical/caching-retry.md",
+    "docs/technical/caching-retry.md",
+    "docs/technical/caching-retry.md",
+    "docs/technical/caching-retry.md",
+    "docs/technical/caching-retry.md"
+  ],
+  "development/error-handling.md": [
+    "docs/technical/error-handling.md",
+    "docs/technical/error-handling.md",
+    "docs/technical/error-handling.md",
+    "docs/technical/error-handling.md"
+  ],
+  "development/execution.md": [
+    "docs/technical/execution.md",
+    "docs/technical/execution.md",
+    "docs/technical/execution.md",
+    "docs/technical/execution.md",
+    "docs/technical/execution.md",
+    "docs/technical/execution.md"
+  ],
+  "development/pipeline.md": [
+    "docs/technical/pipeline.md",
+    "docs/technical/pipeline.md",
+    "docs/technical/pipeline.md",
+    "docs/technical/pipeline.md",
+    "docs/technical/pipeline.md"
+  ]
+}

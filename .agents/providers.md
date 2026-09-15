@@ -11,26 +11,27 @@
 
 - До реализации зафиксируйте контракт API: протокол, аутентификацию, статусы,
   ошибки, DTO и используемые возможности. Порядок работы:
-  [анализ провайдера](../docs/guides/provider-analysis.md),
-  [методология](../docs/guides/provider-methodology.md),
-  [чеклист](../docs/guides/provider-checklist.md).
+  [анализ провайдера](../docs/guides/sdk/analysis.md),
+  [методология](../docs/start/create-sdk.md),
+  [чеклист](../docs/guides/sdk/coverage.md).
 - Соблюдайте владение сущностями: запрос и его собственные DTO/enum держите
   вместе внутри ресурса. Общие типы ресурса остаются в ресурсе;
   `Domain/` предназначен для типов, используемых на уровне всего провайдера.
   Полная раскладка приведена в разделе
-  [«Структура и владение сущностями»](../docs/guides/provider-methodology.md#21-структура-и-владение-сущностями).
+  [«Структура и владение сущностями»](../docs/guides/sdk/design.md#структура-и-владение-сущностями).
 - Разделяйте бизнес-данные DTO и служебные данные результата: ошибки, трассировку,
   continuation token и runtime meta. Вводите provider-specific поля только
   при подтверждении контрактом API; это относится и к `providerTraceId`.
-- Задавайте DTO-семантику в DTO и профилях, а транспортные политики — в настройках
-  клиента. Различайте DX-представление и формат, который принимает API.
-  Подробности — в [настройках сериализации](../docs/guides/client-config/serialization.md).
+- Задавайте входную DTO-семантику атрибутами/профилями либо внешним HydrationRules
+  для plain-моделей. Внутри cast/provider сохраняйте набор через HydrationScope.
+  Транспортные политики задавайте в настройках клиента. Различайте DX-представление и формат, который принимает API.
+  Подробности — в [настройках сериализации](../docs/reference/serialization/README.md).
 - Сохраняйте границы `OperationDescriptor`, статических каталогов и runtime meta.
   Каталоги должны быть read-only, без I/O и с `generatedAt` в метаданных;
   общие интерфейсы ядра не зависят от конкретного провайдера.
 - Проверяйте сериализацию/гидрацию DTO и маппинг ошибок/статусов. Остальные
   сценарии проверяйте по используемым возможностям SDK; минимум и расширения
-  описаны в [методологии тестирования](../docs/guides/provider-methodology.md#6-минимальный-набор-тестов).
+  описаны в [методологии тестирования](../docs/guides/testing/unit.md#проверить-операцию-sdk).
 
 ## Рекомендации
 
@@ -49,12 +50,12 @@
 
 | Условие | Что использовать и где читать |
 | --- | --- |
-| Квоты и повторные попытки | Rate-limit ограничивает любые запросы; retry включайте при подтверждённой безопасности повтора. [Retry и Rate Limit](../docs/guides/retries-rate-limit.md) |
-| Laravel-конфигурация | Рекомендуется `config/apisutra/<provider>.php`. Совместимость со старыми ключами нужна только для существующих потребителей; порядок и завершение миграции описаны в [Laravel-интеграции](../docs/guides/laravel.md#backward-compatibility). |
-| Несколько API с разными настройками или версиями | [Мегаклиент](../docs/guides/megaclient.md), [версионирование](../docs/guides/versioning.md); явно выбранная версия не допускает fallback. |
-| Пагинация, batch или асинхронные операции | [Пагинация](../docs/guides/pagination.md), [batch](../docs/guides/batch.md), [continuation token](../docs/guides/continuation-token.md), [provider async-await](../docs/guides/provider-async-await.md) |
-| Метаданные и агрегированное описание SDK | [Ошибки](../docs/guides/errors.md), [статические каталоги](../docs/guides/provider-catalogs.md), [Operation Inventory](../docs/guides/operation-inventory.md) |
-| Специальные формы данных, протокола или файлов | [DTO](../docs/guides/dto.md), [касты](../docs/guides/casts.md), [запросы](../docs/guides/requests.md), [атрибуты](../docs/guides/attributes/README.md), [файлы](../docs/guides/files.md) |
-| Проверка контракта на реальном API | [Live-тестирование](../docs/guides/live-testing.md); состав проверок определяется особенностями API. |
+| Квоты и повторные попытки | Rate-limit ограничивает любые запросы; retry включайте при подтверждённой безопасности повтора. [Retry и Rate Limit](../docs/reference/execution/README.md) |
+| Laravel-конфигурация | Рекомендуется `config/apisutra/<provider>.php`. Совместимость со старыми ключами нужна только для существующих потребителей; порядок и завершение миграции описаны в [Laravel-интеграции](../docs/reference/integrations/laravel.md#backward-compatibility). |
+| Несколько API с разными настройками или версиями | [Мегаклиент](../docs/guides/integration/multi-service.md), [версионирование](../docs/reference/client/versioning.md); явно выбранная версия не допускает fallback. |
+| Пагинация, batch или асинхронные операции | [Пагинация](../docs/reference/execution/pagination.md), [batch](../docs/reference/execution/batch-pool.md), [continuation token](../docs/reference/execution/continuation-await.md), [provider async-await](../docs/guides/recipes/continuation.md) |
+| Метаданные и агрегированное описание SDK | [Ошибки](../docs/reference/results/handles.md), [статические каталоги](../docs/reference/client/catalogs.md), [Operation Inventory](../docs/reference/client/operation-inventory.md) |
+| Специальные формы данных, протокола или файлов | [DTO](../docs/start/describe-dto.md), [касты](../docs/reference/serialization/casts.md), [запросы](../docs/glossary/requests.md), [атрибуты](../docs/reference/attributes/README.md), [файлы](../docs/glossary/files.md) |
+| Проверка контракта на реальном API | [Live-тестирование](../docs/reference/testing/live.md); состав проверок определяется особенностями API. |
 
 Для оформления руководств и примеров также действуют [правила документации](documentation.md).

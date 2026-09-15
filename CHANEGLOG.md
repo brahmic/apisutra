@@ -2,7 +2,15 @@
 
 ## Unreleased
 
-- Добавлены [внешние правила гидратации](docs/guides/hydration-rules.md): неизменяемые
+- Перестроена документация: [маршруты пользователя](docs/start/README.md),
+  тематический [справочник](docs/reference/README.md), короткий словарь и отдельные
+  [инструкции разработчика пакета](https://github.com/brahmic/apisutra/blob/master/CONTRIBUTING.md).
+  Человек и ИИ используют одни маршруты; старые страницы-переходы удалены.
+  Quickstart запускает [опубликованный SDK](docs/example/sdk/README.md) с явной
+  конфигурацией и транспортом; добавлены исполняемые примеры rules и await, проверка
+  Laravel binding, деклараций API, навигации и поставки. Runtime API не изменён.
+
+- Добавлены [внешние правила гидратации](docs/guides/dto/plain-models.md): неизменяемые
   HydrationRules для plain DTO, mapping, strict scalar/list, вложенные формы,
   required/explicit null, defaults и extras. Клиент и standalone используют один набор;
   scoped casts/providers сохраняют его при рекурсии. Receiver исключается из исходящих
@@ -21,24 +29,24 @@
   `ContinuationAwaitException` с previous, attempts и последним HTTP-ответом,
   `ContinuationContext` и `ContinuationOutcome`. Повторный `awaitAs()` использует
   исходный Ready-payload и гидратор клиента. Конструктор `ContinuationService`
-  теперь требует гидратор. [Миграция и контракт](docs/guides/provider-async-await.md#миграция-с-эвристического-ожидания).
+  теперь требует гидратор. [Миграция и контракт](docs/reference/execution/continuation-await.md#миграция-с-эвристического-ожидания).
 
 - Исправлена изоляция объектов в metadata cache Hydrator, DtoSerializer и Serializer:
   defaults конструктора и объектные аргументы атрибутов больше не разделяются
   между DTO и операциями одного клиента. Default вычисляется PHP только при
   отсутствии разрешённого аргумента, включая режим без кеша; лишние вызовы
   пользовательских конструкторов устранены. Намеренно переданные общие объекты
-  сохраняют идентичность. Подробнее: [defaults DTO](docs/guides/dto.md#значения-по-умолчанию-и-изоляция-объектов)
-  и [аргументы Cast](docs/guides/casts.md#объектные-аргументы-атрибутов).
+  сохраняют идентичность. Подробнее: [defaults DTO](docs/reference/dto/lifecycle.md#значения-по-умолчанию-и-изоляция-объектов)
+  и [аргументы Cast](docs/reference/dto/lifecycle.md#объектные-аргументы-атрибутов).
 - Исправлен одиночный `#[Nested]` из JSON: вложенный DTO проходит обычную
   гидратацию, ошибки получают путь поля без фиктивного индекса списка.
   Неоднозначные декларации отклоняются с `ConfigurationException`;
-  [правила объекта и коллекции](docs/guides/attributes/data-transfer.md#одиночный-объект-и-коллекция).
+  [правила объекта и коллекции](docs/reference/attributes/hydration.md#nested).
 - Структурированные ошибки `DefaultValue` provider включают имя текущего поля:
   например, `data.child.count` вместо `data.child`.
   Закреплены проверки через provider для `Present` и совместного `Null`/`Present`;
-  [контракт и миграция путей](docs/guides/attributes/data-transfer.md#provider-для-найденного-значения).
-- Уточнены [источники casts](docs/guides/casts.md#регистрация-кастов).
+  [контракт и миграция путей](docs/reference/dto/defaults.md#provider-для-найденного-значения).
+- Уточнены [источники casts](docs/reference/serialization/casts.md#регистрация-кастов).
   Реестры конструктора Hydrator, клиента, global и extension по-прежнему
   не подключаются к гидратации DTO. Профили DTO и `#[Cast]` сохраняют поведение;
   публичные аргументы и зависимости не меняются.
@@ -48,7 +56,7 @@
 Предварительный выпуск с исправлениями изоляции авторизации и кеша, строгими
 контрактами данных, потоковыми файлами, общими дедлайнами и совместными квотами.
 Обновление с `v0.1.0-alpha.1` не полностью обратно совместимо:
-см. [руководство миграции](docs/guides/migration.md).
+см. [руководство миграции](docs/migration/README.md).
 
 - Добавлена MIT-лицензия; полный текст включён в дистрибутив.
 - CI проверяет PHP 8.4/8.5, locked/lowest/latest зависимости, Laravel 12,
@@ -76,7 +84,7 @@
   или прошедшая дата — 0; единицы исключения остаются секундами.
 - **Изменение совместимости:** 55/56 участвуют в уже разрешённом сетевом retry,
   включая явно safe POST; неизвестный MIME больше не превращается в `[]` или
-  случайно декодированный JSON. Подробности — в [руководстве миграции](docs/guides/migration.md).
+  случайно декодированный JSON. Подробности — в [руководстве миграции](docs/migration/README.md).
   Новых обязательных настроек, зависимостей и Laravel bindings нет.
 
 ### 2026-09-13 — совместные квоты и атомарный Redis backend
@@ -90,7 +98,7 @@
 - **Изменение совместимости:** прежнее замещение включается через
   `includeClientQuota: false`; PSR-16 store поддерживается только для одиночной
   квоты без явного backend. Атомарный учёт использует новые ключи и новые окна.
-  [Миграция и примеры](docs/guides/client-config/rate-limit.md#миграция-с-прежнего-замещения).
+  [Миграция и примеры](docs/reference/execution/rate-limit.md#миграция-с-прежнего-замещения).
 - Локальные проверки transport/timeout выполняются до расхода квот; эффективный
   таймаут учитывает ожидание и retry backoff. Ошибка Redis останавливает отправку
   без fallback или повтора неизвестного списания.
@@ -111,12 +119,11 @@
   и дистрибутив. Удалённые проверки успешно пройдены при подготовке этого выпуска.
 - Исправлено сохранение регистра escape-последовательностей подписанного path
   при нормализации новым libcurl: request target передаётся явно.
-- Добавлена единая [памятка миграции](docs/guides/migration.md). Уточнены ограничения
+- Добавлена единая [памятка миграции](docs/migration/README.md). Уточнены ограничения
   Promise/Parallel и общего PSR-16 счётчика лимитов.
 - Локально: полный suite на PHP 8.4/8.5 — 1525 passed, 5530 assertions без deprecation;
   latest-набор также проходит. Lowest проходит без падений, с deprecation старых
-  сторонних библиотек; детали и команды — в [гайде тестирования](docs/guides/testing.md).
-
+  сторонних библиотек; детали и команды — в [гайде тестирования](docs/guides/testing/unit.md).
 
 ### 2026-09-12 — ошибки пагинации, safe диагностика и запись fixtures
 
@@ -133,9 +140,9 @@
   SDK не повторяет HTTP из-за сбоя записи, даже если сама операция уже прошла успешно.
 - Duration описан в миллисекундах без изменения значений. Существующие runtime TTL,
   disabled rate limit и правила nullable/reset сохранены.
-- Миграция: учитывать [guard iterator](docs/guides/pagination.md#ошибки-защитная-остановка-и-миграция),
-  [safe limit](docs/guides/logging.md#размер-safe-debuglog) и
-  [ошибки recorder](docs/guides/testing.md#ошибки-recording-и-миграция).
+- Миграция: учитывать [guard iterator](docs/reference/execution/pagination.md#ошибки-защитная-остановка-и-миграция),
+  [safe limit](docs/reference/results/observability.md#размер-safe-debuglog) и
+  [ошибки recorder](docs/reference/testing/fixtures.md#ошибки-recording-и-миграция).
 - Проверено: 1491 passed, 34 deprecation, 5530 assertions; запись из двух процессов,
   большой JSON, standalone contracts/JSON и Laravel integration прошли.
 
@@ -145,7 +152,7 @@
   bindings сохраняются; callbacks работают только с SDK-типами и не ломают bootstrap Laravel.
 - Обычный DI сохраняет явные значения и клиента SDK-запроса. Автоматический перенос
   входящих HTTP-данных удалён; для него применяется существующая явная RequestFactory.
-  Контроллерам с прежним auto-fill нужна [миграция](docs/guides/laravel.md#миграция-с-автоматического-заполнения).
+  Контроллерам с прежним auto-fill нужна [миграция](docs/reference/integrations/laravel.md#миграция-с-автоматического-заполнения).
 - Нового обязательного конфига и runtime-зависимостей ядра нет. Добавлено отдельное
   тестовое Laravel 12 приложение: discovery, HTTP, Artisan, последовательные задания,
   два клиента, config:cache и повторный bootstrap. Octane этим не проверяется.
@@ -163,7 +170,7 @@
 - Refresh использует выполняющего клиента без обязательного setClient; отказ
   восстановления не запускает слепой повтор основной операции. Проверены async и batch/pool.
 - Пользовательским authenticator с неявной ротацией внутри повторного authenticate
-  нужна [миграция на контракт refresh](docs/guides/auth.md#восстановление-после-401-и-миграция).
+  нужна [миграция на контракт refresh](docs/reference/auth/tokens.md#восстановление-после-401-и-миграция).
 - Проверено: 1439 passed, 34 прежних deprecation, 5260 assertions; standalone auth с --no-dev.
 
 ### 2026-09-12 — корректное ожидание и ошибки rate-limit
@@ -181,7 +188,7 @@
 - Изменения совместимости: RequestException.response стал nullable; set=false больше
   не игнорируется; неположительные/непредставимые limit/period отклоняются. Новый формат
   ключей может однократно сбросить накопленную квоту, а смешанные версии считают отдельно.
-  Catch RateLimitException и retryAfter сохранены. [Контракт и миграция](docs/guides/client-config/rate-limit.md#миграция-с-прежнего-замещения).
+  Catch RateLimitException и retryAfter сохранены. [Контракт и миграция](docs/reference/execution/rate-limit.md#миграция-с-прежнего-замещения).
 - Defaults сохранены: лимитер отключён, при включении — 100/60 и Wait, без store/key.
   Новых зависимостей нет. PSR-16 store остаётся необязательным и не гарантирует атомарную
   межпроцессную квоту; без store счётчик принадлежит экземпляру клиента.
@@ -201,7 +208,7 @@
   явной проверки DTO; добавлен `resetFactory()` для сброса общего bootstrap.
 - Изменение совместимости: недоступный валидатор теперь останавливает выполнение,
   включая ручные isValid/errors; явный provider клиента имеет приоритет над общей
-  фабрикой. [Контракт и миграция](docs/guides/validation.md#миграция-и-различие-ошибок).
+  фабрикой. [Контракт и миграция](docs/reference/client/validation.md#миграция-и-различие-ошибок).
 - Проверено: обычный и перемешанный прогоны — 1323 passed, 34 deprecation,
   4460 assertions, без падений. Standalone validation и JSON/DTO работают без Illuminate.
 
@@ -219,8 +226,8 @@
   фактический тип, HTTP status и traceId. Исходный ответ доступен без debug.
 - Изменение совместимости: для перечисленных ошибок данных обновите обработку
   PHP/configuration-исключений на HydrationException / hydration_error.
-  [Правила и миграция](docs/guides/dto.md#обязательные-поля-и-ошибки-гидратации),
-  [подробная диагностика](docs/guides/errors.md#подробная-диагностика-гидратации).
+  [Правила и миграция](docs/reference/dto/defaults.md#обязательные-поля-и-ошибки-гидратации),
+  [подробная диагностика](docs/reference/dto/diagnostics.md#подробная-диагностика-гидратации).
 - Проверено: 1298 passed, 36 прежних deprecation, 4340 assertions; standalone JSON/DTO
   работает без Laravel/Guzzle HTTP Client.
 
@@ -228,10 +235,10 @@
 
 - `Returns::unwrap` больше не подставляет корень при отсутствующем пути или null.
   Отсутствующий путь и null/scalar вместо DTO дают разные причины `hydration_error`
-  с сохранённым HTTP-ответом. [Контракт и миграция](docs/guides/attributes/response.md#строгий-unwrap).
+  с сохранённым HTTP-ответом. [Контракт и миграция](docs/reference/attributes/response.md#строгий-unwrap).
 - Большие целочисленные JSON-литералы автоматически сохраняются строками, включая
   json/jsonStrict, JsonCast, диагностику и record/playback. Обязательных настроек нет.
-  Для ID используйте string/int|string; [подробности](docs/guides/serialization.md#большие-целые-в-ответах).
+  Для ID используйте string/int|string; [подробности](docs/reference/dto/scalars.md#большие-целые-в-ответах).
 - Встроенная гидратация int и IntegerCast отклоняют переполнение. Исходящий IntegerCast
   возвращает serialization_error до HTTP. Новые ошибки гидратации содержат безопасные
   reason/path/expected/actual без исходного значения.
@@ -255,7 +262,7 @@
   timeout с причиной auth_refresh_lock_timeout, без основного HTTP. Сохранены deadline,
   исходный 401 и первичная ошибка при сбое освобождения блокировки.
 - Custom auth получает scoped token store; без стабильной identity хранение локальное.
-  Новые настройки обычному клиенту не требуются. [Контракт и миграция](docs/guides/auth.md#миграция-token-cache).
+  Новые настройки обычному клиенту не требуются. [Контракт и миграция](docs/reference/auth/tokens.md#миграция-token-cache).
 - Проверено: 1231 тест без падений (1195 passed, 36 прежних deprecation), 3757 assertions.
   Standalone auth/body/files/external URL работает без Laravel/Guzzle HTTP Client.
 
@@ -269,7 +276,7 @@
   прежнюю семантику. Это изменение поведения для hooks и собственных адаптеров.
 - При смене тела удаляются унаследованные Content-Length/Transfer-Encoding и старый
   снимок metadata тела. Явные framing headers проверяются перед HTTP. Content-Type
-  сохраняется; смену формата указывает hook. [Контракт и миграция](docs/guides/transport.md#замена-и-очистка-тела-preparedrequest).
+  сохраняется; смену формата указывает hook. [Контракт и миграция](docs/reference/execution/transport.md#замена-и-очистка-тела-preparedrequest).
 - Итоговый debug при успехе и ошибке отражает запрос полученного ответа, при сбое
   без ответа — текущий контекст. Сохранены redaction и отсутствие чтения потоков.
 - Проверены запрет retry при смене тела, файловый cache bypass, streaming capability,
@@ -300,7 +307,7 @@
   с `bodyOmitted`; для playback добавлен `MockResponse::file()`.
 - Штатный транспорт поддерживает `FileStreamingInterface` автоматически.
   Сторонним транспортам, PSR-клиентам и retry handler требуется поддержка этого
-  контракта. Изменения не полностью обратно совместимы; [миграция и примеры](docs/guides/files.md).
+  контракта. Изменения не полностью обратно совместимы; [миграция и примеры](docs/guides/recipes/files.md).
 - Проверено: 1144 теста без падений (1108 passed, 36 прежних deprecation),
   3268 assertions. Файл 128 MiB передан в пяти режимах под `memory_limit=64M`:
   пик около 15 MiB для upload и 8 MiB для download. Standalone работает без
@@ -329,7 +336,7 @@
 - Готовые ссылки маскируются целиком до path/query в безопасном debug/logger/recorder,
   без обязательной RedactionPolicy. Raw-доступ остаётся исходным.
 - Изменения внешнего `withBaseUrl()` и требований к стороннему транспорту не полностью
-  обратно совместимы. Контракт и миграция: [внешние URL](docs/guides/external-urls.md).
+  обратно совместимы. Контракт и миграция: [внешние URL](docs/reference/serialization/uri-query.md).
 - Проверено: 1101 тест без падений (1065 passed, 36 прежних deprecation),
   3133 assertions; 12 новых локальных HTTP-сценариев и standalone без Laravel/Guzzle Client.
 
@@ -351,7 +358,7 @@
   сохраняя исходные параметры. Проверены 401, retry, PSR request target и изоляция кеша.
 - Изменения не полностью обратно совместимы: false ранее становился пустой строкой,
   пустой Comma — `key=`, часть недопустимых входов молча искажалась. Точечная миграция
-  описана в [сериализации](docs/guides/serialization.md#совместимость-при-обновлении-uriquery).
+  описана в [сериализации](docs/reference/serialization/uri-query.md#совместимость-при-обновлении-uriquery).
   Обязательных настроек нет; внешние и подписанные endpoint остаются неподдерживаемыми.
 - Проверено: 1050 тестов без падений (1014 passed, 36 с прежними deprecation),
   2996 assertions; standalone URI/JSON/retry/timeout без Laravel/Guzzle HTTP Client.
@@ -469,8 +476,8 @@
 #### Документация и проверки
 
 - Обновлены руководства и указания по миграции:
-  [кеш](docs/guides/client-config/cache.md), [авторизация](docs/guides/auth.md),
-  [диагностика](docs/guides/logging.md), [тестирование](docs/guides/testing.md).
+  [кеш](docs/reference/execution/cache.md), [авторизация](docs/reference/auth/strategies.md),
+  [диагностика](docs/reference/results/observability.md), [тестирование](docs/guides/testing/unit.md).
 - Добавлены регрессионные тесты и воспроизводимая standalone-проверка без Laravel.
   Полный прогон после автоматической identity: 776 тестов, 2049 проверок,
   без падений; 38 тестов с deprecation.

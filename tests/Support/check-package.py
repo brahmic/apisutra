@@ -26,6 +26,7 @@ def run(command, cwd=ROOT):
 ref = run(['git', 'write-tree']) if args.staged else run(['git', 'rev-parse', 'HEAD'])
 excluded = json.loads((ROOT / 'composer.json').read_text())['archive']['exclude']
 required = ['composer.json', 'README.md', 'CHANEGLOG.md', 'LICENSE', 'src/Core/AbstractClient.php', 'docs/README.md', 'src/RateLimiting/Resources/acquire.lua']
+required += [str(path.relative_to(ROOT)) for path in (ROOT / 'docs').rglob('*') if path.is_file()]
 smokes = sorted((ROOT / 'tests/Support').glob('standalone-*.php'))
 report = {'git_reference': ref, 'php': run([PHP, '-r', 'echo PHP_VERSION;']), 'archives': {}}
 with tempfile.TemporaryDirectory(prefix='apisutra-dist-') as temporary:
@@ -51,6 +52,7 @@ with tempfile.TemporaryDirectory(prefix='apisutra-dist-') as temporary:
             archive.extractall(checkout)
         contents[kind] = {str(p.relative_to(checkout)): hashlib.sha256(p.read_bytes()).hexdigest()
                           for p in checkout.rglob('*') if p.is_file()}
+        run(['python3', str(ROOT / 'tests/Support/check-docs.py'), '--root', str(checkout), '--navigation-only'])
         run(['composer', 'validate', '--strict'], checkout)
         run(['composer', 'install', '--no-dev', '--no-interaction', '--prefer-dist', '--no-progress'], checkout)
         run(['composer', 'dump-autoload', '--no-dev', '--optimize', '--strict-psr'], checkout)
