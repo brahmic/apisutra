@@ -13,6 +13,7 @@ composer test -- --fail-on-deprecation --fail-on-warning
 composer lint
 composer analyse
 composer check-docs
+composer analyse-docs
 composer check-package
 composer install --working-dir=tests/Integration/Laravel
 php tests/Integration/Laravel/verify.php
@@ -29,8 +30,10 @@ PHPStan проверяет весь src на уровне 5 с точным base
 о полном отсутствии долга по типам. PSR-12 проверяется для src: ошибки блокируют
 проверку, предупреждения о рекомендуемой длине строки остаются видимыми.
 
-CI включает PHP 8.4/8.5, locked/lowest/latest зависимости, качество, архивы и
-изолированное Laravel 12 приложение. Lowest определяется Composer с действующими
+CI включает PHP 8.4/8.5, locked/lowest/latest зависимости, качество, архивы,
+изолированное Laravel 12 приложение и отдельный
+[Docs CI](../.github/workflows/docs.yml) для документации и PHP-примеров.
+Lowest определяется Composer с действующими
 ограничениями совместимости и безопасности; это не установка заведомо уязвимых
 исторических версий. Для воспроизведения в отдельном checkout:
 

@@ -5,6 +5,7 @@
 # ApiSutra
 
 [![Tests](https://github.com/brahmic/apisutra/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/tests.yml)
+[![Docs CI](https://github.com/brahmic/apisutra/actions/workflows/docs.yml/badge.svg?branch=master&event=push)](https://github.com/brahmic/apisutra/actions/workflows/docs.yml)
 [![Documentation](https://img.shields.io/badge/docs-read-2563eb)](docs/README.md)
 [![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-777BB4)](composer.json)
 [![Packagist](https://img.shields.io/packagist/vpre/brahmic/apisutra)](https://packagist.org/packages/brahmic/apisutra)
