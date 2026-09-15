@@ -230,6 +230,7 @@ def run_checks(root):
         ('published_sdk', [php, str(ROOT / 'tests/Support/standalone-readme-smoke.php'), str(root)]),
         ('hydration_example', [php, str(ROOT / 'tests/Support/standalone-hydration-rules-smoke.php'), str(root)]),
         ('dto_showcase', [php, str(ROOT / 'tests/Support/standalone-dto-showcase-smoke.php'), str(root)]),
+        ('client_showcase', [php, str(ROOT / 'tests/Support/standalone-client-showcase-smoke.php'), str(root)]),
         ('continuation_example', [php, str(ROOT / 'tests/Support/standalone-documentation-continuation-smoke.php'), str(root)]),
     ]:
         run = subprocess.run(command, text=True, capture_output=True)

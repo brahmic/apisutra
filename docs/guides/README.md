@@ -4,7 +4,7 @@
 [маршруте](../start/create-sdk.md), технические правила — в [справочнике](../reference/README.md).
 
 - [Справочник атрибутов](../reference/attributes/README.md).
-- [client-config](../reference/client/configuration.md).
+- [Создание и настройка клиента на одном примере](client/showcase.md).
 - [Возможности DTO на одном примере](dto/showcase.md).
 - [DTO с атрибутами](dto/attribute-models.md).
 - [DTO без атрибутов](dto/plain-models.md).

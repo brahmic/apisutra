@@ -130,7 +130,7 @@ echo $record->createdAt->format('d.m.Y'); // 15.09.2026
 
 `$record` — типизированный `GetRecordResponseDto`. `dataOrFail()` возвращает DTO или выбрасывает исключение; доступна и [явная проверка результата](docs/reference/results/handles.md).
 
-[Запустить полный пример](docs/example/sdk/run.php) · [Подключить свой API](docs/guides/integration/standalone.md#настоящий-http).
+[Возможности конфигурирования клиента](docs/guides/client/showcase.md) · [Подключить свой API](docs/guides/integration/standalone.md#настоящий-http).
 
 ## Установка и первый запуск
 

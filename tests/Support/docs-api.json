@@ -580,14 +580,14 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Config\\CacheConfig",
-      "docs": ["docs/reference/auth/tokens.md", "docs/reference/execution/cache.md"],
+      "docs": ["docs/reference/auth/tokens.md", "docs/reference/execution/cache.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"store": {"type": "?Psr\\SimpleCache\\CacheInterface", "optional": true, "variadic": false}, "ttl": {"type": "int", "optional": true, "variadic": false}, "prefix": {"type": "string", "optional": true, "variadic": false}, "mode": {"type": "Brahmic\\ApiSutra\\Enums\\Cache\\CacheMode", "optional": true, "variadic": false}, "identity": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Cache\\CacheIdentityProviderInterface", "optional": true, "variadic": false}, "locks": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Auth\\AuthLockProviderInterface", "optional": true, "variadic": false}}}
       }
     },
     {
       "class": "Brahmic\\ApiSutra\\Config\\ClientConfig",
-      "docs": ["docs/guides/integration/multi-service.md", "docs/guides/recipes/continuation.md", "docs/guides/recipes/extensions.md", "docs/guides/sdk/design.md", "docs/reference/auth/credentials.md", "docs/reference/auth/strategies.md", "docs/reference/client/catalogs.md", "docs/reference/client/configuration.md", "docs/reference/client/construction.md", "docs/reference/execution/batch-pool.md", "docs/reference/execution/cache.md", "docs/reference/execution/continuation-await.md", "docs/reference/execution/deadlines.md", "docs/reference/execution/pagination.md", "docs/reference/execution/rate-limit.md", "docs/reference/execution/retry.md", "docs/reference/files/archives.md", "docs/reference/integrations/laravel.md", "docs/reference/integrations/redis.md", "docs/reference/results/errors.md", "docs/reference/results/observability.md", "docs/reference/serialization/body.md", "docs/reference/serialization/casts.md", "docs/reference/serialization/dto-output.md", "docs/reference/serialization/request-parts.md"],
+      "docs": ["docs/guides/integration/multi-service.md", "docs/guides/recipes/continuation.md", "docs/guides/recipes/extensions.md", "docs/guides/sdk/design.md", "docs/reference/auth/credentials.md", "docs/reference/auth/strategies.md", "docs/reference/client/catalogs.md", "docs/reference/client/configuration.md", "docs/reference/client/construction.md", "docs/reference/execution/batch-pool.md", "docs/reference/execution/cache.md", "docs/reference/execution/continuation-await.md", "docs/reference/execution/deadlines.md", "docs/reference/execution/pagination.md", "docs/reference/execution/rate-limit.md", "docs/reference/execution/retry.md", "docs/reference/files/archives.md", "docs/reference/integrations/laravel.md", "docs/reference/integrations/redis.md", "docs/reference/results/errors.md", "docs/reference/results/observability.md", "docs/reference/serialization/body.md", "docs/reference/serialization/casts.md", "docs/reference/serialization/dto-output.md", "docs/reference/serialization/request-parts.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"baseUrl": {"type": "string", "optional": false, "variadic": false}, "auth": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Auth\\AuthenticatorInterface", "optional": true, "variadic": false}, "authScopes": {"type": "array", "optional": true, "variadic": false}, "authPolicy": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Auth\\AuthPolicyInterface", "optional": true, "variadic": false}, "authRetryOn401": {"type": "bool", "optional": true, "variadic": false}, "authRetryAttempts": {"type": "int", "optional": true, "variadic": false}, "logger": {"type": "?Psr\\Log\\LoggerInterface", "optional": true, "variadic": false}, "logLevel": {"type": "string", "optional": true, "variadic": false}, "cache": {"type": "Psr\\SimpleCache\\CacheInterface|Brahmic\\ApiSutra\\Config\\CacheConfig|null", "optional": true, "variadic": false}, "cacheConfig": {"type": "?Brahmic\\ApiSutra\\Config\\CacheConfig", "optional": true, "variadic": false}, "timeout": {"type": "int", "optional": true, "variadic": false}, "connectTimeout": {"type": "int", "optional": true, "variadic": false}, "retry": {"type": "?Brahmic\\ApiSutra\\Config\\RetryConfig", "optional": true, "variadic": false}, "rateLimit": {"type": "?Brahmic\\ApiSutra\\Config\\RateLimitConfig", "optional": true, "variadic": false}, "pool": {"type": "?Brahmic\\ApiSutra\\Config\\PoolConfig", "optional": true, "variadic": false}, "queryArrayFormat": {"type": "Brahmic\\ApiSutra\\Enums\\Http\\QueryArrayFormat", "optional": true, "variadic": false}, "serializeNulls": {"type": "bool", "optional": true, "variadic": false}, "namingStrategy": {"type": "Brahmic\\ApiSutra\\Enums\\Configuration\\NamingStrategy", "optional": true, "variadic": false}, "casts": {"type": "array", "optional": true, "variadic": false}, "dtoSerializationProfile": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Serialization\\DtoSerializationProfileInterface", "optional": true, "variadic": false}, "wireBodySerializationPolicy": {"type": "?Brahmic\\ApiSutra\\Config\\DtoSerializationPolicy", "optional": true, "variadic": false}, "requestPartsEnumOutput": {"type": "Brahmic\\ApiSutra\\Enums\\Serialization\\EnumOutput", "optional": true, "variadic": false}, "requestPartsStrictEnums": {"type": "bool", "optional": true, "variadic": false}, "requestDateTime": {"type": "?Brahmic\\ApiSutra\\Config\\DateTimeSerializationPolicy", "optional": true, "variadic": false}, "delay": {"type": "int", "optional": true, "variadic": false}, "throwOnErrors": {"type": "bool", "optional": true, "variadic": false}, "debug": {"type": "bool", "optional": true, "variadic": false}, "environment": {"type": "Brahmic\\ApiSutra\\Enums\\Configuration\\Environment", "optional": true, "variadic": false}, "idempotencyHeader": {"type": "string", "optional": true, "variadic": false}, "extensions": {"type": "array", "optional": true, "variadic": false}, "paginationConfig": {"type": "?Brahmic\\ApiSutra\\Config\\PaginationConfig", "optional": true, "variadic": false}, "archive": {"type": "?Brahmic\\ApiSutra\\Config\\ArchiveConfig", "optional": true, "variadic": false}, "paginationRule": {"type": "?Brahmic\\ApiSutra\\Pagination\\PaginationRule", "optional": true, "variadic": false}, "resolvedResultFactory": {"type": "?Brahmic\\ApiSutra\\Result\\ResolvedResultFactoryInterface", "optional": true, "variadic": false}, "errorMapper": {"type": "?Brahmic\\ApiSutra\\VO\\Errors\\ClientErrorMapperInterface", "optional": true, "variadic": false}, "errorContextFactory": {"type": "?Brahmic\\ApiSutra\\VO\\Errors\\ErrorContextFactoryInterface", "optional": true, "variadic": false}, "responseFactory": {"type": "?Brahmic\\ApiSutra\\Response\\ClientResponseFactoryInterface", "optional": true, "variadic": false}, "containerProvider": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Container\\ContainerProviderInterface", "optional": true, "variadic": false}, "requestEnrichers": {"type": "array", "optional": true, "variadic": false}, "credentialsConfig": {"type": "?Brahmic\\ApiSutra\\Config\\CredentialsEnrichmentConfig", "optional": true, "variadic": false}, "continuationTokenExtractor": {"type": "?Brahmic\\ApiSutra\\Result\\ContinuationTokenExtractorInterface", "optional": true, "variadic": false}, "resultMetaExtractor": {"type": "?Brahmic\\ApiSutra\\Result\\ResultMetaExtractorInterface", "optional": true, "variadic": false}, "providerCatalogRegistry": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Catalog\\ProviderCatalogRegistryInterface", "optional": true, "variadic": false}, "defaultContinuationMode": {"type": "Brahmic\\ApiSutra\\Enums\\Continuation\\ContinuationMode", "optional": true, "variadic": false}, "defaultPollRequest": {"type": "?string", "optional": true, "variadic": false}, "continuationModeApplicator": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Continuation\\ContinuationModeApplicatorInterface", "optional": true, "variadic": false}, "redaction": {"type": "Brahmic\\ApiSutra\\Diagnostics\\RedactionPolicy", "optional": true, "variadic": false}, "textBooleanFormat": {"type": "Brahmic\\ApiSutra\\Enums\\Serialization\\BooleanFormat", "optional": true, "variadic": false}, "originPolicy": {"type": "Brahmic\\ApiSutra\\Config\\OriginPolicy", "optional": true, "variadic": false}, "includeClientQuota": {"type": "bool", "optional": true, "variadic": false}, "rateLimitBackend": {"type": "?Brahmic\\ApiSutra\\RateLimiting\\RateLimitBackendInterface", "optional": true, "variadic": false}, "continuationStateResolver": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Continuation\\ContinuationStateResolverInterface", "optional": true, "variadic": false}, "hydrationRules": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\HydrationRules", "optional": true, "variadic": false}}},
         "fromLaravel": {"return": "self", "parameters": {"overrides": {"type": "array", "optional": false, "variadic": false}}},
@@ -663,14 +663,14 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Config\\RateLimitConfig",
-      "docs": ["docs/reference/execution/rate-limit.md", "docs/reference/integrations/redis.md"],
+      "docs": ["docs/reference/execution/rate-limit.md", "docs/reference/integrations/redis.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"limit": {"type": "int", "optional": true, "variadic": false}, "period": {"type": "int", "optional": true, "variadic": false}, "behavior": {"type": "Brahmic\\ApiSutra\\Enums\\RateLimiting\\RateLimitBehavior", "optional": true, "variadic": false}, "store": {"type": "?Psr\\SimpleCache\\CacheInterface", "optional": true, "variadic": false}, "key": {"type": "?string", "optional": true, "variadic": false}}}
       }
     },
     {
       "class": "Brahmic\\ApiSutra\\Config\\RetryConfig",
-      "docs": ["docs/reference/execution/deadlines.md", "docs/reference/execution/retry.md"],
+      "docs": ["docs/reference/execution/deadlines.md", "docs/reference/execution/retry.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"attempts": {"type": "int", "optional": true, "variadic": false}, "baseDelay": {"type": "int", "optional": true, "variadic": false}, "maxDelay": {"type": "int", "optional": true, "variadic": false}, "backoff": {"type": "Brahmic\\ApiSutra\\Enums\\RateLimiting\\BackoffStrategy", "optional": true, "variadic": false}, "jitter": {"type": "bool", "optional": true, "variadic": false}, "retryOn": {"type": "array", "optional": true, "variadic": false}, "retryExceptions": {"type": "array", "optional": true, "variadic": false}, "totalTimeoutMs": {"type": "?int", "optional": true, "variadic": false}, "safeMethods": {"type": "array", "optional": true, "variadic": false}}}
       }
@@ -854,7 +854,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Core\\AbstractClient",
-      "docs": ["docs/guides/integration/multi-service.md", "docs/guides/sdk/design.md", "docs/reference/client/construction.md"],
+      "docs": ["docs/guides/integration/multi-service.md", "docs/guides/sdk/design.md", "docs/reference/client/construction.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"config": {"type": "Brahmic\\ApiSutra\\Config\\ClientConfig", "optional": false, "variadic": false}, "transport": {"type": "Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\TransportInterface", "optional": false, "variadic": false}, "hooks": {"type": "?Brahmic\\ApiSutra\\Hooks\\HookRegistry", "optional": true, "variadic": false}, "attributes": {"type": "?Brahmic\\ApiSutra\\Attributes\\AttributeRegistry", "optional": true, "variadic": false}, "extensions": {"type": "?Brahmic\\ApiSutra\\Extensions\\ExtensionRegistry", "optional": true, "variadic": false}, "sleeper": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Timing\\SleeperInterface", "optional": true, "variadic": false}, "clock": {"type": "Brahmic\\ApiSutra\\Contracts\\Interfaces\\Timing\\ClockInterface", "optional": true, "variadic": false}}},
         "send": {"return": "Brahmic\\ApiSutra\\Result\\ResultHandle", "parameters": {"request": {"type": "Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface", "optional": false, "variadic": false}, "mode": {"type": "Brahmic\\ApiSutra\\Enums\\Execution\\SendMode", "optional": true, "variadic": false}}},
@@ -888,7 +888,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Core\\AbstractRequest",
-      "docs": ["docs/guides/recipes/pagination.md", "docs/reference/attributes/behavior.md", "docs/reference/attributes/hooks.md", "docs/reference/attributes/http.md", "docs/reference/attributes/request.md", "docs/reference/attributes/response.md", "docs/reference/auth/strategies.md", "docs/reference/auth/tokens.md", "docs/reference/client/resources.md", "docs/reference/client/validation.md", "docs/reference/execution/cache.md", "docs/reference/execution/pagination.md", "docs/reference/execution/rate-limit.md", "docs/reference/execution/retry.md", "docs/reference/files/uploads.md", "docs/reference/request/composition.md", "docs/reference/request/declaration.md", "docs/reference/serialization/uri-query.md"],
+      "docs": ["docs/guides/recipes/pagination.md", "docs/reference/attributes/behavior.md", "docs/reference/attributes/hooks.md", "docs/reference/attributes/http.md", "docs/reference/attributes/request.md", "docs/reference/attributes/response.md", "docs/reference/auth/strategies.md", "docs/reference/auth/tokens.md", "docs/reference/client/resources.md", "docs/reference/client/validation.md", "docs/reference/execution/cache.md", "docs/reference/execution/pagination.md", "docs/reference/execution/rate-limit.md", "docs/reference/execution/retry.md", "docs/reference/files/uploads.md", "docs/reference/request/composition.md", "docs/reference/request/declaration.md", "docs/reference/serialization/uri-query.md", "docs/guides/client/showcase.md"],
       "methods": {
         "send": {"return": "Brahmic\\ApiSutra\\Result\\ResultHandle", "parameters": {"mode": {"type": "Brahmic\\ApiSutra\\Enums\\Execution\\SendMode", "optional": true, "variadic": false}}},
         "sendAsync": {"return": "Brahmic\\ApiSutra\\Result\\ResultHandle", "parameters": []},
@@ -1199,7 +1199,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Result\\ExecutionResult",
-      "docs": ["docs/reference/execution/batch-pool.md", "docs/reference/execution/continuation-await.md", "docs/reference/results/handles.md"],
+      "docs": ["docs/reference/execution/batch-pool.md", "docs/reference/execution/continuation-await.md", "docs/reference/results/handles.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"data": {"type": "mixed", "optional": false, "variadic": false}, "status": {"type": "Brahmic\\ApiSutra\\Enums\\Result\\ResultStatus", "optional": false, "variadic": false}, "errors": {"type": "Brahmic\\ApiSutra\\Collections\\ErrorCollection", "optional": false, "variadic": false}, "validationErrors": {"type": "array", "optional": true, "variadic": false}, "debug": {"type": "?Brahmic\\ApiSutra\\VO\\Audit\\DebugInfo", "optional": true, "variadic": false}, "traceId": {"type": "?string", "optional": true, "variadic": false}, "audit": {"type": "array", "optional": true, "variadic": false}, "meta": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\DataTransfer\\ResultMeta", "optional": true, "variadic": false}, "nested": {"type": "array", "optional": true, "variadic": false}, "requestClass": {"type": "?string", "optional": true, "variadic": false}, "exception": {"type": "?Throwable", "optional": true, "variadic": false}, "response": {"type": "?Brahmic\\ApiSutra\\VO\\Http\\ProviderResponse", "optional": true, "variadic": false}, "redaction": {"type": "Brahmic\\ApiSutra\\Diagnostics\\RedactionPolicy", "optional": true, "variadic": false}}},
         "isSuccess": {"return": "bool", "parameters": []},
@@ -1244,7 +1244,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Result\\ResultHandle",
-      "docs": ["docs/reference/results/handles.md"],
+      "docs": ["docs/reference/results/handles.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"result": {"type": "Brahmic\\ApiSutra\\Result\\ExecutionResult|GuzzleHttp\\Promise\\PromiseInterface", "optional": false, "variadic": false}, "factory": {"type": "Brahmic\\ApiSutra\\Result\\ResolvedResultFactoryInterface", "optional": false, "variadic": false}, "client": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\ClientInterface", "optional": true, "variadic": false}, "sourceRequest": {"type": "?Brahmic\\ApiSutra\\Contracts\\Interfaces\\Core\\RequestInterface", "optional": true, "variadic": false}}},
         "raw": {"return": "Brahmic\\ApiSutra\\Result\\ExecutionResult", "parameters": []},
@@ -1295,7 +1295,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\DtoRules",
-      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md", "docs/guides/client/showcase.md"],
       "methods": {
         "create": {"return": "self", "parameters": {"policy": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\RulePolicy", "optional": true, "variadic": false}}},
         "field": {"return": "self", "parameters": {"property": {"type": "string", "optional": false, "variadic": false}, "rule": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\FieldRule", "optional": false, "variadic": false}}},
@@ -1327,7 +1327,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\HydrationRules",
-      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md", "docs/guides/client/showcase.md"],
       "methods": {
         "create": {"return": "self", "parameters": {"defaults": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\RulePolicy", "optional": true, "variadic": false}}},
         "withDto": {"return": "self", "parameters": {"class": {"type": "string", "optional": false, "variadic": false}, "rules": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\DtoRules", "optional": false, "variadic": false}}},
@@ -1355,14 +1355,14 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\RulePolicy",
-      "docs": ["docs/reference/dto/field-rules.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/client/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"scalars": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\ScalarPolicy", "optional": true, "variadic": false}, "emptyString": {"type": "?Brahmic\\ApiSutra\\Enums\\DataTransfer\\EmptyStringBehavior", "optional": true, "variadic": false}, "naming": {"type": "?Brahmic\\ApiSutra\\Enums\\Configuration\\NamingStrategy", "optional": true, "variadic": false}, "dateTime": {"type": "?Brahmic\\ApiSutra\\Config\\DateTimeHydrationPolicy", "optional": true, "variadic": false}, "casts": {"type": "array", "optional": true, "variadic": false}}}
       }
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\ScalarPolicy",
-      "docs": ["docs/reference/dto/field-rules.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/client/showcase.md"],
       "methods": {
         "cases": {"return": "array", "parameters": []},
         "from": {"return": "static", "parameters": {"value": {"type": "string|int", "optional": false, "variadic": false}}},

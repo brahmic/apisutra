@@ -6,6 +6,7 @@
 | Пример | Что показывает |
 | --- | --- |
 | [Records SDK](sdk/README.md) | Конфигурация, транспорт, ресурс, запрос, DTO и ошибка HTTP |
+| [Возможности клиента](client-showcase/README.md) | Auth, таймауты, retry, квоты, кеш, DTO, диагностика и разовые опции |
 | [Возможности DTO](dto-showcase/README.md) | Атрибуты и правила одного товара, DX/wire, defaults и диагностика |
 | [Ожидание операции](continuation/README.md) | Pending/Ready, token, строгий финал и кеш await |
 | [Правила DTO](hydration-rules/README.md) | Mapping, nested/each, strict-список, extras и scoped cast |

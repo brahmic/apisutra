@@ -15,3 +15,4 @@ $loader->addPsr4('Example\\Records\\', __DIR__ . '/src/');
 $loader->addPsr4('Example\\HydrationRules\\', __DIR__ . '/../hydration-rules/src/');
 $loader->addPsr4('Example\\Continuation\\', __DIR__ . '/../continuation/src/');
 $loader->addPsr4('Example\\DtoShowcase\\', __DIR__ . '/../dto-showcase/src/');
+$loader->addPsr4('Example\\ClientShowcase\\', __DIR__ . '/../client-showcase/src/');

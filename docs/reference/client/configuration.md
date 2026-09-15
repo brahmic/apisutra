@@ -1,5 +1,8 @@
 # Параметры ClientConfig
 
+[Обзор на одном примере](../../guides/client/showcase.md) показывает, как настройки
+меняют выполнение запросов. Ниже находится полный каталог параметров.
+
 `Brahmic\ApiSutra\Config\ClientConfig` — неизменяемая конфигурация одного клиента.
 Обязателен `baseUrl`; транспорт передаётся отдельно в конструктор клиента.
 [Полная сборка](construction.md) и [исполняемый пример](../../example/sdk/src/Config/ClientConfigFactory.php).
