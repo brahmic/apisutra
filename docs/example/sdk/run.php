@@ -33,7 +33,7 @@ $client = new DemoClient(ClientConfigFactory::create(), $transport);
 $record = $client->records()->get(7)->send()->dataOrFail();
 $error = $client->records()->get(404)->send()->resolved();
 
-// Альтернативная атрибутная модель использует тот же исходный ответ.
+// Отдельная модель показывает создание через from() без клиента и внешних правил.
 $attributeRecord = RecordDto::from($success['data']);
 if ($attributeRecord->id !== $record->id || $attributeRecord->title !== $record->title) {
     throw new RuntimeException('Атрибутная модель примера дала другой результат');
@@ -42,6 +42,9 @@ if ($attributeRecord->id !== $record->id || $attributeRecord->title !== $record-
 echo json_encode([
     'id' => $record->id,
     'title' => $record->title,
+    'createdAt' => $record->createdAt->format(DATE_ATOM),
+    'authorName' => $record->authorName,
+    'description' => $record->description,
     'extra' => $record->_extra,
     'failed' => $error->isFailed(),
     'status' => $error->errorStatus(),

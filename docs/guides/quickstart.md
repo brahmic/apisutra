@@ -24,7 +24,7 @@ php docs/example/sdk/run.php
 Результат:
 
 ```json
-{"id":7,"title":"Первая запись","extra":{"future_flag":false},"failed":true,"status":404}
+{"id":7,"title":"Первая запись","createdAt":"2026-09-15T10:30:00+00:00","authorName":"Анна","description":null,"extra":{"future_flag":false},"failed":true,"status":404}
 ```
 
 ## Как устроен пример
@@ -36,10 +36,15 @@ php docs/example/sdk/run.php
 3. [RecordsResource](../example/sdk/src/Resources/Records/RecordsResource.php)
    возвращает привязанный к клиенту запрос.
 4. [GetRecordRequest](../example/sdk/src/Resources/Records/Get/GetRecordRequest.php)
-   объявляет GET, параметр пути и `Returns` с `unwrap: 'data'`.
+   объявляет GET, параметр пути, `Returns` с `unwrap: 'data'` и
+   [повторы при временных ошибках](../reference/execution/retry.md) через `Retry`.
 5. [GetRecordResponseDto](../example/sdk/src/Resources/Records/Get/GetRecordResponseDto.php)
-   остаётся обычным PHP-классом. [Правила](../example/sdk/src/Config/HydrationRulesFactory.php)
-   преобразуют `record_id` в `id`, проверяют строгие скаляры и сохраняют неизвестные поля в `_extra`.
+   наследует `AbstractResponseDto`: `From` берёт `record_id` или запасной `id`,
+   читает имя из `author.name`, а `From` и `DateTimeFrom` преобразуют `created_at`
+   в `DateTimeImmutable`. `EmptyStringAsNull(blank: true)` заменяет пустое или
+   состоящее из пробелов описание на `null`.
+   [Правила](../example/sdk/src/Config/HydrationRulesFactory.php) проверяют строгие скаляры
+   и сохраняют неизвестные поля в `_extra`; маппинг свойств остаётся в атрибутах.
 6. `dataOrFail()` возвращает DTO или выбрасывает исключение. Второй вызов использует
    `resolved()` и показывает проверку HTTP-ошибки без извлечения данных.
 

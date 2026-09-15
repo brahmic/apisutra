@@ -1,7 +1,9 @@
 # Учебный Records SDK
 
-Небольшой SDK условного сервиса записей. В нём одна операция, plain DTO и внешние
-правила; локальные JSON-ответы показывают успешный результат и HTTP 404.
+Небольшой SDK условного сервиса записей. В нём одна операция, DTO с атрибутами
+маппинга и даты, запасной ключ, чтение вложенного значения и нормализация пустой строки.
+Внешние правила включают строгие типы и сбор неизвестных полей.
+Локальные JSON-ответы показывают успешный результат и HTTP 404.
 
 ## Запуск
 
@@ -20,7 +22,7 @@ php vendor/brahmic/apisutra/docs/example/sdk/run.php
 Ожидаемый результат:
 
 ```json
-{"id":7,"title":"Первая запись","extra":{"future_flag":false},"failed":true,"status":404}
+{"id":7,"title":"Первая запись","createdAt":"2026-09-15T10:30:00+00:00","authorName":"Анна","description":null,"extra":{"future_flag":false},"failed":true,"status":404}
 ```
 
 ## Исходники
@@ -31,11 +33,11 @@ php vendor/brahmic/apisutra/docs/example/sdk/run.php
 | [run.php](run.php) | Явная сборка, два вызова и чтение результата |
 | [DemoClient](src/DemoClient.php) | Вход `records()` |
 | [ClientConfigFactory](src/Config/ClientConfigFactory.php) | URL и набор правил клиента |
-| [HydrationRulesFactory](src/Config/HydrationRulesFactory.php) | Mapping, strict, receiver `_extra` |
+| [HydrationRulesFactory](src/Config/HydrationRulesFactory.php) | Строгие типы и сбор неизвестных полей в `_extra` |
 | [RecordsResource](src/Resources/Records/RecordsResource.php) | Создание привязанного запроса |
-| [GetRecordRequest](src/Resources/Records/Get/GetRecordRequest.php) | GET, path и Returns |
-| [GetRecordResponseDto](src/Resources/Records/Get/GetRecordResponseDto.php) | Обычная PHP-модель ответа |
-| [RecordDto с атрибутом](src/AttributeExample/RecordDto.php) | Альтернативный способ описать mapping |
+| [GetRecordRequest](src/Resources/Records/Get/GetRecordRequest.php) | GET, параметр пути, типизированный ответ и повторы при временных ошибках |
+| [GetRecordResponseDto](src/Resources/Records/Get/GetRecordResponseDto.php) | Наследник AbstractResponseDto: From с fallback и вложенным путём, DateTimeFrom, EmptyStringAsNull |
+| [RecordDto с атрибутом](src/AttributeExample/RecordDto.php) | Создание DTO через from() без клиента и внешних правил |
 | [Laravel provider](src/Laravel/DemoServiceProvider.php) | Явный binding с конфигурацией SDK |
 | [Успех](fixtures/record.json), [ошибка](fixtures/error.json) | Обезличенные локальные ответы |
 
