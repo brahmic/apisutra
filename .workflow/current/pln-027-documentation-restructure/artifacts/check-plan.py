@@ -37,6 +37,19 @@ for line in block.splitlines():
             errors.append(f"Повтор цели: {path}")
         targets.add(path)
 
+# Разработка ApiSutra отделена от пользовательского комплекта и его agent-входа.
+developer_targets = {path for path in targets
+                     if path == "CONTRIBUTING.md" or path.startswith("development/")}
+user_targets = targets - developer_targets
+if "CONTRIBUTING.md" not in developer_targets or "development/README.md" not in developer_targets:
+    errors.append("Нет отдельного входа для разработчика ApiSutra")
+if "docs/start/agent.md" not in user_targets:
+    errors.append("Нет входа агента в общие пользовательские маршруты")
+if "docs/start/contribute.md" in targets:
+    errors.append("Разработка ядра осталась в пользовательских маршрутах")
+if any(path.startswith(("docs/ai/", "docs/development/", "docs/technical/")) for path in targets):
+    errors.append("Проект дерева смешивает аудитории или создаёт отдельную документацию для ИИ")
+
 rows = re.findall(r"^\| `([^`]+)` \| (.+?) \| .+ \|$", (PLAN / "content-map.md").read_text(), re.M)
 mapped = []
 for source, destinations in rows:
@@ -82,10 +95,13 @@ for path in files:
             errors.append(f"{path.name}:{number}: концевые пробелы")
 
 print(json.dumps({
+    "planning_revision": "audience-separation-2026-09-15",
     "baseline_commit": baseline["commit"],
     "verified_sha256": len(hashes),
     "mapped_source_files": len(mapped),
     "planned_markdown_files_without_redirects": len(targets),
+    "planned_user_documents": len(user_targets),
+    "planned_developer_documents": len(developer_targets),
     "plan_documents": len(files),
     "local_links": links,
     "errors": errors,

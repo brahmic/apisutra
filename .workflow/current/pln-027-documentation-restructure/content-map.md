@@ -5,7 +5,8 @@
 переносов. Проверка полного покрытия API в `inventory.md` остаётся отдельной задачей.
 
 Все пути в таблицах — относительно `docs/`; `../README.md` и `../CHANEGLOG.md`
-обозначают корневые файлы. Целевые пути пока проектные, см. [дерево](structure.md).
+обозначают корневые файлы; `../development/` — материалы разработчика ApiSutra.
+Целевые пути пока проектные, см. [дерево](structure.md) и [аудитории](audiences.md).
 Каждый исходный файл встречается ровно один раз. Если путь исчезает, остаётся
 страница перехода со старыми востребованными якорями без копии контракта.
 
@@ -84,42 +85,48 @@
 | `guides/resources.md` | `reference/client/resources.md`, `guides/sdk/design.md` | Ресурсный API и владение типами; без копии целого SDK layout. |
 | `guides/retries-rate-limit.md` | `reference/execution/retry.md`, `reference/execution/rate-limit.md`, `reference/execution/deadlines.md` | Разделить retry, квоты и общий бюджет; связать условия применения. |
 | `guides/serialization.md` | `reference/serialization/request-parts.md`, `reference/serialization/uri-query.md`, `reference/serialization/body.md`, `reference/serialization/dto-output.md`, `reference/serialization/receiver-output.md`, `reference/dto/scalars.md` | Request parts, wire, DX и большие целые имеют самостоятельные контракты. |
-| `guides/testing.md` | `guides/testing/unit.md`, `reference/testing/mocking.md`, `reference/testing/fixtures.md`, `reference/testing/live.md` | Практика отдельно от fake/assert/recording API; документационные smoke не копируют код. |
+| `guides/testing.md` | `guides/testing/unit.md`, `reference/testing/mocking.md`, `reference/testing/fixtures.md`, `reference/testing/live.md`, `../development/testing.md` | Практика отдельно от fake/assert/recording API; документационные smoke не копируют код. |
 | `guides/transport.md` | `reference/execution/transport.md`, `reference/execution/deadlines.md` | Фактический sync/promise путь, зависимости, timeout/deadline и replay. |
 | `guides/troubleshooting.md` | `guides/troubleshooting.md`, `start/diagnose.md` | Симптом → диагностика → прямой контракт; не новая классификация ошибок. |
 | `guides/use-cases.md` | `start/README.md`, `guides/README.md`, `guides/recipes/pagination.md`, `guides/recipes/continuation.md`, `guides/recipes/files.md` | Убрать параллельный каталог задач; содержательные рецепты сохранить. |
 | `guides/validation.md` | `reference/client/validation.md`, `guides/testing/unit.md` | Зависимость от фабрики, клиентский контекст, standalone и кастомная проверка. |
 | `guides/versioning.md` | `reference/client/versioning.md`, `guides/integration/multi-service.md` | Контракт explicit/default версии и небольшой сценарий использования. |
 
-## Определения и устройство ядра
+## Пользовательские определения и отдельные материалы разработчика
 
 | Сейчас | Цель | Действие |
 | --- | --- | --- |
 | `glossary/README.md` | `glossary/README.md` | Сократить до тематических групп и поиска сущностей; не копировать всё оглавление. |
-| `glossary/architecture.md` | `glossary/architecture.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/attributes.md` | `glossary/attributes.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/auth.md` | `glossary/auth.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/client.md` | `glossary/client.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/collections.md` | `glossary/collections.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/dto.md` | `glossary/dto.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/execution.md` | `glossary/execution.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/extensions.md` | `glossary/extensions.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/files.md` | `glossary/files.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/laravel.md` | `glossary/laravel.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/pagination.md` | `glossary/pagination.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/pipeline.md` | `glossary/pipeline.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/requests.md` | `glossary/requests.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/results.md` | `glossary/results.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `glossary/testing.md` | `glossary/testing.md` | Сохранить адрес; определения сократить, убрать полные сигнатуры и устаревшие символы. |
-| `technical/README.md` | `technical/README.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
-| `technical/architecture.md` | `technical/architecture.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
-| `technical/attributes.md` | `technical/attributes.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
-| `technical/caching-retry.md` | `technical/caching-retry.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
-| `technical/error-handling.md` | `technical/error-handling.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
-| `technical/execution.md` | `technical/execution.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
-| `technical/pipeline.md` | `technical/pipeline.md` | Сохранить обзор и адрес; убрать параметры и ложные гарантии, ссылаться на reference. |
+| `glossary/architecture.md` | `glossary/architecture.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/attributes.md` | `glossary/attributes.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/auth.md` | `glossary/auth.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/client.md` | `glossary/client.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/collections.md` | `glossary/collections.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/dto.md` | `glossary/dto.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/execution.md` | `glossary/execution.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/extensions.md` | `glossary/extensions.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/files.md` | `glossary/files.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/laravel.md` | `glossary/laravel.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/pagination.md` | `glossary/pagination.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/pipeline.md` | `glossary/pipeline.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/requests.md` | `glossary/requests.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/results.md` | `glossary/results.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `glossary/testing.md` | `glossary/testing.md` | Оставить определения пользователя; внутренние помощники — development, устаревшие символы удалить. |
+| `technical/README.md` | `../development/README.md`, `reference/README.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
+| `technical/architecture.md` | `../development/architecture.md`, `reference/client/construction.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
+| `technical/attributes.md` | `../development/attributes.md`, `reference/attributes/README.md`, `reference/extensions/extensions.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
+| `technical/caching-retry.md` | `../development/caching-retry.md`, `reference/execution/cache.md`, `reference/execution/retry.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
+| `technical/error-handling.md` | `../development/error-handling.md`, `reference/results/errors.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
+| `technical/execution.md` | `../development/execution.md`, `reference/execution/transport.md`, `reference/execution/continuation-await.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
+| `technical/pipeline.md` | `../development/pipeline.md`, `reference/request/declaration.md`, `reference/extensions/hooks.md` | Внутреннее устройство — development, пользовательские гарантии — reference; старый адрес остаётся переходом. |
 
 ## Как не потерять раздел при разбиении
+
+При смешении аудиторий разделы классифицируются отдельно. `docs/glossary/architecture.md`
+описывает устройство пользовательского SDK и остаётся публичным. Внутренний pipeline
+ядра относится к development, а контракты hooks/casts/transports — к публичному reference.
+CONTRIBUTING и новые dev-руководства не входят в 90 исходных файлов: это новые входы;
+их содержание не должно дублировать инструкции `.agents/` и публичные контракты.
 
 Для каждого заголовка крупного исходника перед удалением указать одно из действий:
 перенесён целиком; объединён с конкретным разделом-владельцем; пример вынесен в PHP;

@@ -113,7 +113,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 - [Контракты внешних правил DTO — решения В01–В17 приняты](discussion/dsc-005-declarative-dto-contracts/dsc-005-readme.md)
 - [ADR-001: явный критерий готовности continuation](adr/adr-001-continuation-readiness.md)
 - [ADR-002: внешний набор правил гидратации DTO](adr/adr-002-external-hydration-rules.md)
-- [Документация: точность и точки входа — новый план, дерево и карта переносов подготовлены](current/pln-027-documentation-restructure/pln-027-readme.md)
+- [Документация: пользователь и разработчик пакета, общие маршруты человека и ИИ — новый план, дерево и карта подготовлены](current/pln-027-documentation-restructure/pln-027-readme.md)
 - [Транспорт, формат ответа, бюджет и retry — аудит пяти замечаний](audit/aud-005-transport-response-retry/aud-005-readme.md)
 - [Транспорт, raw, внешний дедлайн и условный retry — завершено](completed/pln-026-transport-response-retry/pln-026-readme.md)
 - [Совместные квоты и атомарный Redis/phpredis backend — завершено](completed/pln-025-joint-rate-limit-quotas/pln-025-readme.md)
