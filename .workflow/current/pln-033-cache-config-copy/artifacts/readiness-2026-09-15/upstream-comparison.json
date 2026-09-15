@@ -1,0 +1,22 @@
+{
+  "observations": 19,
+  "observations_equal": true,
+  "expected_environment": {
+    "php": "8.5.4",
+    "apisutra": "v0.3.0-alpha.1",
+    "reference": "6a649f5e247adba3ecc0c82f1ba68cb74c018aba"
+  },
+  "actual_environment": {
+    "php": "8.4.15",
+    "apisutra": "dev-master",
+    "reference": "b3fb3e78582f4b69bfca3fd061b9a1c718949933"
+  },
+  "composer_reference_equal": false,
+  "original_verify_exit_code": 1,
+  "original_verify_expected_exit_code": 1,
+  "git_head": "6b85fbe2120744804856eedfc0528b50312b0266",
+  "source_trees": [
+    "16d82136fb5631064489aef12853b63a1d0838a7",
+    "16d82136fb5631064489aef12853b63a1d0838a7"
+  ]
+}

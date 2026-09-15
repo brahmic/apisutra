@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "git_head": "6b85fbe2120744804856eedfc0528b50312b0266",
+  "issue_reference": "6a649f5e247adba3ecc0c82f1ba68cb74c018aba",
+  "upstream_observations_equal": true,
+  "legacy_cases_verified": 7,
+  "workflow_documents": 16,
+  "workflow_links": 161,
+  "migration_test_files": 26,
+  "migration_support_files": 4,
+  "note": "Проверка фактуры до реализации; не прохождение D01–D36/C01–C26."
+}

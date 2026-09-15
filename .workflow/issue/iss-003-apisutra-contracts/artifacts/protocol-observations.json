@@ -1,0 +1,516 @@
+{
+    "environment": {
+        "php": "8.5.4",
+        "apisutra": "v0.3.0-alpha.1",
+        "reference": "6a649f5e247adba3ecc0c82f1ba68cb74c018aba"
+    },
+    "observations": [
+        {
+            "id": "P01",
+            "case": "real BotInfo equals existing decoder",
+            "result": true
+        },
+        {
+            "id": "P02",
+            "case": "real Message equals existing decoder (no attachments)",
+            "result": true
+        },
+        {
+            "id": "P03",
+            "case": "optional missing vs nullable mandatory",
+            "result": {
+                "userId": 1,
+                "firstName": "Bot",
+                "username": null,
+                "isBot": true,
+                "lastActivityTime": null,
+                "lastName": null,
+                "name": null,
+                "description": null,
+                "avatarUrl": null,
+                "fullAvatarUrl": null,
+                "commands": null,
+                "extra": []
+            }
+        },
+        {
+            "id": "P04",
+            "case": "reject user_id \"123\"",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в userId: ожидается int, получено string",
+            "context": {
+                "reason": "invalid_field_type",
+                "path": "userId",
+                "expected": "int",
+                "actual": "string",
+                "sourcePath": "/user_id",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P05",
+            "case": "reject is_bot \"false\"",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в isBot: ожидается bool, получено string",
+            "context": {
+                "reason": "invalid_field_type",
+                "path": "isBot",
+                "expected": "bool",
+                "actual": "string",
+                "sourcePath": "/is_bot",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P06",
+            "case": "reject first_name 5",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в firstName: ожидается string, получено int",
+            "context": {
+                "reason": "invalid_field_type",
+                "path": "firstName",
+                "expected": "string",
+                "actual": "int",
+                "sourcePath": "/first_name",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P07",
+            "case": "reject avatar_url null",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в avatarUrl: ожидается non-null input, получено null",
+            "context": {
+                "reason": "explicit_null_not_allowed",
+                "path": "avatarUrl",
+                "expected": "non-null input",
+                "actual": "null",
+                "sourcePath": "/avatar_url",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P08",
+            "case": "reject last_activity_time null",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в lastActivityTime: ожидается non-null input, получено null",
+            "context": {
+                "reason": "explicit_null_not_allowed",
+                "path": "lastActivityTime",
+                "expected": "non-null input",
+                "actual": "null",
+                "sourcePath": "/last_activity_time",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P09",
+            "case": "reject commands {\"bad\":{\"name\":\"start\"}}",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в commands: ожидается list, получено array",
+            "context": {
+                "reason": "invalid_list_shape",
+                "path": "commands",
+                "expected": "list",
+                "actual": "array",
+                "sourcePath": "/commands",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P10",
+            "case": "reject commands [{\"name\":5}]",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в commands[0].name: ожидается string, получено int",
+            "context": {
+                "reason": "invalid_field_type",
+                "path": "commands[0].name",
+                "expected": "string",
+                "actual": "int",
+                "sourcePath": "/commands/0/name",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P11",
+            "case": "mandatory nullable field omitted",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в username: ожидается ?string, получено missing",
+            "context": {
+                "reason": "required_field_missing",
+                "path": "username",
+                "expected": "?string",
+                "actual": "missing",
+                "sourcePath": "/username",
+                "sourcePathKind": "expected",
+                "sourceCandidates": [
+                    "/username"
+                ]
+            }
+        },
+        {
+            "id": "P12",
+            "case": "dot path fallback and extra collision",
+            "result": {
+                "id": 7,
+                "count": null,
+                "extra": {
+                    "profile": {
+                        "future": false
+                    },
+                    "id": 8,
+                    "extra": {
+                        "origin": null
+                    },
+                    "zero": 0,
+                    "empty": "",
+                    "list": []
+                }
+            }
+        },
+        {
+            "id": "P13",
+            "case": "missing optional count",
+            "result": {
+                "id": 7,
+                "count": null,
+                "extra": []
+            }
+        },
+        {
+            "id": "P14",
+            "case": "explicit null count",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в count: ожидается non-null input, получено null",
+            "context": {
+                "reason": "explicit_null_not_allowed",
+                "path": "count",
+                "expected": "non-null input",
+                "actual": "null",
+                "sourcePath": "/count",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P15",
+            "case": "sparse list",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в commands: ожидается list, получено array",
+            "context": {
+                "reason": "invalid_list_shape",
+                "path": "commands",
+                "expected": "list",
+                "actual": "array",
+                "sourcePath": "/commands",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P16",
+            "case": "HTTP Returns same real BotInfo",
+            "result": {
+                "success": true,
+                "same": true,
+                "status": 200
+            }
+        },
+        {
+            "id": "P17",
+            "case": "HTTP unwrap Message and source path on error",
+            "result": {
+                "success": false,
+                "status": 200,
+                "errors": {},
+                "context": {
+                    "reason": "invalid_field_type",
+                    "path": "message.recipient.chatId",
+                    "expected": "?int",
+                    "actual": "string",
+                    "sourcePath": "/message/recipient/chat_id",
+                    "sourcePathKind": "resolved",
+                    "sourceCandidates": []
+                }
+            }
+        },
+        {
+            "id": "P18",
+            "case": "native bool query and body null false zero",
+            "result": {
+                "success": true,
+                "query": "preview=false",
+                "body": "{\"text\":\"0\",\"notify\":false,\"attachments\":null,\"link\":null}"
+            }
+        },
+        {
+            "id": "P19",
+            "case": "receiver excluded on outbound plain object",
+            "result": {
+                "success": true,
+                "body": {
+                    "userId": 9223372036854775807,
+                    "firstName": "Test bot",
+                    "username": "maxsutra_test_bot",
+                    "isBot": true,
+                    "lastActivityTime": 1720000000123,
+                    "lastName": null,
+                    "name": null,
+                    "description": null,
+                    "avatarUrl": null,
+                    "fullAvatarUrl": null,
+                    "commands": [
+                        {
+                            "name": "start",
+                            "description": null
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": "P20",
+            "case": "strict and legacy rules isolated",
+            "result": true
+        },
+        {
+            "id": "P21",
+            "case": "nested lists with variants and raw unknown",
+            "result": {
+                "rows": [
+                    [
+                        {
+                            "id": 7,
+                            "count": null,
+                            "extra": {
+                                "type": "known",
+                                "future": false
+                            }
+                        },
+                        {
+                            "type": "future",
+                            "value": 0
+                        }
+                    ],
+                    []
+                ],
+                "extra": []
+            }
+        },
+        {
+            "id": "P22",
+            "case": "real CallbackButton constructor-owned type",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "DTO hydration property already initialized before fallback assignment: Brahmic\\MaxSutra\\Model\\Attachments\\Buttons\\CallbackButton::$type",
+            "context": null
+        },
+        {
+            "id": "P23",
+            "case": "real InlineKeyboardAttachment constructor-owned type",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "DTO hydration property already initialized before fallback assignment: Brahmic\\MaxSutra\\Model\\Attachments\\InlineKeyboardAttachment::$type",
+            "context": null
+        },
+        {
+            "id": "P24",
+            "case": "snake naming rejects camel-case-only source",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в userId: ожидается int, получено missing",
+            "context": {
+                "reason": "required_field_missing",
+                "path": "userId",
+                "expected": "int",
+                "actual": "missing",
+                "sourcePath": "/user_id",
+                "sourcePathKind": "expected",
+                "sourceCandidates": [
+                    "/user_id"
+                ]
+            }
+        },
+        {
+            "id": "P25",
+            "case": "snake naming policy equals complete BotInfo decoder",
+            "result": true
+        },
+        {
+            "id": "P26",
+            "case": "snake naming chooses wire key and preserves camel extra",
+            "result": {
+                "recordId": 7,
+                "extra": {
+                    "recordId": 8
+                }
+            }
+        },
+        {
+            "id": "P27",
+            "case": "agnostic constructor-owned scalar reproducer",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "DTO hydration property already initialized before fallback assignment: ConstructorOwned::$kind",
+            "context": null
+        },
+        {
+            "id": "P28",
+            "case": "constructor-owned scalar omitted in source",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в kind: ожидается string, получено missing",
+            "context": {
+                "reason": "required_field_missing",
+                "path": "kind",
+                "expected": "string",
+                "actual": "missing",
+                "sourcePath": "/kind",
+                "sourcePathKind": "expected",
+                "sourceCandidates": [
+                    "/kind"
+                ]
+            }
+        },
+        {
+            "id": "P29",
+            "case": "scoped custom cast shares strict rules",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в rows[0].id: ожидается int, получено string",
+            "context": {
+                "reason": "invalid_field_type",
+                "path": "rows[0].id",
+                "expected": "int",
+                "actual": "string",
+                "sourcePath": "/rows/0",
+                "sourcePathKind": "boundary",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P30",
+            "case": "strict nested list rejects bad known variant",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Serialization\\HydrationException",
+            "message": "Некорректные данные в rows[0][0].id: ожидается int, получено string",
+            "context": {
+                "reason": "invalid_field_type",
+                "path": "rows[0][0].id",
+                "expected": "int",
+                "actual": "string",
+                "sourcePath": "/rows/0/0/id",
+                "sourcePathKind": "resolved",
+                "sourceCandidates": []
+            }
+        },
+        {
+            "id": "P31",
+            "case": "HTTP integer overflow remains diagnostic",
+            "result": {
+                "success": false,
+                "status": 200,
+                "context": {
+                    "reason": "integer_out_of_range",
+                    "path": "userId",
+                    "expected": "int",
+                    "actual": "string",
+                    "sourcePath": "/user_id",
+                    "sourcePathKind": "resolved",
+                    "sourceCandidates": []
+                }
+            }
+        },
+        {
+            "id": "P32",
+            "case": "native fake hydrates DTO but bypasses PSR transport",
+            "result": {
+                "success": true,
+                "class": "Brahmic\\MaxSutra\\Model\\Users\\BotInfo",
+                "PSR_calls": 0
+            }
+        },
+        {
+            "id": "P33",
+            "case": "preventStrayRequests alone reaches PSR transport",
+            "result": {
+                "success": false,
+                "error": "Unexpected HTTP request.",
+                "PSR_calls": 1
+            }
+        },
+        {
+            "id": "P34",
+            "case": "two extra receivers explicitly rejected",
+            "error": "Brahmic\\ApiSutra\\Exceptions\\Configuration\\ConfigurationException",
+            "message": "Receiver DTO уже задан",
+            "context": null
+        },
+        {
+            "id": "P35",
+            "case": "hydrator permits numeric extra keys unlike current Payload",
+            "result": {
+                "legacyError": "Brahmic\\MaxSutra\\Errors\\ProtocolException",
+                "newExtra": {
+                    "future_field": {
+                        "enabled": true
+                    },
+                    "5": "future"
+                }
+            }
+        },
+        {
+            "id": "P36",
+            "case": "fake plus preventStrayRequests blocks HTTP",
+            "result": {
+                "success": false,
+                "error": "Незамоканный запрос",
+                "PSR_calls": 0
+            }
+        },
+        {
+            "id": "P37",
+            "case": "Returns succeeds with unwrapped real Message",
+            "result": {
+                "success": true,
+                "same": true
+            }
+        },
+        {
+            "id": "P38",
+            "case": "Returns missing unwrap does not use root",
+            "result": {
+                "success": false,
+                "status": 200,
+                "context": {
+                    "reason": "unwrap_path_missing",
+                    "path": "message",
+                    "expected": "present",
+                    "actual": "missing",
+                    "sourcePath": "/message",
+                    "sourcePathKind": "expected",
+                    "sourceCandidates": [
+                        "/message"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "P39",
+            "case": "Returns null unwrap distinct from missing",
+            "result": {
+                "success": false,
+                "status": 200,
+                "context": {
+                    "reason": "unexpected_response_shape",
+                    "path": "message",
+                    "expected": "Brahmic\\MaxSutra\\Model\\Messages\\Message",
+                    "actual": "null",
+                    "sourcePath": "/message",
+                    "sourcePathKind": "resolved",
+                    "sourceCandidates": []
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+
+   PASS  Tests\Unit\Core\ClientConfigTest
+  ✓ ClientConfig и AbstractClient → it отключает кеш метаданных в Testi… 0.01s
+  ✓ ClientConfig и AbstractClient → it ClientConfig::with переопределяет значения
+  ✓ ClientConfig и AbstractClient → it ClientConfig::fromLaravel использует overrides
+  ✓ ClientConfig и AbstractClient → it ClientConfig::fromLaravel использует containerProvider для debug/environment
+  ✓ ClientConfig и AbstractClient → it валидирует baseUrl
+  ✓ ClientConfig и AbstractClient → it валидирует числовые параметры with dataset "timeout"
+  ✓ ClientConfig и AbstractClient → it валидирует числовые параметры with dataset "connectTimeout"
+  ✓ ClientConfig и AbstractClient → it валидирует числовые параметры with dataset "delay"
+  ✓ ClientConfig и AbstractClient → it валидирует числовые параметры with dataset "authRetryAttempts"
+  ✓ ClientConfig и AbstractClient → it валидирует idempotencyHeader
+  ✓ ClientConfig и AbstractClient → it валидирует requestPartsEnumOutput
+  ✓ ClientConfig и AbstractClient → it валидирует requestDateTime timezone
+  ✓ ClientConfig и AbstractClient → it валидирует casts with dataset "class not found"
+  ✓ ClientConfig и AbstractClient → it валидирует casts with dataset "class without interface"
+  ✓ ClientConfig и AbstractClient → it валидирует casts with dataset "invalid object"
+  ✓ ClientConfig и AbstractClient → it принимает валидные casts
+  ✓ ClientConfig и AbstractClient → it валидирует requestEnrichers и credentialsConfig.scopes
+  ✓ ClientConfig и AbstractClient → it принимает continuationTokenExtractor и сохраняет в with()
+  ✓ ClientConfig и AbstractClient → it сохраняет wireBodySerializationPolicy в with()
+  ✓ ClientConfig и AbstractClient → it принимает resultMetaExtractor и сохраняет в with()
+  ✓ ClientConfig и AbstractClient → it валидирует defaultPollRequest и continuationModeApplicator
+
+   PASS  Tests\Unit\Serialization\HydrationCompatibilityTest
+  ✓ it сохраняет defaults fallback и выбранный null                      0.01s
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('intValue', 42.0, 42)
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('intValue', '4.2e1', 42)
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('intValue', '+42', 42)
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('intValue', true, 1)
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('boolValue', 'non-empty', true)
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('boolValue', 2, true)
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('stringValue', true, '1')
+  ✓ it сохраняет разрешённые scalar conversions reflection with ('floatValue', true, 1.0)
+  ✓ it проверяет параметр конструктора без пробного вызова и сохраняет преобразование свойства
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('null', null)
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with (null, null)
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('false', false)
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('0', 0)
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('"text"', 'text')
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('[]', [])
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('{}', [])
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ('{"id":9223372036854775808999}', ['9223372036854775808999'])
+  ✓ it сохраняет корректный JSON и нестроковые значения JsonCast with ([true], [true])
+  ✓ it отличает неверный JSON от неподходящего типа его валидного результата
+  ✓ it сохраняет индекс each/itemCast и original JsonException в цепочке
+  ✓ it сохраняет конфигурационную ошибку неверной timezone и map
+  ✓ it доставляет ошибки JsonCast через promise и throwOnErrors с данными из кеша with (false)
+  ✓ it доставляет ошибки JsonCast через promise и throwOnErrors с данными из кеша with (true)
+  ✓ it отличает неверный тип enum от неизвестного значения и неверного объявления
+  ✓ it безопасно классифицирует ошибку явного DateTimeCast with ('fixture-secret')
+  ✓ it безопасно классифицирует ошибку явного DateTimeCast with (Binary String: 0x6669787475726…2657400)
+  ✓ it безопасно классифицирует ошибку явного DateTimeCast with (['fixture-secret'])
+
+   PASS  Tests\Unit\Serialization\ExternalHydrationRulesTest
+  ✓ it гидратирует граф plain readonly DTO и сохраняет остатки через st… 0.01s
+  ✓ it гидратирует граф plain readonly DTO и сохраняет остатки через standalone и Returns with (true)
+  ✓ it возвращает точные DTO и source пути после mapping, each и unwrap with (false)
+  ✓ it возвращает точные DTO и source пути после mapping, each и unwrap with (true)
+
+   PASS  Tests\Unit\Cache\CacheManagerOverridesTest
+  ✓ CacheManager overrides → it withoutCache отключает чтение и запись
+  ✓ CacheManager overrides → it withCacheWriteOnly пишет в кеш без чтения
+  ✓ CacheManager overrides → it withCache применяет ttl override
+  ✓ CacheManager overrides → it withCache использует ttl из атрибута при null override
+  ✓ CacheManager overrides → it withCache использует ttl из конфига при отсутствии атрибута
+  ✓ CacheManager overrides → it атрибут Cache(mode=Disabled) отключает кеш
+  ✓ CacheManager overrides → it withCache включает кеш при Cache(mode=Disabled)
+  ✓ CacheManager overrides → it withCache включает кеш при глобальном отключении
+  ✓ CacheManager overrides → it baseUrl override влияет на cache key
+  ✓ CacheManager overrides → it использует key из cache-атрибута
+  ✓ CacheManager overrides → it page и limit влияют на cache key
+  ✓ CacheManager overrides → it clearCache инвалидирует запись запроса
+  ✓ CacheManager overrides → it clearCache учитывает pagination options
+
+  Tests:    66 passed (204 assertions)
+  Duration: 0.08s

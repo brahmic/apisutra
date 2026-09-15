@@ -1,0 +1,193 @@
+{
+    "observations": [
+        {
+            "field": "floatString",
+            "input": {
+                "type": "int",
+                "value": 5
+            },
+            "reflection_types": [
+                "string",
+                "float"
+            ],
+            "hydrator": {
+                "type": "string",
+                "value": "5"
+            },
+            "setValue": {
+                "type": "float",
+                "value": 5.0
+            },
+            "coerce": {
+                "type": "string",
+                "value": "5"
+            },
+            "hydrator_noTransform": {
+                "type": "float",
+                "value": 5.0
+            }
+        },
+        {
+            "field": "stringFloat",
+            "input": {
+                "type": "int",
+                "value": 5
+            },
+            "reflection_types": [
+                "string",
+                "float"
+            ],
+            "hydrator": {
+                "type": "string",
+                "value": "5"
+            },
+            "setValue": {
+                "type": "float",
+                "value": 5.0
+            },
+            "coerce": {
+                "type": "string",
+                "value": "5"
+            },
+            "hydrator_noTransform": {
+                "type": "float",
+                "value": 5.0
+            }
+        },
+        {
+            "field": "boolInt",
+            "input": {
+                "type": "string",
+                "value": "false"
+            },
+            "reflection_types": [
+                "int",
+                "bool"
+            ],
+            "hydrator": {
+                "type": "bool",
+                "value": false
+            },
+            "setValue": {
+                "type": "bool",
+                "value": true
+            },
+            "coerce": {
+                "type": "bool",
+                "value": false
+            },
+            "hydrator_noTransform": {
+                "type": "bool",
+                "value": true
+            }
+        },
+        {
+            "field": "intBool",
+            "input": {
+                "type": "string",
+                "value": "false"
+            },
+            "reflection_types": [
+                "int",
+                "bool"
+            ],
+            "hydrator": {
+                "type": "bool",
+                "value": false
+            },
+            "setValue": {
+                "type": "bool",
+                "value": true
+            },
+            "coerce": {
+                "type": "bool",
+                "value": false
+            },
+            "hydrator_noTransform": {
+                "type": "bool",
+                "value": true
+            }
+        },
+        {
+            "field": "number",
+            "input": {
+                "type": "string",
+                "value": "7"
+            },
+            "reflection_types": [
+                "int"
+            ],
+            "hydrator": {
+                "type": "int",
+                "value": 7
+            },
+            "setValue": {
+                "type": "int",
+                "value": 7
+            },
+            "coerce": {
+                "type": "int",
+                "value": 7
+            },
+            "hydrator_noTransform": {
+                "type": "int",
+                "value": 7
+            }
+        },
+        {
+            "field": "text",
+            "input": {
+                "type": "bool",
+                "value": true
+            },
+            "reflection_types": [
+                "string"
+            ],
+            "hydrator": {
+                "type": "string",
+                "value": "1"
+            },
+            "setValue": {
+                "type": "string",
+                "value": "1"
+            },
+            "coerce": {
+                "type": "string",
+                "value": "1"
+            },
+            "hydrator_noTransform": {
+                "type": "string",
+                "value": "1"
+            }
+        },
+        {
+            "field": "intBool",
+            "input": {
+                "type": "string",
+                "value": "1"
+            },
+            "reflection_types": [
+                "int",
+                "bool"
+            ],
+            "hydrator": {
+                "type": "int",
+                "value": 1
+            },
+            "setValue": {
+                "type": "int",
+                "value": 1
+            },
+            "coerce": {
+                "type": "int",
+                "value": 1
+            },
+            "hydrator_noTransform": {
+                "type": "int",
+                "value": 1
+            }
+        }
+    ],
+    "verified": 7,
+    "failures": []
+}

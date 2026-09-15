@@ -1,0 +1,153 @@
+[
+  {
+    "name": "git-head",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "source-trees",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD:src",
+      "6a649f5e247adba3ecc0c82f1ba68cb74c018aba:src"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "source-diff",
+    "argv": [
+      "git",
+      "diff",
+      "--exit-code",
+      "6a649f5e247adba3ecc0c82f1ba68cb74c018aba",
+      "--",
+      "src"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "git-status",
+    "argv": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "php-version",
+    "argv": [
+      "php",
+      "-v"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "composer-version",
+    "argv": [
+      "composer",
+      "--version",
+      "--no-ansi"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "upstream",
+    "argv": [
+      "php",
+      ".workflow/issue/iss-003-apisutra-contracts/artifacts/upstream-probe.php",
+      "vendor/autoload.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "upstream-verify",
+    "argv": [
+      "php",
+      ".workflow/issue/iss-003-apisutra-contracts/artifacts/upstream-probe.php",
+      "vendor/autoload.php",
+      "--verify"
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "legacy-typing",
+    "argv": [
+      "php",
+      ".workflow/current/pln-032-constructor-owned-fields/artifacts/legacy-typing-probe.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "legacy-lint",
+    "argv": [
+      "php",
+      "-l",
+      ".workflow/current/pln-032-constructor-owned-fields/artifacts/legacy-typing-probe.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "legacy-style",
+    "argv": [
+      "vendor/bin/phpcs",
+      "--standard=PSR12",
+      ".workflow/current/pln-032-constructor-owned-fields/artifacts/legacy-typing-probe.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "tests",
+    "argv": [
+      "vendor/bin/pest",
+      "--colors=never",
+      "tests/Unit/Core/ClientConfigTest.php",
+      "tests/Unit/Serialization/HydrationCompatibilityTest.php",
+      "tests/Unit/Serialization/ExternalHydrationRulesTest.php",
+      "tests/Unit/Cache/CacheManagerOverridesTest.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "public-docs",
+    "argv": [
+      "composer",
+      "check-docs"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "whitespace",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "test-files",
+    "argv": [
+      "rg",
+      "--files",
+      "tests",
+      "--glob",
+      "*.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "source-files",
+    "argv": [
+      "rg",
+      "--files",
+      "src"
+    ],
+    "exit_code": 0
+  }
+]
