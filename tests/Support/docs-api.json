@@ -93,7 +93,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Cast",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md", "docs/reference/files/downloads.md", "docs/reference/serialization/casts.md", "docs/reference/serialization/uri-query.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md", "docs/reference/files/downloads.md", "docs/reference/serialization/casts.md", "docs/reference/serialization/uri-query.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"class": {"type": "string", "optional": false, "variadic": false}, "args": {"type": "mixed", "optional": true, "variadic": true}}}
       },
@@ -103,7 +103,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DateTimeFrom",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"format": {"type": "?string", "optional": true, "variadic": false}, "defaultTimezone": {"type": "?string", "optional": true, "variadic": false}, "preserveOffset": {"type": "?bool", "optional": true, "variadic": false}, "strictMissingTimezone": {"type": "?bool", "optional": true, "variadic": false}, "strictFormat": {"type": "?bool", "optional": true, "variadic": false}, "invalidBehavior": {"type": "?Brahmic\\ApiSutra\\Enums\\Serialization\\DateTimeInvalidBehavior", "optional": true, "variadic": false}}}
       },
@@ -113,7 +113,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DateTimeTo",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"format": {"type": "?string", "optional": true, "variadic": false}, "timezone": {"type": "?string", "optional": true, "variadic": false}}}
       },
@@ -123,7 +123,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DefaultValue",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"value": {"type": "array|string|int|float|bool|null", "optional": true, "variadic": false}, "provider": {"type": "?string", "optional": true, "variadic": false}, "when": {"type": "array", "optional": true, "variadic": false}}}
       },
@@ -163,7 +163,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\DtoSerialize",
-      "docs": ["docs/reference/attributes/hydration.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"enumOutput": {"type": "?Brahmic\\ApiSutra\\Enums\\Serialization\\EnumOutput", "optional": true, "variadic": false}, "strictEnums": {"type": "?bool", "optional": true, "variadic": false}, "namingStrategy": {"type": "?Brahmic\\ApiSutra\\Enums\\Configuration\\NamingStrategy", "optional": true, "variadic": false}, "serializeNulls": {"type": "?bool", "optional": true, "variadic": false}, "dateTimeFormat": {"type": "?string", "optional": true, "variadic": false}, "dateTimeTimezone": {"type": "?string", "optional": true, "variadic": false}}}
       },
@@ -173,7 +173,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\EmptyStringAsNull",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/defaults.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"blank": {"type": "bool", "optional": true, "variadic": false}}}
       },
@@ -183,7 +183,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\From",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/profiles.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/profiles.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"name": {"type": "string", "optional": false, "variadic": false}, "fallback": {"type": "array", "optional": true, "variadic": false}}}
       },
@@ -203,7 +203,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Map",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/profiles.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/profiles.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"name": {"type": "string", "optional": false, "variadic": false}}}
       },
@@ -213,7 +213,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\Nested",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/collections.md", "docs/reference/dto/defaults.md", "docs/reference/dto/shapes.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/collections.md", "docs/reference/dto/defaults.md", "docs/reference/dto/shapes.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"type": {"type": "?string", "optional": true, "variadic": false}, "itemCast": {"type": "?string", "optional": true, "variadic": false}, "from": {"type": "?string", "optional": true, "variadic": false}, "fallback": {"type": "array", "optional": true, "variadic": false}, "each": {"type": "?string", "optional": true, "variadic": false}, "discriminator": {"type": "?string", "optional": true, "variadic": false}, "map": {"type": "?array", "optional": true, "variadic": false}, "discriminatorMode": {"type": "Brahmic\\ApiSutra\\Enums\\DataTransfer\\NestedDiscriminatorMode", "optional": true, "variadic": false}, "unknownVariant": {"type": "Brahmic\\ApiSutra\\Enums\\DataTransfer\\NestedUnknownVariant", "optional": true, "variadic": false}}}
       },
@@ -223,7 +223,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Attributes\\DataTransfer\\To",
-      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/profiles.md"],
+      "docs": ["docs/reference/attributes/hydration.md", "docs/reference/dto/profiles.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"name": {"type": "string", "optional": false, "variadic": false}}}
       },
@@ -1276,7 +1276,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Hydrator",
-      "docs": ["docs/reference/dto/defaults.md", "docs/reference/dto/field-rules.md", "docs/reference/dto/shapes.md"],
+      "docs": ["docs/reference/dto/defaults.md", "docs/reference/dto/field-rules.md", "docs/reference/dto/shapes.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "__construct": {"return": "", "parameters": {"casts": {"type": "Brahmic\\ApiSutra\\Casts\\CastRegistry", "optional": false, "variadic": false}, "cache": {"type": "?Brahmic\\ApiSutra\\Attributes\\AttributeMetadataCache", "optional": true, "variadic": false}, "profileResolver": {"type": "?Brahmic\\ApiSutra\\Serialization\\DtoHydrationProfileResolver", "optional": true, "variadic": false}, "rules": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\HydrationRules", "optional": true, "variadic": false}}},
         "default": {"return": "self", "parameters": []},
@@ -1295,7 +1295,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\DtoRules",
-      "docs": ["docs/reference/dto/field-rules.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "create": {"return": "self", "parameters": {"policy": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\RulePolicy", "optional": true, "variadic": false}}},
         "field": {"return": "self", "parameters": {"property": {"type": "string", "optional": false, "variadic": false}, "rule": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\FieldRule", "optional": false, "variadic": false}}},
@@ -1304,7 +1304,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\FieldRule",
-      "docs": ["docs/reference/dto/field-rules.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "create": {"return": "self", "parameters": []},
         "from": {"return": "self", "parameters": {"path": {"type": "string", "optional": false, "variadic": false}, "fallback": {"type": "string", "optional": true, "variadic": true}}},
@@ -1327,7 +1327,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\HydrationRules",
-      "docs": ["docs/reference/dto/field-rules.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "create": {"return": "self", "parameters": {"defaults": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\RulePolicy", "optional": true, "variadic": false}}},
         "withDto": {"return": "self", "parameters": {"class": {"type": "string", "optional": false, "variadic": false}, "rules": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\DtoRules", "optional": false, "variadic": false}}},
@@ -1389,7 +1389,7 @@
     },
     {
       "class": "Brahmic\\ApiSutra\\Serialization\\Rules\\ValueShape",
-      "docs": ["docs/reference/dto/field-rules.md"],
+      "docs": ["docs/reference/dto/field-rules.md", "docs/guides/dto/showcase.md"],
       "methods": {
         "int": {"return": "self", "parameters": []},
         "float": {"return": "self", "parameters": []},

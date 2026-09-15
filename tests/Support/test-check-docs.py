@@ -101,6 +101,13 @@ class DocumentationChecks(unittest.TestCase):
         self.write('docs/README.md', '# Документация\n' + 'строка\n' * 151)
         self.assertIn('размер', self.errors())
 
+    def test_root_readme_has_room_for_showcase_with_a_fixed_limit(self):
+        body = '# SDK\n[Документация](docs/README.md)\n'
+        self.write('README.md', body + 'строка\n' * 178)
+        self.assertEqual('', self.errors())
+        self.write('README.md', body + 'строка\n' * 179)
+        self.assertIn('размер', self.errors())
+
     def test_redirect_cannot_bypass_navigation_or_size_limits(self):
         self.write('docs/old.md', checker.BRIDGE + '\n# Старый адрес\n' + '<a id="alias"></a>\n' * 301)
         errors = self.errors()

@@ -144,6 +144,8 @@ def is_development(name):
 def line_limit(name, content):
     if name == 'CHANEGLOG.md' or name.startswith('docs/migration/v'):
         return None
+    if name == 'README.md':
+        return 180
     if name.endswith('README.md'):
         return 150
     if name.startswith('docs/start/'):
@@ -227,6 +229,7 @@ def run_checks(root):
         ('api', [php, str(ROOT / 'tests/Support/check-docs-api.php'), str(root)]),
         ('published_sdk', [php, str(ROOT / 'tests/Support/standalone-readme-smoke.php'), str(root)]),
         ('hydration_example', [php, str(ROOT / 'tests/Support/standalone-hydration-rules-smoke.php'), str(root)]),
+        ('dto_showcase', [php, str(ROOT / 'tests/Support/standalone-dto-showcase-smoke.php'), str(root)]),
         ('continuation_example', [php, str(ROOT / 'tests/Support/standalone-documentation-continuation-smoke.php'), str(root)]),
     ]:
         run = subprocess.run(command, text=True, capture_output=True)

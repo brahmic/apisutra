@@ -5,6 +5,7 @@
 
 - [Справочник атрибутов](../reference/attributes/README.md).
 - [client-config](../reference/client/configuration.md).
+- [Возможности DTO на одном примере](dto/showcase.md).
 - [DTO с атрибутами](dto/attribute-models.md).
 - [DTO без атрибутов](dto/plain-models.md).
 - [Подключить в Laravel](integration/laravel.md).

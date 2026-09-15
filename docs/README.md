@@ -10,6 +10,7 @@
 - [Создать SDK](start/create-sdk.md).
 - [Добавить операцию](start/add-operation.md).
 - [Описать DTO](start/describe-dto.md).
+- [Изучить возможности DTO на одном примере](guides/dto/showcase.md).
 - [Использовать готовый SDK](start/use-sdk.md).
 - [Диагностировать проблему](start/diagnose.md).
 

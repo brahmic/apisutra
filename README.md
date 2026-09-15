@@ -45,8 +45,11 @@ ApiSutra — PHP-пакет для создания SDK внешних API. Вы
 
 ## Как выглядит SDK
 
-Опишите [операцию](docs/example/sdk/src/Resources/Records/Get/GetRecordRequest.php) и [DTO ответа](docs/example/sdk/src/Resources/Records/Get/GetRecordResponseDto.php) — пакет соберёт запрос и преобразует результат.
 Импорты в обзорных фрагментах опущены:
+
+### Декларация запроса
+
+[GetRecordRequest](docs/example/sdk/src/Resources/Records/Get/GetRecordRequest.php) задаёт операцию API:
 
 ```php
 // HTTP-метод и адрес операции.
@@ -64,7 +67,13 @@ final class GetRecordRequest extends AbstractRequest
     ) {
     }
 }
+```
 
+### Декларация ответа (DTO)
+
+[GetRecordResponseDto](docs/example/sdk/src/Resources/Records/Get/GetRecordResponseDto.php) описывает данные, которые получит приложение:
+
+```php
 // Типизированная модель записи, которую получит приложение.
 final readonly class GetRecordResponseDto extends AbstractResponseDto
 {
@@ -94,6 +103,10 @@ final readonly class GetRecordResponseDto extends AbstractResponseDto
 ```
 
 `_extra` нужно только для сохранения неизвестных полей: свойство объявляется явно, а правило `extras('_extra')` включает его заполнение. Без сбора уберите оба.
+
+[Возможности DTO на одном примере](docs/guides/dto/showcase.md) — вложенные модели, коллекции, enum, casts, defaults, исходящий JSON и ошибки.
+
+### Создание и конфигурирование клиента
 
 Подключите [правила DTO](docs/example/sdk/src/Config/HydrationRulesFactory.php) к [клиенту](docs/example/sdk/src/DemoClient.php):
 
