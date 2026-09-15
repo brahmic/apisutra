@@ -81,7 +81,7 @@
             "/.agents",
             "/AGENTS.md",
             "/CONTRIBUTING.md",
-            "/development",
+            "/docs/development",
             "/tests",
             "/.github",
             "/.phpunit.cache",

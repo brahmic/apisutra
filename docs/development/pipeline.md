@@ -1,6 +1,6 @@
 # Pipeline ядра
 
-[Pipeline](../src/Pipeline/Pipeline.php) организует отдельное выполнение запроса:
+[Pipeline](../../src/Pipeline/Pipeline.php) организует отдельное выполнение запроса:
 создаёт контекст, выбирает ветку обработки и возвращает `ExecutionResult`.
 Выбор пагинации, batch/pool и ожидание continuation находятся уровнем выше;
 их связи описаны в [потоках выполнения](execution.md).
@@ -8,11 +8,11 @@
 ## Контекст и начало исполнения
 
 `Pipeline::execute()` извлекает исходный запрос и runtime-опции из `RequestExecution`.
-[PipelineContextFactory](../src/Pipeline/Flow/PipelineContextFactory.php) создаёт
+[PipelineContextFactory](../../src/Pipeline/Flow/PipelineContextFactory.php) создаёт
 контекст и прикрепляет его к `AbstractRequest`. Pipeline создаёт `ExecutionBudget`,
 проверяет срок и совместимость режима ответа, затем запускает стадию `Started`.
 
-[PipelineContext](../src/VO/Pipeline/PipelineContext.php) связывает данные стадий:
+[PipelineContext](../../src/VO/Pipeline/PipelineContext.php) связывает данные стадий:
 
 | Данные | Назначение |
 | --- | --- |
@@ -32,20 +32,20 @@
 
 `runStages()` задаёт порядок до HTTP-отправки:
 
-1. [PipelineValidator](../src/Pipeline/Flow/PipelineValidator.php) проверяет запрос.
-   Затем [RequestContractValidator](../src/Pipeline/Flow/RequestContractValidator.php)
+1. [PipelineValidator](../../src/Pipeline/Flow/PipelineValidator.php) проверяет запрос.
+   Затем [RequestContractValidator](../../src/Pipeline/Flow/RequestContractValidator.php)
    проверяет декларативные ограничения полей. Ошибка завершает выполнение до подготовки.
-2. [PipelineCompositeHandler](../src/Pipeline/Flow/PipelineCompositeHandler.php)
+2. [PipelineCompositeHandler](../../src/Pipeline/Flow/PipelineCompositeHandler.php)
    передаёт composite/depends-on в `CompositeFlow`. Возвращённый результат завершает
    текущую ветку; дочерние запросы и основная отправка depends-on имеют свои входы в Pipeline.
-3. [RequestPreparationStep](../src/Pipeline/Flow/RequestPreparationStep.php) через
+3. [RequestPreparationStep](../../src/Pipeline/Flow/RequestPreparationStep.php) через
    `PreparedRequestFactory` и `Serializer` собирает `PreparedRequest`.
-4. [RequestFlowRunner](../src/Pipeline/Flow/RequestFlowRunner.php) выполняет
+4. [RequestFlowRunner](../../src/Pipeline/Flow/RequestFlowRunner.php) выполняет
    подготовленный запрос и обрабатывает ответ.
 
 `skipValidation` и `skipComposite` используются при внутреннем повторном входе
 после dependencies. Публичные правила подготовки принадлежат
-[сериализации](../docs/reference/serialization/README.md).
+[сериализации](../reference/serialization/README.md).
 
 ## От подготовленного запроса до результата
 
@@ -90,18 +90,18 @@ flowchart TD
 и вызывает `AfterResponse`. Далее действуют общие ErrorPolicy и обработка ответа;
 DTO заново создаётся гидратором клиента. В HTTP-кеше хранится ответ, а не DTO.
 
-[RetrySender](../src/Pipeline/Transport/RetrySender.php) управляет попытками:
+[RetrySender](../../src/Pipeline/Transport/RetrySender.php) управляет попытками:
 проверяет бюджет, применяет rate-limit, отправляет запрос и вызывает `AfterResponse`
 после полученного ответа. Затем решает вопрос восстановления авторизации и retry.
 `BeforeSend` находится снаружи этого цикла; `AfterResponse` может выполниться
 несколько раз. Правила повтора, восстановления тела, задержек и квот принадлежат
-[retry](../docs/reference/execution/retry.md),
-[rate-limit](../docs/reference/execution/rate-limit.md) и
-[кешу](../docs/reference/execution/cache.md).
+[retry](../reference/execution/retry.md),
+[rate-limit](../reference/execution/rate-limit.md) и
+[кешу](../reference/execution/cache.md).
 
 ### Преобразование ответа
 
-[ResponseHydrator](../src/Pipeline/Hydration/ResponseHydrator.php) выбирает raw,
+[ResponseHydrator](../../src/Pipeline/Hydration/ResponseHydrator.php) выбирает raw,
 download, response handler или стандартное декодирование. Для массива данных
 `HookRunner` вызывает `BeforeHydrate`. Затем ResponseHydrator применяет выбранный
 обработчик либо штатные unwrap, правила пагинации и гидрацию DTO.
@@ -110,24 +110,24 @@ download, response handler или стандартное декодирован�
 unwrap и гидрацию. Возврат null передаёт обработку стандартному пути.
 Raw и download имеют отдельные ветки; без DTO успешный ответ также может содержать
 массив, scalar или null. Контракты — в
-[расширениях](../docs/reference/extensions/extensions.md#response-handlers-и-приоритет),
-[режимах ответа](../docs/reference/execution/transport.md) и
-[успешном ответе без DTO](../docs/reference/results/handles.md#успешный-ответ-без-dto).
+[расширениях](../reference/extensions/extensions.md#response-handlers-и-приоритет),
+[режимах ответа](../reference/execution/transport.md) и
+[успешном ответе без DTO](../reference/results/handles.md#успешный-ответ-без-dto).
 
 ## Подключение расширений
 
 При штатной сборке клиента `ExtensionRegistry` регистрирует расширения в связанных реестрах
 кастов, хуков и обработчиков атрибутов. Эти же реестры получают компоненты пайплайна.
 Response handler выбирается через реестр при обработке ответа; его жизненный цикл
-описан в [публичном контракте расширений](../docs/reference/extensions/extensions.md#жизненный-цикл).
+описан в [публичном контракте расширений](../reference/extensions/extensions.md#жизненный-цикл).
 
-[HookRunner](../src/Pipeline/Hooks/HookRunner.php) исполняет четыре вида хуков.
-Порядок групп и приоритетов принадлежит [контракту хуков](../docs/reference/extensions/hooks.md#порядок-исполнения).
+[HookRunner](../../src/Pipeline/Hooks/HookRunner.php) исполняет четыре вида хуков.
+Порядок групп и приоритетов принадлежит [контракту хуков](../reference/extensions/hooks.md#порядок-исполнения).
 `BeforeHydrate` получает отдельный путь вызова с массивом данных.
 `AfterHydrate` вызывается и для результата без объекта DTO; обработка атрибутов
 этой стадии требует объекта в `context.dto`.
 
-[StageProcessor](../src/Pipeline/Attributes/StageProcessor.php) передаёт управление
+[StageProcessor](../../src/Pipeline/Attributes/StageProcessor.php) передаёт управление
 в `AttributeRegistry::processStage()`. В текущем пайплайне это три точки:
 `Started` на запросе, `BeforeSend` на запросе и `AfterHydrate` на объекте результата.
 Запись стадии в audit сама по себе не вызывает обработчики атрибутов.
@@ -135,13 +135,13 @@ Response handler выбирается через реестр при обраб�
 
 Casts применяются внутри сериализатора и гидратора при преобразовании значений.
 Для вложенных DTO внешние правила сохраняет `HydrationScope`; его публичный
-контракт находится в [контексте гидратации](../docs/reference/dto/scope.md).
+контракт находится в [контексте гидратации](../reference/dto/scope.md).
 
 ## Ошибки и раннее завершение
 
 Обычный неуспешный ответ классифицирует `ErrorPolicy`, а `ResultFactory` собирает
 его ошибки. Исключения стадий обрабатывает
-[ExecutionResultBuilder](../src/Pipeline/Flow/ExecutionResultBuilder.php):
+[ExecutionResultBuilder](../../src/Pipeline/Flow/ExecutionResultBuilder.php):
 при `throwOnErrors = false` создаётся результат с ошибкой, при включённой настройке
 исключение выходит через границу Pipeline.
 
@@ -154,14 +154,14 @@ builder создаёт результат досрочного завершен�
 из пользовательского обработчика превышение срока также может завершить запрос.
 При внешних правилах DTO-путь и исходный путь сохраняются в результате,
 а автоматический лог использует отдельный безопасный контекст. Подробнее — [ошибки](error-handling.md),
-[диагностика DTO](../docs/reference/dto/diagnostics.md) и
-[deadline](../docs/reference/execution/deadlines.md).
+[диагностика DTO](../reference/dto/diagnostics.md) и
+[deadline](../reference/execution/deadlines.md).
 
 ## Где проверять изменения
 
 | Участок | Сценарии |
 | --- | --- |
-| Порядок валидации и ветвлений | [PipelineValidationOrderTest](../tests/Unit/Pipeline/PipelineValidationOrderTest.php), [PipelineSkipFlagsTest](../tests/Unit/Pipeline/PipelineSkipFlagsTest.php) |
-| Хуки и ответ из кеша | [PipelineIntegrationTest](../tests/Unit/Pipeline/PipelineIntegrationTest.php), [BeforeHydrateHookDataTest](../tests/Unit/Pipeline/BeforeHydrateHookDataTest.php) |
-| Ранний выход и исключения | [PipelineEarlyReturnStagesTest](../tests/Unit/Pipeline/PipelineEarlyReturnStagesTest.php), [PipelineThrowOnErrorsTest](../tests/Unit/Pipeline/PipelineThrowOnErrorsTest.php) |
-| Формат ответа и расширения | [SuccessfulResponseContractTest](../tests/Unit/Pipeline/SuccessfulResponseContractTest.php), [ExtensionResponseHandlerTest](../tests/Unit/Extensions/ExtensionResponseHandlerTest.php) |
+| Порядок валидации и ветвлений | [PipelineValidationOrderTest](../../tests/Unit/Pipeline/PipelineValidationOrderTest.php), [PipelineSkipFlagsTest](../../tests/Unit/Pipeline/PipelineSkipFlagsTest.php) |
+| Хуки и ответ из кеша | [PipelineIntegrationTest](../../tests/Unit/Pipeline/PipelineIntegrationTest.php), [BeforeHydrateHookDataTest](../../tests/Unit/Pipeline/BeforeHydrateHookDataTest.php) |
+| Ранний выход и исключения | [PipelineEarlyReturnStagesTest](../../tests/Unit/Pipeline/PipelineEarlyReturnStagesTest.php), [PipelineThrowOnErrorsTest](../../tests/Unit/Pipeline/PipelineThrowOnErrorsTest.php) |
+| Формат ответа и расширения | [SuccessfulResponseContractTest](../../tests/Unit/Pipeline/SuccessfulResponseContractTest.php), [ExtensionResponseHandlerTest](../../tests/Unit/Extensions/ExtensionResponseHandlerTest.php) |

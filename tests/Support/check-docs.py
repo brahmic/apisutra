@@ -137,6 +137,10 @@ def links(content):
     return result
 
 
+def is_development(name):
+    return name == 'CONTRIBUTING.md' or name == 'docs/development' or name.startswith('docs/development/')
+
+
 def line_limit(name, content):
     if name == 'CHANEGLOG.md' or name.startswith('docs/migration/v'):
         return None
@@ -146,7 +150,7 @@ def line_limit(name, content):
         return 200
     if name.startswith('docs/glossary/'):
         return 180
-    if name.startswith('development/') or name == 'CONTRIBUTING.md':
+    if is_development(name):
         return 220
     if name.startswith('docs/reference/'):
         return 320
@@ -157,13 +161,13 @@ def inspect(root):
     root = root.resolve()
     paths = [root / 'README.md', root / 'CHANEGLOG.md', *sorted((root / 'docs').rglob('*.md'))]
     if (root / 'CONTRIBUTING.md').exists():
-        paths += [root / 'CONTRIBUTING.md', *sorted((root / 'development').rglob('*.md'))]
+        paths.append(root / 'CONTRIBUTING.md')
     content = {p: p.read_text() for p in paths if p.exists()}
     errors, sizes, edges = [], [], {p: set() for p in content}
     count = 0
     for path, body in content.items():
         name = str(path.relative_to(root))
-        public = name in ('README.md', 'CHANEGLOG.md') or name.startswith('docs/')
+        public = not is_development(name) and (name in ('README.md', 'CHANEGLOG.md') or name.startswith('docs/'))
         limit = line_limit(name, body)
         length = len(body.splitlines())
         sizes.append({'path': name, 'lines': length, 'bytes': len(body.encode()), 'limit': limit, 'bridge': is_bridge(body)})
@@ -190,8 +194,8 @@ def inspect(root):
                 errors.append(f'{name}: ссылка выходит из пакета: {link}')
                 continue
             relative = str(target.relative_to(root))
-            if public and (relative.split('/')[0] in {'.workflow', '.agents', '.codex', 'tests', 'development', '.github'}
-                           or relative in {'AGENTS.md', 'CONTRIBUTING.md'}):
+            if public and (relative.split('/')[0] in {'.workflow', '.agents', '.codex', 'tests', '.github'}
+                           or relative == 'AGENTS.md' or is_development(relative)):
                 errors.append(f'{name}: ссылка на непоставляемый ресурс: {link}')
             if not target.exists():
                 errors.append(f'{name}: отсутствует {link}')
@@ -201,7 +205,7 @@ def inspect(root):
             if target in content:
                 edges[path].add(target)
     reachable = set()
-    pending = [root / 'README.md', root / 'CONTRIBUTING.md']
+    pending = [root / 'README.md', root / 'CONTRIBUTING.md', root / 'docs/development/README.md']
     while pending:
         node = pending.pop()
         if node in reachable:

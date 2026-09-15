@@ -20,12 +20,12 @@
 Явный `await()` выбрасывает ошибки ожидания независимо от `throwOnErrors`.
 `ContinuationAwaitException` сохраняет последний результат и причину ошибки;
 неудачная гидратация Ready-payload не превращается в следующий poll.
-См. [ожидание и миграцию](../docs/guides/recipes/continuation.md).
+См. [ожидание и миграцию](../guides/recipes/continuation.md).
 
 При внешних правилах HydrationException разделяет DTO-путь и исходный JSON Pointer.
 `context()` сохраняет точные данные для результата, `logContext()` маскирует
 неизвестные ключи источника в автоматическом логе.
-[Границы диагностики](../docs/reference/dto/diagnostics.md#диагностика-и-входы).
+[Границы диагностики](../reference/dto/diagnostics.md#диагностика-и-входы).
 
 ## Переопределения
 `AbstractRequest` и `AbstractClient` могут переопределять:

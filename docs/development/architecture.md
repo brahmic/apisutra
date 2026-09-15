@@ -2,7 +2,7 @@
 
 Карта компонентов для разработчика пакета: кто принимает решения, как связаны
 потоки выполнения и где подключаются расширения. Публичные параметры, приоритеты
-и ограничения описаны в [справочнике](../docs/reference/README.md).
+и ограничения описаны в [справочнике](../reference/README.md).
 
 ## Цели SDK
 
@@ -15,15 +15,15 @@
 
 | Компонент | Ответственность |
 | --- | --- |
-| [ClientConfig](../src/Config/ClientConfig.php) | Настройки и зависимости конкретного клиента |
-| [AbstractClient](../src/Core/AbstractClient.php) | Собирает сервисы и пайплайн, отправляет запросы, создаёт представления результата |
-| [AbstractRequest](../src/Core/AbstractRequest.php) / [RequestExecution](../src/Request/RequestExecution.php) | Декларация операции и её обёртка с runtime-опциями |
-| [RequestSpecResolver](../src/Request/RequestSpecResolver.php) | Читает атрибуты запроса и собирает RequestSpec |
-| [RequestResolver](../src/Request/RequestResolver.php) | Выбирает одиночное выполнение или обход страниц |
-| [Pipeline](../src/Pipeline/Pipeline.php) | Организует отдельное выполнение и доставку его результата |
-| [Serializer](../src/Serialization/Serializer.php) / [Hydrator](../src/Serialization/Hydrator.php) | Преобразуют запрос в HTTP-представление и данные ответа в DTO |
-| [HydrationRules](../src/Serialization/Rules/HydrationRules.php) / [HydrationScope](../src/Serialization/Rules/HydrationScope.php) | Описывают внешние правила DTO и сохраняют их при вложенной гидратации |
-| [ExecutionResult](../src/Result/ExecutionResult.php) / [ResultHandle](../src/Result/ResultHandle.php) | Хранят итог исполнения и предоставляют способы его получения |
+| [ClientConfig](../../src/Config/ClientConfig.php) | Настройки и зависимости конкретного клиента |
+| [AbstractClient](../../src/Core/AbstractClient.php) | Собирает сервисы и пайплайн, отправляет запросы, создаёт представления результата |
+| [AbstractRequest](../../src/Core/AbstractRequest.php) / [RequestExecution](../../src/Request/RequestExecution.php) | Декларация операции и её обёртка с runtime-опциями |
+| [RequestSpecResolver](../../src/Request/RequestSpecResolver.php) | Читает атрибуты запроса и собирает RequestSpec |
+| [RequestResolver](../../src/Request/RequestResolver.php) | Выбирает одиночное выполнение или обход страниц |
+| [Pipeline](../../src/Pipeline/Pipeline.php) | Организует отдельное выполнение и доставку его результата |
+| [Serializer](../../src/Serialization/Serializer.php) / [Hydrator](../../src/Serialization/Hydrator.php) | Преобразуют запрос в HTTP-представление и данные ответа в DTO |
+| [HydrationRules](../../src/Serialization/Rules/HydrationRules.php) / [HydrationScope](../../src/Serialization/Rules/HydrationScope.php) | Описывают внешние правила DTO и сохраняют их при вложенной гидратации |
+| [ExecutionResult](../../src/Result/ExecutionResult.php) / [ResultHandle](../../src/Result/ResultHandle.php) | Хранят итог исполнения и предоставляют способы его получения |
 
 `AbstractClient` собирает гидратор, сериализатор, реестры и кеш метаданных.
 Реестры хуков, атрибутов и расширений можно передать в конструктор готовыми.
@@ -33,11 +33,11 @@
 
 ## Принципы и границы
 
-- Транспорт подставляется через [TransportInterface](../docs/reference/execution/transport.md).
+- Транспорт подставляется через [TransportInterface](../reference/execution/transport.md).
 - Контейнер опционален. Auto-resolve требует зарегистрированного резолвера,
   а встроенная валидация — фабрики, которую можно передать явно.
-  См. [создание клиента](../docs/reference/client/construction.md) и
-  [валидацию](../docs/reference/client/validation.md).
+  См. [создание клиента](../reference/client/construction.md) и
+  [валидацию](../reference/client/validation.md).
 - Внутри пайплайна ошибки по умолчанию доставляются через результат;
   `throwOnErrors`, `dataOrFail()` и `await()` задают явные границы исключений.
   Подробнее — [доставка ошибок](error-handling.md).
@@ -75,11 +75,11 @@ Continuation начинается при явном ожидании резул�
 ## Резолв клиента
 
 `$client->send($request)` явно выбирает исполнителя. При `$request->send()`
-[AbstractRequest](../src/Core/AbstractRequest.php) использует уже привязанный клиент
+[AbstractRequest](../../src/Core/AbstractRequest.php) использует уже привязанный клиент
 или получает `ClientResolverInterface` через `ContainerProviderRegistry`.
 
-[ClientResolver](../src/Resolver/ClientResolver.php) разворачивает `RequestExecution`
-до исходного запроса и обращается в [ClientRegistry](../src/Resolver/ClientRegistry.php).
+[ClientResolver](../../src/Resolver/ClientResolver.php) разворачивает `RequestExecution`
+до исходного запроса и обращается в [ClientRegistry](../../src/Resolver/ClientRegistry.php).
 Реестр выбирает самый длинный совпадающий namespace и кеширует найденный клиент
 для класса запроса; новая регистрация сбрасывает этот кеш.
 
@@ -90,21 +90,21 @@ Auto-discovery заранее наполняет реестр. Оно не за�
 
 `ClientResolver` выбирает клиента, `RequestResolver` — способ выполнения запроса,
 `RequestSpecResolver` — его метаданные. Регистрация, discovery и настройка контейнера
-описаны в [поиске клиента](../docs/reference/client/discovery.md).
-Поведение проверяют [ClientResolverTest](../tests/Unit/Resolver/ClientResolverTest.php)
-и [ContainerProviderRequestResolverTest](../tests/Unit/Core/ContainerProviderRequestResolverTest.php).
+описаны в [поиске клиента](../reference/client/discovery.md).
+Поведение проверяют [ClientResolverTest](../../tests/Unit/Resolver/ClientResolverTest.php)
+и [ContainerProviderRequestResolverTest](../../tests/Unit/Core/ContainerProviderRequestResolverTest.php).
 
 ## Точки расширения
 
 | Задача | Механизм и подробности |
 | --- | --- |
-| Выполнить действие на границе отправки или гидратации | [Хуки](../docs/reference/extensions/hooks.md), исполняемые HookRunner |
-| Подключить несколько обработчиков одним модулем | [ExtensionInterface и реестры](../docs/reference/extensions/extensions.md) |
-| Обработать собственный формат ответа | [Response handler](../docs/reference/extensions/extensions.md#response-handlers-и-приоритет), выбираемый по MIME |
-| Преобразовать значение поля | [Casts](../docs/reference/serialization/casts.md); для вложенной гидратации — [HydrationScope](../docs/reference/dto/scope.md) |
-| Описать DTO без атрибутов | [Внешние правила полей](../docs/reference/dto/field-rules.md) |
+| Выполнить действие на границе отправки или гидратации | [Хуки](../reference/extensions/hooks.md), исполняемые HookRunner |
+| Подключить несколько обработчиков одним модулем | [ExtensionInterface и реестры](../reference/extensions/extensions.md) |
+| Обработать собственный формат ответа | [Response handler](../reference/extensions/extensions.md#response-handlers-и-приоритет), выбираемый по MIME |
+| Преобразовать значение поля | [Casts](../reference/serialization/casts.md); для вложенной гидратации — [HydrationScope](../reference/dto/scope.md) |
+| Описать DTO без атрибутов | [Внешние правила полей](../reference/dto/field-rules.md) |
 | Добавить собственную декларацию | [AttributeRegistry и обработчики атрибутов](attributes.md#кастомные-атрибуты-attributeregistry) |
-| Подставить HTTP-клиент или стратегию авторизации | [Транспорт](../docs/reference/execution/transport.md) и [авторизация](../docs/reference/auth/strategies.md) |
+| Подставить HTTP-клиент или стратегию авторизации | [Транспорт](../reference/execution/transport.md) и [авторизация](../reference/auth/strategies.md) |
 
 Места вызова обработчиков — в [пайплайне](pipeline.md#подключение-расширений).
 Публичные возможности расширения доступны автору SDK; внутренние сервисы ниже
@@ -117,10 +117,10 @@ Auto-discovery заранее наполняет реестр. Оно не за�
 - **HydrationTypeSelector** — выбор ветки union/объявленного типа для гидрации.
 - **BuiltinHydrationCaster** — выбор cast из атрибута/профиля и встроенных преобразований.
 - **RuleSetCompiler** — проверка внешнего набора до обработки DTO; правила применяет гидратор.
-  [Контракт](../docs/reference/dto/field-rules.md).
+  [Контракт](../reference/dto/field-rules.md).
 - **SafeScalarHydrationCaster** — безопасное приведение scalar-значений по типу DTO.
 
 Общие механизмы преобразования следует развивать в этом слое, сохраняя согласованность
 `Hydrator`, `DtoSerializer` и `RequestPartsCollector`. Публичные правила разделены на
-[гидратацию DTO](../docs/reference/dto/README.md) и
-[исходящую сериализацию](../docs/reference/serialization/README.md).
+[гидратацию DTO](../reference/dto/README.md) и
+[исходящую сериализацию](../reference/serialization/README.md).

@@ -6,7 +6,7 @@
 - Кеш включается через `CacheConfig` в `ClientConfig`.
 - Поддерживаются режимы: Enabled / Disabled / ReadOnly / WriteOnly.
 - Ключ строится из подготовленного запроса и области кеша; traceId не разделяет записи.
-  [Контракт ключа](../docs/reference/execution/cache.md).
+  [Контракт ключа](../reference/execution/cache.md).
 - Сохраняется HTTP-ответ, а не DTO. На cache hit клиент применяет собственный гидратор
   и текущий набор правил; набор не входит в ключ HTTP cache.
 
@@ -28,4 +28,4 @@
 каждой HTTP-попыткой. RateLimiter организует Wait/Throw и общий budget; backend
 только атомарно принимает или отклоняет набор. По умолчанию состояние локальное
 и окна измеряются monotonic clock. PSR-16 сохранён только для одной квоты.
-[Контракт](../docs/reference/execution/rate-limit.md), [Redis](../docs/reference/integrations/redis.md).
+[Контракт](../reference/execution/rate-limit.md), [Redis](../reference/integrations/redis.md).

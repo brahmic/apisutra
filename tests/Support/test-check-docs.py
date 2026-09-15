@@ -72,9 +72,26 @@ class DocumentationChecks(unittest.TestCase):
         self.assertIn('неопределённая ссылка', self.errors())
 
     def test_unshipped_dependency_is_rejected_even_when_present(self):
-        self.write('development/detail.md', '# Detail\n')
-        self.write('docs/README.md', '# Документация\n[Internal](../development/detail.md)\n')
+        self.write('docs/development/detail.md', '# Detail\n')
+        self.write('docs/README.md', '# Документация\n[Internal](development/detail.md)\n')
         self.assertIn('непоставляемый ресурс', self.errors())
+
+    def test_development_entry_can_link_checkout_resources(self):
+        self.write('docs/development/README.md', '# Разработка\n[Правила](../../AGENTS.md)\n'
+                   '[Исходник](../../src/Example.php)\n[Тест](../../tests/ExampleTest.php)\n')
+        self.write('AGENTS.md', '# Правила\n')
+        self.write('src/Example.php', '<?php\n')
+        self.write('tests/ExampleTest.php', '<?php\n')
+        self.assertEqual('', self.errors())
+        self.write('docs/development/orphan.md', '# Отдельная тема\n')
+        self.assertIn('нет маршрута', self.errors())
+
+    def test_development_limits_are_preserved_inside_docs(self):
+        self.write('docs/development/README.md', '# Разработка\n[Тема](detail.md)\n')
+        self.write('docs/development/detail.md', '# Тема\n' + 'строка\n' * 219)
+        self.assertEqual('', self.errors())
+        self.write('docs/development/detail.md', '# Тема\n' + 'строка\n' * 220)
+        self.assertIn('размер', self.errors())
 
     def test_orphan_and_size(self):
         self.write('docs/orphan.md', '# Orphan\n')

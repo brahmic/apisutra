@@ -8,7 +8,8 @@
 
 Перед работой выберите инструкции по задаче в [указателе правил](.agents/README.md).
 Пользовательские руководства — в [документации](docs/README.md).
-Разработка ApiSutra — в [CONTRIBUTING](CONTRIBUTING.md) и [development](development/README.md).
+Общий вход разработчика ApiSutra — [docs/development](docs/development/README.md).
+Подготовка вклада в пакет — в [CONTRIBUTING](CONTRIBUTING.md).
 Внутренние аудиты, планы и решения для разработки — в [.workflow](.workflow/README.md).
 
 ## Обязательные правила кода

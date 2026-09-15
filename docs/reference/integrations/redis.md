@@ -106,6 +106,6 @@ phpredis. Оно может использовать тот же подходя�
 NOSCRIPT, сетевой timeout и Laravel-рецепт проверяются отдельно от обычных unit tests.
 Для локального Redis suite выполните `composer test:redis`: команда создаёт и очищает
 изолированный стенд. Требования и ручной запуск Laravel-проверки — в
-[гайде тестирования](https://github.com/brahmic/apisutra/blob/master/development/testing.md#redis-rate-limit).
+[гайде тестирования](https://github.com/brahmic/apisutra/blob/master/docs/development/testing.md#redis-rate-limit).
 Нельзя направлять этот стенд на рабочий Redis: часть сценариев меняет ACL, script cache
 и настройки памяти выделенного тестового сервера.
