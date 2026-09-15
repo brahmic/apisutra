@@ -27,6 +27,7 @@ use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use Brahmic\ApiSutra\Exceptions\Serialization\HydrationException;
 use Brahmic\ApiSutra\Serialization\Concerns\ReflectionHelperTrait;
 use Brahmic\ApiSutra\Serialization\Rules\CompiledDtoRules;
+use Brahmic\ApiSutra\Serialization\Rules\ConstructorValues;
 use Brahmic\ApiSutra\Serialization\Rules\HydratedProperty;
 use Brahmic\ApiSutra\Serialization\Rules\HydrationRules;
 use Brahmic\ApiSutra\Serialization\Rules\HydrationScope;
@@ -152,6 +153,7 @@ final class Hydrator
         $compiled = $this->rulesCompiler?->forClass($dtoClass);
         $resolvedHydration = $this->resolveHydration($dtoClass);
         $values = [];
+        $constructorChecks = [];
         $origins = [];
         $consumed = new SourceConsumption();
         $receiver = $compiled?->declaration?->receiver;
@@ -169,6 +171,9 @@ final class Hydrator
                 $compiled,
                 $scope,
             );
+            if ($compiled?->field($name)?->constructorValue) {
+                $constructorChecks[$name] = ['property' => $propertyMeta['property'], 'input' => $field];
+            }
             $origins[$name] = $field->location;
             $consumed->mergeAt($field->segments, $field->consumed);
             if ($field->state !== ValueState::Missing) {
@@ -181,7 +186,7 @@ final class Hydrator
         }
 
         try {
-            return $this->instantiateHydratedDto($dtoClass, $metadata, $values);
+            return $this->instantiateHydratedDto($dtoClass, $metadata, $values, $constructorChecks);
         } catch (HydrationException $exception) {
             $location = $origins[$exception->path ?? '']
                 ?? $scope->location()->descend([$exception->path ?? ''], kind: SourcePathKind::Expected);
@@ -194,8 +199,9 @@ final class Hydrator
     /**
      * @param array<string, mixed> $metadata
      * @param array<string, mixed> $values
+     * @param array<string, array{property: ReflectionProperty, input: HydratedProperty}> $constructorChecks
      */
-    private function instantiateHydratedDto(string $dtoClass, array $metadata, array $values): object
+    private function instantiateHydratedDto(string $dtoClass, array $metadata, array $values, array $constructorChecks): object
     {
         $constructor = $metadata['constructor'];
         $reflection = new ReflectionClass($dtoClass);
@@ -208,9 +214,10 @@ final class Hydrator
             values: $values,
             properties: $metadata['properties'],
             constructor: $constructor,
+            constructorChecks: $constructorChecks,
         );
 
-        if ($remainingAssignments === []) {
+        if ($remainingAssignments === [] && $constructorChecks === []) {
             return $reflection->newInstanceArgs($constructorArgs);
         }
 
@@ -218,6 +225,7 @@ final class Hydrator
             reflection: $reflection,
             constructorArgs: $constructorArgs,
             assignments: $remainingAssignments,
+            constructorChecks: $constructorChecks,
         );
     }
 
@@ -344,6 +352,9 @@ final class Hydrator
                     return new HydratedProperty($value, ValueState::Present, $segments, $location, $consumed);
                 }
                 if ($state === ValueState::Missing) {
+                    if ($rule?->constructorValue && !$rule->constructorValueAllowMissing) {
+                        throw HydrationException::invalidValue('required_field_missing', (string) $property->getType(), 'missing');
+                    }
                     return new HydratedProperty(null, $state, $segments, $location, $consumed);
                 }
                 return $scope->at($location, function () use (
@@ -431,16 +442,22 @@ final class Hydrator
                             }
                         }
                     }
-                    $value = $scope->at($location, function () use ($value, $policy, $parameter, $property): mixed {
+                    $value = $scope->at($location, function () use ($value, $policy, $parameter, $property, $rule): mixed {
                         if ($policy?->scalars === ScalarPolicy::Strict) {
-                            return $this->scalarValues->strictReflection(
+                            $value = $this->scalarValues->strictReflection(
                                 $value,
                                 $parameter === null ? $property->getType() : $parameter->getType(),
                                 $parameter?->getDeclaringClass() ?? $property->getDeclaringClass(),
                             );
                         }
-                        if ($parameter === null) {
+                        if ($parameter === null && $policy?->scalars !== ScalarPolicy::Strict) {
                             $this->valueValidator->assertValue($value, $property->getType(), $property->getDeclaringClass(), '');
+                        }
+                        if ($rule?->constructorValue) {
+                            if ($policy?->scalars !== ScalarPolicy::Strict) {
+                                $value = (new NativePropertyValue())->resolve($value, $property);
+                            }
+                            (new ConstructorValues())->assertInput($value);
                         }
                         return $value;
                     });
@@ -587,9 +604,10 @@ final class Hydrator
      *   default: ?DefaultValue
      * }> $properties
      * @param array<int, array{name: string, reflection: ReflectionParameter, hasDefault: bool}> $constructor
+     * @param array<string, array{property: ReflectionProperty, input: HydratedProperty}> $constructorChecks
      * @return array<string, array{property: ReflectionProperty, value: mixed}>
      */
-    private function buildRemainingPropertyAssignments(array $values, array $properties, array $constructor): array
+    private function buildRemainingPropertyAssignments(array $values, array $properties, array $constructor, array $constructorChecks = []): array
     {
         $constructorNames = array_fill_keys(
             array_map(
@@ -604,7 +622,7 @@ final class Hydrator
         foreach ($properties as $propertyMeta) {
             $name = $propertyMeta['name'];
 
-            if (isset($constructorNames[$name])) {
+            if (isset($constructorNames[$name]) || isset($constructorChecks[$name])) {
                 continue;
             }
 
@@ -672,11 +690,13 @@ final class Hydrator
     /**
      * @param array<string, mixed> $constructorArgs
      * @param array<string, array{property: ReflectionProperty, value: mixed}> $assignments
+     * @param array<string, array{property: ReflectionProperty, input: HydratedProperty}> $constructorChecks
      */
     private function instantiateWithPropertyFill(
         ReflectionClass $reflection,
         array $constructorArgs,
         array $assignments,
+        array $constructorChecks = [],
     ): object {
         $object = $reflection->newInstanceWithoutConstructor();
 
@@ -685,6 +705,10 @@ final class Hydrator
             $constructor->invokeArgs($object, $constructorArgs);
         }
 
+        $comparator = new ConstructorValues();
+        foreach ($constructorChecks as $check) {
+            $comparator->check($object, $check['property'], $check['input']);
+        }
         $this->assignPropertyValues($object, $assignments);
 
         return $object;

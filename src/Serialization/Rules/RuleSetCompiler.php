@@ -31,9 +31,11 @@ use Brahmic\ApiSutra\Exceptions\Configuration\ConfigurationException;
 use DateTimeInterface;
 use JsonSerializable;
 use ReflectionClass;
-use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
+use ReflectionNamedType;
+use ReflectionType;
+use ReflectionUnionType;
 use Stringable;
 
 /** @internal Проверяет декларации, не создавая DTO, атрибутов или обработчиков. */
@@ -97,6 +99,9 @@ final class RuleSetCompiler
                 if ($field->default?->provider !== null) {
                     $this->validateHandler($field->default->provider, DefaultValueProviderInterface::class);
                 }
+                if ($field->constructorValue) {
+                    $this->validateConstructorValue($reflection, $property, $field);
+                }
                 if ($field->shape !== null) {
                     $this->validateShape($field->shape, $property);
                 }
@@ -109,6 +114,36 @@ final class RuleSetCompiler
             throw $exception;
         }
         return $compiled;
+    }
+
+    private function validateConstructorValue(ReflectionClass $class, ReflectionProperty $property, FieldRule $field): void
+    {
+        $constructor = $class->getConstructor();
+        if (
+            !$property->isPublic() || $property->hasHooks() || $property->hasDefaultValue()
+            || $constructor === null || !$constructor->isPublic()
+            || array_any($constructor->getParameters(), static fn (ReflectionParameter $parameter): bool => $parameter->getName() === $property->getName())
+            || !$this->isConstructorValueType($property->getType())
+        ) {
+            throw new ConfigurationException('constructorValue требует отдельное public поле поддержанного типа без hooks/default: '
+                . $class->getName() . '::$' . $property->getName());
+        }
+        for ($shape = $field->shape; $shape !== null; $shape = $shape->item) {
+            if (!in_array($shape->kind, ['scalar', 'mixed', 'nullable', 'list'], true)) {
+                throw new ConfigurationException('constructorValue не поддерживает DTO/variants в форме значения');
+            }
+        }
+    }
+
+    private function isConstructorValueType(?ReflectionType $type): bool
+    {
+        if ($type instanceof ReflectionUnionType) {
+            return array_all($type->getTypes(), fn (ReflectionType $part): bool => $this->isConstructorValueType($part));
+        }
+        return $type instanceof ReflectionNamedType && (
+            in_array($type->getName(), ['int', 'float', 'string', 'bool', 'true', 'false', 'null', 'array'], true)
+            || enum_exists($type->getName())
+        );
     }
 
     /** @return array<class-string, string> */

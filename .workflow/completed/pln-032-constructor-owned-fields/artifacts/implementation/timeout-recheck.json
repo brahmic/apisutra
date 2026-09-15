@@ -1,0 +1,8 @@
+{
+  "command": [
+    "vendor/bin/pest",
+    "--colors=never",
+    "tests/Integration/TransportTimeoutIntegrationTest.php"
+  ],
+  "exit": 0
+}

@@ -108,7 +108,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
-- [AS-5: проверка полей конструктора DTO — план 032 готов к реализации, включая массивы](current/pln-032-constructor-owned-fields/pln-032-readme.md)
+- [AS-5: проверка полей конструктора DTO — план 032 завершён, включая массивы](completed/pln-032-constructor-owned-fields/pln-032-readme.md)
 - [AS-6: отдельные cacheStore и параметры — план 033 готов к реализации с миграцией, K03 принят](current/pln-033-cache-config-copy/pln-033-readme.md)
 - [Исходные требования AS-5/AS-6 от пользователя пакета](issue/iss-003-apisutra-contracts/iss-003-readme.md)
 - [ADR-003: явная проверка значений конструктора — принято](adr/adr-003-constructor-owned-fields.md)

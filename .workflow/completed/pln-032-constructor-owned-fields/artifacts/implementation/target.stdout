@@ -1,0 +1,108 @@
+
+   PASS  Tests\Unit\Serialization\ConstructorOwnedArraysTest
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([], [], true) #1
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([1, null, Brahmic\ApiSutra\Enums\DataTransfer\ValueState Enum (Present, 'present')], [1, null, Brahmic\ApiSutra\Enums\DataTransfer\ValueState Enum (Present, 'present')], true)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([1, 2], [2, 1], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([1], ['1'], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([10], [10.0], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([1], [], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([[1, null], [false]], [[false], [null, 1]], true)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([null], [], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with (['b', 'a'], ['a', 'b'], true)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with (['b', 'c'], ['c', 'b'], true)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with (['a'], ['a'], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([Brahmic\ApiSutra\Enums\DataTransfer\ValueState Enum (Present, 'present')], [Brahmic\ApiSutra\Enums\DataTransfer\ValueState Enum (Null, 'null')], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([Brahmic\ApiSutra\Enums\DataTransfer\ValueState Enum (Present, 'present')], ['present'], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([NAN], [NAN], false)
+  ✓ it сравнивает рекурсивные массивы по ключам без перестановки входа with ([], [], true) #2
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('dto') / (false)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('dto') / (true)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('date') / (false)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('date') / (true)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('object') / (false)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('object') / (true)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('closure') / (false)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('closure') / (true)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('resource') / (false)
+  ✓ it проверяет полный допустимый домен до сравнения, без вызова пользовательских методов with ('resource') / (true)
+  ✓ it считает array-контейнеры включая пустой последний и ограничивает циклы with (511) / (false)
+  ✓ it считает array-контейнеры включая пустой последний и ограничивает циклы with (511) / (true)
+  ✓ it считает array-контейнеры включая пустой последний и ограничивает циклы with (512) / (false)
+  ✓ it считает array-контейнеры включая пустой последний и ограничивает циклы with (512) / (true)
+  ✓ it считает array-контейнеры включая пустой последний и ограничивает циклы with (513) / (false)
+  ✓ it считает array-контейнеры включая пустой последний и ограничивает циклы with (513) / (true)
+  ✓ it останавливает цикл, но разрешает повтор конечной ветви with (false)
+  ✓ it останавливает цикл, но разрешает повтор конечной ветви with (true)
+  ✓ it применяет list/each и default перед сравнением и сохраняет целый путь свойства
+  ✓ it не переносит результаты между узлами, наборами и cold/warm/cache-off with (false)
+  ✓ it не переносит результаты между узлами, наборами и cold/warm/cache-off with (true)
+  ✓ it не раскрывает внутренний секретный ключ при mismatch преобразованного массива
+
+   PASS  Tests\Unit\Serialization\ConstructorOwnedDeclarationsTest
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора… 0.01s
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('hidden')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('mixed')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('object')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('untyped')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('defaulted')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('virtual')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('hooked')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('date')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('intersection')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('parameter')
+  ✓ it отклоняет неподходящие свойства до HTTP без запуска конструктора with ('promoted')
+  ✓ it требует конструктор и проверяет форму результата на любой глубине
+  ✓ it сохраняет ошибки конструктора и требует инициализированное поле даже при Missing
+  ✓ it применяет provider один раз с Missing и Null и сохраняет Boundary with ('Brahmic\ApiSutra\Tests\Stubs\…ingDto', 'known')
+  ✓ it применяет provider один раз с Missing и Null и сохраняет Boundary with ('Brahmic\ApiSutra\Tests\Stubs\…rayDto', [1, [null]])
+  ✓ it применяет provider один раз с Missing и Null и сохраняет Boundary with ('Brahmic\ApiSutra\Tests\Stubs\…bleDto', null)
+  ✓ it сохраняет нормализацию пустой строки и границу cast
+  ✓ it сравнивает enum cases, literals и точное расширение float with ('Brahmic\ApiSutra\Tests\Stubs\…numDto', 'known', Brahmic\ApiSutra\Tests\Stubs\ConstructorOwned\Kind Enum (Known, 'known'))
+  ✓ it сравнивает enum cases, literals и точное расширение float with ('Brahmic\ApiSutra\Tests\Stubs\…nitDto', Brahmic\ApiSutra\Tests\Stubs\ConstructorOwned\Flag Enum (Known), Brahmic\ApiSutra\Tests\Stubs\ConstructorOwned\Flag Enum (Known))
+  ✓ it сравнивает enum cases, literals и точное расширение float with ('Brahmic\ApiSutra\Tests\Stubs\…rueDto', true, true)
+  ✓ it сравнивает enum cases, literals и точное расширение float with ('Brahmic\ApiSutra\Tests\Stubs\…lseDto', false, false)
+  ✓ it сравнивает enum cases, literals и точное расширение float with ('Brahmic\ApiSutra\Tests\Stubs\…oatDto', 9007199254740992, 9007199254740992.0)
+  ✓ it сравнивает enum cases, literals и точное расширение float with ('Brahmic\ApiSutra\Tests\Stubs\…bleDto', null, null)
+  ✓ it не расширяет Strict и различает enum mismatch от неверного enum
+  ✓ it отмечает array union без преобразования листьев и NAN как mismatch
+
+   PASS  Tests\Unit\Serialization\ConstructorOwnedEntriesTest
+  ✓ it применяет constructorValue через Returns/promise/response cache…  0.01s
+  ✓ it применяет constructorValue через Returns/promise/response cache и сохраняет результат ошибки with (Brahmic\ApiSutra\Enums\Execution\SendMode Enum (Sync, 'sync')) / (false)
+  ✓ it применяет constructorValue через Returns/promise/response cache и сохраняет результат ошибки with (Brahmic\ApiSutra\Enums\Execution\SendMode Enum (Async, 'async')) / (true)
+  ✓ it применяет constructorValue через Returns/promise/response cache и сохраняет результат ошибки with (Brahmic\ApiSutra\Enums\Execution\SendMode Enum (Async, 'async')) / (false)
+  ✓ it сохраняет сравнение в pagination, composite и Ready await with ('pagination') / (true)
+  ✓ it сохраняет сравнение в pagination, composite и Ready await with ('pagination') / (false)
+  ✓ it сохраняет сравнение в pagination, composite и Ready await with ('composite') / (true)
+  ✓ it сохраняет сравнение в pagination, composite и Ready await with ('composite') / (false)
+  ✓ it сохраняет сравнение в pagination, composite и Ready await with ('await') / (true)
+  ✓ it сохраняет сравнение в pagination, composite и Ready await with ('await') / (false)
+  ✓ it сравнивает словарь через HTTP и cached awaitAs с тем же гидратором with (true)
+  ✓ it сравнивает словарь через HTTP и cached awaitAs с тем же гидратором with (false)
+  ✓ it сохраняет проверенные источники и пути во вложенных списках и variants with ('dto')
+  ✓ it сохраняет проверенные источники и пути во вложенных списках и variants with ('variants')
+  ✓ it сохраняет проверенные источники и пути во вложенных списках и variants with ('list')
+  ✓ it повторно сравнивает кешированный ответ по набору копии клиента
+  ✓ it сохраняет исходящий To, ручной DTO и наследуемый конструктор без дополнительных проверок
+  ✓ it доставляет mismatch через throwOnErrors и оставляет безопасную диагностику
+
+   PASS  Tests\Unit\Serialization\ConstructorOwnedFieldsTest
+  ✓ it проверяет readonly и mutable поле после одного конструктора, затем заполняет обычное поле with ('Brahmic\ApiSutra\Tests\Stubs\…ingDto')
+  ✓ it проверяет readonly и mutable поле после одного конструктора, затем заполняет обычное поле with ('Brahmic\ApiSutra\Tests\Stubs\…bleDto')
+  ✓ it различает mismatch, missing и ошибку типа, сохраняя путь и число конструкторов with (['secret-value'], 'constructor_value_mismatch', 1)
+  ✓ it различает mismatch, missing и ошибку типа, сохраняя путь и число конструкторов with ([], 'required_field_missing', 0)
+  ✓ it различает mismatch, missing и ошибку типа, сохраняя путь и число конструкторов with ([1], 'invalid_field_type', 0)
+  ✓ it различает mismatch, missing и ошибку типа, сохраняя путь и число конструкторов with ([false], 'invalid_field_type', 0)
+  ✓ it различает mismatch, missing и ошибку типа, сохраняя путь и число конструкторов with ([[]], 'invalid_field_type', 0)
+  ✓ it различает mismatch, missing и ошибку типа, сохраняя путь и число конструкторов with ([null], 'null_not_allowed', 0)
+  ✓ it allowMissing не отменяет required, default и запрет явного null
+  ✓ it Legacy сравнивает итог обычного Hydrator, включая noTransform и канонические union with ('FloatString', 5, '5', …)
+  ✓ it Legacy сравнивает итог обычного Hydrator, включая noTransform и канонические union with ('StringFloat', 5, '5', …)
+  ✓ it Legacy сравнивает итог обычного Hydrator, включая noTransform и канонические union with ('BoolInt', 'false', false, …)
+  ✓ it Legacy сравнивает итог обычного Hydrator, включая noTransform и канонические union with ('Int', '7', 7, …)
+  ✓ it Legacy сравнивает итог обычного Hydrator, включая noTransform и канонические union with ('String', true, '1', …)
+  ✓ it Legacy сравнивает итог обычного Hydrator, включая noTransform и канонические union with ('IntBool', '1', 1, …)
+  ✓ it сохраняет запрет повторной записи без opt-in и не разрешает повторную группу
+
+  Tests:    97 passed (456 assertions)
+  Duration: 0.10s

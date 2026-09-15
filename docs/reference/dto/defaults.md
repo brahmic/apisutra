@@ -259,3 +259,6 @@ Literal value и `HandlerSpec::args` допускают scalar, null, unit/backe
 из них любой глубины; прочие объекты и closure внутри массивов запрещены.
 Enum case сохраняет идентичность. [Defaults конструктора](lifecycle.md#значения-по-умолчанию-и-изоляция-объектов)
 по-прежнему вычисляются PHP только при отсутствии аргумента.
+
+У [constructorValue](constructor-values.md) default/provider обрабатывается до
+сравнения с конструктором. `allowMissing` разрешает отсутствие, но не отменяет required.

@@ -1311,6 +1311,7 @@
         "shape": {"return": "self", "parameters": {"shape": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\ValueShape", "optional": false, "variadic": false}}},
         "cast": {"return": "self", "parameters": {"cast": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\HandlerSpec", "optional": false, "variadic": false}, "result": {"type": "?Brahmic\\ApiSutra\\Serialization\\Rules\\ValueShape", "optional": true, "variadic": false}}},
         "noTransform": {"return": "self", "parameters": []},
+        "constructorValue": {"return": "self", "parameters": {"allowMissing": {"type": "bool", "optional": true, "variadic": false}}},
         "required": {"return": "self", "parameters": []},
         "forbidExplicitNull": {"return": "self", "parameters": []},
         "inputShape": {"return": "self", "parameters": {"shape": {"type": "Brahmic\\ApiSutra\\Serialization\\Rules\\InputShape", "optional": false, "variadic": false}}},

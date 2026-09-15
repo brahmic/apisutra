@@ -1,0 +1,346 @@
+{
+  "scope": "tests/**/*Test.php and tests/Support/*.php; candidate syntax cache: or cache =>",
+  "test_files": 26,
+  "support_files": 4,
+  "files": {
+    "tests/Integration/CoreFlowIntegrationTest.php": [
+      {
+        "line": 187,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cache: $cache, rateLimit: new RateLimitConfig(store: $store)), $transport);"
+      }
+    ],
+    "tests/Support/TestClientFactory.php": [
+      {
+        "line": 34,
+        "text": "cache: $cacheConfig,"
+      }
+    ],
+    "tests/Support/standalone-auth-smoke.php": [
+      {
+        "line": 46,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://' . $name . '.fixture.test', auth: $auth, cache: $store), new HttpTransport($http, $factory, $factory));"
+      },
+      {
+        "line": 64,
+        "text": "baseUrl: 'https://fixture.test', timeout: 5, auth: $auth, cache: new CacheConfig(locks: $locks),"
+      }
+    ],
+    "tests/Support/standalone-smoke.php": [
+      {
+        "line": 33,
+        "text": "cache: new CacheConfig(store: $store),"
+      }
+    ],
+    "tests/Support/streaming-memory-smoke.php": [
+      {
+        "line": 25,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: $server->url, cache: new ArrayCache(), debug: true), $transport);"
+      }
+    ],
+    "tests/Unit/Auth/AuthHandlerRefreshLockTest.php": [
+      {
+        "line": 31,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 67,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 102,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 127,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 153,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 188,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      }
+    ],
+    "tests/Unit/Auth/AuthHandlerTest.php": [
+      {
+        "line": 25,
+        "text": "cache: new CacheConfig(store: $cache),"
+      }
+    ],
+    "tests/Unit/Auth/AuthLeaseContractTest.php": [
+      {
+        "line": 62,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 83,
+        "text": "baseUrl: 'https://fixture.test', auth: new LockAwareAuthenticator(), cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 98,
+        "text": "baseUrl: 'https://fixture.test', authRetryOn401: false, auth: new LockAwareAuthenticator(), cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 117,
+        "text": "$config = new ClientConfig(baseUrl: 'https://fixture.test', cache: new CacheConfig(store: $cache, locks: $explicit ? $provider : null));"
+      },
+      {
+        "line": 131,
+        "text": "baseUrl: 'https://fixture.test', auth: new LockAwareAuthenticator(), cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 146,
+        "text": "cache: new CacheConfig(locks: $locks), throwOnErrors: $throws,"
+      }
+    ],
+    "tests/Unit/Auth/TokenIsolationTest.php": [
+      {
+        "line": 66,
+        "text": "auth: $auth, cache: $store,"
+      },
+      {
+        "line": 92,
+        "text": "cache: new CacheConfig(store: $store, locks: $locks),"
+      },
+      {
+        "line": 151,
+        "text": "cache: new CacheConfig(store: $store, identity: new CacheIdentity($variant === 'tenant' && $i === 1 ? 'b' : 'a')),"
+      },
+      {
+        "line": 178,
+        "text": "baseUrl: 'https://fixture.test', cache: $store,"
+      },
+      {
+        "line": 195,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', auth: $auth, cache: $store), $transport);"
+      }
+    ],
+    "tests/Unit/Cache/AutomaticCacheIdentityTest.php": [
+      {
+        "line": 38,
+        "text": "cache: $this->store,"
+      },
+      {
+        "line": 76,
+        "text": "cache: new CacheConfig(store: $this->store, prefix: 'shared'),"
+      },
+      {
+        "line": 112,
+        "text": "$config = $this->config->with(cache: new CacheConfig("
+      }
+    ],
+    "tests/Unit/Cache/CacheIsolationTest.php": [
+      {
+        "line": 38,
+        "text": "cache: new CacheConfig(store: $this->store, prefix: 'provider:account-a'),"
+      },
+      {
+        "line": 45,
+        "text": "$b = new TestClient($this->config->with(cache: new CacheConfig(store: $this->store, prefix: 'provider:account-b')), $this->transport);"
+      },
+      {
+        "line": 64,
+        "text": "$client = new TestClient($this->config->with(cache: new CacheConfig(store: $this->store)), $this->transport);"
+      },
+      {
+        "line": 144,
+        "text": "$client = new TestClient($this->config->with(cache: new CacheConfig(store: $store, prefix: 'account', ttl: 10)), $this->transport);"
+      },
+      {
+        "line": 216,
+        "text": "cache: $this->store,"
+      },
+      {
+        "line": 249,
+        "text": "cache: new CacheConfig(store: $store, prefix: 'account'),"
+      }
+    ],
+    "tests/Unit/Cache/CacheManagerDownloadTest.php": [
+      {
+        "line": 29,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 58,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 87,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      }
+    ],
+    "tests/Unit/Cache/CacheManagerFileUploadTest.php": [
+      {
+        "line": 30,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 60,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 90,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      }
+    ],
+    "tests/Unit/Cache/CacheManagerOverridesTest.php": [
+      {
+        "line": 32,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 61,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 87,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 109,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 131,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 45, prefix: 'test-account'),"
+      },
+      {
+        "line": 156,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 182,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 208,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, mode: CacheMode::Disabled, prefix: 'test-account'),"
+      },
+      {
+        "line": 236,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 265,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'prefix:'),"
+      },
+      {
+        "line": 289,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 316,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      },
+      {
+        "line": 342,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      }
+    ],
+    "tests/Unit/Cache/CacheManagerTest.php": [
+      {
+        "line": 24,
+        "text": "cache: new CacheConfig(store: $cacheStore, ttl: 60, prefix: 'tests'),"
+      }
+    ],
+    "tests/Unit/Cache/CacheManagerTtlTest.php": [
+      {
+        "line": 27,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      }
+    ],
+    "tests/Unit/Pipeline/PipelineIntegrationTest.php": [
+      {
+        "line": 55,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      }
+    ],
+    "tests/Unit/Pipeline/PipelineRequestOptionsProviderFallbackTest.php": [
+      {
+        "line": 56,
+        "text": "cache: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),"
+      }
+    ],
+    "tests/Unit/Pipeline/PreparedBodyContractTest.php": [
+      {
+        "line": 184,
+        "text": "cache: new CacheConfig(store: $cache),"
+      }
+    ],
+    "tests/Unit/RateLimit/JointQuotaTest.php": [
+      {
+        "line": 250,
+        "text": "$client = jointClient(new ClientConfig(baseUrl: 'https://quota.test', cache: new ArrayCache(),"
+      }
+    ],
+    "tests/Unit/Retry/RetrySenderAuthRefreshTest.php": [
+      {
+        "line": 141,
+        "text": "cache: new CacheConfig(locks: $locks),"
+      }
+    ],
+    "tests/Unit/Serialization/BigIntegerIntegrationTest.php": [
+      {
+        "line": 34,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cache: new StrictCache(), environment: Environment::Testing), $transport);"
+      }
+    ],
+    "tests/Unit/Serialization/ExternalHydrationEntriesTest.php": [
+      {
+        "line": 113,
+        "text": "'cache' => new CacheConfig(store: $store, prefix: 'rules-shared'),"
+      }
+    ],
+    "tests/Unit/Serialization/ExternalHydrationWireTest.php": [
+      {
+        "line": 164,
+        "text": "'cache' => new CacheConfig(store: new StrictCache(), prefix: 'wire'),"
+      }
+    ],
+    "tests/Unit/Serialization/ExternalUrlContractTest.php": [
+      {
+        "line": 149,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cache: new CacheConfig(store: new StrictCache())), $transport);"
+      }
+    ],
+    "tests/Unit/Serialization/HydrationCompatibilityTest.php": [
+      {
+        "line": 104,
+        "text": "$config = new ClientConfig(baseUrl: 'https://fixture.test', environment: Environment::Testing, cache: $cache);"
+      }
+    ],
+    "tests/Unit/Serialization/RawResponseTest.php": [
+      {
+        "line": 107,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cache: new CacheConfig(store: new ArrayCache())), $transport);"
+      }
+    ],
+    "tests/Unit/Serialization/UriPipelineTest.php": [
+      {
+        "line": 137,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cache: new CacheConfig(store: new StrictCache())), $transport);"
+      }
+    ],
+    "tests/Unit/Timing/ExecutionBudgetTest.php": [
+      {
+        "line": 92,
+        "text": "baseUrl: 'https://fixture.test', auth: $auth, cache: new CacheConfig(locks: $locks),"
+      },
+      {
+        "line": 107,
+        "text": "baseUrl: 'https://fixture.test', cache: new CacheConfig(store: new ArrayCache()),"
+      }
+    ],
+    "tests/Unit/Timing/ExternalDeadlineTest.php": [
+      {
+        "line": 149,
+        "text": "$client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cache: new CacheConfig(store: $cache), auth: new RefreshingAuthenticator()), $transport, $clock, $clock);"
+      }
+    ]
+  },
+  "live_guide_matches": [
+    102
+  ]
+}

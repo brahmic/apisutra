@@ -28,6 +28,7 @@
 | `shape(ValueShape $shape)` | Преобразование вложенной формы |
 | `cast(HandlerSpec $cast, ?ValueShape $result = null)` | Готовое значение от cast; result только проверяет его |
 | `noTransform()` | Явное отсутствие преобразования; native-тип всё равно проверяется |
+| `constructorValue(bool $allowMissing = false)` | [Проверка значения конструктора без повторной записи](constructor-values.md) |
 | `required()`, `forbidExplicitNull()` | Присутствие ключа и запрет исходного null |
 | `inputShape(InputShape $shape)` | Проверка Object/List перед cast или noTransform |
 | `default(DefaultSpec $default)`, `policy(RulePolicy $policy)` | Default и policy поля |

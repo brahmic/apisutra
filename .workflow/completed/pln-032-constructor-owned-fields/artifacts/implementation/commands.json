@@ -1,0 +1,93 @@
+{
+  "target": {
+    "command": [
+      "vendor/bin/pest",
+      "--colors=never",
+      "tests/Unit/Serialization/ConstructorOwnedArraysTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedDeclarationsTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedEntriesTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedFieldsTest.php"
+    ],
+    "exit": 0
+  },
+  "tests": {
+    "command": [
+      "composer",
+      "test",
+      "--",
+      "--colors=never"
+    ],
+    "exit": 1
+  },
+  "phpstan": {
+    "command": [
+      "vendor/bin/phpstan",
+      "analyse",
+      "--no-progress",
+      "--memory-limit=1G",
+      "src/Serialization/Hydrator.php",
+      "src/Serialization/Rules/FieldRule.php",
+      "src/Serialization/Rules/RuleSetCompiler.php",
+      "src/Serialization/Rules/ConstructorValues.php",
+      "src/Serialization/NativePropertyValue.php"
+    ],
+    "exit": 0
+  },
+  "style": {
+    "command": [
+      "vendor/bin/phpcs",
+      "-n",
+      "--report=summary",
+      "src/Serialization/Hydrator.php",
+      "src/Serialization/Rules/FieldRule.php",
+      "src/Serialization/Rules/RuleSetCompiler.php",
+      "src/Serialization/Rules/ConstructorValues.php",
+      "src/Serialization/NativePropertyValue.php",
+      "tests/Stubs/ConstructorOwned",
+      "tests/Support/ConstructorOwnedFixture.php",
+      "docs/example/constructor-values",
+      "tests/Support/standalone-constructor-values-smoke.php",
+      "tests/Unit/Serialization/ConstructorOwnedArraysTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedDeclarationsTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedEntriesTest.php",
+      "tests/Unit/Serialization/ConstructorOwnedFieldsTest.php"
+    ],
+    "exit": 0
+  },
+  "docs": {
+    "command": [
+      "composer",
+      "check-docs"
+    ],
+    "exit": 0
+  },
+  "docs-types": {
+    "command": [
+      "composer",
+      "analyse-docs"
+    ],
+    "exit": 0
+  },
+  "example": {
+    "command": [
+      "php",
+      "tests/Support/standalone-constructor-values-smoke.php"
+    ],
+    "exit": 0
+  },
+  "upstream": {
+    "command": [
+      "php",
+      ".workflow/issue/iss-003-apisutra-contracts/artifacts/upstream-probe.php"
+    ],
+    "exit": 0
+  },
+  "whitespace": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0
+  }
+}

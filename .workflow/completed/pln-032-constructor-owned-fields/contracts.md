@@ -185,6 +185,6 @@ ConfigurationException остаётся для неверного объявле
 
 В кеше остаются descriptors/reflection. Проверки и ожидаемые значения — на узел;
 конструктор, default и cast не вызываются при компиляции или прогреве. Критерии
-изоляции объектов из [031](../../completed/pln-031-metadata-value-isolation/contracts.md)
+изоляции объектов из [031](../pln-031-metadata-value-isolation/contracts.md)
 сохраняются. Serializer может читать новый descriptor при проверке набора, но
 не выполняет constructorValue и не исключает такое свойство из запроса.

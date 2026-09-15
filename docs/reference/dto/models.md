@@ -49,3 +49,6 @@ final readonly class OtherLastNamesBlockDto extends BaseBlockDto
 - fallback assignment работает только для оставшихся public data properties
 - для nullable non-constructor property при `Missing` hydrator инициализирует `null`
 - для non-nullable missing non-constructor property hydrator бросает явную ошибку
+
+Конструктор может сам установить фиксированное свойство. Для проверки такого входа
+без повторной записи используйте [constructorValue](constructor-values.md).

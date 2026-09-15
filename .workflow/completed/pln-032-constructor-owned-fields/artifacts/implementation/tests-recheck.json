@@ -1,0 +1,9 @@
+{
+  "command": [
+    "composer",
+    "test",
+    "--",
+    "--colors=never"
+  ],
+  "exit": 0
+}

@@ -8,7 +8,7 @@ ReflectionProperty::setValue, ScalarValues::coerce и Hydrator с noTransform.
 Из корня репозитория:
 
 ```bash
-php .workflow/current/pln-032-constructor-owned-fields/artifacts/legacy-typing-probe.php
+php .workflow/completed/pln-032-constructor-owned-fields/artifacts/legacy-typing-probe.php
 ```
 
 Для стандартного пути float|string ← 5 даёт "5", bool|int ← 'false' — false.
@@ -18,6 +18,11 @@ php .workflow/current/pln-032-constructor-owned-fields/artifacts/legacy-typing-p
 
 Результат probe, команды/логи 66 адресных тестов, сравнение 19 наблюдений issue,
 среда и проверки документов сохранены единственным комплектом в
-[общих доказательствах 032/033](../../pln-033-cache-config-copy/artifacts/README.md).
+[общих доказательствах 032/033](../../../current/pln-033-cache-config-copy/artifacts/README.md).
 Скрипт запуска, правила повторения без перезаписи и контрольные суммы находятся там.
-Матрица приёмки будущего режима пока не выполнялась; стадия реализации не начата.
+Историческая проверка готовности предшествует реализации.
+
+[Baseline принятого commit](implementation-baseline/report.json),
+[команды реализации](implementation/commands.json) и [итоговая матрица](../implementation.md)
+содержат последующие доказательства. SHA снимков проверяются на указанном commit;
+пути внутри снимков сохранены в исходном виде до переноса плана.

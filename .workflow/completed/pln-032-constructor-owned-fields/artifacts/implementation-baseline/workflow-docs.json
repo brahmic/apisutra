@@ -1,0 +1,23 @@
+{
+  "files": [
+    ".workflow/README.md",
+    ".workflow/adr/adr-003-constructor-owned-fields.md",
+    ".workflow/adr/adr-004-cache-store-separation.md",
+    ".workflow/current/pln-032-constructor-owned-fields/acceptance.md",
+    ".workflow/current/pln-032-constructor-owned-fields/array-comparison.md",
+    ".workflow/current/pln-032-constructor-owned-fields/contracts.md",
+    ".workflow/current/pln-032-constructor-owned-fields/pln-032-readme.md",
+    ".workflow/current/pln-032-constructor-owned-fields/questions.md",
+    ".workflow/current/pln-032-constructor-owned-fields/artifacts/README.md",
+    ".workflow/current/pln-033-cache-config-copy/acceptance.md",
+    ".workflow/current/pln-033-cache-config-copy/architecture-review.md",
+    ".workflow/current/pln-033-cache-config-copy/contracts.md",
+    ".workflow/current/pln-033-cache-config-copy/migration.md",
+    ".workflow/current/pln-033-cache-config-copy/pln-033-readme.md",
+    ".workflow/current/pln-033-cache-config-copy/questions.md",
+    ".workflow/current/pln-033-cache-config-copy/artifacts/README.md"
+  ],
+  "documents": 16,
+  "links": 161,
+  "errors": []
+}

@@ -20,6 +20,8 @@ final readonly class FieldRule
         public ?InputShape $inputShape = null,
         public ?DefaultSpec $default = null,
         public ?RulePolicy $policy = null,
+        public bool $constructorValue = false,
+        public bool $constructorValueAllowMissing = false,
         private bool $transformationSet = false,
     ) {
     }
@@ -51,6 +53,12 @@ final readonly class FieldRule
     {
         $this->assertUnset($this->transformationSet, 'преобразование');
         return $this->copy(['noTransform' => true, 'transformationSet' => true]);
+    }
+
+    public function constructorValue(bool $allowMissing = false): self
+    {
+        $this->assertUnset($this->constructorValue, 'constructorValue');
+        return $this->copy(['constructorValue' => true, 'constructorValueAllowMissing' => $allowMissing]);
     }
 
     public function required(): self

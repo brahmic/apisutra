@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Добавлено [constructorValue](docs/reference/dto/constructor-values.md): явная
+  проверка поля, установленного конструктором, без повторной записи в readonly.
+  Поддержаны scalar/null/enum и рекурсивные массивы, словари сравниваются независимо
+  от порядка ключей. Несовпадение даёт `constructor_value_mismatch`; обычные поля
+  сохраняют прежнее поведение.
+
 - Перестроена документация: [маршруты пользователя](docs/start/README.md),
   тематический [справочник](docs/reference/README.md), короткий словарь и отдельные
   [инструкции разработчика пакета](https://github.com/brahmic/apisutra/blob/master/CONTRIBUTING.md).

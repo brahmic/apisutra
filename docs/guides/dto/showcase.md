@@ -287,3 +287,6 @@ Boundary у cast означает известный вход преобразо
 | Нужны прикладные правила и описание смысла поля | [Validate, Label, About](../../reference/attributes/hydration.md); подключение валидатора — [отдельный шаг](../../reference/client/validation.md) |
 
 [Выбрать DTO для своего SDK](../../start/describe-dto.md) · [Полный справочник](../../reference/dto/README.md) · [Исходники и запуск](../../example/dto-showcase/README.md).
+
+Фиксированный `type`, список и словарь, установленные конструктором, показаны
+в отдельном [примере constructorValue](../../reference/dto/constructor-values.md).
