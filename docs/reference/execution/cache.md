@@ -18,38 +18,59 @@ use Brahmic\ApiSutra\Config\ClientConfig;
 $config = new ClientConfig(
     baseUrl: 'https://api.example',
     auth: new BearerAuthenticator($token),
-    cacheStore: $store, cacheConfig: new CacheConfig(ttl: 60),
+    cacheConfig: new CacheConfig(store: $store, ttl: 60),
 );
 ```
 
-`cacheStore: $store` без блока параметров включает кеширование разрешённых операций.
-`CacheConfig` содержит только параметры: `ttl=3600`, `prefix=''`, `mode=Enabled`,
-`identity=null`, `locks=null`. Без cacheStore блок сам по себе кеш не подключает.
-HTTP и общий auth-кеш используют один store, сохраняя отдельные ключи и правила identity.
+`cacheConfig: new CacheConfig(store: $store)` включает кеширование разрешённых
+операций. Блок объединяет store и параметры: `ttl=3600`, `prefix=''`, `mode=Enabled`,
+`identity=null`, `locks=null`, `store=null`. Без store кеш не подключается.
+HTTP и общий auth-кеш используют store из одного блока, сохраняя отдельные ключи
+и правила identity. Другого аргумента подключения кеша у ClientConfig нет.
 
 ## Копирование и отключение
 
+`ClientConfig::with(cacheConfig: ...)` заменяет блок **целиком**. Для изменения
+отдельных полей используйте `CacheConfig::with()`:
+
+```php
+$cache = new CacheConfig(store: $store, ttl: 60);
+$config = new ClientConfig(baseUrl: 'https://api.example', cacheConfig: $cache);
+$short = $config->with(cacheConfig: $cache->with(ttl: 10));
+$detached = $config->with(cacheConfig: $cache->with(store: null));
+$removed = $config->with(cacheConfig: null);
+```
+
 | Изменение | Результат новой конфигурации |
 | --- | --- |
-| `with()`, `with(timeout: 7)` | Store и весь блок параметров сохранены по ссылке |
-| `with(cacheStore: $otherStore)` | Заменён только backend |
-| `with(cacheConfig: new CacheConfig(ttl: 10))` | Параметры заменены целиком; store сохранён |
-| `with(cacheStore: null)` | Общий backend отключён, параметры сохранены |
-| `with(cacheConfig: null)` | Store сохранён, действуют defaults, включая Enabled |
-| `with(cacheStore: null, cacheConfig: null)` | Подключение и параметры убраны |
+| `$config->with()`, `$config->with(timeout: 7)` | Тот же блок и все зависимости сохранены |
+| `$config->with(cacheConfig: $replacement)` | Блок заменён целиком; прежний store и параметры не наследуются |
+| `$config->with(cacheConfig: null)` | Общий store и параметры, включая явный locks, убраны |
+| `$cache->with(ttl: 10)` | Только TTL изменён; store и остальные поля сохранены |
+| `$cache->with(store: $otherStore)` | Заменён только backend |
+| `$cache->with(store: null)` | Общий backend отключён; параметры и явный locks сохранены |
+| `$cache->with(identity: null, locks: null)` | Сброшены только identity и locks; store сохранён |
 
-Новая конфигурация не меняет исходную и уже созданный клиент, не очищает и не клонирует
-хранилище. Новый TTL действует на новые записи; существующие сроки сами не обновляются.
-При null store даже `withCache()` не подключит прежний backend. После сброса только
-параметров Disabled сменится на Enabled и HTTP-кеш снова сможет работать.
+`CacheConfig::with()` возвращает новый блок даже без изменений. Непереданное поле
+сохраняется, явный null устанавливается только для store/identity/locks. Для ttl,
+prefix и mode null недопустим. Неизвестные имена дают PHP Error, неверные типы —
+TypeError; передавайте overrides по имени. Для применения блока передайте его в
+ClientConfig, исходные объекты остаются неизменными.
+
+Копирование не обращается к backend, identity или locks, не очищает записи и не
+клонирует зависимости. Новый TTL действует на новые записи. Существующий клиент
+продолжает работать со своей конфигурацией. Без store даже `withCache()` не подключит
+прежний backend. Замена на `new CacheConfig(ttl: 10)` без store тоже отключит его.
 
 Для отключения только HTTP сохраняйте store и задавайте `CacheMode::Disabled`
-или `withoutCache()` для одного выполнения. Auth продолжает использовать store;
-обычные явные HTTP overrides сохраняют прежний приоритет над Disabled.
-Явный `cacheConfig.locks` также сохраняется при `cacheStore: null` и может использовать
-собственный backend. Для сброса и store, и locks сбросьте оба поля.
+через копию блока либо `withoutCache()` для одного выполнения. Auth продолжает
+использовать store; явные HTTP overrides сохраняют прежний приоритет над Disabled.
+`CacheConfig::with(store: null)` сохраняет явный locks, который может использовать
+собственный backend. Полное удаление блока снимает и его; отдельные хранилища
+rate-limit и пользовательских расширений не меняются.
 
-Старые `cache:` и `CacheConfig(store: ...)` удалены. См. [миграцию](../../migration/v0.4.0-alpha.1.md#разделение-store-и-параметров-кеша).
+При обновлении с v0.4.0-alpha.1 перенесите `cacheStore` внутрь блока и учтите новую
+семантику полной замены/null: [миграция](../../migration/v0.5.0-alpha.1.md).
 
 ## Пространство кеша
 
@@ -141,7 +162,7 @@ final class TenantSummaryRequest extends AbstractRequest implements CacheIdentit
 ```
 
 Для контекста подключения SDK аналогично передаёт объект контракта в
-`new CacheConfig(identity: $tenantContext)` рядом с `cacheStore: $store`. Конфигурационная identity
+`new CacheConfig(store: $store, identity: $tenantContext)`. Конфигурационная identity
 не заменяет обязательную identity собственного authenticator. Если выбранный
 контракт возвращает неопределённое значение, запрос выполняется без кеширования;
 при DEBUG-логировании доступна причина `cache_reason=unknown_identity`.

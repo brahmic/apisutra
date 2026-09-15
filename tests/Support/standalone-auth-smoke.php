@@ -43,7 +43,7 @@ foreach (['a', 'b'] as $name) {
         new Response(200, ['Content-Type' => 'application/json'], '{"id":1,"name":"fixture"}'),
         new Response(200, ['Content-Type' => 'application/json'], '{"id":1,"name":"fixture"}'),
     ]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://' . $name . '.fixture.test', auth: $auth, cacheStore: $store), new HttpTransport($http, $factory, $factory));
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://' . $name . '.fixture.test', auth: $auth, cacheConfig: new CacheConfig(store: $store)), new HttpTransport($http, $factory, $factory));
     $request = (new AuthRequest('fixture'))->withoutCache();
     if (!$client->send($request)->raw()->isSuccess() || !$client->sendAsync($request)->raw()->isSuccess()
         || count($http->requests) !== 3 || $http->requests[2]->getHeaderLine('Authorization') !== 'Bearer token-' . $name) {

@@ -16,18 +16,31 @@ use Brahmic\ApiSutra\Tests\Support\VirtualClock;
 use Brahmic\ApiSutra\VO\Http\PreparedRequest;
 use Psr\SimpleCache\CacheInterface;
 
-it('сохраняет каждый независимый аргумент при пустой и несвязанной копии', function (bool $hasStore, bool $hasConfig): void {
+it('сохраняет единый блок при пустой и несвязанной копии', function (bool $hasStore, bool $hasConfig): void {
     $store = $hasStore ? new ClockCache(new VirtualClock()) : null;
-    $params = $hasConfig ? new CacheConfig(ttl: 60, prefix: 'copy', mode: CacheMode::Disabled) : null;
-    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheStore: $store, cacheConfig: $params);
+    $cache = $hasConfig ? new CacheConfig(ttl: 60, prefix: 'copy', mode: CacheMode::Disabled, store: $store) : null;
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: $cache);
     foreach ([$config, $config->with(), $config->with(timeout: 7), $config->with()->with(timeout: 7)] as $copy) {
-        expect($copy->cacheStore)->toBe($store)->and($copy->cacheConfig)->toBe($params);
+        expect($copy->cacheConfig)->toBe($cache)->and($copy->cacheConfig?->store)->toBe($hasConfig ? $store : null);
     }
     expect($config->with())->not->toBe($config)->and($config->timeout)->toBe(30)
         ->and($config->with(timeout: 7)->timeout)->toBe(7);
 })->with([true, false])->with([true, false]);
 
-it('заменяет настройки целиком и сохраняет ссылки без IO, очищения и клонирования', function (): void {
+it('заменяет блок целиком без наследования прежнего store и параметров', function (): void {
+    $store = new ClockCache(new VirtualClock());
+    $cache = new CacheConfig(ttl: 60, prefix: 'old', mode: CacheMode::Disabled, store: $store);
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: $cache);
+    $replacement = new CacheConfig(ttl: 10);
+    $changed = $config->with(cacheConfig: $replacement);
+    expect($changed->cacheConfig)->toBe($replacement)->and($replacement->store)->toBeNull()
+        ->and($replacement->ttl)->toBe(10)->and($replacement->prefix)->toBe('')
+        ->and($replacement->mode)->toBe(CacheMode::Enabled)
+        ->and($config->with(cacheConfig: null)->with(timeout: 7)->cacheConfig)->toBeNull()
+        ->and($config->cacheConfig)->toBe($cache)->and($cache->store)->toBe($store);
+});
+
+it('копирует отдельные поля блока без IO, очищения и клонирования зависимостей', function (): void {
     $clock = new VirtualClock();
     $store = new ClockCache($clock);
     $store->entries = ['existing' => ['value' => 'untouched', 'expires' => null]];
@@ -39,87 +52,87 @@ it('заменяет настройки целиком и сохраняет с�
         }
     };
     $locks = new TestAuthLockProvider($clock);
-    $params = new CacheConfig(ttl: 60, prefix: 'old', mode: CacheMode::Disabled, identity: $identity, locks: $locks);
-    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheStore: $store, cacheConfig: $params);
-    $replacement = new CacheConfig(ttl: 10);
-    $changed = $config->with(cacheConfig: $replacement);
-    expect($changed->cacheStore)->toBe($store)->and($changed->cacheConfig)->toBe($replacement)
-        ->and($replacement->prefix)->toBe('')->and($replacement->mode)->toBe(CacheMode::Enabled)
-        ->and($replacement->identity)->toBeNull()->and($replacement->locks)->toBeNull();
-    $moved = $config->with(cacheStore: $other);
-    expect($moved->cacheStore)->toBe($other)->and($moved->cacheConfig)->toBe($params)
-        ->and($params->identity)->toBe($identity)->and($params->locks)->toBe($locks);
-    foreach (
-        [
-        $config->with(cacheStore: $other, cacheConfig: $replacement),
-        $config->with(cacheStore: $other)->with(cacheConfig: $replacement),
-        $config->with(cacheConfig: $replacement)->with(cacheStore: $other),
-        ] as $copy
-    ) {
-        expect($copy->cacheStore)->toBe($other)->and($copy->cacheConfig)->toBe($replacement);
+    $cache = new CacheConfig(ttl: 60, prefix: 'old', mode: CacheMode::Disabled, identity: $identity, locks: $locks, store: $store);
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: $cache);
+    $same = $cache->with();
+    expect($same)->not->toBe($cache)->and($same)->toEqual($cache);
+    foreach ([$same, $cache->with(ttl: 10), $cache->with(prefix: 'new')] as $copy) {
+        expect($copy->store)->toBe($store)->and($copy->identity)->toBe($identity)
+            ->and($copy->locks)->toBe($locks)->and($copy->mode)->toBe(CacheMode::Disabled);
     }
+    expect($cache->with(ttl: 10)->ttl)->toBe(10)->and($cache->with(prefix: 'new')->prefix)->toBe('new')
+        ->and($cache->with(mode: CacheMode::ReadOnly)->mode)->toBe(CacheMode::ReadOnly);
+    $moved = $config->with(cacheConfig: $cache->with(store: $other));
+    expect($moved->cacheConfig->store)->toBe($other)->and($moved->cacheConfig->ttl)->toBe(60)
+        ->and($moved->cacheConfig->prefix)->toBe('old')->and($moved->cacheConfig->identity)->toBe($identity)
+        ->and($moved->cacheConfig->locks)->toBe($locks);
     foreach (
-        [
-        $config->with(cacheStore: null),
-        $config->with(cacheStore: null)->with()->with(timeout: 7),
-        ] as $copy
+        [$cache->with(store: $other, ttl: 10), $cache->with(store: $other)->with(ttl: 10),
+        $cache->with(ttl: 10)->with(store: $other)] as $copy
     ) {
-        expect($copy->cacheStore)->toBeNull()->and($copy->cacheConfig)->toBe($params);
+        expect($copy->store)->toBe($other)->and($copy->ttl)->toBe(10)->and($copy->locks)->toBe($locks);
     }
-    expect($config->with(cacheConfig: null)->cacheStore)->toBe($store)
-        ->and($config->with(cacheConfig: null)->cacheConfig)->toBeNull()
-        ->and($config->with(cacheStore: null, cacheConfig: null)->cacheConfig)->toBeNull()
-        ->and($config->with(cacheStore: null, cacheConfig: $replacement)->cacheConfig)->toBe($replacement)
-        ->and($config->with(cacheStore: $other, cacheConfig: null)->cacheStore)->toBe($other)
-        ->and($config->cacheStore)->toBe($store)->and($config->cacheConfig)->toBe($params)
+    $detached = $cache->with(store: null)->with();
+    expect($detached->store)->toBeNull()->and($detached->identity)->toBe($identity)
+        ->and($detached->locks)->toBe($locks)->and($detached->mode)->toBe(CacheMode::Disabled);
+    expect($cache->with(identity: null)->identity)->toBeNull()->and($cache->with(identity: null)->locks)->toBe($locks)
+        ->and($cache->with(locks: null)->locks)->toBeNull()->and($cache->with(locks: null)->identity)->toBe($identity)
+        ->and($cache->with(identity: null, locks: null, store: null)->store)->toBeNull()
+        ->and($cache->store)->toBe($store)->and($cache->ttl)->toBe(60)
+        ->and($config->cacheConfig)->toBe($cache)->and($config->with(cacheConfig: null)->cacheConfig)->toBeNull()
         ->and($store->entries)->toBe(['existing' => ['value' => 'untouched', 'expires' => null]])
         ->and($store->events)->toBe([])->and($other->events)->toBe([])->and($locks->keys)->toBe([]);
 });
 
-it('отклоняет старые именованные аргументы и неверные типы без доступа к backend', function (): void {
+it('отклоняет удалённые входы и неверные типы без обращения к backend', function (): void {
     $store = new ClockCache(new VirtualClock());
-    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheStore: $store);
-    foreach (
-        [
-        fn () => new ClientConfig(baseUrl: 'https://copy.test', cache: $store),
-        fn () => $config->with(cache: null),
-        fn () => $config->with(cache: $store, cacheStore: $store),
-        fn () => new ClientConfig(...['baseUrl' => 'https://copy.test', 'cache' => $store]),
-        fn () => ClientConfig::fromLaravel(['baseUrl' => 'https://copy.test', 'cache' => $store]),
-        fn () => new CacheConfig(store: $store),
-        ] as $call
-    ) {
-        expect($call)->toThrow(Error::class);
+    $cache = new CacheConfig(store: $store);
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: $cache);
+    foreach (['cache', 'cacheStore'] as $name) {
+        foreach ([$store, null] as $value) {
+            expect(fn () => new ClientConfig(...['baseUrl' => 'https://copy.test', $name => $value]))->toThrow(Error::class);
+            expect(fn () => $config->with(...[$name => $value]))->toThrow(Error::class);
+            expect(fn () => ClientConfig::fromLaravel(['baseUrl' => 'https://copy.test', $name => $value]))->toThrow(Error::class);
+        }
     }
-    expect(fn () => new ClientConfig(baseUrl: 'https://copy.test', cacheStore: new CacheConfig()))->toThrow(TypeError::class);
-    expect(fn () => $config->with(cacheConfig: $store))->toThrow(TypeError::class);
-    expect($store->events)->toBe([]);
+    expect(fn () => $cache->with(unknown: 1))->toThrow(Error::class)
+        ->and(fn () => $cache->with(10))->toThrow(Error::class)
+        ->and(fn () => $config->with(cacheConfig: $store))->toThrow(TypeError::class)
+        ->and(fn () => new CacheConfig(store: $cache))->toThrow(TypeError::class);
+    foreach (['ttl' => null, 'prefix' => null, 'mode' => null, 'store' => $cache, 'identity' => $store, 'locks' => $store] as $key => $value) {
+        expect(fn () => $cache->with(...[$key => $value]))->toThrow(TypeError::class);
+    }
+    expect(fn () => $cache->with(ttl: '10'))->toThrow(TypeError::class)
+        ->and($store->events)->toBe([])->and($config->cacheConfig)->toBe($cache);
 });
 
-it('сохраняет позиции параметров, readonly типизацию, массивы, Laravel и независимые поля', function (): void {
+it('поддерживает новый порядок ClientConfig, прежние позиции CacheConfig, массивы и Laravel', function (): void {
     $store = new ClockCache(new VirtualClock());
-    $params = new CacheConfig(10, 'prefix', CacheMode::ReadOnly);
-    $config = new ClientConfig('https://copy.test', null, [], null, true, 1, null, 'info', $store, $params, 7);
-    expect($config->cacheStore)->toBe($store)->and($config->cacheConfig)->toBe($params)->and($config->timeout)->toBe(7);
+    $cache = new CacheConfig(10, 'prefix', CacheMode::ReadOnly, null, null, $store);
+    $config = new ClientConfig('https://copy.test', null, [], null, true, 1, null, 'info', $cache, 7);
+    expect($config->cacheConfig)->toBe($cache)->and($cache->store)->toBe($store)->and($config->timeout)->toBe(7);
     $class = new ReflectionClass(ClientConfig::class);
-    expect($class->hasProperty('cache'))->toBeFalse()->and($class->getProperty('cacheStore')->isReadOnly())->toBeTrue()
-        ->and((string) $class->getProperty('cacheStore')->getType())->toBe('?' . CacheInterface::class)
-        ->and((new ReflectionClass(CacheConfig::class))->hasProperty('store'))->toBeFalse();
+    $block = new ReflectionClass(CacheConfig::class);
+    expect($class->hasProperty('cache'))->toBeFalse()->and($class->hasProperty('cacheStore'))->toBeFalse()
+        ->and($class->getProperty('cacheConfig')->isReadOnly())->toBeTrue()->and($block->isReadOnly())->toBeTrue()
+        ->and((string) $block->getProperty('store')->getType())->toBe('?' . CacheInterface::class);
     foreach (
-        [new ClientConfig(...['baseUrl' => 'https://copy.test', 'cacheStore' => $store, 'cacheConfig' => $params]),
-        ClientConfig::fromLaravel(['baseUrl' => 'https://copy.test', 'cacheStore' => $store, 'cacheConfig' => $params]),
-        ] as $copy
+        [new ClientConfig(...['baseUrl' => 'https://copy.test', 'cacheConfig' => $cache]),
+        ClientConfig::fromLaravel(['baseUrl' => 'https://copy.test', 'cacheConfig' => $cache])] as $copy
     ) {
-        expect($copy->cacheStore)->toBe($store)->and($copy->cacheConfig)->toBe($params);
+        expect($copy->cacheConfig)->toBe($cache)->and($copy->cacheConfig->store)->toBe($store);
     }
     $retry = new RetryConfig();
     $config = $config->with(auth: new BearerAuthenticator('synthetic'), hydrationRules: HydrationRules::create());
     $copy = $config->with(auth: null, hydrationRules: null, retry: $retry, authScopes: []);
     expect($copy->auth)->toBeNull()->and($copy->hydrationRules)->toBeNull()->and($copy->retry)->toBe($retry)
-        ->and($copy->cacheStore)->toBe($store)->and($copy->authScopes)->toBe([]);
+        ->and($copy->cacheConfig)->toBe($cache)->and($copy->authScopes)->toBe([]);
 });
 
-it('TestClientFactory сохраняет явные null без запасного store', function (): void {
-    $client = TestClientFactory::make(overrides: ['cacheStore' => null, 'cacheConfig' => null]);
-    expect($client->getConfig()->cacheStore)->toBeNull()->and($client->getConfig()->cacheConfig)->toBeNull();
+it('TestClientFactory сохраняет явный null и блок без store без запасного подключения', function (): void {
+    foreach ([null, new CacheConfig(ttl: 10)] as $cache) {
+        $client = TestClientFactory::make(overrides: ['cacheConfig' => $cache]);
+        expect($client->getConfig()->cacheConfig)->toBe($cache)
+            ->and($client->getConfig()->cacheConfig?->store)->toBeNull();
+    }
 });

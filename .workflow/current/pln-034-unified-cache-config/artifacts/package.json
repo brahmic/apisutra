@@ -1,0 +1,13 @@
+{
+  "command": [
+    "composer",
+    "check-package",
+    "--",
+    "--staged"
+  ],
+  "cwd": "repository root",
+  "exit_code": 1,
+  "seconds": 5.218,
+  "time_utc": "2026-09-15T16:42:12.557194+00:00",
+  "log_normalization": "strip ANSI colors, trailing spaces and empty EOF lines"
+}

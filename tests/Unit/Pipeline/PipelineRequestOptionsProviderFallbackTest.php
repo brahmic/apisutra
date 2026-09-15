@@ -53,8 +53,7 @@ describe('Pipeline options fallback for RequestOptionsProviderInterface', functi
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
             environment: Environment::Testing,
-            cacheStore: $cache,
-            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
+            cacheConfig: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
         );
         $client = new TestClient($config, $transport);
 

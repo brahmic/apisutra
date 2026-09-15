@@ -43,8 +43,7 @@ $another = $config->with(timeout: 15, hydrationRules: null);
 | `authRetryAttempts` | `int` | [Refresh и 401](../auth/tokens.md) |
 | `logger` | `?LoggerInterface` | [Логи и debug](../results/observability.md) |
 | `logLevel` | `string` | [Логи и debug](../results/observability.md) |
-| `cacheStore` | `?CacheInterface` | Единственный PSR-16 store для HTTP и общего auth-кеша |
-| `cacheConfig` | `?CacheConfig` | [Параметры кеша](../execution/cache.md), без store |
+| `cacheConfig` | `?CacheConfig` | [Единый блок кеша](../execution/cache.md): store и параметры HTTP/auth |
 | `timeout` | `int` | [Лимиты времени](../execution/deadlines.md) |
 | `connectTimeout` | `int` | [Лимиты времени](../execution/deadlines.md) |
 | `retry` | `?RetryConfig` | [Повторные попытки](../execution/retry.md) |
@@ -101,5 +100,5 @@ HTTP-кеш хранит ответ провайдера, не готовый DT
 
 [Раздел клиента](README.md).
 
-`cacheStore` и `cacheConfig` независимы: `with()` сохраняет каждый незаданный аргумент,
-явный null сбрасывает только названное поле. [Отключение и замена настроек](../execution/cache.md#копирование-и-отключение).
+`with(cacheConfig: ...)` заменяет блок целиком, null удаляет его. Для изменения
+отдельных полей передайте копию `CacheConfig::with(...)`. [Отключение и замена настроек](../execution/cache.md#копирование-и-отключение).

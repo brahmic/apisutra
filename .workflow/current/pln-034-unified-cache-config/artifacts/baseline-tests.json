@@ -1,0 +1,13 @@
+{
+  "command": [
+    "vendor/bin/pest",
+    "tests/Unit/Cache",
+    "tests/Unit/Auth",
+    "tests/Unit/Core/ClientConfigCacheTest.php"
+  ],
+  "cwd": "repository root",
+  "exit_code": 0,
+  "seconds": 0.218,
+  "time_utc": "2026-09-15T16:37:06.650616+00:00",
+  "log_normalization": "strip ANSI colors, trailing spaces and empty EOF lines"
+}

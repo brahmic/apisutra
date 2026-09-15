@@ -1,0 +1,78 @@
+
+PHP CODE SNIFFER REPORT SUMMARY
+--------------------------------------------------------------------------------
+FILE                                                            ERRORS  WARNINGS
+--------------------------------------------------------------------------------
+...tra-cache-unified/src/Attributes/AttributeMetadataCache.php  0       1
+...apisutra-cache-unified/src/Attributes/AttributeRegistry.php  0       3
+...mic/apisutra-cache-unified/src/Auth/ApiKeyAuthenticator.php  0       1
+...apisutra-cache-unified/src/Auth/CacheCredentialIdentity.php  0       1
+...kages/brahmic/apisutra-cache-unified/src/Casts/EnumCast.php  0       1
+...isutra-cache-unified/src/Collections/AbstractCollection.php  0       1
+.../brahmic/apisutra-cache-unified/src/Config/ClientConfig.php  0       4
+...ahmic/apisutra-cache-unified/src/Config/RateLimitConfig.php  0       1
+...src/Contracts/Interfaces/Core/ContextualClientInterface.php  0       1
+.../brahmic/apisutra-cache-unified/src/Core/AbstractClient.php  0       5
+...unified/src/Exceptions/Serialization/HydrationException.php  0       4
+...hmic/apisutra-cache-unified/src/Execution/BatchExecutor.php  0       1
+...sutra-cache-unified/src/Execution/ExecutionErrorFactory.php  0       5
+...ahmic/apisutra-cache-unified/src/Execution/PoolExecutor.php  0       3
+...apisutra-cache-unified/src/Execution/Batch/BatchContext.php  0       1
+...cache-unified/src/Execution/Batch/ParallelBatchStrategy.php  0       1
+...apisutra-cache-unified/src/Extensions/ExtensionRegistry.php  0       2
+...hmic/apisutra-cache-unified/src/Files/FileTransferGuard.php  0       1
+...ges/brahmic/apisutra-cache-unified/src/Files/StreamCopy.php  0       1
+...packages/brahmic/apisutra-cache-unified/src/Http/Origin.php  0       1
+...hmic/apisutra-cache-unified/src/Http/RequestDestination.php  0       1
+...c/apisutra-cache-unified/src/Laravel/SdkServiceProvider.php  0       1
+...nified/src/OperationInventory/OperationInventoryBuilder.php  0       1
+...nified/src/OperationInventory/SdkCallPathMethodAnalyzer.php  0       2
+...unified/src/OperationInventory/Catalog/ResponseDtoUsage.php  0       2
+...unified/src/Pagination/PaginationItemsCollectionBuilder.php  0       1
+...brahmic/apisutra-cache-unified/src/Pagination/Paginator.php  0       1
+...es/brahmic/apisutra-cache-unified/src/Pipeline/Pipeline.php  0       2
+...tra-cache-unified/src/Pipeline/Auth/AuthBindingResolver.php  0       1
+...ic/apisutra-cache-unified/src/Pipeline/Auth/AuthHandler.php  0       9
+...pisutra-cache-unified/src/Pipeline/Auth/AuthRefreshLock.php  0       1
+...apisutra-cache-unified/src/Pipeline/Auth/AuthTokenCache.php  0       1
+...a-cache-unified/src/Pipeline/Auth/LocalAuthLockProvider.php  0       1
+...-cache-unified/src/Pipeline/Cache/CacheIdentityResolver.php  0       3
+.../apisutra-cache-unified/src/Pipeline/Cache/CacheManager.php  0       3
+...c/apisutra-cache-unified/src/Pipeline/Error/ErrorPolicy.php  0       1
+...-cache-unified/src/Pipeline/Flow/ExecutionResultBuilder.php  0       6
+...a-cache-unified/src/Pipeline/Hydration/ResponseHydrator.php  0       4
+...-cache-unified/src/Pipeline/Preparation/TimeoutResolver.php  0       1
+...pisutra-cache-unified/src/Pipeline/Result/ResultFactory.php  0       3
+...sutra-cache-unified/src/Pipeline/Transport/DelayApplier.php  0       1
+...a-cache-unified/src/Pipeline/Transport/RateLimitApplier.php  0       1
+...cache-unified/src/Pipeline/Transport/RetryDecisionMaker.php  0       1
+...isutra-cache-unified/src/Pipeline/Transport/RetrySender.php  0       9
+...mic/apisutra-cache-unified/src/RateLimiting/RateLimiter.php  0       2
+...ahmic/apisutra-cache-unified/src/Request/RequestOptions.php  0       4
+...rahmic/apisutra-cache-unified/src/Retry/RetryAfterDelay.php  0       1
+...s/brahmic/apisutra-cache-unified/src/Retry/RetryHandler.php  0       1
+.../apisutra-cache-unified/src/Serialization/DtoSerializer.php  0       1
+...cache-unified/src/Serialization/EnumSerializationHelper.php  0       1
+...tra-cache-unified/src/Serialization/FilePayloadPreparer.php  0       1
+...cache-unified/src/Serialization/HydrationValueValidator.php  0       2
+...ahmic/apisutra-cache-unified/src/Serialization/Hydrator.php  0       21
+...ic/apisutra-cache-unified/src/Serialization/JsonEncoder.php  0       1
+...tra-cache-unified/src/Serialization/NativePropertyValue.php  0       1
+...sutra-cache-unified/src/Serialization/RequestUrlBuilder.php  0       5
+...he-unified/src/Serialization/SerializationValueResolver.php  0       1
+...mic/apisutra-cache-unified/src/Serialization/Serializer.php  0       3
+...cache-unified/src/Serialization/Rules/ConstructorValues.php  0       3
+...ra-cache-unified/src/Serialization/Rules/HydrationScope.php  0       3
+...he-unified/src/Serialization/Rules/NestedValueProcessor.php  0       3
+...a-cache-unified/src/Serialization/Rules/RuleSetCompiler.php  0       10
+...ache-unified/src/Serialization/Rules/RuleValueProcessor.php  0       4
+...utra-cache-unified/src/Serialization/Rules/ScalarValues.php  0       3
+...c/apisutra-cache-unified/src/Transport/GuzzleHttpClient.php  0       4
+...hmic/apisutra-cache-unified/src/Transport/HttpTransport.php  0       3
+...hmic/apisutra-cache-unified/src/Transport/MockTransport.php  0       2
+...apisutra-cache-unified/src/Transport/RecordingTransport.php  0       1
+...mic/apisutra-cache-unified/src/VO/Http/ProviderResponse.php  0       1
+...hmic/apisutra-cache-unified/src/VO/Validation/Validator.php  0       2
+--------------------------------------------------------------------------------
+A TOTAL OF 0 ERRORS AND 180 WARNINGS WERE FOUND IN 70 FILES
+--------------------------------------------------------------------------------

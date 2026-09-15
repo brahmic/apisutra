@@ -160,7 +160,7 @@ use Example\ClientShowcase\DemoClient;
 use Example\ClientShowcase\Support\MemoryStore;
 
 $store = new MemoryStore();
-$cached = $base->with(cacheStore: $store, cacheConfig: new CacheConfig(ttl: 60))
+$cached = $base->with(cacheConfig: new CacheConfig(store: $store, ttl: 60))
     ->with(timeout: 7); // Копия сохраняет store и все параметры кеша.
 $cachedClient = new DemoClient($cached, $transport);
 $first = $cachedClient->records()->get(7)->send()->dataOrFail();

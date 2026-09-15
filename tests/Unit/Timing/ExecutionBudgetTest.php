@@ -105,8 +105,7 @@ it('поздний hook не кеширует успех и новое выпо�
     $transport->fake(['*' => MockResponse::success(['ok' => true])]);
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test',
-        cacheStore: new ArrayCache(),
-        cacheConfig: new CacheConfig(),
+        cacheConfig: new CacheConfig(store: new ArrayCache()),
         retry: new RetryConfig(totalTimeoutMs: 1000),
     ), $transport, $clock, $clock);
     $client->hooks()->on(Hook::AfterHydrate, new class($clock, $throws) implements HookInterface {

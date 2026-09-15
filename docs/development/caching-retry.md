@@ -31,6 +31,6 @@
 [Контракт](../reference/execution/rate-limit.md), [Redis](../reference/integrations/redis.md).
 
 `CacheManager`, `AuthBindingResolver`, `AuthHandler` и подключение auth в AbstractClient
-читают общий backend только из `ClientConfig.cacheStore`. Параметры CacheConfig
-разрешаются отдельно; CacheExecutionState хранит выбранный store одного выполнения.
+читают общий backend только из `ClientConfig.cacheConfig?->store`. Атрибут Cache
+копирует блок через with(), сохраняя store/identity/locks; CacheExecutionState хранит выбранный store одного выполнения.
 У метаданных, rate limiting и отдельных расширений остаются собственные настройки кеша.

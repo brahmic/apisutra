@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Casts\CastRegistry;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Contracts\Interfaces\Hooks\HookInterface;
@@ -31,7 +32,7 @@ use Brahmic\ApiSutra\VO\Pipeline\PipelineContext;
 it('сохраняет bigint при JSON content type и повторном чтении из кеша', function (string $type): void {
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::make('{"id":9223372036854775808999}', headers: ['Content-Type' => $type])]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cacheStore: new StrictCache(), environment: Environment::Testing), $transport);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://api.test', cacheConfig: new CacheConfig(store: new StrictCache()), environment: Environment::Testing), $transport);
     $request = (new CacheProbeRequest())->setClient($client);
     expect($request->send()->dataOrFail())->toBe(['id' => '9223372036854775808999'])
         ->and($request->send()->dataOrFail())->toBe(['id' => '9223372036854775808999'])

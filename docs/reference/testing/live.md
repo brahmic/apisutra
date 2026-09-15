@@ -90,6 +90,7 @@ ClientConfig принимает `Psr\SimpleCache\CacheInterface` (PSR-16). Дл�
 PSR-16-совместимую реализацию.
 
 ```php
+use Brahmic\ApiSutra\Config\CacheConfig;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 
@@ -99,8 +100,7 @@ $cache = new Psr16Cache(new FilesystemAdapter('', 0, $cacheDir));
 $client = ProviderClient::make(
     apiKey: LiveEnv::apiKey(),
     transport: $transport,
-    cacheStore: $cache,
-    cacheTtl: 604800,
+    cacheConfig: new CacheConfig(store: $cache, ttl: 604800),
 );
 ```
 

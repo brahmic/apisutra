@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Casts\DateTimeCast;
 use Brahmic\ApiSutra\Casts\EnumCast;
 use Brahmic\ApiSutra\Casts\JsonCast;
@@ -101,7 +102,7 @@ it('доставляет ошибки JsonCast через promise и throwOnErro
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success(['payload' => '{"ok":true}'])]);
     $cache = new StrictCache();
-    $config = new ClientConfig(baseUrl: 'https://fixture.test', environment: Environment::Testing, cacheStore: $cache);
+    $config = new ClientConfig(baseUrl: 'https://fixture.test', environment: Environment::Testing, cacheConfig: new CacheConfig(store: $cache));
     $request = (new HydrationProbeRequest(HydrationJsonPayloadDto::class))->setClient(new TestClient($config, $transport));
     expect($request->send()->dataOrFail()->payload)->toBe(['ok' => true]);
     // Моделируем сохранённый HTTP-ответ, который не проходит текущий контракт DTO.

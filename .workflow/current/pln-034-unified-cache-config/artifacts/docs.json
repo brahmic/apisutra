@@ -1,0 +1,11 @@
+{
+  "command": [
+    "composer",
+    "check-docs"
+  ],
+  "cwd": "repository root",
+  "exit_code": 0,
+  "seconds": 0.676,
+  "time_utc": "2026-09-15T16:41:11.252201+00:00",
+  "log_normalization": "strip ANSI colors, trailing spaces and empty EOF lines"
+}

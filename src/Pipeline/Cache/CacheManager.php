@@ -42,7 +42,7 @@ final readonly class CacheManager
     public function clearScope(): void
     {
         $cache = $this->config->cacheConfig ?? new CacheConfig();
-        $store = $this->config->cacheStore;
+        $store = $cache->store;
         if ($store === null) {
             return;
         }
@@ -294,12 +294,9 @@ final readonly class CacheManager
         if ($request instanceof AbstractRequest) {
             $attribute = $request->getCacheAttribute();
             if ($attribute !== null) {
-                return new CacheConfig(
+                return $cacheConfig->with(
                     ttl: $attribute->ttl ?? $cacheConfig->ttl,
-                    prefix: $cacheConfig->prefix,
                     mode: $attribute->mode,
-                    identity: $cacheConfig->identity,
-                    locks: $cacheConfig->locks,
                 );
             }
         }
@@ -344,7 +341,7 @@ final readonly class CacheManager
      */
     private function resolveCacheState(RequestInterface $request, ?RequestOptions $options): ?array
     {
-        $store = $this->config->cacheStore;
+        $store = $this->config->cacheConfig?->store;
         if ($store === null) {
             return null;
         }

@@ -28,8 +28,7 @@ it('читает сохранённые старой версией HTTP и toke
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://migration.test',
         auth: new TokenAuthenticator('migration-user', 'synthetic-password', refreshRequestClass: TokenLoginRequest::class),
-        cacheStore: $store,
-        cacheConfig: new CacheConfig(ttl: 60, prefix: 'migration', identity: new CacheIdentity('tenant-1')),
+        cacheConfig: new CacheConfig(store: $store, ttl: 60, prefix: 'migration', identity: new CacheIdentity('tenant-1')),
     ), $transport, $clock, $clock);
     $dto = $client->send(new AuthRequest('migration'))->dataOrFail();
     expect($dto->id)->toBe(7)->and($dto->name)->toBe('baseline')->and($transport->getRecorded())->toBe([])
@@ -47,14 +46,14 @@ it('сохраняет store при копировании и меняет TTL �
     $transport = new MockTransport();
     $transport->preventStrayRequests();
     $transport->fake(['*' => MockResponse::success(['id' => 7])]);
-    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheStore: $store, cacheConfig: $parameters ? new CacheConfig(ttl: 60) : null);
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: new CacheConfig(store: $store, ttl: $parameters ? 60 : 3600));
     $client = new TestClient($config, $transport, $clock, $clock);
     foreach ([$config, $config->with(), $config->with(timeout: 7)] as $cfg) {
         $copy = new TestClient($cfg, $transport, $clock, $clock);
         expect($copy->send(new CacheProbeRequest('/old'))->raw()->response->status)->toBe(200);
     }
     expect($transport->getRecorded())->toHaveCount(1);
-    $short = new TestClient($config->with(cacheConfig: new CacheConfig(ttl: 10)), $transport, $clock, $clock);
+    $short = new TestClient($config->with(cacheConfig: $config->cacheConfig->with(ttl: 10)), $transport, $clock, $clock);
     $short->send(new CacheProbeRequest('/new'))->dataOrFail();
     $clock->advance(11000);
     $short->send(new CacheProbeRequest('/new'))->dataOrFail();
@@ -65,26 +64,31 @@ it('сохраняет store при копировании и меняет TTL �
     expect($transport->getRecorded())->toHaveCount(4);
 })->with([false, true]);
 
-it('сброс параметров после Disabled разрешает HTTP, сброс store запрещает даже Enabled override', function (): void {
+it('полная замена режима и отключение блока или store не меняют исходного клиента', function (string $detach): void {
     $clock = new VirtualClock();
     $store = new ClockCache($clock);
     $transport = new MockTransport();
     $transport->preventStrayRequests();
     $transport->fake(['*' => MockResponse::success(['id' => 7])]);
-    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheStore: $store, cacheConfig: new CacheConfig(mode: CacheMode::Disabled));
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: new CacheConfig(store: $store, mode: CacheMode::Disabled));
     $disabled = new TestClient($config, $transport);
     for ($i = 0; $i < 2; $i++) {
         $disabled->send(new CacheProbeRequest())->dataOrFail();
     }
     expect($transport->getRecorded())->toHaveCount(2);
-    $enabled = new TestClient($config->with(cacheConfig: null), $transport);
+    $enabled = new TestClient($config->with(cacheConfig: new CacheConfig(store: $store)), $transport);
     for ($i = 0; $i < 2; $i++) {
         $enabled->send(new CacheProbeRequest())->dataOrFail();
     }
     expect($transport->getRecorded())->toHaveCount(3);
     $before = $store->entries;
     $store->events = [];
-    $removed = new TestClient($config->with(cacheStore: null)->with(cacheConfig: new CacheConfig()), $transport);
+    $detached = match ($detach) {
+        'block' => null,
+        'store' => $config->cacheConfig->with(store: null),
+        'replacement' => new CacheConfig(),
+    };
+    $removed = new TestClient($config->with(cacheConfig: $detached), $transport);
     for ($i = 0; $i < 2; $i++) {
         (new CacheProbeRequest())->setClient($removed)->withCache()->dataOrFail();
     }
@@ -93,7 +97,7 @@ it('сброс параметров после Disabled разрешает HTTP,
     expect($transport->getRecorded())->toHaveCount(5)->and($store->events)->toBe([])->and($store->entries)->toBe($before);
     $enabled->send(new CacheProbeRequest())->dataOrFail();
     expect($transport->getRecorded())->toHaveCount(5);
-});
+})->with(['block', 'store', 'replacement']);
 
 it('разделяет store, параметры namespace и исходный долгоживущий клиент', function (): void {
     $clock = new VirtualClock();
@@ -102,9 +106,9 @@ it('разделяет store, параметры namespace и исходный �
     $transport = new MockTransport();
     $transport->preventStrayRequests();
     $transport->fake(['*' => MockResponse::success(['id' => 7])]);
-    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheStore: $first);
-    $configs = [$config, $config->with(cacheStore: $second), $config->with(cacheConfig: new CacheConfig(prefix: 'different')),
-        $config->with(cacheConfig: new CacheConfig(identity: new CacheIdentity('tenant-2')))];
+    $config = new ClientConfig(baseUrl: 'https://copy.test', cacheConfig: new CacheConfig(store: $first));
+    $configs = [$config, $config->with(cacheConfig: $config->cacheConfig->with(store: $second)), $config->with(cacheConfig: $config->cacheConfig->with(prefix: 'different')),
+        $config->with(cacheConfig: $config->cacheConfig->with(identity: new CacheIdentity('tenant-2')))];
     foreach ($configs as $cfg) {
         $client = new TestClient($cfg, $transport);
         $client->send(new CacheProbeRequest())->dataOrFail();
@@ -119,7 +123,7 @@ it('разделяет store, параметры namespace и исходный �
     expect($transport->getRecorded())->toHaveCount(5)->and($second->entries)->not->toBe([]);
 });
 
-it('общий auth store переживает смену timeout и HTTP mode, а отключение store сохраняет явный locks', function (bool $parameters): void {
+it('общий auth store переживает копирование, null блока снимает также явный locks', function (bool $parameters, string $detach): void {
     $clock = new VirtualClock();
     $store = new ClockCache($clock);
     $locks = new TestAuthLockProvider($clock);
@@ -131,22 +135,23 @@ it('общий auth store переживает смену timeout и HTTP mode, 
     ]);
     $config = new ClientConfig(
         baseUrl: 'https://copy.test',
-        cacheStore: $store,
-        cacheConfig: $parameters ? new CacheConfig(mode: CacheMode::Disabled, locks: $locks) : null,
+        cacheConfig: new CacheConfig(store: $store, mode: $parameters ? CacheMode::Disabled : CacheMode::Enabled, locks: $parameters ? $locks : null),
         auth: new TokenAuthenticator('synthetic-user', 'synthetic-password', refreshRequestClass: TokenLoginRequest::class)
     );
-    foreach ([$config, $config->with(timeout: 7), $config->with(cacheConfig: new CacheConfig(mode: CacheMode::ReadOnly))] as $cfg) {
+    foreach ([$config, $config->with(timeout: 7), $config->with(cacheConfig: $config->cacheConfig->with(mode: CacheMode::ReadOnly, locks: null))] as $cfg) {
         $client = new TestClient($cfg, $transport, $clock, $clock);
         (new AuthRequest('value'))->setClient($client)->withoutCache()->dataOrFail();
     }
     $transport->assertSent(TokenLoginRequest::class, times: 1);
     $snapshot = $store->entries;
     $store->events = [];
-    $removed = new TestClient($config->with(cacheStore: null), $transport, $clock, $clock);
+    $detached = $detach === 'store' ? $config->cacheConfig->with(store: null) : null;
+    $removed = new TestClient($config->with(cacheConfig: $detached), $transport, $clock, $clock);
     (new AuthRequest('value'))->setClient($removed)->withoutCache()->dataOrFail();
     $transport->assertSent(TokenLoginRequest::class, times: 2);
     expect($store->events)->toBe([])->and($store->entries)->toBe($snapshot);
     if ($parameters) {
-        expect($locks->keys)->toHaveCount(2)->and($locks->releases)->toBe(2);
+        $expectedLocks = $detach === 'store' ? 2 : 1;
+        expect($locks->keys)->toHaveCount($expectedLocks)->and($locks->releases)->toBe($expectedLocks);
     }
-})->with([false, true]);
+})->with([false, true])->with(['store', 'block']);

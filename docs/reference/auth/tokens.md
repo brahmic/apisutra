@@ -55,10 +55,11 @@ $config = $config->with(
 );
 ```
 
-Для общего кеша токена передайте PSR‑16 store в `ClientConfig::cacheStore`.
-Это тот же backend, который использует HTTP-кеш; `CacheConfig` содержит только параметры.
-`with(cacheStore: null)` отключает общий store в копии без очистки записей.
-Локальное хранение и явно заданный locks сохраняются. [Полная семантика](../execution/cache.md#копирование-и-отключение).
+Для общего кеша токена передайте PSR‑16 store через
+`cacheConfig: new CacheConfig(store: $store)`. Это тот же backend, который использует
+HTTP-кеш. `CacheConfig::with(store: null)` отключает общий store и сохраняет остальные
+поля; `ClientConfig::with(cacheConfig: null)` убирает весь блок, включая явный locks.
+Записи не очищаются; без общего store действует локальное хранение токена. [Полная семантика](../execution/cache.md#копирование-и-отключение).
 
 ## Refresh и 401
 - `AuthenticatorInterface::shouldRefresh()` и `getRefreshRequest()` управляют обновлением токена.
@@ -119,8 +120,7 @@ use Brahmic\ApiSutra\Config\ClientConfig;
 // $lockProvider — реализация AuthLockProviderInterface выбранного хранилища.
 $config = new ClientConfig(
     baseUrl: 'https://api.example',
-    cacheStore: $tokenStore,
-    cacheConfig: new CacheConfig(locks: $lockProvider),
+    cacheConfig: new CacheConfig(store: $tokenStore, locks: $lockProvider),
 );
 ```
 

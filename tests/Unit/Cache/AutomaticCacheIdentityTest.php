@@ -35,7 +35,7 @@ beforeEach(function (): void {
     }]);
     $this->config = new ClientConfig(
         baseUrl: 'https://api.test',
-        cacheStore: $this->store,
+        cacheConfig: new CacheConfig(store: $this->store),
         environment: Environment::Testing,
     );
 });
@@ -73,8 +73,7 @@ it('одинаковый prefix или runtime scope не объединяет �
     foreach (['fixture-a', 'fixture-b'] as $token) {
         $client = new TestClient($this->config->with(
             auth: new BearerAuthenticator($token),
-            cacheStore: $this->store,
-            cacheConfig: new CacheConfig(prefix: 'shared'),
+            cacheConfig: new CacheConfig(store: $this->store, prefix: 'shared'),
         ), $this->transport);
         $request = (new TenantCacheRequest())->setClient($client);
         $requests[] = $runtime ? $request->withCacheScope('same') : $request;
@@ -97,9 +96,9 @@ it('разделяет tenant одного аккаунта и очищает т
     expect($b->dataOrFail())->toBe(['value' => 4]);
 });
 
-it('конфигурационный tenant сохраняется при атрибуте Cache и раздельном store', function (): void {
-    $a = new TestClient($this->config->with(cacheConfig: new CacheConfig(identity: new CacheIdentity('a'))), $this->transport);
-    $b = new TestClient($this->config->with(cacheConfig: new CacheConfig(identity: new CacheIdentity('b'))), $this->transport);
+it('конфигурационный tenant и store сохраняются при атрибуте Cache', function (): void {
+    $a = new TestClient($this->config->with(cacheConfig: $this->config->cacheConfig->with(identity: new CacheIdentity('a'))), $this->transport);
+    $b = new TestClient($this->config->with(cacheConfig: $this->config->cacheConfig->with(identity: new CacheIdentity('b'))), $this->transport);
     $request = (new TenantCacheRequest())->setClient($a);
     $other = (new TenantCacheRequest())->setClient($b);
     expect($request->dataOrFail())->toBe(['value' => 1])
@@ -110,7 +109,7 @@ it('конфигурационный tenant сохраняется при атр
 });
 
 it('пропускает кеш при неизвестной identity независимо от prefix', function (string $source): void {
-    $config = $this->config->with(cacheStore: $this->store, cacheConfig: new CacheConfig(prefix: 'explicit', identity: $source === 'config' ? new CacheIdentity(null) : null));
+    $config = $this->config->with(cacheConfig: new CacheConfig(store: $this->store, prefix: 'explicit', identity: $source === 'config' ? new CacheIdentity(null) : null));
     if ($source === 'auth') {
         $config = $config->with(auth: new NamedAuthenticator('fixture'));
     }

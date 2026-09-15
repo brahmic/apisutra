@@ -27,8 +27,7 @@ describe('CacheManager file uploads', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cacheStore: $cache,
-            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
+            cacheConfig: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -58,8 +57,7 @@ describe('CacheManager file uploads', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cacheStore: $cache,
-            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
+            cacheConfig: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 
@@ -89,8 +87,7 @@ describe('CacheManager file uploads', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://api.test',
-            cacheStore: $cache,
-            cacheConfig: new CacheConfig(ttl: 60, prefix: 'test-account'),
+            cacheConfig: new CacheConfig(store: $cache, ttl: 60, prefix: 'test-account'),
             environment: Environment::Testing,
         );
 

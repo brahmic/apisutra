@@ -48,8 +48,7 @@ function ownedClient(array $payload, ?HydrationRules $rules = null): array
     $config = new ClientConfig(
         baseUrl: 'https://owned.test',
         hydrationRules: $rules ?? ownedNodeRules(),
-        cacheStore: new StrictCache(),
-        cacheConfig: new CacheConfig()
+        cacheConfig: new CacheConfig(store: new StrictCache())
     );
     return [new TestClient($config, $transport), $transport];
 }

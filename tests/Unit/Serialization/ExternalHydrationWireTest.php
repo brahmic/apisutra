@@ -161,7 +161,7 @@ it('строит requestDebug, HTTP cache и лог без receiver', function (
         }
     };
     [$client, $transport] = receiverWireClient(receiverWireRules(), [
-        'cacheStore' => new StrictCache(), 'cacheConfig' => new CacheConfig(prefix: 'wire'),
+        'cacheConfig' => new CacheConfig(store: new StrictCache(), prefix: 'wire'),
         'logger' => $logger, 'logLevel' => LogLevel::DEBUG, 'debug' => true,
     ]);
     foreach (['synthetic-secret-a', 'synthetic-secret-b'] as $secret) {

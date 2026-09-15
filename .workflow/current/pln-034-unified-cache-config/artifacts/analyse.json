@@ -1,0 +1,11 @@
+{
+  "command": [
+    "composer",
+    "analyse"
+  ],
+  "cwd": "repository root",
+  "exit_code": 0,
+  "seconds": 5.216,
+  "time_utc": "2026-09-15T16:40:04.869615+00:00",
+  "log_normalization": "strip ANSI colors, trailing spaces and empty EOF lines"
+}

@@ -19,19 +19,17 @@ final class TestClientFactory
      */
     public static function make(array $responses = [], array $overrides = []): TestClient
     {
-        $cacheStore = array_key_exists('cacheStore', $overrides) ? $overrides['cacheStore'] : new ArrayCache();
         $cacheConfig = array_key_exists('cacheConfig', $overrides)
-            ? $overrides['cacheConfig'] : new CacheConfig(ttl: 60, prefix: 'tests');
+            ? $overrides['cacheConfig'] : new CacheConfig(ttl: 60, prefix: 'tests', store: new ArrayCache());
         $rateLimit = $overrides['rateLimit'] ?? new RateLimitConfig(
             limit: 5,
             period: 60,
             behavior: RateLimitBehavior::Wait,
-            store: $cacheStore,
+            store: $cacheConfig?->store,
         );
 
         $config = new ClientConfig(
             baseUrl: (string) ($overrides['baseUrl'] ?? 'https://provider.test'),
-            cacheStore: $cacheStore,
             cacheConfig: $cacheConfig,
             rateLimit: $rateLimit,
             environment: $overrides['environment'] ?? Environment::Testing,

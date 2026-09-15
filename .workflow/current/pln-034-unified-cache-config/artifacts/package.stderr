@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/dev/www/packages/brahmic/apisutra-cache-unified/tests/Support/check-package.py", line 69, in <module>
+    raise RuntimeError('Архивы различаются: ' + ', '.join(changed))
+RuntimeError: Архивы различаются: .git
+Script python3 tests/Support/check-package.py handling the check-package event returned with error code 1

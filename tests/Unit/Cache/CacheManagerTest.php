@@ -21,8 +21,7 @@ describe('CacheManager', function () {
 
         $config = new ClientConfig(
             baseUrl: 'https://provider.test',
-            cacheStore: $cacheStore,
-            cacheConfig: new CacheConfig(ttl: 60, prefix: 'tests'),
+            cacheConfig: new CacheConfig(store: $cacheStore, ttl: 60, prefix: 'tests'),
             environment: Environment::Testing,
         );
 

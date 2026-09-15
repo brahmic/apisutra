@@ -30,8 +30,7 @@ $store = new ArrayCache();
 $config = new ClientConfig(
     baseUrl: 'https://example.test',
     auth: new ApiKeyAuthenticator('fixture-secret', header: 'Authorization'),
-    cacheStore: $store,
-    cacheConfig: new CacheConfig(),
+    cacheConfig: new CacheConfig(store: $store),
     debug: true,
 );
 $transport = new MockTransport();

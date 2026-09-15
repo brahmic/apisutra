@@ -36,7 +36,6 @@ use Brahmic\ApiSutra\VO\Errors\ErrorContextFactoryInterface;
 use DateTimeZone;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\SimpleCache\CacheInterface;
 use Throwable;
 
 /**
@@ -84,7 +83,6 @@ final readonly class ClientConfig
         public int $authRetryAttempts = 1,
         public ?LoggerInterface $logger = null,
         public string $logLevel = LogLevel::INFO,
-        public ?CacheInterface $cacheStore = null,
         public ?CacheConfig $cacheConfig = null,
         public int $timeout = 30,
         public int $connectTimeout = 10,
@@ -167,7 +165,6 @@ final readonly class ClientConfig
             'authRetryAttempts' => $this->authRetryAttempts,
             'logger' => $this->logger,
             'logLevel' => $this->logLevel,
-            'cacheStore' => $this->cacheStore,
             'cacheConfig' => $this->cacheConfig,
             'timeout' => $this->timeout,
             'connectTimeout' => $this->connectTimeout,

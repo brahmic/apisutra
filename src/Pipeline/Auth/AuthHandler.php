@@ -349,7 +349,7 @@ final readonly class AuthHandler
 
     private function resolveCacheStore(): ?CacheInterface
     {
-        return $this->config->cacheStore;
+        return $this->config->cacheConfig?->store;
     }
 
     private function resolveRefreshLockTtlSeconds(): int

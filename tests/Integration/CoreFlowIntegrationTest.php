@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Enums\Http\HttpMethod;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\ContractFlowRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Dto\PolymorphicOwnerPersonDto;
@@ -184,7 +185,7 @@ it('withCache без TTL сохраняет прежний TTL после отк
     $store->failure = 'read';
     $transport = new MockTransport();
     $transport->fake(['*' => MockResponse::success(['id' => 1, 'name' => 'fixture'])]);
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cacheStore: $cache, rateLimit: new RateLimitConfig(store: $store)), $transport);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cacheConfig: new CacheConfig(store: $cache), rateLimit: new RateLimitConfig(store: $store)), $transport);
     $execution = (new DiscoveryDtoRequest())->setClient($client)->withCache(10)->withoutCache()->withCache()
         ->withRateLimit(1, 60)->withoutRateLimit();
     expect($execution->send()->raw()->isSuccess())->toBeTrue()

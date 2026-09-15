@@ -108,11 +108,14 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
+- [Единый CacheConfig и выпуск v0.5.0-alpha.1 — в работе](current/pln-034-unified-cache-config/pln-034-readme.md)
+- [ADR-005: единый блок кеша — принято](adr/adr-005-unified-cache-config.md)
+
 - [AS-5: проверка полей конструктора DTO — план 032 завершён: constructorValue и массивы](completed/pln-032-constructor-owned-fields/pln-032-readme.md)
 - [AS-6: отдельные cacheStore и параметры — план 033 завершён: cacheStore и миграция](completed/pln-033-cache-config-copy/pln-033-readme.md)
 - [Исходные требования AS-5/AS-6 от пользователя пакета](issue/iss-003-apisutra-contracts/iss-003-readme.md)
 - [ADR-003: явная проверка значений конструктора — принято](adr/adr-003-constructor-owned-fields.md)
-- [ADR-004: разделение store и настроек кеша клиента — принято](adr/adr-004-cache-store-separation.md)
+- [ADR-004: разделение store и настроек — заменено ADR-005](adr/adr-004-cache-store-separation.md)
 - [Декларативное преобразование DTO: проверка фидбека AS-1–AS-4](audit/aud-006-declarative-dto/aud-006-readme.md)
 - [Одиночный Nested, пути provider и контракт casts — завершено](completed/pln-029-hydration-defects/pln-029-readme.md)
 - [Готовность continuation-результата и сохранение ошибок await — завершено](completed/pln-030-continuation-errors/pln-030-readme.md)

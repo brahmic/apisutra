@@ -185,5 +185,5 @@ use Brahmic\ApiSutra\Attributes\Behavior\Pagination;
 final class PaginatedRequest extends AbstractRequest {}
 ```
 
-Атрибут `Cache` задаёт параметры HTTP-кеша; при `ClientConfig.cacheStore = null`
+Атрибут `Cache` задаёт параметры HTTP-кеша; при отсутствии `ClientConfig.cacheConfig` или его store
 он не создаёт и не восстанавливает хранилище. См. [подключение кеша](../execution/cache.md).

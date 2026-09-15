@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 // Запуск: php -d memory_limit=64M tests/Support/streaming-memory-smoke.php binary|multipart|download|path|sink
+use Brahmic\ApiSutra\Config\CacheConfig;
 use Brahmic\ApiSutra\Config\ClientConfig;
 use Brahmic\ApiSutra\Tests\Stubs\ProviderB\Requests\ProviderBDownloadRequest;
 use Brahmic\ApiSutra\Tests\Stubs\Requests\BinaryUploadRequest;
@@ -22,7 +23,7 @@ $directory = sys_get_temp_dir() . '/apisutra-memory-' . bin2hex(random_bytes(6))
 mkdir($directory, 0700);
 $server = new LocalFileServer();
 $transport = new RecordingTransport(HttpTransport::createDefault(), $directory . '/recordings');
-$client = new TestClient(new ClientConfig(baseUrl: $server->url, cacheStore: new ArrayCache(), debug: true), $transport);
+$client = new TestClient(new ClientConfig(baseUrl: $server->url, cacheConfig: new CacheConfig(store: new ArrayCache()), debug: true), $transport);
 $file = null;
 $sink = null;
 $result = null;

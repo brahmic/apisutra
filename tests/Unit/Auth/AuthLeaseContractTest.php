@@ -114,9 +114,9 @@ it('store с capability выбирается автоматически, явн�
         }
     };
     $provider = new TestAuthLockProvider();
-    $config = new ClientConfig(baseUrl: 'https://fixture.test', cacheStore: $cache, cacheConfig: new CacheConfig(locks: $explicit ? $provider : null));
+    $config = new ClientConfig(baseUrl: 'https://fixture.test', cacheConfig: new CacheConfig(store: $cache, locks: $explicit ? $provider : null));
     $copy = $config->with(debug: true);
-    $lock = new AuthRefreshLock($copy->cacheStore, $copy->cacheConfig->locks);
+    $lock = new AuthRefreshLock($copy->cacheConfig->store, $copy->cacheConfig->locks);
     $lease = $lock->acquireLease('fixture', 5);
     expect($lease !== null)->toBe($explicit)->and($cache->calls)->toBe($explicit ? 0 : 1);
 })->with([false, true]);

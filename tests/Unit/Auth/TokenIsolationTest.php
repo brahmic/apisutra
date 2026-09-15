@@ -63,7 +63,7 @@ it('изолирует токены клиентов и повторно исп�
         $transports[] = $transport;
         $clients[] = new TestClient(new ClientConfig(
             baseUrl: !$sameServer && $i === 1 ? 'https://b.fixture.test' : 'https://a.fixture.test',
-            auth: $auth, cacheStore: $store,
+            auth: $auth, cacheConfig: new CacheConfig(store: $store),
         ), $transport);
     }
     foreach ([0, 1, 0] as $i) {
@@ -89,8 +89,7 @@ it('перечитывает токен после ожидания и отли�
     $client = new TestClient(new ClientConfig(
         baseUrl: 'https://fixture.test', timeout: 5,
         auth: new TokenAuthenticator('fixture', 'password', refreshRequestClass: TokenLoginRequest::class),
-        cacheStore: $store,
-        cacheConfig: new CacheConfig(locks: $locks),
+        cacheConfig: new CacheConfig(store: $store, locks: $locks),
     ), $transport, $clock, $clock);
     $request = (new AuthRequest('fixture'))->setClient($client)->withoutCache();
     expect($request->send()->raw()->isSuccess())->toBeTrue();
@@ -149,8 +148,7 @@ it('разделяет объявленные scope, tenant и base path, сох
         $client = new TestClient(new ClientConfig(
             baseUrl: 'https://fixture.test/' . ($variant === 'base_path' && $i === 1 ? 'b' : 'a'),
             auth: $auth, authScopes: ['secondary' => $auth],
-            cacheStore: $store,
-            cacheConfig: new CacheConfig(identity: new CacheIdentity($variant === 'tenant' && $i === 1 ? 'b' : 'a')),
+            cacheConfig: new CacheConfig(store: $store, identity: new CacheIdentity($variant === 'tenant' && $i === 1 ? 'b' : 'a')),
         ), $transport);
         $request = (new AuthRequest('fixture'))->setClient($client)->withoutCache();
         if ($variant === 'scope' && $i === 1) {
@@ -177,7 +175,7 @@ it('не читает старый username key и не теряет локал�
         AuthRequest::class => MockResponse::success(['id' => 1, 'name' => 'fixture']),
     ]);
     $client = new TestClient(new ClientConfig(
-        baseUrl: 'https://fixture.test', cacheStore: $store,
+        baseUrl: 'https://fixture.test', cacheConfig: new CacheConfig(store: $store),
         auth: new TokenAuthenticator('fixture', 'password', refreshRequestClass: TokenLoginRequest::class),
     ), $transport);
     $request = (new AuthRequest('fixture'))->setClient($client)->withoutCache();
@@ -194,7 +192,7 @@ it('собственная auth разделяет token store только пр
         $auth = new TokenCacheProbeAuthenticator($identity);
         $transport = new MockTransport();
         $transport->fake([AuthRequest::class => MockResponse::success(['id' => 1, 'name' => 'fixture'])]);
-        $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', auth: $auth, cacheStore: $store), $transport);
+        $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', auth: $auth, cacheConfig: new CacheConfig(store: $store)), $transport);
         $request = (new AuthRequest('fixture'))->setClient($client)->withoutCache();
         expect($request->send()->raw()->isSuccess())->toBeTrue();
         if ($i === 0) {

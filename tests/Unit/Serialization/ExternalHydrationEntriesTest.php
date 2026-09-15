@@ -110,7 +110,7 @@ it('применяет правила к composite и отмечает прои�
 it('гидратирует общий HTTP cache каждым текущим набором без повторного HTTP', function (): void {
     $store = new StrictCache();
     [$client, $transport] = entryClient(['record_id' => 7, 'other_id' => 8], overrides: [
-        'cacheStore' => $store, 'cacheConfig' => new CacheConfig(prefix: 'rules-shared'),
+        'cacheConfig' => new CacheConfig(store: $store, prefix: 'rules-shared'),
     ]);
     $other = new TestClient($client->getConfig()->with(hydrationRules: entryRules('other_id')), $transport);
     expect((new RecordRequest())->setClient($client)->withCache()->dataOrFail()->id)->toBe(7)

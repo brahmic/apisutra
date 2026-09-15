@@ -146,7 +146,7 @@ it('истёкший срок не читает кеш и не запускае�
     $clock = new VirtualClock();
     $cache = new SpyCache();
     $transport = new MockTransport();
-    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cacheStore: $cache, cacheConfig: new CacheConfig(), auth: new RefreshingAuthenticator()), $transport, $clock, $clock);
+    $client = new TestClient(new ClientConfig(baseUrl: 'https://fixture.test', cacheConfig: new CacheConfig(store: $cache), auth: new RefreshingAuthenticator()), $transport, $clock, $clock);
     $hook = new class implements HookInterface {
         public int $calls = 0;
         public function handle(PipelineContext $context): ?array { $this->calls++; return null; }

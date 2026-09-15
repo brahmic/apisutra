@@ -1,0 +1,16 @@
+
+FILE: ...s/brahmic/apisutra-cache-unified/tests/Unit/Core/ClientConfigCacheTest.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 4 LINES
+--------------------------------------------------------------------------------
+  69 | ERROR | [x] The first expression of a multi-line control structure must
+     |       |     be on the line after the opening parenthesis
+  70 | ERROR | [x] The closing parenthesis of a multi-line control structure
+     |       |     must be on the line after the last expression
+ 117 | ERROR | [x] The first expression of a multi-line control structure must
+     |       |     be on the line after the opening parenthesis
+ 118 | ERROR | [x] The closing parenthesis of a multi-line control structure
+     |       |     must be on the line after the last expression
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
