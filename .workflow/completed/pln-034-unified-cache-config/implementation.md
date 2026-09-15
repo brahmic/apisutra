@@ -18,7 +18,7 @@ client showcase, справочник и API registry; добавлена вер
 | U01–U06 | ClientConfigCacheTest: ссылки, полная/частичная замена, null, TypeError/Error, позиции, Laravel, отсутствие IO |
 | U07–U12 | UnifiedCacheConfigTest: GET/TTL, отключение тремя способами, auth/locks, прежние записи и долгоживущий клиент; AutomaticCacheIdentityTest/AuthLeaseContractTest: tenant, атрибут и fallback locks |
 | U13 | Документация и типизация примеров прошли; client showcase выполняется в обоих архивах |
-| U14 | Тесты, analyse, lint и финальные архивы прошли; ожидается CI релизного commit |
+| U14 | Тесты, analyse, lint, архивы и CI прошли; GitHub prerelease и Packagist проверены |
 
 ## Проверки
 
@@ -44,3 +44,19 @@ client showcase, справочник и API registry; добавлена вер
 репозитория: `python3 <путь>/artifacts/run-check.py <метка> <команда> [аргументы]`.
 Из логов удалены ANSI цвета, пробелы в концах строк и пустые строки в конце файла;
 коды возврата и содержательные результаты сохранены.
+
+## Выпуск
+
+[Tests CI](artifacts/ci-tests.json) и [Docs CI](artifacts/ci-docs.json) прошли на
+релизном commit `355df5f5182a06b0d122eea1a566ce1beedf7491`: PHP 8.4/8.5,
+locked/lowest/latest зависимости, Laravel 12, Redis 7.0/8.2, quality и distribution.
+
+[GitHub Release](artifacts/release.json) опубликован как prerelease v0.5.0-alpha.1;
+[Packagist](artifacts/packagist.json) возвращает тот же commit в source и dist.
+Тег аннотированный; прежний v0.4.0-alpha.1 не менялся. Итоговое закрытие workflow
+фиксируется после публикации и не меняет поставляемый код или документацию.
+[Текст релиза](release-notes.md), [ссылки комплекта](artifacts/workflow-links.json).
+
+Для повторения команд с путями current используйте нынешний каталог completed;
+JSON сохраняет точную команду на момент запуска. Контрольные суммы доказательств
+находятся в [sha256.json](artifacts/sha256.json).

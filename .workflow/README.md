@@ -108,7 +108,7 @@ Markdown-ссылки отсчитываются от файла, текстов
 
 ## Текущие материалы
 
-- [Единый CacheConfig и выпуск v0.5.0-alpha.1 — в работе](current/pln-034-unified-cache-config/pln-034-readme.md)
+- [Единый CacheConfig и выпуск v0.5.0-alpha.1 — завершён](completed/pln-034-unified-cache-config/pln-034-readme.md)
 - [ADR-005: единый блок кеша — принято](adr/adr-005-unified-cache-config.md)
 
 - [AS-5: проверка полей конструктора DTO — план 032 завершён: constructorValue и массивы](completed/pln-032-constructor-owned-fields/pln-032-readme.md)

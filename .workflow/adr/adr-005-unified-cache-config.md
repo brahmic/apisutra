@@ -15,8 +15,8 @@ AS-6 выявил реальные ошибки копирования, но н�
 верхний уровень ClientConfig. Его with() позволяет независимо менять store и параметры.
 Полная замена блока не сливается со старым, null убирает блок целиком.
 
-[Контракт](../current/pln-034-unified-cache-config/contracts.md) задаёт сигнатуры и null;
-[план](../current/pln-034-unified-cache-config/pln-034-readme.md) — реализацию и приёмку.
+[Контракт](../completed/pln-034-unified-cache-config/contracts.md) задаёт сигнатуры и null;
+[план](../completed/pln-034-unified-cache-config/pln-034-readme.md) — реализацию и приёмку.
 
 ## Последствия и альтернативы
 
