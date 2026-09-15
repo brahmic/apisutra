@@ -95,6 +95,6 @@ smoke; семантика тестов не менялась. Whitespace про�
 
 Текущая семантика опубликована в [контракте кеша](../../../docs/reference/execution/cache.md),
 [клиентской конфигурации](../../../docs/reference/client/configuration.md) и
-[миграции](../../../docs/migration/unreleased.md#разделение-store-и-параметров-кеша).
+[миграции](../../../docs/migration/v0.4.0-alpha.1.md#разделение-store-и-параметров-кеша).
 Обновлены auth tokens/locks, attributes, live testing, glossary, development,
 client showcase, docs-api.json и CHANEGLOG. Планы 032 и 033 реализованы последовательно.

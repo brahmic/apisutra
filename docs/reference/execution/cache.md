@@ -49,7 +49,7 @@ HTTP и общий auth-кеш используют один store, сохран
 Явный `cacheConfig.locks` также сохраняется при `cacheStore: null` и может использовать
 собственный backend. Для сброса и store, и locks сбросьте оба поля.
 
-Старые `cache:` и `CacheConfig(store: ...)` удалены. См. [миграцию](../../migration/unreleased.md#разделение-store-и-параметров-кеша).
+Старые `cache:` и `CacheConfig(store: ...)` удалены. См. [миграцию](../../migration/v0.4.0-alpha.1.md#разделение-store-и-параметров-кеша).
 
 ## Пространство кеша
 

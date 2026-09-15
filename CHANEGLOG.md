@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.4.0-alpha.1 — 2026-09-15
 
 - **Миграция конфигурации кеша:** единственный backend теперь задаётся через
   `ClientConfig::cacheStore`; `CacheConfig` содержит ttl/prefix/mode/identity/locks.
@@ -8,7 +8,7 @@
   при несвязанном изменении и не игнорирует новый блок параметров. Каждый явный null
   сбрасывает только своё поле; конфигурирование не очищает записи и не меняет старый
   клиент. HTTP и auth используют один store; ключи и формат записей сохранены.
-  [Инструкция перехода](docs/migration/unreleased.md#разделение-store-и-параметров-кеша).
+  [Инструкция перехода](docs/migration/v0.4.0-alpha.1.md#разделение-store-и-параметров-кеша).
 
 - Добавлено [constructorValue](docs/reference/dto/constructor-values.md): явная
   проверка поля, установленного конструктором, без повторной записи в readonly.
@@ -22,7 +22,14 @@
   Человек и ИИ используют одни маршруты; старые страницы-переходы удалены.
   Quickstart запускает [опубликованный SDK](docs/example/sdk/README.md) с явной
   конфигурацией и транспортом; добавлены исполняемые примеры rules и await, проверка
-  Laravel binding, деклараций API, навигации и поставки. Runtime API не изменён.
+  Laravel binding, деклараций API, навигации и поставки. Добавлены обзоры
+  [возможностей DTO](docs/guides/dto/showcase.md) и
+  [конфигурирования клиента](docs/guides/client/showcase.md) с исполняемыми примерами.
+
+## v0.3.0-alpha.1 — 2026-09-15
+
+Обновление с `v0.2.0-alpha.1` меняет контракт ожидания операций;
+см. [руководство миграции](docs/migration/v0.3.0-alpha.1.md).
 
 - Добавлены [внешние правила гидратации](docs/guides/dto/plain-models.md): неизменяемые
   HydrationRules для plain DTO, mapping, strict scalar/list, вложенные формы,

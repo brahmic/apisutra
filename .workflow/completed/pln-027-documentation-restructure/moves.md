@@ -102,7 +102,7 @@
 | `docs/guides/live-testing.md` | 31 | [guides/testing/live.md](../../../docs/guides/testing/live.md), [reference/testing/live.md](../../../docs/reference/testing/live.md) |
 | `docs/guides/logging.md` | 9 | [reference/results/observability.md](../../../docs/reference/results/observability.md) |
 | `docs/guides/megaclient.md` | 18 | [guides/integration/multi-service.md](../../../docs/guides/integration/multi-service.md), [reference/client/construction.md](../../../docs/reference/client/construction.md), [reference/client/response-dto-catalog.md](../../../docs/reference/client/response-dto-catalog.md) |
-| `docs/guides/migration.md` | 5 | [migration/unreleased.md](../../../docs/migration/unreleased.md), [migration/v0.2.0-alpha.1.md](../../../docs/migration/v0.2.0-alpha.1.md) |
+| `docs/guides/migration.md` | 5 | [migration/v0.3.0-alpha.1.md](../../../docs/migration/v0.3.0-alpha.1.md), [migration/v0.2.0-alpha.1.md](../../../docs/migration/v0.2.0-alpha.1.md) |
 | `docs/guides/naming-strategy.md` | 6 | [reference/serialization/request-parts.md](../../../docs/reference/serialization/request-parts.md) |
 | `docs/guides/operation-inventory.md` | 22 | [reference/client/catalogs.md](../../../docs/reference/client/catalogs.md), [reference/client/operation-inventory.md](../../../docs/reference/client/operation-inventory.md), [reference/client/response-dto-catalog.md](../../../docs/reference/client/response-dto-catalog.md) |
 | `docs/guides/pagination.md` | 15 | [reference/execution/pagination.md](../../../docs/reference/execution/pagination.md) |
